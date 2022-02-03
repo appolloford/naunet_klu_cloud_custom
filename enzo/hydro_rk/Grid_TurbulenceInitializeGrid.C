@@ -55,14 +55,14 @@ int grid::TurbulenceInitializeGrid(float CloudDensity, float CloudSoundSpeed, FL
       CH2IINum, CH3INum, CH3IINum, CH3OHINum, CH4INum, CH4IINum, CNINum,
       CNIINum, COINum, COIINum, CO2INum, H2CNINum, H2COINum, H2COIINum,
       H2NOIINum, H2OINum, H2OIINum, H2SiOINum, H3IINum, H3COIINum, H3OIINum,
-      HCNINum, HCNIINum, HCNHIINum, HCOINum, HCOIINum, HCO2IINum, HeINum,
-      HeIINum, HeHIINum, HNCINum, HNCOINum, HNOINum, HNOIINum, HOCIINum, MgINum,
-      MgIINum, NINum, NIINum, N2INum, N2IINum, N2HIINum, NHINum, NHIINum,
-      NH2INum, NH2IINum, NH3INum, NH3IINum, NOINum, NOIINum, NO2INum, OINum,
-      OIINum, O2INum, O2IINum, O2HINum, O2HIINum, OCNINum, OHINum, OHIINum,
-      SiINum, SiIINum, SiCINum, SiCIINum, SiC2INum, SiC2IINum, SiC3INum,
-      SiC3IINum, SiHINum, SiHIINum, SiH2INum, SiH2IINum, SiH3INum, SiH3IINum,
-      SiH4INum, SiH4IINum, SiH5IINum, SiOINum, SiOIINum, SiOHIINum;
+      HCNINum, HCNIINum, HCNHIINum, HCOINum, HCOIINum, HCO2IINum, HeHIINum,
+      HNCINum, HNCOINum, HNOINum, HNOIINum, HOCIINum, MgINum, MgIINum, NINum,
+      NIINum, N2INum, N2IINum, N2HIINum, NHINum, NHIINum, NH2INum, NH2IINum,
+      NH3INum, NH3IINum, NOINum, NOIINum, NO2INum, OINum, OIINum, O2INum,
+      O2IINum, O2HINum, O2HIINum, OCNINum, OHINum, OHIINum, SiINum, SiIINum,
+      SiCINum, SiCIINum, SiC2INum, SiC2IINum, SiC3INum, SiC3IINum, SiHINum,
+      SiHIINum, SiH2INum, SiH2IINum, SiH3INum, SiH3IINum, SiH4INum, SiH4IINum,
+      SiH5IINum, SiOINum, SiOIINum, SiOHIINum;
 #endif
 
   NumberOfBaryonFields = 0;
@@ -165,8 +165,6 @@ int grid::TurbulenceInitializeGrid(float CloudDensity, float CloudSoundSpeed, FL
       FieldType[HCOINum  = NumberOfBaryonFields++] = HCOIDensity;
       FieldType[HCOIINum  = NumberOfBaryonFields++] = HCOIIDensity;
       FieldType[HCO2IINum  = NumberOfBaryonFields++] = HCO2IIDensity;
-      FieldType[HeINum  = NumberOfBaryonFields++] = HeIDensity;
-      FieldType[HeIINum  = NumberOfBaryonFields++] = HeIIDensity;
       FieldType[HeHIINum  = NumberOfBaryonFields++] = HeHIIDensity;
       FieldType[HNCINum  = NumberOfBaryonFields++] = HNCIDensity;
       FieldType[HNCOINum  = NumberOfBaryonFields++] = HNCOIDensity;

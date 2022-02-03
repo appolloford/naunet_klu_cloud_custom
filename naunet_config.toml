@@ -6,7 +6,7 @@ name = "naunet_klu_cloud_custom"
 description = "example"
 
 [chemistry]
-elements = ["E", "H", "HE", "C", "N", "O", "SI", "S", "CL", "MG"]
+elements = ["E", "H", "D", "He", "HE", "C", "N", "O", "SI", "S", "CL", "MG", "Si"]
 pseudo_elements = ["CR", "CRP", "PHOTON", "CRPHOT"]
 species = ["H", "H+", "H2", "H2+", "H3+", "HE", "HE+", "HEH+", "C", "C+", "CH", "CH+", "CH2", "CH2+", "N", "N+", "CH3", "CH3+", "NH", "NH+", "#CH4", "CH4", "CH4+", "NH2", "NH2+", "O", "O+", "#NH3", "NH3", "NH3+", "OH", "OH+", "#H2O", "H2O", "H2O+", "H3O+", "MG", "MG+", "#MG", "CN", "CN+", "#HCN", "#HNC", "HCN", "HCN+", "HNC", "#CO", "#N2", "CO", "CO+", "H2CN", "HCNH+", "N2", "N2+", "#H2CN", "SI", "SI+", "HCO", "HCO+", "HOC+", "N2H+", "SIH", "SIH+", "#NO", "#H2CO", "H2CO", "H2CO+", "NO", "NO+", "SIH2", "SIH2+", "H3CO+", "HNO", "HNO+", "#HNO", "SIH3", "SIH3+", "#O2", "#CH3OH", "CH3OH", "H2NO+", "O2", "O2+", "#SIH4", "SIH4", "SIH4+", "O2H", "O2H+", "#O2H", "SIH5+", "SIC", "SIC+", "#SIC", "OCN", "#HNCO", "HNCO", "#CO2", "CO2", "#SIO", "SIO", "SIO+", "HCO2+", "SIOH+", "#NO2", "NO2", "#H2SIO", "H2SIO", "SIC2", "SIC2+", "#SIC2", "#SIC3", "SIC3+", "SIC3", "E-"]
 extra_species = []

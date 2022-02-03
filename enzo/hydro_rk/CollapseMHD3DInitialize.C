@@ -131,8 +131,6 @@ int CollapseMHD3DInitialize(FILE *fptr, FILE *Outfptr,
   const char *HCOIName               = "HCOI_Density";
   const char *HCOIIName              = "HCOII_Density";
   const char *HCO2IIName             = "HCO2II_Density";
-  const char *HeIName                = "HeI_Density";
-  const char *HeIIName               = "HeII_Density";
   const char *HeHIIName              = "HeHII_Density";
   const char *HNCIName               = "HNCI_Density";
   const char *HNCOIName              = "HNCOI_Density";
@@ -608,8 +606,6 @@ int CollapseMHD3DInitialize(FILE *fptr, FILE *Outfptr,
       DataLabel[count++] = (char*) HCOIName;
       DataLabel[count++] = (char*) HCOIIName;
       DataLabel[count++] = (char*) HCO2IIName;
-      DataLabel[count++] = (char*) HeIName;
-      DataLabel[count++] = (char*) HeIIName;
       DataLabel[count++] = (char*) HeHIIName;
       DataLabel[count++] = (char*) HNCIName;
       DataLabel[count++] = (char*) HNCOIName;

@@ -64,10 +64,10 @@ int main() {
     y[IDX_NI]            = 7.5e-5 * nH;
     y[IDX_OI]            = 1.8e-4 * nH;
     y[IDX_COI]           = 1.4e-4 * nH;
-    y[IDX_SI]            = 8.0e-8 * nH;
+    // y[IDX_SI]            = 8.0e-8 * nH;
     y[IDX_SiI]           = 8.0e-9 * nH;
     y[IDX_MgI]           = 7.0e-9 * nH;
-    y[IDX_ClI]           = 4.0e-9 * nH;
+    // y[IDX_ClI]           = 4.0e-9 * nH;
 
     FILE *fbin           = fopen("evolution_singlegrid.bin", "w");
     FILE *ftxt           = fopen("evolution_singlegrid.txt", "w");
