@@ -8,12 +8,46 @@
 
 // clang-format off
 double GetMantleDens(double *y) {
+
+    int gindex[24] = {
+        IDX_GCH3OHI, IDX_GCH4I, IDX_GCOI, IDX_GCO2I, IDX_GH2CNI, IDX_GH2COI,
+        IDX_GH2OI, IDX_GH2SiOI, IDX_GHCNI, IDX_GHNCI, IDX_GHNCOI, IDX_GHNOI,
+        IDX_GMgI, IDX_GN2I, IDX_GNH3I, IDX_GNOI, IDX_GNO2I, IDX_GO2I, IDX_GO2HI,
+        IDX_GSiCI, IDX_GSiC2I, IDX_GSiC3I, IDX_GSiH4I, IDX_GSiOI
+    };
+
     return y[IDX_GCH3OHI] + y[IDX_GCH4I] + y[IDX_GCOI] + y[IDX_GCO2I] +
         y[IDX_GH2CNI] + y[IDX_GH2COI] + y[IDX_GH2OI] + y[IDX_GH2SiOI] +
         y[IDX_GHCNI] + y[IDX_GHNCI] + y[IDX_GHNCOI] + y[IDX_GHNOI] + y[IDX_GMgI]
         + y[IDX_GN2I] + y[IDX_GNH3I] + y[IDX_GNOI] + y[IDX_GNO2I] + y[IDX_GO2I]
         + y[IDX_GO2HI] + y[IDX_GSiCI] + y[IDX_GSiC2I] + y[IDX_GSiC3I] +
         y[IDX_GSiH4I] + y[IDX_GSiOI];
+}
+
+double GetHNuclei(double *y) {
+    return 4.0e+00*y[IDX_GCH3OHI] + 4.0e+00*y[IDX_GCH4I] + 2.0e+00*y[IDX_GH2CNI] +
+        2.0e+00*y[IDX_GH2COI] + 2.0e+00*y[IDX_GH2OI] + 2.0e+00*y[IDX_GH2SiOI] +
+        1.0e+00*y[IDX_GHCNI] + 1.0e+00*y[IDX_GHNCI] + 1.0e+00*y[IDX_GHNCOI] +
+        1.0e+00*y[IDX_GHNOI] + 3.0e+00*y[IDX_GNH3I] + 1.0e+00*y[IDX_GO2HI] +
+        4.0e+00*y[IDX_GSiH4I] + 1.0e+00*y[IDX_CHI] + 1.0e+00*y[IDX_CHII] +
+        2.0e+00*y[IDX_CH2I] + 2.0e+00*y[IDX_CH2II] + 3.0e+00*y[IDX_CH3I] +
+        3.0e+00*y[IDX_CH3II] + 4.0e+00*y[IDX_CH3OHI] + 4.0e+00*y[IDX_CH4I] +
+        4.0e+00*y[IDX_CH4II] + 1.0e+00*y[IDX_HI] + 1.0e+00*y[IDX_HII] +
+        2.0e+00*y[IDX_H2I] + 2.0e+00*y[IDX_H2II] + 2.0e+00*y[IDX_H2CNI] +
+        2.0e+00*y[IDX_H2COI] + 2.0e+00*y[IDX_H2COII] + 2.0e+00*y[IDX_H2NOII] +
+        2.0e+00*y[IDX_H2OI] + 2.0e+00*y[IDX_H2OII] + 2.0e+00*y[IDX_H2SiOI] +
+        3.0e+00*y[IDX_H3II] + 3.0e+00*y[IDX_H3COII] + 3.0e+00*y[IDX_H3OII] +
+        1.0e+00*y[IDX_HCNI] + 1.0e+00*y[IDX_HCNII] + 2.0e+00*y[IDX_HCNHII] +
+        1.0e+00*y[IDX_HCOI] + 1.0e+00*y[IDX_HCOII] + 1.0e+00*y[IDX_HCO2II] +
+        1.0e+00*y[IDX_HeHII] + 1.0e+00*y[IDX_HNCI] + 1.0e+00*y[IDX_HNCOI] +
+        1.0e+00*y[IDX_HNOI] + 1.0e+00*y[IDX_HNOII] + 1.0e+00*y[IDX_HOCII] +
+        1.0e+00*y[IDX_N2HII] + 1.0e+00*y[IDX_NHI] + 1.0e+00*y[IDX_NHII] +
+        2.0e+00*y[IDX_NH2I] + 2.0e+00*y[IDX_NH2II] + 3.0e+00*y[IDX_NH3I] +
+        3.0e+00*y[IDX_NH3II] + 1.0e+00*y[IDX_O2HI] + 1.0e+00*y[IDX_O2HII] +
+        1.0e+00*y[IDX_OHI] + 1.0e+00*y[IDX_OHII] + 1.0e+00*y[IDX_SiHI] +
+        1.0e+00*y[IDX_SiHII] + 2.0e+00*y[IDX_SiH2I] + 2.0e+00*y[IDX_SiH2II] +
+        3.0e+00*y[IDX_SiH3I] + 3.0e+00*y[IDX_SiH3II] + 4.0e+00*y[IDX_SiH4I] +
+        4.0e+00*y[IDX_SiH4II] + 5.0e+00*y[IDX_SiH5II] + 1.0e+00*y[IDX_SiOHII];
 }
 
 double GetMu(double *y) {
@@ -197,7 +231,7 @@ double GetH2shieldingFGK(double coldens) {
         double r  = radiativewidth / (1.7724539*dopplerwidth);
         double t  = 3.02 * pow(1000.0*r, -0.064);
         double u  = pow(taud*r, 0.5) / t;
-        double sr = pow((u*u + 0.78539816), -0.5) * r / t;
+        sr = pow((u*u + 0.78539816), -0.5) * r / t;
     }
 
     // Calculate doppler contribution of self shielding function sj

@@ -45,6 +45,7 @@ int Fex(realtype t, N_Vector u, N_Vector udot, void *user_data) {
     double mant = GetMantleDens(y);
     double mantabund = mant / nH;
     double garea = (pi*rG*rG) * gdens;
+    double garea_per_H = garea / nH;
     double densites = 4.0 * garea * sites;
     double h2col = 0.5*1.59e21*Av;
     double cocol = 1e-5 * h2col;
@@ -2645,8 +2646,8 @@ int Fex(realtype t, N_Vector u, N_Vector udot, void *user_data) {
         k[850]*y[IDX_OHII]*y[IDX_SiOI] + k[860]*y[IDX_SiII]*y[IDX_CH3OHI] +
         k[862]*y[IDX_SiH2II]*y[IDX_O2I] - k[1246]*y[IDX_SiOHII];
     
-    ydot[IDX_H2I] += H2formation*y[IDX_HI] - H2dissociation*y[IDX_H2I]/nH;
-    ydot[IDX_HI] += 2.0*(H2dissociation*y[IDX_H2I]/nH - H2formation*y[IDX_HI]);
+    ydot[IDX_H2I] += H2formation*y[IDX_HI]*nH - H2dissociation*y[IDX_H2I];
+    ydot[IDX_HI] += 2.0*(H2dissociation*y[IDX_H2I] - H2formation*y[IDX_HI]*nH);
     
 // clang-format on
 

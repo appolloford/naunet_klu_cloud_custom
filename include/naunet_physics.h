@@ -3,6 +3,7 @@
 
 /*  */
 double GetMantleDens(double *y);
+double GetHNuclei(double *y);
 double GetMu(double *y);
 double GetGamma(double *y);
 double GetNumDens(double *y);

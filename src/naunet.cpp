@@ -206,7 +206,7 @@ int Naunet::Solve(realtype *ab, realtype dt, NaunetData *data) {
 
     /* */
 
-    return NAUNET_SUCCESS;
+    return flag;
 };
 
 #ifdef PYMODULE

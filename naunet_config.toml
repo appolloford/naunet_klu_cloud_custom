@@ -14,7 +14,7 @@ network = ["reactions.ucl"]
 database = ["uclcustreaction"]
 heating = []
 cooling = []
-ode_modifier = ["ydot[IDX_H2I] += H2formation*y[IDX_HI] - H2dissociation*y[IDX_H2I]/nH", "ydot[IDX_HI] += 2.0*(H2dissociation*y[IDX_H2I]/nH - H2formation*y[IDX_HI])"]
+ode_modifier = ["ydot[IDX_H2I] += H2formation*y[IDX_HI]*nH - H2dissociation*y[IDX_H2I]", "ydot[IDX_HI] += 2.0*(H2dissociation*y[IDX_H2I] - H2formation*y[IDX_HI]*nH)"]
 
 [chemistry.dust]
 type = "RR07custom"
@@ -76,6 +76,10 @@ method = "sparse"
 
 [summary]
 num_of_species = 114
+num_of_gas_species = 90
+num_of_ice_species = 24
 num_of_reactions = 1403
 list_of_species = ["#CH3OH", "#CH4", "#CO", "#CO2", "#H2CN", "#H2CO", "#H2O", "#H2SIO", "#HCN", "#HNC", "#HNCO", "#HNO", "#MG", "#N2", "#NH3", "#NO", "#NO2", "#O2", "#O2H", "#SIC", "#SIC2", "#SIC3", "#SIH4", "#SIO", "C", "C+", "CH", "CH+", "CH2", "CH2+", "CH3", "CH3+", "CH3OH", "CH4", "CH4+", "CN", "CN+", "CO", "CO+", "CO2", "E-", "H", "H+", "H2", "H2+", "H2CN", "H2CO", "H2CO+", "H2NO+", "H2O", "H2O+", "H2SIO", "H3+", "H3CO+", "H3O+", "HCN", "HCN+", "HCNH+", "HCO", "HCO+", "HCO2+", "HE", "HE+", "HEH+", "HNC", "HNCO", "HNO", "HNO+", "HOC+", "MG", "MG+", "N", "N+", "N2", "N2+", "N2H+", "NH", "NH+", "NH2", "NH2+", "NH3", "NH3+", "NO", "NO+", "NO2", "O", "O+", "O2", "O2+", "O2H", "O2H+", "OCN", "OH", "OH+", "SI", "SI+", "SIC", "SIC+", "SIC2", "SIC2+", "SIC3", "SIC3+", "SIH", "SIH+", "SIH2", "SIH2+", "SIH3", "SIH3+", "SIH4", "SIH4+", "SIH5+", "SIO", "SIO+", "SIOH+"]
+list_of_gas_species = ["C", "C+", "CH", "CH+", "CH2", "CH2+", "CH3", "CH3+", "CH3OH", "CH4", "CH4+", "CN", "CN+", "CO", "CO+", "CO2", "E-", "H", "H+", "H2", "H2+", "H2CN", "H2CO", "H2CO+", "H2NO+", "H2O", "H2O+", "H2SIO", "H3+", "H3CO+", "H3O+", "HCN", "HCN+", "HCNH+", "HCO", "HCO+", "HCO2+", "HE", "HE+", "HEH+", "HNC", "HNCO", "HNO", "HNO+", "HOC+", "MG", "MG+", "N", "N+", "N2", "N2+", "N2H+", "NH", "NH+", "NH2", "NH2+", "NH3", "NH3+", "NO", "NO+", "NO2", "O", "O+", "O2", "O2+", "O2H", "O2H+", "OCN", "OH", "OH+", "SI", "SI+", "SIC", "SIC+", "SIC2", "SIC2+", "SIC3", "SIC3+", "SIH", "SIH+", "SIH2", "SIH2+", "SIH3", "SIH3+", "SIH4", "SIH4+", "SIH5+", "SIO", "SIO+", "SIOH+"]
+list_of_ice_species = ["#CH3OH", "#CH4", "#CO", "#CO2", "#H2CN", "#H2CO", "#H2O", "#H2SIO", "#HCN", "#HNC", "#HNCO", "#HNO", "#MG", "#N2", "#NH3", "#NO", "#NO2", "#O2", "#O2H", "#SIC", "#SIC2", "#SIC3", "#SIH4", "#SIO"]
 

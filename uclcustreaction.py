@@ -207,6 +207,9 @@ class CUSTOMDust(RR07Dust):
         "nmono": 2.0,
     }
 
+    def __init__(self, *args, **kwargs) -> None:
+        super().__init__(*args, **kwargs)
+
     def rate_desorption(
         self,
         spec: Species,

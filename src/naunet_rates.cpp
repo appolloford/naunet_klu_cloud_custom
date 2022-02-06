@@ -36,6 +36,7 @@ int EvalRates(realtype *k, realtype *y, NaunetData *u_data) {
     double mant = GetMantleDens(y);
     double mantabund = mant / nH;
     double garea = (pi*rG*rG) * gdens;
+    double garea_per_H = garea / nH;
     double densites = 4.0 * garea * sites;
     double h2col = 0.5*1.59e21*Av;
     double cocol = 1e-5 * h2col;
@@ -4351,6 +4352,7 @@ int EvalHeatingRates(realtype *kh, realtype *y, NaunetData *u_data) {
     double mant = GetMantleDens(y);
     double mantabund = mant / nH;
     double garea = (pi*rG*rG) * gdens;
+    double garea_per_H = garea / nH;
     double densites = 4.0 * garea * sites;
     double h2col = 0.5*1.59e21*Av;
     double cocol = 1e-5 * h2col;
@@ -4401,6 +4403,7 @@ int EvalCoolingRates(realtype *kc, realtype *y, NaunetData *u_data) {
     double mant = GetMantleDens(y);
     double mantabund = mant / nH;
     double garea = (pi*rG*rG) * gdens;
+    double garea_per_H = garea / nH;
     double densites = 4.0 * garea * sites;
     double h2col = 0.5*1.59e21*Av;
     double cocol = 1e-5 * h2col;
