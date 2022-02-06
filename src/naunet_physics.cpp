@@ -8,6 +8,19 @@
 
 // clang-format off
 double GetMantleDens(double *y) {
+
+    int gindex[51] = {
+        IDX_GC2I, IDX_GC2HI, IDX_GC2H2I, IDX_GC2H3I, IDX_GC2H4I, IDX_GC2H5I,
+        IDX_GC2H5OHI, IDX_GC3H2I, IDX_GC4HI, IDX_GC4NI, IDX_GCH2COI,
+        IDX_GCH3CCHI, IDX_GCH3CNI, IDX_GCH3CNHI, IDX_GCH3OHI, IDX_GCH4I,
+        IDX_GCOI, IDX_GCO2I, IDX_GCSI, IDX_GH2CNI, IDX_GH2COI, IDX_GH2CSI,
+        IDX_GH2OI, IDX_GH2SI, IDX_GH2S2I, IDX_GH2SiOI, IDX_GHC3NI, IDX_GHClI,
+        IDX_GHCNI, IDX_GHCOOCH3I, IDX_GHNCI, IDX_GHNCOI, IDX_GHNOI, IDX_GMgI,
+        IDX_GN2I, IDX_GNCCNI, IDX_GNH3I, IDX_GNOI, IDX_GNO2I, IDX_GNSI,
+        IDX_GO2I, IDX_GO2HI, IDX_GOCSI, IDX_GSiCI, IDX_GSiC2I, IDX_GSiC3I,
+        IDX_GSiH4I, IDX_GSiOI, IDX_GSiSI, IDX_GSOI, IDX_GSO2I
+    };
+
     return y[IDX_GC2I] + y[IDX_GC2HI] + y[IDX_GC2H2I] + y[IDX_GC2H3I] +
         y[IDX_GC2H4I] + y[IDX_GC2H5I] + y[IDX_GC2H5OHI] + y[IDX_GC3H2I] +
         y[IDX_GC4HI] + y[IDX_GC4NI] + y[IDX_GCH2COI] + y[IDX_GCH3CCHI] +
@@ -20,6 +33,54 @@ double GetMantleDens(double *y) {
         y[IDX_GNO2I] + y[IDX_GNSI] + y[IDX_GO2I] + y[IDX_GO2HI] + y[IDX_GOCSI] +
         y[IDX_GSiCI] + y[IDX_GSiC2I] + y[IDX_GSiC3I] + y[IDX_GSiH4I] +
         y[IDX_GSiOI] + y[IDX_GSiSI] + y[IDX_GSOI] + y[IDX_GSO2I];
+}
+
+double GetHNuclei(double *y) {
+    return 1.0e+00*y[IDX_GC2HI] + 2.0e+00*y[IDX_GC2H2I] + 3.0e+00*y[IDX_GC2H3I] +
+        4.0e+00*y[IDX_GC2H4I] + 5.0e+00*y[IDX_GC2H5I] + 6.0e+00*y[IDX_GC2H5OHI]
+        + 2.0e+00*y[IDX_GC3H2I] + 1.0e+00*y[IDX_GC4HI] + 2.0e+00*y[IDX_GCH2COI]
+        + 4.0e+00*y[IDX_GCH3CCHI] + 3.0e+00*y[IDX_GCH3CNI] +
+        4.0e+00*y[IDX_GCH3CNHI] + 4.0e+00*y[IDX_GCH3OHI] + 4.0e+00*y[IDX_GCH4I]
+        + 2.0e+00*y[IDX_GH2CNI] + 2.0e+00*y[IDX_GH2COI] + 2.0e+00*y[IDX_GH2CSI]
+        + 2.0e+00*y[IDX_GH2OI] + 2.0e+00*y[IDX_GH2SI] + 2.0e+00*y[IDX_GH2S2I] +
+        2.0e+00*y[IDX_GH2SiOI] + 1.0e+00*y[IDX_GHC3NI] + 1.0e+00*y[IDX_GHClI] +
+        1.0e+00*y[IDX_GHCNI] + 4.0e+00*y[IDX_GHCOOCH3I] + 1.0e+00*y[IDX_GHNCI] +
+        1.0e+00*y[IDX_GHNCOI] + 1.0e+00*y[IDX_GHNOI] + 3.0e+00*y[IDX_GNH3I] +
+        1.0e+00*y[IDX_GO2HI] + 4.0e+00*y[IDX_GSiH4I] + 1.0e+00*y[IDX_C2HI] +
+        1.0e+00*y[IDX_C2HII] + 2.0e+00*y[IDX_C2H2I] + 2.0e+00*y[IDX_C2H2II] +
+        3.0e+00*y[IDX_C2H3I] + 4.0e+00*y[IDX_C2H4I] + 5.0e+00*y[IDX_C2H5I] +
+        6.0e+00*y[IDX_C2H5OHI] + 7.0e+00*y[IDX_C2H5OH2II] +
+        1.0e+00*y[IDX_C2NHII] + 2.0e+00*y[IDX_C3H2I] + 5.0e+00*y[IDX_C3H5II] +
+        1.0e+00*y[IDX_C4HI] + 1.0e+00*y[IDX_CHI] + 1.0e+00*y[IDX_CHII] +
+        2.0e+00*y[IDX_CH2I] + 2.0e+00*y[IDX_CH2II] + 2.0e+00*y[IDX_CH2COI] +
+        3.0e+00*y[IDX_CH3I] + 3.0e+00*y[IDX_CH3II] + 4.0e+00*y[IDX_CH3CCHI] +
+        3.0e+00*y[IDX_CH3CNI] + 4.0e+00*y[IDX_CH3CNHI] + 4.0e+00*y[IDX_CH3CNHII]
+        + 4.0e+00*y[IDX_CH3OHI] + 5.0e+00*y[IDX_CH3OH2II] + 4.0e+00*y[IDX_CH4I]
+        + 4.0e+00*y[IDX_CH4II] + 5.0e+00*y[IDX_CH5II] + 1.0e+00*y[IDX_HI] +
+        1.0e+00*y[IDX_HII] + 2.0e+00*y[IDX_H2I] + 2.0e+00*y[IDX_H2II] +
+        2.0e+00*y[IDX_H2ClII] + 2.0e+00*y[IDX_H2CNI] + 2.0e+00*y[IDX_H2COI] +
+        2.0e+00*y[IDX_H2COII] + 2.0e+00*y[IDX_H2CSI] + 2.0e+00*y[IDX_H2CSII] +
+        2.0e+00*y[IDX_H2NOII] + 2.0e+00*y[IDX_H2OI] + 2.0e+00*y[IDX_H2OII] +
+        2.0e+00*y[IDX_H2SI] + 2.0e+00*y[IDX_H2SII] + 2.0e+00*y[IDX_H2S2I] +
+        2.0e+00*y[IDX_H2S2II] + 2.0e+00*y[IDX_H2SiOI] + 3.0e+00*y[IDX_H3II] +
+        3.0e+00*y[IDX_H3COII] + 3.0e+00*y[IDX_H3CSII] + 3.0e+00*y[IDX_H3OII] +
+        3.0e+00*y[IDX_H3SII] + 5.0e+00*y[IDX_H5C2O2II] + 1.0e+00*y[IDX_HC3NI] +
+        1.0e+00*y[IDX_HClI] + 1.0e+00*y[IDX_HClII] + 1.0e+00*y[IDX_HCNI] +
+        1.0e+00*y[IDX_HCNII] + 2.0e+00*y[IDX_HCNHII] + 1.0e+00*y[IDX_HCOI] +
+        1.0e+00*y[IDX_HCOII] + 1.0e+00*y[IDX_HCO2II] + 4.0e+00*y[IDX_HCOOCH3I] +
+        1.0e+00*y[IDX_HCSI] + 1.0e+00*y[IDX_HCSII] + 1.0e+00*y[IDX_HeHII] +
+        1.0e+00*y[IDX_HNCI] + 1.0e+00*y[IDX_HNCOI] + 1.0e+00*y[IDX_HNOI] +
+        1.0e+00*y[IDX_HNOII] + 1.0e+00*y[IDX_HNSII] + 1.0e+00*y[IDX_HOCII] +
+        1.0e+00*y[IDX_HOCSII] + 1.0e+00*y[IDX_HSI] + 1.0e+00*y[IDX_HSII] +
+        1.0e+00*y[IDX_HS2I] + 1.0e+00*y[IDX_HS2II] + 1.0e+00*y[IDX_HSiSII] +
+        1.0e+00*y[IDX_HSOII] + 1.0e+00*y[IDX_HSO2II] + 1.0e+00*y[IDX_N2HII] +
+        1.0e+00*y[IDX_NHI] + 1.0e+00*y[IDX_NHII] + 2.0e+00*y[IDX_NH2I] +
+        2.0e+00*y[IDX_NH2II] + 3.0e+00*y[IDX_NH3I] + 3.0e+00*y[IDX_NH3II] +
+        4.0e+00*y[IDX_NH4II] + 1.0e+00*y[IDX_O2HI] + 1.0e+00*y[IDX_O2HII] +
+        1.0e+00*y[IDX_OHI] + 1.0e+00*y[IDX_OHII] + 1.0e+00*y[IDX_SiHI] +
+        1.0e+00*y[IDX_SiHII] + 2.0e+00*y[IDX_SiH2I] + 2.0e+00*y[IDX_SiH2II] +
+        3.0e+00*y[IDX_SiH3I] + 3.0e+00*y[IDX_SiH3II] + 4.0e+00*y[IDX_SiH4I] +
+        4.0e+00*y[IDX_SiH4II] + 5.0e+00*y[IDX_SiH5II] + 1.0e+00*y[IDX_SiOHII];
 }
 
 double GetMu(double *y) {
@@ -259,7 +320,7 @@ double GetH2shieldingFGK(double coldens) {
         double r  = radiativewidth / (1.7724539*dopplerwidth);
         double t  = 3.02 * pow(1000.0*r, -0.064);
         double u  = pow(taud*r, 0.5) / t;
-        double sr = pow((u*u + 0.78539816), -0.5) * r / t;
+        sr = pow((u*u + 0.78539816), -0.5) * r / t;
     }
 
     // Calculate doppler contribution of self shielding function sj

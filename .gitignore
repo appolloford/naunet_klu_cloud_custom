@@ -3,4 +3,8 @@ __pycache__/
 
 # build
 build/
+lib/
+python/
 
+# deprecated
+enzo_*/
