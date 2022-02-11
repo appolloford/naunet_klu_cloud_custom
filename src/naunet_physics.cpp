@@ -8,14 +8,6 @@
 
 // clang-format off
 double GetMantleDens(double *y) {
-
-    int gindex[24] = {
-        IDX_GCH3OHI, IDX_GCH4I, IDX_GCOI, IDX_GCO2I, IDX_GH2CNI, IDX_GH2COI,
-        IDX_GH2OI, IDX_GH2SiOI, IDX_GHCNI, IDX_GHNCI, IDX_GHNCOI, IDX_GHNOI,
-        IDX_GMgI, IDX_GN2I, IDX_GNH3I, IDX_GNOI, IDX_GNO2I, IDX_GO2I, IDX_GO2HI,
-        IDX_GSiCI, IDX_GSiC2I, IDX_GSiC3I, IDX_GSiH4I, IDX_GSiOI
-    };
-
     return y[IDX_GCH3OHI] + y[IDX_GCH4I] + y[IDX_GCOI] + y[IDX_GCO2I] +
         y[IDX_GH2CNI] + y[IDX_GH2COI] + y[IDX_GH2OI] + y[IDX_GH2SiOI] +
         y[IDX_GHCNI] + y[IDX_GHNCI] + y[IDX_GHNCOI] + y[IDX_GHNOI] + y[IDX_GMgI]
