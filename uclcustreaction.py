@@ -254,6 +254,8 @@ class CUSTOMDust(RR07Dust):
                 ]
             )
 
+            rate = f"eb_crd >= {spec.binding_energy} ? ({rate}) : 0.0"
+
         elif destype == "photon":
             if not uvphot:
                 raise ValueError("Symbol of UV field strength was not provided.")
@@ -271,6 +273,8 @@ class CUSTOMDust(RR07Dust):
                 raise ValueError("Symbol of H2 formation rate was not provided.")
 
             rate = f"opt_h2d * {h2deseff} * {h2form} * nH / mant"
+
+            rate = f"eb_h2d >= {spec.binding_energy} ? ({rate}) : 0.0"
 
         else:
             raise ValueError(f"Not support desorption type {destype}")
