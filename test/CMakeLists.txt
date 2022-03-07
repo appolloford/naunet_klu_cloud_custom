@@ -4,6 +4,8 @@ elseif(MAKE_STATIC)
     set(NAUNETLIB naunet_static)
 endif()
 
+set(NAUNETLIB naunet_static)
+
 # check enabled languages
 get_property(
     languages 

@@ -6,6 +6,8 @@
 #include "naunet_macros.h"
 #include "naunet_physics.h"
 
+using namespace naunet_nr;
+
 // clang-format off
 double GetMantleDens(double *y) {
     return y[IDX_GCH3OHI] + y[IDX_GCH4I] + y[IDX_GCOI] + y[IDX_GCO2I] +

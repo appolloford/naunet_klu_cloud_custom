@@ -21,6 +21,7 @@ class Naunet {
     Naunet();
     ~Naunet();
     int Init(int nsystem = MAX_NSYSTEMS, double atol = 1e-20, double rtol = 1e-5, int mxsteps=500);
+    int Reset(int nsystem = MAX_NSYSTEMS, double atol = 1e-20, double rtol = 1e-5, int mxsteps=500);
     int DebugInfo();
     int Finalize();
     /* */
@@ -35,6 +36,7 @@ class Naunet {
     int mxsteps_;
     realtype atol_;
     realtype rtol_;
+    FILE *errfp_;
 
     /*  */
 

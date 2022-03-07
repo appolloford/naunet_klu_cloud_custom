@@ -5,7 +5,9 @@
 #define NR_END 1
 #define FREE_ARG char*
 
-void nrerror(char error_text[])
+// using namespace naunet_nr;
+
+void naunet_nr::nrerror(char error_text[])
 /* Numerical Recipes standard error handler */
 {
     fprintf(stderr,"Numerical Recipes run-time error...\n");
@@ -14,7 +16,7 @@ void nrerror(char error_text[])
     exit(1);
 }
 
-double *vector(long nl, long nh)
+double *naunet_nr::vector(long nl, long nh)
 /* allocate a double vector with subscript range v[nl..nh] */
 {
     double *v;
@@ -24,13 +26,13 @@ double *vector(long nl, long nh)
     return v-nl+NR_END;
 }
 
-void free_vector(double *v, long nl, long nh)
+void naunet_nr::free_vector(double *v, long nl, long nh)
 /* free a double vector allocated with vector() */
 {
     free((FREE_ARG) (v+nl-NR_END));
 }
 
-double **matrix(long nrl, long nrh, long ncl, long nch)
+double **naunet_nr::matrix(long nrl, long nrh, long ncl, long nch)
 /* allocate a double matrix with subscript range m[nrl..nrh][ncl..nch] */
 {
     long i, nrow=nrh-nrl+1,ncol=nch-ncl+1;
@@ -54,14 +56,14 @@ double **matrix(long nrl, long nrh, long ncl, long nch)
     return m;
 }
 
-void free_matrix(double **m, long nrl, long nrh, long ncl, long nch)
+void naunet_nr::free_matrix(double **m, long nrl, long nrh, long ncl, long nch)
 /* free a double matrix allocated by dmatrix() */
 {
     free((FREE_ARG) (m[nrl]+ncl-NR_END));
     free((FREE_ARG) (m+nrl-NR_END));
 }
 
-void spline(double x[], double y[], int n, double yp1, double ypn, double y2[])
+void naunet_nr::spline(double x[], double y[], int n, double yp1, double ypn, double y2[])
 {
     int i,k;
     double p,qn,sig,un,*u;
@@ -93,7 +95,7 @@ void spline(double x[], double y[], int n, double yp1, double ypn, double y2[])
 }
 
 
-void splint(double xa[], double ya[], double y2a[], int n, double x, double *y)
+void naunet_nr::splint(double xa[], double ya[], double y2a[], int n, double x, double *y)
 {
     void nrerror(char error_text[]);
     int klo,khi,k;
@@ -115,7 +117,7 @@ void splint(double xa[], double ya[], double y2a[], int n, double x, double *y)
 
 
 
-void splie2(double x1a[], double x2a[], double *ya[], int m, int n, double **y2a)
+void naunet_nr::splie2(double x1a[], double x2a[], double *ya[], int m, int n, double **y2a)
 {
     void spline(double x[], double y[], int n, double yp1, double ypn, double y2[]);
     int j;
@@ -125,7 +127,7 @@ void splie2(double x1a[], double x2a[], double *ya[], int m, int n, double **y2a
 }
 
 
-void splin2(double x1a[], double x2a[], double *ya[], double *y2a[], int m, int n,
+void naunet_nr::splin2(double x1a[], double x2a[], double *ya[], double *y2a[], int m, int n,
             double x1, double x2, double *y)
 {
     void spline(double x[], double y[], int n, double yp1, double ypn, double y2[]);
