@@ -94,6 +94,7 @@ int main() {
 #endif
 
     // naunet.Reset(1, 1e-20, 1e-5, 10000);
+    naunet.Finalize();
 
     double y[NEQUATIONS] = {0.0};
 
@@ -593,6 +594,9 @@ int main() {
         fprintf(rtxt, "\n");
 // #endif
 
+        Naunet naunet;
+        naunet.Init(1, 1e-30, 1e-5, 10000);
+
         // dtyr = pow(10.0, logtime) - time;
         // dtyr = 7.4048661e+02;
         // dtyr = 7.4048661e+02;
@@ -622,6 +626,9 @@ int main() {
         double duration = timer.elapsed();
         fprintf(ttxt, "%8.5e \n", duration);
         printf("Time = %13.7e yr, elapsed: %8.5e sec\n", time, duration);
+
+
+        naunet.Finalize();
     }
 
     // save the final results
@@ -641,7 +648,7 @@ int main() {
     fclose(rtxt);
 // #endif
 
-    naunet.Finalize();
+    // naunet.Finalize();
 
     return 0;
 }
