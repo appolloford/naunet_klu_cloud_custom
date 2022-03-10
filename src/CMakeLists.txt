@@ -7,6 +7,13 @@ set(
         naunet_jac
 )
 
+# check enabled languages
+get_property(
+    languages
+        GLOBAL
+            PROPERTY ENABLED_LANGUAGES
+)
+
 # Functions from Numerical Recipes, not suppport GPU yet.
 if(NOT "CUDA" IN_LIST languages)
     list(
@@ -123,7 +130,6 @@ if(MAKE_PYTHON)
         ${PYMODNAME}
             PUBLIC
                 ${CMAKE_SOURCE_DIR}/include
-            
     )
 
     target_link_libraries(

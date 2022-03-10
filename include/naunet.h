@@ -20,11 +20,10 @@ class Naunet {
    public:
     Naunet();
     ~Naunet();
-    int Init(int nsystem = MAX_NSYSTEMS, double atol = 1e-20, double rtol = 1e-5, int mxsteps=500);
-    int Reset(int nsystem = MAX_NSYSTEMS, double atol = 1e-20, double rtol = 1e-5, int mxsteps=500);
-    int DebugInfo();
     int Finalize();
-    /* */
+    int Init(int nsystem = MAX_NSYSTEMS, double atol = 1e-20, double rtol = 1e-5, int mxsteps=500);
+    int PrintDebugInfo();
+    int Reset(int nsystem = MAX_NSYSTEMS, double atol = 1e-20, double rtol = 1e-5, int mxsteps=500);
     int Solve(realtype *ab, realtype dt, NaunetData *data);
 #ifdef PYMODULE
     py::array_t<realtype> PyWrapSolve(py::array_t<realtype> arr, realtype dt,
@@ -45,7 +44,16 @@ class Naunet {
     void *cv_mem_;
     SUNLinearSolver cv_ls_;
 
+    realtype ab_init_[NEQUATIONS];
+    realtype ab_tmp_[NEQUATIONS]; // Temporary state for error handling
+
     /*  */
+
+    int GetCVStates(void *cv_mem, 
+                    long int &nst, long int &nfe, long int &nsetups, long int &nje, 
+                    long int &netf, long int &nge, long int &nni, long int &ncfn);
+    int HandleError(int flag, realtype *ab, realtype dt, realtype t0);
+    static int CheckFlag(void *flagvalue, const char *funcname, int opt, FILE *errf);
 };
 
 #ifdef PYMODULE
