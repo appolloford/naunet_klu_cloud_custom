@@ -1,3 +1,4 @@
+#include <stdio.h>
 #include <math.h>
 #include <algorithm>
 
@@ -8,19 +9,6 @@
 
 // clang-format off
 double GetMantleDens(double *y) {
-
-    int gindex[51] = {
-        IDX_GC2I, IDX_GC2HI, IDX_GC2H2I, IDX_GC2H3I, IDX_GC2H4I, IDX_GC2H5I,
-        IDX_GC2H5OHI, IDX_GC3H2I, IDX_GC4HI, IDX_GC4NI, IDX_GCH2COI,
-        IDX_GCH3CCHI, IDX_GCH3CNI, IDX_GCH3CNHI, IDX_GCH3OHI, IDX_GCH4I,
-        IDX_GCOI, IDX_GCO2I, IDX_GCSI, IDX_GH2CNI, IDX_GH2COI, IDX_GH2CSI,
-        IDX_GH2OI, IDX_GH2SI, IDX_GH2S2I, IDX_GH2SiOI, IDX_GHC3NI, IDX_GHClI,
-        IDX_GHCNI, IDX_GHCOOCH3I, IDX_GHNCI, IDX_GHNCOI, IDX_GHNOI, IDX_GMgI,
-        IDX_GN2I, IDX_GNCCNI, IDX_GNH3I, IDX_GNOI, IDX_GNO2I, IDX_GNSI,
-        IDX_GO2I, IDX_GO2HI, IDX_GOCSI, IDX_GSiCI, IDX_GSiC2I, IDX_GSiC3I,
-        IDX_GSiH4I, IDX_GSiOI, IDX_GSiSI, IDX_GSOI, IDX_GSO2I
-    };
-
     return y[IDX_GC2I] + y[IDX_GC2HI] + y[IDX_GC2H2I] + y[IDX_GC2H3I] +
         y[IDX_GC2H4I] + y[IDX_GC2H5I] + y[IDX_GC2H5OHI] + y[IDX_GC3H2I] +
         y[IDX_GC4HI] + y[IDX_GC4NI] + y[IDX_GCH2COI] + y[IDX_GCH3CCHI] +
@@ -295,6 +283,10 @@ double GetH2shieldingInt(double coldens) {
 
     /* */
 
+    printf("WARNING!! Not Implemented! Return H2 shielding = -1.\n");
+
+    /* */
+
     return shielding;
 }
 
@@ -354,6 +346,10 @@ double GetCOshieldingInt(double tgas, double h2col, double coldens) {
 
     /* */
 
+    printf("WARNING!! Not Implemented! Return CO shielding = -1.\n");
+
+    /* */
+
     return shielding;
 }
 
@@ -365,10 +361,12 @@ double GetCOshieldingInt1(double h2col, double coldens) {
     double logh2 = std::min(std::max(log10(h2col), COShieldingTableX[0]), COShieldingTableX[5]);
     double logco = std::min(std::max(log10(coldens), COShieldingTableY[0]), COShieldingTableY[6]);
 
-    double *x1  = vector(1, 6);
-    double *x2  = vector(1, 7);
-    double **y  = matrix(1, 6, 1, 7);
-    double **y2 = matrix(1, 6, 1, 7);
+    /* */
+
+    double *x1  = naunet_util::vector(1, 6);
+    double *x2  = naunet_util::vector(1, 7);
+    double **y  = naunet_util::matrix(1, 6, 1, 7);
+    double **y2 = naunet_util::matrix(1, 6, 1, 7);
 
     for (int i=1; i<=6; i++) x1[i] = COShieldingTableX[i-1];
     for (int i=1; i<=7; i++) x2[i] = COShieldingTableY[i-1];
@@ -379,19 +377,18 @@ double GetCOshieldingInt1(double h2col, double coldens) {
         }
     }
 
-    splie2(x1, x2, y, 6, 7, y2);
+    naunet_util::splie2(x1, x2, y, 6, 7, y2);
 
-    splin2(x1, x2, y, y2, 6, 7, logh2, logco, &shielding);
-
-    // splin2(COShieldingTableX, COShieldingTableY, COShieldingTable, COShieldingTableD2, 
-    //        6, 7, logh2, logco, &shielding);
+    naunet_util::splin2(x1, x2, y, y2, 6, 7, logh2, logco, &shielding);
 
     shielding = pow(10.0, shielding);
 
-    free_vector(x1, 1, 6);
-    free_vector(x2, 1, 7);
-    free_matrix(y, 1, 6, 1, 7);
-    free_matrix(y2, 1, 6, 1, 7);
+    naunet_util::free_vector(x1, 1, 6);
+    naunet_util::free_vector(x2, 1, 7);
+    naunet_util::free_matrix(y, 1, 6, 1, 7);
+    naunet_util::free_matrix(y2, 1, 6, 1, 7);
+
+    /* */
 
     /* */
 
@@ -404,6 +401,10 @@ double GetN2shieldingInt(double tgas, double h2col, double coldens) {
     // clang-format on
 
     double shielding = -1.0;
+
+    /* */
+
+    printf("WARNING!! Not Implemented! Return N2 shielding = -1.\n");
 
     /* */
 
@@ -438,7 +439,7 @@ double xlamda(double wavelength) {
     }
 
     else if (wavelength >= x[28]) {
-        return 0.05 - 5.16e-11 * (wavelength-x[29]);
+        return 0.05 - 5.16e-11 * (wavelength-x[28]);
     }
 
     for (int i=0; i<28; i++) {
@@ -447,11 +448,13 @@ double xlamda(double wavelength) {
         }
     }
 
+    return 0.0;
+
 }
 
 // Calculate the influence of dust extinction (g=0.8, omega=0.3) 
 // Ref: Wagenblast & Hartquist, mnras237, 1019 (1989)
-// Originally implemented in UCLCHEM
+// Adapted from UCLCHEM
 double GetGrainScattering(double av, double wavelength) {
 
     double c[6] = {1.0e0, 2.006e0, -1.438e0, 7.364e-1, -5.076e-1, -5.920e-2};
@@ -483,6 +486,7 @@ double GetGrainScattering(double av, double wavelength) {
 
 // Calculate lambda bar (in a) according to equ. 4 of van dishoeck
 // and black, apj 334, p771 (1988)
+// Adapted from UCLCHEM
 double GetCharactWavelength(double h2col, double cocol) {
     double logco = log10(abs(cocol)+1.0);
     double logh2 = log10(abs(h2col)+1.0);
@@ -495,6 +499,10 @@ double GetCharactWavelength(double h2col, double cocol) {
     // to the total rate of each depth. lbar cannot be larger than
     // the wavelength of band 33 (1076.1a) and not be smaller than
     // the wavelength of band 1 (913.6a).
-    return std::min(1076.0, std::max(913.0, lbar));
+
+    /* */
+    lbar = std::min(1076.0, std::max(913.0, lbar));
+    /* */
+    return lbar;
 
 }

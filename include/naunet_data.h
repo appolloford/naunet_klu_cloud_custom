@@ -12,6 +12,9 @@ struct NaunetData {
     double opt_crd;
     double opt_h2d;
     double opt_uvd;
+    double eb_h2d;
+    double eb_crd;
+    double eb_uvd;
     double crdeseff;
     double h2deseff;
     double nH;

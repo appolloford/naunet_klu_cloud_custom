@@ -23,6 +23,9 @@ int EvalRates(realtype *k, realtype *y, NaunetData *u_data) {
     realtype opt_crd = u_data->opt_crd;
     realtype opt_h2d = u_data->opt_h2d;
     realtype opt_uvd = u_data->opt_uvd;
+    realtype eb_h2d = u_data->eb_h2d;
+    realtype eb_crd = u_data->eb_crd;
+    realtype eb_uvd = u_data->eb_uvd;
     realtype crdeseff = u_data->crdeseff;
     realtype h2deseff = u_data->h2deseff;
     realtype nH = u_data->nH;
@@ -7726,6 +7729,9 @@ int EvalHeatingRates(realtype *kh, realtype *y, NaunetData *u_data) {
     realtype opt_crd = u_data->opt_crd;
     realtype opt_h2d = u_data->opt_h2d;
     realtype opt_uvd = u_data->opt_uvd;
+    realtype eb_h2d = u_data->eb_h2d;
+    realtype eb_crd = u_data->eb_crd;
+    realtype eb_uvd = u_data->eb_uvd;
     realtype crdeseff = u_data->crdeseff;
     realtype h2deseff = u_data->h2deseff;
     realtype nH = u_data->nH;
@@ -7777,6 +7783,9 @@ int EvalCoolingRates(realtype *kc, realtype *y, NaunetData *u_data) {
     realtype opt_crd = u_data->opt_crd;
     realtype opt_h2d = u_data->opt_h2d;
     realtype opt_uvd = u_data->opt_uvd;
+    realtype eb_h2d = u_data->eb_h2d;
+    realtype eb_crd = u_data->eb_crd;
+    realtype eb_uvd = u_data->eb_uvd;
     realtype crdeseff = u_data->crdeseff;
     realtype h2deseff = u_data->h2deseff;
     realtype nH = u_data->nH;
