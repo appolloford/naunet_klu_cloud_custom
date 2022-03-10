@@ -289,6 +289,14 @@ int Naunet::Solve(realtype *ab, realtype dt, NaunetData *data) {
         // flag is 0 (CV_SUCCESS) in the first iteration
         // modify some parameters if the first iteration failed
         if (flag == -1) {
+            // if error handling has been tried once, continue with the current time and state
+            if (level > 1) {
+                for (int i=0; i<NEQUATIONS; i++) {
+                    ab_tmp[i] = ab[i];
+                }
+                dt -= t0;
+            }
+            // in case h = hmin, use smaller timesteps
             nsubsteps = level * 10;
             // flag = CVodeSetMaxNumSteps(cv_mem_, (level+1) * mxsteps_);
             // if (check_flag(&flag, "CVodeSetMaxNumSteps", 0)) return 1;
