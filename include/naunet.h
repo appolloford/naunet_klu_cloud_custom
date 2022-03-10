@@ -88,6 +88,7 @@ PYBIND11_MODULE(PYMODNAME, m) {
         .def_readwrite("eb_uvd", &NaunetData::eb_uvd)
         .def_readwrite("crdeseff", &NaunetData::crdeseff)
         .def_readwrite("h2deseff", &NaunetData::h2deseff)
+        .def_readwrite("ksp", &NaunetData::ksp)
         .def_readwrite("nH", &NaunetData::nH)
         .def_readwrite("zeta", &NaunetData::zeta)
         .def_readwrite("Tgas", &NaunetData::Tgas)

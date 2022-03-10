@@ -47,6 +47,7 @@ int main() {
     double crdeseff = 1.0e5;
     double h2deseff = 1.0e-2;
     double uvcreff  = 1.0e-3;
+    double ksp      = 0.0;
 
     NaunetData data;
     data.nH       = nH;
@@ -66,6 +67,7 @@ int main() {
     data.crdeseff = crdeseff;
     data.h2deseff = h2deseff;
     data.uvcreff  = uvcreff;
+    data.ksp      = ksp;
 
     // data.zeta     = 1.3e-17;
     // data.Av       = Av;

@@ -184,8 +184,8 @@ int Naunet::HandleError(int cvflag, realtype *ab, realtype dt, realtype t0) {
         }
         else if (cvflag < 0) {
             fprintf(errfp_, "The error cannot be recovered by Naunet! Exit from Naunet!\n");
-            fprintf(errfp_, "Flag = %d, level = %d\n", cvflag, level);
-            break;
+            fprintf(errfp_, "cvFlag = %d, level = %d\n", cvflag, level);
+            return NAUNET_FAIL;
         }
 
         // Reset initial conditions
@@ -420,6 +420,7 @@ int Naunet::Solve(realtype *ab, realtype dt, NaunetData *data) {
         fprintf(errfp_, "data.eb_uvd = %13.7e\n", data->eb_uvd);
         fprintf(errfp_, "data.crdeseff = %13.7e\n", data->crdeseff);
         fprintf(errfp_, "data.h2deseff = %13.7e\n", data->h2deseff);
+        fprintf(errfp_, "data.ksp = %13.7e\n", data->ksp);
         fprintf(errfp_, "data.nH = %13.7e\n", data->nH);
         fprintf(errfp_, "data.zeta = %13.7e\n", data->zeta);
         fprintf(errfp_, "data.Tgas = %13.7e\n", data->Tgas);

@@ -37,6 +37,7 @@ int Fex(realtype t, N_Vector u, N_Vector udot, void *user_data) {
     realtype eb_uvd = u_data->eb_uvd;
     realtype crdeseff = u_data->crdeseff;
     realtype h2deseff = u_data->h2deseff;
+    realtype ksp = u_data->ksp;
     realtype nH = u_data->nH;
     realtype zeta = u_data->zeta;
     realtype Tgas = u_data->Tgas;

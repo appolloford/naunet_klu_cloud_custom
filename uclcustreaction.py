@@ -203,6 +203,23 @@ class CUSTOMReaction(Reaction):
 @define_dust(name="RR07custom")
 class CUSTOMDust(RR07Dust):
 
+    varis = {
+        "Radius": "rG",
+        "GrainDensity": "gdens",  # grain density
+        "SurfaceSites": "sites",
+        "FreezeRatio": "fr",
+        "ThermDesorptionOption": "opt_thd",
+        "CRDesorptionOption": "opt_crd",
+        "H2DesorptionOption": "opt_h2d",
+        "UVDesorptionOption": "opt_uvd",
+        "H2MaxDesorptionEnergy": "eb_h2d",
+        "CRMaxDesorptionEnergy": "eb_crd",
+        "UVMaxDesorptionEnergy": "eb_uvd",
+        "CRDesorptionEfficiency": "crdeseff",
+        "H2DesorptionEfficiency": "h2deseff",
+        "SputteringRate": "ksp",
+    }
+
     consts = {
         "nmono": 2.0,
     }
@@ -225,6 +242,7 @@ class CUSTOMDust(RR07Dust):
 
         crdeseff = self.varis.get("CRDesorptionEfficiency")
         h2deseff = self.varis.get("H2DesorptionEfficiency")
+        ksp      = self.varis.get("SputteringRate")
 
         if destype == "thermal":
 
@@ -240,6 +258,8 @@ class CUSTOMDust(RR07Dust):
                     f"exp(-eb_{spec.alias}/{tdust})",
                 ],
             )
+
+            rate = f"({rate} + {ksp} * gdens / mant)"
 
         elif destype == "cosmicray":
             if not zeta:

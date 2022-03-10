@@ -17,6 +17,7 @@ struct NaunetData {
     double eb_uvd;
     double crdeseff;
     double h2deseff;
+    double ksp;
     double nH;
     double zeta;
     double Tgas;
