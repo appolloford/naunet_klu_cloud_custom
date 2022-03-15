@@ -259,7 +259,7 @@ class CUSTOMDust(RR07Dust):
                 ],
             )
 
-            rate = f"({rate} + {ksp} * gdens / mant)"
+            rate = f"({rate} + {ksp} * garea / mant)"
 
         elif destype == "cosmicray":
             if not zeta:

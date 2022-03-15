@@ -3980,7 +3980,7 @@ int EvalRates(realtype *k, realtype *y, NaunetData *u_data) {
         
     if (Tgas>0.0 && Tgas<10000.0) { k[1310] = mantabund > 1e-30 ? ((opt_thd
         * sqrt(2.0*sites*kerg*eb_GCH4I/(pi*pi*amu*16.0)) * 2.0 * densites *
-        exp(-eb_GCH4I/Tgas) + ksp * gdens / mant)) : 0.0;  }
+        exp(-eb_GCH4I/Tgas) + ksp * garea / mant)) : 0.0;  }
         
     if (Tgas>0.0 && Tgas<10000.0) { k[1311] = mantabund > 1e-30 ? (eb_h2d >=
         5500.0 ? (opt_h2d * h2deseff * 1.0e-17 * sqrt(Tgas) * y[IDX_HI] * nH /
@@ -3996,7 +3996,7 @@ int EvalRates(realtype *k, realtype *y, NaunetData *u_data) {
         
     if (Tgas>0.0 && Tgas<10000.0) { k[1314] = mantabund > 1e-30 ? ((opt_thd
         * sqrt(2.0*sites*kerg*eb_GNH3I/(pi*pi*amu*17.0)) * 2.0 * densites *
-        exp(-eb_GNH3I/Tgas) + ksp * gdens / mant)) : 0.0;  }
+        exp(-eb_GNH3I/Tgas) + ksp * garea / mant)) : 0.0;  }
         
     if (Tgas>0.0 && Tgas<10000.0) { k[1315] = mantabund > 1e-30 ? (eb_h2d >=
         5600.0 ? (opt_h2d * h2deseff * 1.0e-17 * sqrt(Tgas) * y[IDX_HI] * nH /
@@ -4012,7 +4012,7 @@ int EvalRates(realtype *k, realtype *y, NaunetData *u_data) {
         
     if (Tgas>0.0 && Tgas<10000.0) { k[1318] = mantabund > 1e-30 ? ((opt_thd
         * sqrt(2.0*sites*kerg*eb_GH2OI/(pi*pi*amu*18.0)) * 2.0 * densites *
-        exp(-eb_GH2OI/Tgas) + ksp * gdens / mant)) : 0.0;  }
+        exp(-eb_GH2OI/Tgas) + ksp * garea / mant)) : 0.0;  }
         
     if (Tgas>0.0 && Tgas<10000.0) { k[1319] = mantabund > 1e-30 ? (eb_h2d >=
         5300.0 ? (opt_h2d * h2deseff * 1.0e-17 * sqrt(Tgas) * y[IDX_HI] * nH /
@@ -4028,7 +4028,7 @@ int EvalRates(realtype *k, realtype *y, NaunetData *u_data) {
         
     if (Tgas>0.0 && Tgas<10000.0) { k[1322] = mantabund > 1e-30 ? ((opt_thd
         * sqrt(2.0*sites*kerg*eb_GMgI/(pi*pi*amu*24.0)) * 2.0 * densites *
-        exp(-eb_GMgI/Tgas) + ksp * gdens / mant)) : 0.0;  }
+        exp(-eb_GMgI/Tgas) + ksp * garea / mant)) : 0.0;  }
         
     if (Tgas>0.0 && Tgas<10000.0) { k[1323] = mantabund > 1e-30 ? (eb_h2d >=
         3700.0 ? (opt_h2d * h2deseff * 1.0e-17 * sqrt(Tgas) * y[IDX_HI] * nH /
@@ -4044,7 +4044,7 @@ int EvalRates(realtype *k, realtype *y, NaunetData *u_data) {
         
     if (Tgas>0.0 && Tgas<10000.0) { k[1326] = mantabund > 1e-30 ? ((opt_thd
         * sqrt(2.0*sites*kerg*eb_GHCNI/(pi*pi*amu*27.0)) * 2.0 * densites *
-        exp(-eb_GHCNI/Tgas) + ksp * gdens / mant)) : 0.0;  }
+        exp(-eb_GHCNI/Tgas) + ksp * garea / mant)) : 0.0;  }
         
     if (Tgas>0.0 && Tgas<10000.0) { k[1327] = mantabund > 1e-30 ? (eb_h2d >=
         3800.0 ? (opt_h2d * h2deseff * 1.0e-17 * sqrt(Tgas) * y[IDX_HI] * nH /
@@ -4060,7 +4060,7 @@ int EvalRates(realtype *k, realtype *y, NaunetData *u_data) {
         
     if (Tgas>0.0 && Tgas<10000.0) { k[1330] = mantabund > 1e-30 ? ((opt_thd
         * sqrt(2.0*sites*kerg*eb_GHNCI/(pi*pi*amu*27.0)) * 2.0 * densites *
-        exp(-eb_GHNCI/Tgas) + ksp * gdens / mant)) : 0.0;  }
+        exp(-eb_GHNCI/Tgas) + ksp * garea / mant)) : 0.0;  }
         
     if (Tgas>0.0 && Tgas<10000.0) { k[1331] = mantabund > 1e-30 ? (eb_h2d >=
         1300.0 ? (opt_h2d * h2deseff * 1.0e-17 * sqrt(Tgas) * y[IDX_HI] * nH /
@@ -4076,7 +4076,7 @@ int EvalRates(realtype *k, realtype *y, NaunetData *u_data) {
         
     if (Tgas>0.0 && Tgas<10000.0) { k[1334] = mantabund > 1e-30 ? ((opt_thd
         * sqrt(2.0*sites*kerg*eb_GCOI/(pi*pi*amu*28.0)) * 2.0 * densites *
-        exp(-eb_GCOI/Tgas) + ksp * gdens / mant)) : 0.0;  }
+        exp(-eb_GCOI/Tgas) + ksp * garea / mant)) : 0.0;  }
         
     if (Tgas>0.0 && Tgas<10000.0) { k[1335] = mantabund > 1e-30 ? (eb_h2d >=
         1100.0 ? (opt_h2d * h2deseff * 1.0e-17 * sqrt(Tgas) * y[IDX_HI] * nH /
@@ -4092,7 +4092,7 @@ int EvalRates(realtype *k, realtype *y, NaunetData *u_data) {
         
     if (Tgas>0.0 && Tgas<10000.0) { k[1338] = mantabund > 1e-30 ? ((opt_thd
         * sqrt(2.0*sites*kerg*eb_GN2I/(pi*pi*amu*28.0)) * 2.0 * densites *
-        exp(-eb_GN2I/Tgas) + ksp * gdens / mant)) : 0.0;  }
+        exp(-eb_GN2I/Tgas) + ksp * garea / mant)) : 0.0;  }
         
     if (Tgas>0.0 && Tgas<10000.0) { k[1339] = mantabund > 1e-30 ? (eb_h2d >=
         2400.0 ? (opt_h2d * h2deseff * 1.0e-17 * sqrt(Tgas) * y[IDX_HI] * nH /
@@ -4108,7 +4108,7 @@ int EvalRates(realtype *k, realtype *y, NaunetData *u_data) {
         
     if (Tgas>0.0 && Tgas<10000.0) { k[1342] = mantabund > 1e-30 ? ((opt_thd
         * sqrt(2.0*sites*kerg*eb_GH2CNI/(pi*pi*amu*28.0)) * 2.0 * densites *
-        exp(-eb_GH2CNI/Tgas) + ksp * gdens / mant)) : 0.0;  }
+        exp(-eb_GH2CNI/Tgas) + ksp * garea / mant)) : 0.0;  }
         
     if (Tgas>0.0 && Tgas<10000.0) { k[1343] = mantabund > 1e-30 ? (eb_h2d >=
         1600.0 ? (opt_h2d * h2deseff * 1.0e-17 * sqrt(Tgas) * y[IDX_HI] * nH /
@@ -4124,7 +4124,7 @@ int EvalRates(realtype *k, realtype *y, NaunetData *u_data) {
         
     if (Tgas>0.0 && Tgas<10000.0) { k[1346] = mantabund > 1e-30 ? ((opt_thd
         * sqrt(2.0*sites*kerg*eb_GNOI/(pi*pi*amu*30.0)) * 2.0 * densites *
-        exp(-eb_GNOI/Tgas) + ksp * gdens / mant)) : 0.0;  }
+        exp(-eb_GNOI/Tgas) + ksp * garea / mant)) : 0.0;  }
         
     if (Tgas>0.0 && Tgas<10000.0) { k[1347] = mantabund > 1e-30 ? (eb_h2d >=
         4500.0 ? (opt_h2d * h2deseff * 1.0e-17 * sqrt(Tgas) * y[IDX_HI] * nH /
@@ -4140,7 +4140,7 @@ int EvalRates(realtype *k, realtype *y, NaunetData *u_data) {
         
     if (Tgas>0.0 && Tgas<10000.0) { k[1350] = mantabund > 1e-30 ? ((opt_thd
         * sqrt(2.0*sites*kerg*eb_GH2COI/(pi*pi*amu*30.0)) * 2.0 * densites *
-        exp(-eb_GH2COI/Tgas) + ksp * gdens / mant)) : 0.0;  }
+        exp(-eb_GH2COI/Tgas) + ksp * garea / mant)) : 0.0;  }
         
     if (Tgas>0.0 && Tgas<10000.0) { k[1351] = mantabund > 1e-30 ? (eb_h2d >=
         3000.0 ? (opt_h2d * h2deseff * 1.0e-17 * sqrt(Tgas) * y[IDX_HI] * nH /
@@ -4156,7 +4156,7 @@ int EvalRates(realtype *k, realtype *y, NaunetData *u_data) {
         
     if (Tgas>0.0 && Tgas<10000.0) { k[1354] = mantabund > 1e-30 ? ((opt_thd
         * sqrt(2.0*sites*kerg*eb_GHNOI/(pi*pi*amu*31.0)) * 2.0 * densites *
-        exp(-eb_GHNOI/Tgas) + ksp * gdens / mant)) : 0.0;  }
+        exp(-eb_GHNOI/Tgas) + ksp * garea / mant)) : 0.0;  }
         
     if (Tgas>0.0 && Tgas<10000.0) { k[1355] = mantabund > 1e-30 ? (eb_h2d >=
         1200.0 ? (opt_h2d * h2deseff * 1.0e-17 * sqrt(Tgas) * y[IDX_HI] * nH /
@@ -4172,7 +4172,7 @@ int EvalRates(realtype *k, realtype *y, NaunetData *u_data) {
         
     if (Tgas>0.0 && Tgas<10000.0) { k[1358] = mantabund > 1e-30 ? ((opt_thd
         * sqrt(2.0*sites*kerg*eb_GO2I/(pi*pi*amu*32.0)) * 2.0 * densites *
-        exp(-eb_GO2I/Tgas) + ksp * gdens / mant)) : 0.0;  }
+        exp(-eb_GO2I/Tgas) + ksp * garea / mant)) : 0.0;  }
         
     if (Tgas>0.0 && Tgas<10000.0) { k[1359] = mantabund > 1e-30 ? (eb_h2d >=
         5000.0 ? (opt_h2d * h2deseff * 1.0e-17 * sqrt(Tgas) * y[IDX_HI] * nH /
@@ -4188,7 +4188,7 @@ int EvalRates(realtype *k, realtype *y, NaunetData *u_data) {
         
     if (Tgas>0.0 && Tgas<10000.0) { k[1362] = mantabund > 1e-30 ? ((opt_thd
         * sqrt(2.0*sites*kerg*eb_GCH3OHI/(pi*pi*amu*32.0)) * 2.0 * densites *
-        exp(-eb_GCH3OHI/Tgas) + ksp * gdens / mant)) : 0.0;  }
+        exp(-eb_GCH3OHI/Tgas) + ksp * garea / mant)) : 0.0;  }
         
     if (Tgas>0.0 && Tgas<10000.0) { k[1363] = mantabund > 1e-30 ? (eb_h2d >=
         13000.0 ? (opt_h2d * h2deseff * 1.0e-17 * sqrt(Tgas) * y[IDX_HI] * nH /
@@ -4204,7 +4204,7 @@ int EvalRates(realtype *k, realtype *y, NaunetData *u_data) {
         
     if (Tgas>0.0 && Tgas<10000.0) { k[1366] = mantabund > 1e-30 ? ((opt_thd
         * sqrt(2.0*sites*kerg*eb_GSiH4I/(pi*pi*amu*32.0)) * 2.0 * densites *
-        exp(-eb_GSiH4I/Tgas) + ksp * gdens / mant)) : 0.0;  }
+        exp(-eb_GSiH4I/Tgas) + ksp * garea / mant)) : 0.0;  }
         
     if (Tgas>0.0 && Tgas<10000.0) { k[1367] = mantabund > 1e-30 ? (eb_h2d >=
         5000.0 ? (opt_h2d * h2deseff * 1.0e-17 * sqrt(Tgas) * y[IDX_HI] * nH /
@@ -4220,7 +4220,7 @@ int EvalRates(realtype *k, realtype *y, NaunetData *u_data) {
         
     if (Tgas>0.0 && Tgas<10000.0) { k[1370] = mantabund > 1e-30 ? ((opt_thd
         * sqrt(2.0*sites*kerg*eb_GO2HI/(pi*pi*amu*33.0)) * 2.0 * densites *
-        exp(-eb_GO2HI/Tgas) + ksp * gdens / mant)) : 0.0;  }
+        exp(-eb_GO2HI/Tgas) + ksp * garea / mant)) : 0.0;  }
         
     if (Tgas>0.0 && Tgas<10000.0) { k[1371] = mantabund > 1e-30 ? (eb_h2d >=
         3500.0 ? (opt_h2d * h2deseff * 1.0e-17 * sqrt(Tgas) * y[IDX_HI] * nH /
@@ -4236,7 +4236,7 @@ int EvalRates(realtype *k, realtype *y, NaunetData *u_data) {
         
     if (Tgas>0.0 && Tgas<10000.0) { k[1374] = mantabund > 1e-30 ? ((opt_thd
         * sqrt(2.0*sites*kerg*eb_GSiCI/(pi*pi*amu*40.0)) * 2.0 * densites *
-        exp(-eb_GSiCI/Tgas) + ksp * gdens / mant)) : 0.0;  }
+        exp(-eb_GSiCI/Tgas) + ksp * garea / mant)) : 0.0;  }
         
     if (Tgas>0.0 && Tgas<10000.0) { k[1375] = mantabund > 1e-30 ? (eb_h2d >=
         4400.0 ? (opt_h2d * h2deseff * 1.0e-17 * sqrt(Tgas) * y[IDX_HI] * nH /
@@ -4252,7 +4252,7 @@ int EvalRates(realtype *k, realtype *y, NaunetData *u_data) {
         
     if (Tgas>0.0 && Tgas<10000.0) { k[1378] = mantabund > 1e-30 ? ((opt_thd
         * sqrt(2.0*sites*kerg*eb_GHNCOI/(pi*pi*amu*43.0)) * 2.0 * densites *
-        exp(-eb_GHNCOI/Tgas) + ksp * gdens / mant)) : 0.0;  }
+        exp(-eb_GHNCOI/Tgas) + ksp * garea / mant)) : 0.0;  }
         
     if (Tgas>0.0 && Tgas<10000.0) { k[1379] = mantabund > 1e-30 ? (eb_h2d >=
         3500.0 ? (opt_h2d * h2deseff * 1.0e-17 * sqrt(Tgas) * y[IDX_HI] * nH /
@@ -4268,7 +4268,7 @@ int EvalRates(realtype *k, realtype *y, NaunetData *u_data) {
         
     if (Tgas>0.0 && Tgas<10000.0) { k[1382] = mantabund > 1e-30 ? ((opt_thd
         * sqrt(2.0*sites*kerg*eb_GSiOI/(pi*pi*amu*44.0)) * 2.0 * densites *
-        exp(-eb_GSiOI/Tgas) + ksp * gdens / mant)) : 0.0;  }
+        exp(-eb_GSiOI/Tgas) + ksp * garea / mant)) : 0.0;  }
         
     if (Tgas>0.0 && Tgas<10000.0) { k[1383] = mantabund > 1e-30 ? (eb_h2d >=
         2600.0 ? (opt_h2d * h2deseff * 1.0e-17 * sqrt(Tgas) * y[IDX_HI] * nH /
@@ -4284,7 +4284,7 @@ int EvalRates(realtype *k, realtype *y, NaunetData *u_data) {
         
     if (Tgas>0.0 && Tgas<10000.0) { k[1386] = mantabund > 1e-30 ? ((opt_thd
         * sqrt(2.0*sites*kerg*eb_GCO2I/(pi*pi*amu*44.0)) * 2.0 * densites *
-        exp(-eb_GCO2I/Tgas) + ksp * gdens / mant)) : 0.0;  }
+        exp(-eb_GCO2I/Tgas) + ksp * garea / mant)) : 0.0;  }
         
     if (Tgas>0.0 && Tgas<10000.0) { k[1387] = mantabund > 1e-30 ? (eb_h2d >=
         2400.0 ? (opt_h2d * h2deseff * 1.0e-17 * sqrt(Tgas) * y[IDX_HI] * nH /
@@ -4300,7 +4300,7 @@ int EvalRates(realtype *k, realtype *y, NaunetData *u_data) {
         
     if (Tgas>0.0 && Tgas<10000.0) { k[1390] = mantabund > 1e-30 ? ((opt_thd
         * sqrt(2.0*sites*kerg*eb_GNO2I/(pi*pi*amu*46.0)) * 2.0 * densites *
-        exp(-eb_GNO2I/Tgas) + ksp * gdens / mant)) : 0.0;  }
+        exp(-eb_GNO2I/Tgas) + ksp * garea / mant)) : 0.0;  }
         
     if (Tgas>0.0 && Tgas<10000.0) { k[1391] = mantabund > 1e-30 ? (eb_h2d >=
         4400.0 ? (opt_h2d * h2deseff * 1.0e-17 * sqrt(Tgas) * y[IDX_HI] * nH /
@@ -4316,7 +4316,7 @@ int EvalRates(realtype *k, realtype *y, NaunetData *u_data) {
         
     if (Tgas>0.0 && Tgas<10000.0) { k[1394] = mantabund > 1e-30 ? ((opt_thd
         * sqrt(2.0*sites*kerg*eb_GH2SiOI/(pi*pi*amu*46.0)) * 2.0 * densites *
-        exp(-eb_GH2SiOI/Tgas) + ksp * gdens / mant)) : 0.0;  }
+        exp(-eb_GH2SiOI/Tgas) + ksp * garea / mant)) : 0.0;  }
         
     if (Tgas>0.0 && Tgas<10000.0) { k[1395] = mantabund > 1e-30 ? (eb_h2d >=
         4300.0 ? (opt_h2d * h2deseff * 1.0e-17 * sqrt(Tgas) * y[IDX_HI] * nH /
@@ -4332,7 +4332,7 @@ int EvalRates(realtype *k, realtype *y, NaunetData *u_data) {
         
     if (Tgas>0.0 && Tgas<10000.0) { k[1398] = mantabund > 1e-30 ? ((opt_thd
         * sqrt(2.0*sites*kerg*eb_GSiC2I/(pi*pi*amu*52.0)) * 2.0 * densites *
-        exp(-eb_GSiC2I/Tgas) + ksp * gdens / mant)) : 0.0;  }
+        exp(-eb_GSiC2I/Tgas) + ksp * garea / mant)) : 0.0;  }
         
     if (Tgas>0.0 && Tgas<10000.0) { k[1399] = mantabund > 1e-30 ? (eb_h2d >=
         5100.0 ? (opt_h2d * h2deseff * 1.0e-17 * sqrt(Tgas) * y[IDX_HI] * nH /
@@ -4348,7 +4348,7 @@ int EvalRates(realtype *k, realtype *y, NaunetData *u_data) {
         
     if (Tgas>0.0 && Tgas<10000.0) { k[1402] = mantabund > 1e-30 ? ((opt_thd
         * sqrt(2.0*sites*kerg*eb_GSiC3I/(pi*pi*amu*64.0)) * 2.0 * densites *
-        exp(-eb_GSiC3I/Tgas) + ksp * gdens / mant)) : 0.0;  }
+        exp(-eb_GSiC3I/Tgas) + ksp * garea / mant)) : 0.0;  }
         
     
         // clang-format on

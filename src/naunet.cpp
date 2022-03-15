@@ -130,7 +130,12 @@ int Naunet::HandleError(int cvflag, realtype *ab, realtype dt, realtype t0) {
         return NAUNET_SUCCESS;
     }
 
+    fprintf(errfp_, "CVode failed in Naunet! Flag = %d\n", cvflag);
+    fprintf(errfp_, "Calling HandleError to fix the problem\n");
+
     /* */
+
+    realtype dt_init = dt;
 
     for (int level=1; level<6; level++) {
 
@@ -144,6 +149,7 @@ int Naunet::HandleError(int cvflag, realtype *ab, realtype dt, realtype t0) {
                 }
                 dt -= t0;
             }
+            // t0 = 0.0;
             nsubsteps = level * 10;
             // cvflag = CVodeSetMaxNumSteps(cv_mem_, (level+1) * mxsteps_);
             // if (CheckFlag(&cvflag, "CVodeSetMaxNumSteps", 1, errfp_) == NAUNET_FAIL) {
@@ -162,6 +168,7 @@ int Naunet::HandleError(int cvflag, realtype *ab, realtype dt, realtype t0) {
                 ab_tmp_[i] = ab[i];
             }
             dt -= t0;
+            // t0 = 0.0;
         }
         // else if (cvflag == -4) {
         //     // if error handling has been tried once, continue with the current time and state
@@ -180,6 +187,8 @@ int Naunet::HandleError(int cvflag, realtype *ab, realtype dt, realtype t0) {
             for (int i=0; i<NEQUATIONS; i++) {
                 ab_tmp_[i] = ab_init_[i];
             }
+            dt = dt_init;
+            // t0 = 0.0;
             nsubsteps = level * 10;
         }
         else if (cvflag < 0) {
@@ -407,31 +416,42 @@ int Naunet::Solve(realtype *ab, realtype dt, NaunetData *data) {
         fprintf(errfp_, "Some unrecoverable error occurred. cvFlag = %d\n", cvflag);
         fprintf(errfp_, "Initial condition: \n");
 
-        fprintf(errfp_, "data.rG = %13.7e\n", data->rG);
-        fprintf(errfp_, "data.gdens = %13.7e\n", data->gdens);
-        fprintf(errfp_, "data.sites = %13.7e\n", data->sites);
-        fprintf(errfp_, "data.fr = %13.7e\n", data->fr);
-        fprintf(errfp_, "data.opt_thd = %13.7e\n", data->opt_thd);
-        fprintf(errfp_, "data.opt_crd = %13.7e\n", data->opt_crd);
-        fprintf(errfp_, "data.opt_h2d = %13.7e\n", data->opt_h2d);
-        fprintf(errfp_, "data.opt_uvd = %13.7e\n", data->opt_uvd);
-        fprintf(errfp_, "data.eb_h2d = %13.7e\n", data->eb_h2d);
-        fprintf(errfp_, "data.eb_crd = %13.7e\n", data->eb_crd);
-        fprintf(errfp_, "data.eb_uvd = %13.7e\n", data->eb_uvd);
-        fprintf(errfp_, "data.crdeseff = %13.7e\n", data->crdeseff);
-        fprintf(errfp_, "data.h2deseff = %13.7e\n", data->h2deseff);
-        fprintf(errfp_, "data.ksp = %13.7e\n", data->ksp);
-        fprintf(errfp_, "data.nH = %13.7e\n", data->nH);
-        fprintf(errfp_, "data.zeta = %13.7e\n", data->zeta);
-        fprintf(errfp_, "data.Tgas = %13.7e\n", data->Tgas);
-        fprintf(errfp_, "data.Av = %13.7e\n", data->Av);
-        fprintf(errfp_, "data.omega = %13.7e\n", data->omega);
-        fprintf(errfp_, "data.G0 = %13.7e\n", data->G0);
-        fprintf(errfp_, "data.uvcreff = %13.7e\n", data->uvcreff);
+        fprintf(errfp_, "    data.rG = %13.7e;\n", data->rG);
+        fprintf(errfp_, "    data.gdens = %13.7e;\n", data->gdens);
+        fprintf(errfp_, "    data.sites = %13.7e;\n", data->sites);
+        fprintf(errfp_, "    data.fr = %13.7e;\n", data->fr);
+        fprintf(errfp_, "    data.opt_thd = %13.7e;\n", data->opt_thd);
+        fprintf(errfp_, "    data.opt_crd = %13.7e;\n", data->opt_crd);
+        fprintf(errfp_, "    data.opt_h2d = %13.7e;\n", data->opt_h2d);
+        fprintf(errfp_, "    data.opt_uvd = %13.7e;\n", data->opt_uvd);
+        fprintf(errfp_, "    data.eb_h2d = %13.7e;\n", data->eb_h2d);
+        fprintf(errfp_, "    data.eb_crd = %13.7e;\n", data->eb_crd);
+        fprintf(errfp_, "    data.eb_uvd = %13.7e;\n", data->eb_uvd);
+        fprintf(errfp_, "    data.crdeseff = %13.7e;\n", data->crdeseff);
+        fprintf(errfp_, "    data.h2deseff = %13.7e;\n", data->h2deseff);
+        fprintf(errfp_, "    data.ksp = %13.7e;\n", data->ksp);
+        fprintf(errfp_, "    data.nH = %13.7e;\n", data->nH);
+        fprintf(errfp_, "    data.zeta = %13.7e;\n", data->zeta);
+        fprintf(errfp_, "    data.Tgas = %13.7e;\n", data->Tgas);
+        fprintf(errfp_, "    data.Av = %13.7e;\n", data->Av);
+        fprintf(errfp_, "    data.omega = %13.7e;\n", data->omega);
+        fprintf(errfp_, "    data.G0 = %13.7e;\n", data->G0);
+        fprintf(errfp_, "    data.uvcreff = %13.7e;\n", data->uvcreff);
         
         
+        fprintf(errfp_, "\n");
+
+        realtype spy = 365.0 * 86400.0;
+
+        fprintf(errfp_, "    dtyr = %13.7e;\n", dt / spy);
+        fprintf(errfp_, "\n");
+
         for (int i=0; i<NEQUATIONS; i++) {
-            fprintf(errfp_, "y[%d] = %13.7e\n", i, ab_init_[i]);
+            fprintf(errfp_, "    y[%d] = %13.7e;\n", i, ab_init_[i]);
+        }
+
+        for (int i=0; i<NEQUATIONS; i++) {
+            fprintf(errfp_, "    y_final[%d] = %13.7e;\n", i, ab[i]);
         }
 
     }
