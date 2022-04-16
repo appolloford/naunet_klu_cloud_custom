@@ -416,6 +416,13 @@ int Naunet::Solve(realtype *ab, realtype dt, NaunetData *data) {
         fprintf(errfp_, "Some unrecoverable error occurred. cvFlag = %d\n", cvflag);
         fprintf(errfp_, "Initial condition: \n");
 
+        fprintf(errfp_, "    data.nH = %13.7e;\n", data->nH);
+        fprintf(errfp_, "    data.Tgas = %13.7e;\n", data->Tgas);
+        fprintf(errfp_, "    data.zeta = %13.7e;\n", data->zeta);
+        fprintf(errfp_, "    data.Av = %13.7e;\n", data->Av);
+        fprintf(errfp_, "    data.omega = %13.7e;\n", data->omega);
+        fprintf(errfp_, "    data.G0 = %13.7e;\n", data->G0);
+        fprintf(errfp_, "    data.uvcreff = %13.7e;\n", data->uvcreff);
         fprintf(errfp_, "    data.rG = %13.7e;\n", data->rG);
         fprintf(errfp_, "    data.gdens = %13.7e;\n", data->gdens);
         fprintf(errfp_, "    data.sites = %13.7e;\n", data->sites);
@@ -430,14 +437,6 @@ int Naunet::Solve(realtype *ab, realtype dt, NaunetData *data) {
         fprintf(errfp_, "    data.crdeseff = %13.7e;\n", data->crdeseff);
         fprintf(errfp_, "    data.h2deseff = %13.7e;\n", data->h2deseff);
         fprintf(errfp_, "    data.ksp = %13.7e;\n", data->ksp);
-        fprintf(errfp_, "    data.nH = %13.7e;\n", data->nH);
-        fprintf(errfp_, "    data.zeta = %13.7e;\n", data->zeta);
-        fprintf(errfp_, "    data.Tgas = %13.7e;\n", data->Tgas);
-        fprintf(errfp_, "    data.Av = %13.7e;\n", data->Av);
-        fprintf(errfp_, "    data.omega = %13.7e;\n", data->omega);
-        fprintf(errfp_, "    data.G0 = %13.7e;\n", data->G0);
-        fprintf(errfp_, "    data.uvcreff = %13.7e;\n", data->uvcreff);
-        
         
         fprintf(errfp_, "\n");
 
@@ -462,7 +461,6 @@ int Naunet::Solve(realtype *ab, realtype dt, NaunetData *data) {
 
     /* */
 
-    return NAUNET_SUCCESS;
 };
 
 #ifdef PYMODULE

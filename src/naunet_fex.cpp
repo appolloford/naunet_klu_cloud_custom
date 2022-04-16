@@ -24,6 +24,13 @@ int Fex(realtype t, N_Vector u, N_Vector udot, void *user_data) {
     realtype *ydot         = N_VGetArrayPointer(udot);
     NaunetData *u_data     = (NaunetData *)user_data;
     // clang-format off
+    realtype nH = u_data->nH;
+    realtype Tgas = u_data->Tgas;
+    realtype zeta = u_data->zeta;
+    realtype Av = u_data->Av;
+    realtype omega = u_data->omega;
+    realtype G0 = u_data->G0;
+    realtype uvcreff = u_data->uvcreff;
     realtype rG = u_data->rG;
     realtype gdens = u_data->gdens;
     realtype sites = u_data->sites;
@@ -38,27 +45,24 @@ int Fex(realtype t, N_Vector u, N_Vector udot, void *user_data) {
     realtype crdeseff = u_data->crdeseff;
     realtype h2deseff = u_data->h2deseff;
     realtype ksp = u_data->ksp;
-    realtype nH = u_data->nH;
-    realtype zeta = u_data->zeta;
-    realtype Tgas = u_data->Tgas;
-    realtype Av = u_data->Av;
-    realtype omega = u_data->omega;
-    realtype G0 = u_data->G0;
-    realtype uvcreff = u_data->uvcreff;
     
+    double h2col = 0.5*1.59e21*Av;
+    double cocol = 1e-5 * h2col;
+    double lamdabar = GetCharactWavelength(h2col, cocol);
+    double H2shielding = GetShieldingFactor(IDX_H2I, h2col, h2col, Tgas, 1);
+    double H2formation = 1.0e-17 * sqrt(Tgas) * GetHNuclei(y);
+    double H2dissociation = 5.1e-11 * G0 * GetGrainScattering(Av, 1000.0) * H2shielding;
     double mant = GetMantleDens(y);
     double mantabund = mant / nH;
     double garea = (pi*rG*rG) * gdens;
     double garea_per_H = garea / nH;
     double densites = 4.0 * garea * sites;
-    double h2col = 0.5*1.59e21*Av;
-    double cocol = 1e-5 * h2col;
-    double lamdabar = GetCharactWavelength(h2col, cocol);
-    double H2shielding = GetShieldingFactor(IDX_H2I, h2col, h2col, Tgas, 1);
-    double H2formation = 1.0e-17 * sqrt(Tgas);
-    double H2dissociation = 5.1e-11 * G0 * GetGrainScattering(Av, 1000.0) * H2shielding;
     
-    
+#if (NHEATPROCS || NCOOLPROCS)
+    if (mu < 0) mu = GetMu(y);
+    if (gamma < 0) gamma = GetGamma(y);
+#endif
+
     // clang-format on
 
     realtype k[NREACTIONS] = {0.0};
@@ -2650,10 +2654,14 @@ int Fex(realtype t, N_Vector u, N_Vector udot, void *user_data) {
         k[850]*y[IDX_OHII]*y[IDX_SiOI] + k[860]*y[IDX_SiII]*y[IDX_CH3OHI] +
         k[862]*y[IDX_SiH2II]*y[IDX_O2I] - k[1246]*y[IDX_SiOHII];
     
-    ydot[IDX_H2I] += H2formation*y[IDX_HI]*nH - H2dissociation*y[IDX_H2I];
-    ydot[IDX_HI] += 2.0*(H2dissociation*y[IDX_H2I] - H2formation*y[IDX_HI]*nH);
+    ydot[IDX_H2I] += H2formation*y[IDX_HI] - H2dissociation*y[IDX_H2I];
+    ydot[IDX_HI] += 2.0*(H2dissociation*y[IDX_H2I] - H2formation*y[IDX_HI]);
     
-// clang-format on
+#if ((NHEATPROCS || NCOOLPROCS) && NAUNET_DEBUG)
+    printf("Total heating/cooling rate: %13.7e\n", ydot[IDX_TGAS]);
+#endif
+
+    // clang-format on
 
     /* */
 

@@ -75,6 +75,13 @@ PYBIND11_MODULE(PYMODNAME, m) {
     // clang-format off
     py::class_<NaunetData>(m, "NaunetData")
         .def(py::init())
+        .def_readwrite("nH", &NaunetData::nH)
+        .def_readwrite("Tgas", &NaunetData::Tgas)
+        .def_readwrite("zeta", &NaunetData::zeta)
+        .def_readwrite("Av", &NaunetData::Av)
+        .def_readwrite("omega", &NaunetData::omega)
+        .def_readwrite("G0", &NaunetData::G0)
+        .def_readwrite("uvcreff", &NaunetData::uvcreff)
         .def_readwrite("rG", &NaunetData::rG)
         .def_readwrite("gdens", &NaunetData::gdens)
         .def_readwrite("sites", &NaunetData::sites)
@@ -89,13 +96,6 @@ PYBIND11_MODULE(PYMODNAME, m) {
         .def_readwrite("crdeseff", &NaunetData::crdeseff)
         .def_readwrite("h2deseff", &NaunetData::h2deseff)
         .def_readwrite("ksp", &NaunetData::ksp)
-        .def_readwrite("nH", &NaunetData::nH)
-        .def_readwrite("zeta", &NaunetData::zeta)
-        .def_readwrite("Tgas", &NaunetData::Tgas)
-        .def_readwrite("Av", &NaunetData::Av)
-        .def_readwrite("omega", &NaunetData::omega)
-        .def_readwrite("G0", &NaunetData::G0)
-        .def_readwrite("uvcreff", &NaunetData::uvcreff)
         ;
     // clang-format on
 }

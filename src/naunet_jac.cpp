@@ -28,7 +28,33 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
     NaunetData *u_data     = (NaunetData *)user_data;
 
     // clang-format off
+    realtype nH = u_data->nH;
+    realtype Tgas = u_data->Tgas;
+    realtype zeta = u_data->zeta;
+    realtype Av = u_data->Av;
+    realtype omega = u_data->omega;
+    realtype G0 = u_data->G0;
+    realtype uvcreff = u_data->uvcreff;
+    realtype rG = u_data->rG;
+    realtype gdens = u_data->gdens;
+    realtype sites = u_data->sites;
+    realtype fr = u_data->fr;
+    realtype opt_thd = u_data->opt_thd;
+    realtype opt_crd = u_data->opt_crd;
+    realtype opt_h2d = u_data->opt_h2d;
+    realtype opt_uvd = u_data->opt_uvd;
+    realtype eb_h2d = u_data->eb_h2d;
+    realtype eb_crd = u_data->eb_crd;
+    realtype eb_uvd = u_data->eb_uvd;
+    realtype crdeseff = u_data->crdeseff;
+    realtype h2deseff = u_data->h2deseff;
+    realtype ksp = u_data->ksp;
         
+#if (NHEATPROCS || NCOOLPROCS)
+    if (mu < 0) mu = GetMu(y);
+    if (gamma < 0) gamma = GetGamma(y);
+#endif
+
     // clang-format on
 
     realtype k[NREACTIONS] = {0.0};

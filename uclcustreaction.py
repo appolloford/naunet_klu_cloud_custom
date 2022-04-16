@@ -1,3 +1,4 @@
+from __future__ import annotations
 from enum import IntEnum
 from naunet.network import define_reaction, define_dust
 from naunet.reactions.reaction import Reaction, ReactionType as BasicType
@@ -55,57 +56,41 @@ class CUSTOMReaction(Reaction):
     }
 
     varis = {
-        "Hnuclei": "nH",
-        "CRIR": "zeta",
-        "Temperature": "Tgas",
-        "VisualExtinction": "Av",
-        "DustGrainAlbedo": "omega",
-        "G0": "G0",
-        "UVCREFF": "uvcreff",  # UVCREFF is ratio of CR induced UV to ISRF UV
+        "nH": None,
+        "Tgas": None,
+        "zeta": 1.3e-17,
+        "Av": 1.0,
+        "omega": 0.5,
+        "G0": 1.0,
+        "uvcreff": 1.0e-3,  # UVCREFF is ratio of CR induced UV to ISRF UV
     }
 
-    user_var = [
+    locvars = [
         "double h2col = 0.5*1.59e21*Av",
         "double cocol = 1e-5 * h2col",
         "double lamdabar = GetCharactWavelength(h2col, cocol)",
         "double H2shielding = GetShieldingFactor(IDX_H2I, h2col, h2col, Tgas, 1)",
-        "double H2formation = 1.0e-17 * sqrt(Tgas)",
+        "double H2formation = 1.0e-17 * sqrt(Tgas) * GetHNuclei(y)",
         "double H2dissociation = 5.1e-11 * G0 * GetGrainScattering(Av, 1000.0) * H2shielding",
     ]
 
-    def __init__(self, react_string, *args, dust: Dust = None, **kwargs) -> None:
-        super().__init__(react_string)
+    def __init__(self, react_string) -> None:
+        super().__init__(format="uclcust", react_string=react_string)
 
-        self.database = "uclcustreaction"
-        self.alpha = 0.0
-        self.beta = 0.0
-        self.gamma = 0.0
-        self.dust = dust
-
-        self._parse_string(react_string)
-
-    def rate_func(self):
+    def rateexpr(self, dust: Dust = None):
         a = self.alpha
         b = self.beta
         c = self.gamma
         rtype = self.reaction_type
-        dust = self.dust if self.dust else None
 
-        Tgas = self.varis.get("Temperature")
-        zeta = self.varis.get("CRIR")
-        Av = self.varis.get("VisualExtinction")
-        G0 = self.varis.get("G0")
-        albedo = self.varis.get("DustGrainAlbedo")
-        uvcreff = self.varis.get("UVCREFF")
-
-        zeta = f"({zeta} / zism)"  # uclchem has cosmic-ray ionization rate in unit of 1.3e-17s-1
+        zeta = f"(zeta / zism)"  # uclchem has cosmic-ray ionization rate in unit of 1.3e-17s-1
 
         re1 = self.reactants[0]
         # re2 = self.reactants[1] if len(self.reactants) > 1 else None
 
         # two-body gas-phase reaction
         if rtype == self.ReactionType.UCLCHEM_MA:
-            rate = f"{a} * pow({Tgas}/300.0, {b}) * exp(-{c}/{Tgas})"
+            rate = f"{a} * pow(Tgas/300.0, {b}) * exp(-{c}/Tgas)"
 
         # direct cosmic-ray ionisation
         elif rtype == self.ReactionType.UCLCHEM_CR:
@@ -113,42 +98,49 @@ class CUSTOMReaction(Reaction):
 
         # cosmic-ray-induced photoreaction
         elif rtype == self.ReactionType.UCLCHEM_CP:
-            rate = f"{a} * {zeta} * pow({Tgas}/300.0, {b}) * {c} / (1.0 - {albedo})"
+            rate = f"{a} * {zeta} * pow(Tgas/300.0, {b}) * {c} / (1.0 - omega)"
 
         # photoreaction
         elif rtype == self.ReactionType.UCLCHEM_PH:
-            rate = f"{G0} * {a} * exp(-{c}*{Av}) / 1.7"  # convert habing to Draine
+            rate = f"G0 * {a} * exp(-{c}*Av) / 1.7"  # convert habing to Draine
             if re1.name in ["CO"]:
-                shield = f"GetShieldingFactor(IDX_{re1.alias}, h2col, {re1.name.lower()}col, {Tgas}, 1)"
-                rate = f"(2.0e-10) * {G0} * {shield} * GetGrainScattering(Av, lamdabar) / 1.7"
+                shield = f"GetShieldingFactor(IDX_{re1.alias}, h2col, {re1.name.lower()}col, Tgas, 1)"
+                rate = f"(2.0e-10) * G0 * {shield} * GetGrainScattering(Av, lamdabar) / 1.7"
 
         # accretion
         elif rtype == self.ReactionType.UCLCHEM_FR:
-            if len(self.reactants) > 1:
-                raise RuntimeError("Too many reactants in an accretion reaction!")
-
-            rate = dust.rate_depletion(re1, a, b, c, Tgas)
+            rate = dust.rateexpr(
+                self.reaction_type, self.reactants, a, b, c, sym_tgas="Tgas"
+            )
 
         # thermal desorption
         elif rtype == self.ReactionType.UCLCHEM_TH:
-            rate = dust.rate_desorption(re1, a, b, c, tdust=Tgas, destype="thermal")
+            rate = dust.rateexpr(
+                self.reaction_type, self.reactants, a, b, c, sym_tdust="Tgas"
+            )
 
         # cosmic-ray-induced thermal desorption
         elif rtype == self.ReactionType.UCLCHEM_CD:
-            rate = dust.rate_desorption(re1, a, b, c, zeta=zeta, destype="cosmicray")
+            rate = dust.rateexpr(
+                self.reaction_type, self.reactants, a, b, c, sym_cr=zeta
+            )
 
         # photodesorption
         elif rtype == self.ReactionType.UCLCHEM_PD:
-            # uvphot = f"({zeta} + ({G0}/{uvcreff}) * exp(-1.8*{Av}) )"
-            uvphot = f"{G0}*1.0e8*exp(-{Av}*3.02) + 1.0e4 * {zeta}"
-            rate = dust.rate_desorption(re1, a, b, c, uvphot=uvphot, destype="photon")
+            # uvphot = f"({zeta} + (G0/uvcreff) * exp(-1.8*Av) )"
+            uvphot = f"G0*1.0e8*exp(-Av*3.02) + 1.0e4 * {zeta}"
+            rate = dust.rateexpr(
+                self.reaction_type, self.reactants, a, b, c, sym_phot=uvphot
+            )
 
         # H2 formation induced desorption
         elif rtype == self.ReactionType.UCLCHEM_HD:
             # Epsilon is efficieny of this process, number of molecules removed per event
             # h2form is formation rate of h2, dependent on hydrogen abundance.
-            h2formrate = f"1.0e-17 * sqrt({Tgas}) * y[IDX_HI]"
-            rate = dust.rate_desorption(re1, a, b, c, h2form=h2formrate, destype="h2")
+            h2formrate = f"1.0e-17 * sqrt(Tgas) * y[IDX_HI] * nH"
+            rate = dust.rateexpr(
+                self.reaction_type, self.reactants, a, b, c, sym_h2form=h2formrate
+            )
 
         else:
             raise ValueError(f"Unsupported type: {rtype}")
@@ -200,106 +192,98 @@ class CUSTOMReaction(Reaction):
                 self.create_species(p) for p in products if self.create_species(p)
             ]
 
-@define_dust(name="RR07custom")
+@define_dust(name="rr07custom")
 class CUSTOMDust(RR07Dust):
-
-    varis = {
-        "Radius": "rG",
-        "GrainDensity": "gdens",  # grain density
-        "SurfaceSites": "sites",
-        "FreezeRatio": "fr",
-        "ThermDesorptionOption": "opt_thd",
-        "CRDesorptionOption": "opt_crd",
-        "H2DesorptionOption": "opt_h2d",
-        "UVDesorptionOption": "opt_uvd",
-        "H2MaxDesorptionEnergy": "eb_h2d",
-        "CRMaxDesorptionEnergy": "eb_crd",
-        "UVMaxDesorptionEnergy": "eb_uvd",
-        "CRDesorptionEfficiency": "crdeseff",
-        "H2DesorptionEfficiency": "h2deseff",
-        "SputteringRate": "ksp",
-    }
 
     consts = {
         "nmono": 2.0,
     }
 
-    def __init__(self, *args, **kwargs) -> None:
-        super().__init__(*args, **kwargs)
+    varis = {
+        "rG": 1e-5,  # grain radius
+        "gdens": 7.6394373e-13,  # grain density
+        "sites": 1e15,  # surface sites
+        "fr": 1.0,  # freeze ratio
+        "opt_thd": 1.0,  # thermal desorption option
+        "opt_crd": 1.0,  # cosmic ray induced desorption option
+        "opt_h2d": 1.0,  # H2 formation induced desorption option
+        "opt_uvd": 1.0,  # UV desorption option
+        "eb_h2d": 1.21e3,  # maxmium binding energy which H2 desorption can desorb
+        "eb_crd": 1.21e3,  # maxmium binding energy which CR desorption can desorb
+        "eb_uvd": 1.0e4,  # maxmium binding energy which UV desorption can desorb
+        "crdeseff": 1e5,  # cosmic ray desorption efficiency
+        "h2deseff": 1.0e-2,  # H2 desorption efficiency
+        "ksp": 0.0,  # Sputtering rate
+    }
 
-    def rate_desorption(
+    locvars = [
+        # "double mant = GetMantleDens(y) > 0.0 ? GetMantleDens(y) : 1e-40",
+        "double mant = GetMantleDens(y)",
+        "double mantabund = mant / nH",
+        "double garea = (pi*rG*rG) * gdens",  # total grain cross-section
+        "double garea_per_H = garea / nH",
+        "double densites = 4.0 * garea * sites",
+    ]
+
+    def __init__(self, species = None) -> None:
+        super().__init__(species=species)
+        self.model = "rr07custom"
+
+
+    def _rate_thermal_desorption(
         self,
-        spec: Species,
+        spec: list[Species],
         a: float,
         b: float,
         c: float,
-        tdust: str = "",
-        zeta: str = "",
-        uvphot: str = "",
-        h2form: str = "",
-        destype: str = "",
+        sym_tdust: str,
     ) -> str:
 
-        crdeseff = self.varis.get("CRDesorptionEfficiency")
-        h2deseff = self.varis.get("H2DesorptionEfficiency")
-        ksp      = self.varis.get("SputteringRate")
+        if not isinstance(sym_tdust, str):
+            raise TypeError("sym_tdust should be a string")
 
-        if destype == "thermal":
+        if not sym_tdust:
+            raise ValueError("Symbol of dust temperature does not exist")
 
-            sites = self.varis.get("SurfaceSites")
+        if len(spec) != 1:
+            raise ValueError("Number of species in thermal desoprtion should be 1.")
 
-            if not tdust:
-                raise ValueError("Symbol of dust temperature was not provided.")
-            rate = " * ".join(
-                [
-                    f"opt_thd",
-                    f"sqrt(2.0*{sites}*kerg*eb_{spec.alias}/(pi*pi*amu*{spec.massnumber}))",
-                    f"2.0 * densites",
-                    f"exp(-eb_{spec.alias}/{tdust})",
-                ],
-            )
+        spec = spec[0]
+        rate = " * ".join(
+            [
+                f"opt_thd",
+                f"sqrt(2.0*sites*kerg*eb_{spec.alias}/(pi*pi*amu*{spec.massnumber}))",
+                f"2.0 * densites",
+                f"exp(-eb_{spec.alias}/{sym_tdust})",
+            ],
+        )
 
-            rate = f"({rate} + {ksp} * garea / mant)"
-
-        elif destype == "cosmicray":
-            if not zeta:
-                raise ValueError(
-                    "Symbol of cosmic ray ionization rate (in Draine unit) was not provided."
-                )
-            rate = " * ".join(
-                [
-                    f"opt_crd * 4.0 * pi * {crdeseff}",
-                    f"({zeta})",
-                    f"1.64e-4 * garea / mant",
-                ]
-            )
-
-            rate = f"eb_crd >= {spec.binding_energy} ? ({rate}) : 0.0"
-
-        elif destype == "photon":
-            if not uvphot:
-                raise ValueError("Symbol of UV field strength was not provided.")
-
-            rate = f"opt_uvd * ({uvphot}) * {spec.photon_yield()} * nmono * 4.0 * garea"
-            # rate = " * ".join(
-            #     [
-            #         f"opt_uvd * 4.875e3 * garea",
-            #         f"({uvphot}) * {spec.photon_yield(default=0.1)} / mant",
-            #     ]
-            # )
-
-        elif destype == "h2":
-            if not h2form:
-                raise ValueError("Symbol of H2 formation rate was not provided.")
-
-            rate = f"opt_h2d * {h2deseff} * {h2form} * nH / mant"
-
-            rate = f"eb_h2d >= {spec.binding_energy} ? ({rate}) : 0.0"
-
-        else:
-            raise ValueError(f"Not support desorption type {destype}")
-
+        rate = f"({rate} + ksp * garea / mant)"
         rate = f"mantabund > 1e-30 ? ({rate}) : 0.0"
+        return rate
 
+
+    def _rate_photon_desorption(
+        self,
+        spec: list[Species],
+        a: float,
+        b: float,
+        c: float,
+        sym_phot: str,
+    ) -> str:
+
+        if not isinstance(sym_phot, str):
+            raise TypeError("sym_phot should be a string")
+
+        if not sym_phot:
+            raise ValueError("Symbol of photon intensity does not exist")
+
+        if len(spec) != 1:
+            raise ValueError("Number of species in photon desoprtion should be 1.")
+
+        spec = spec[0]
+
+        rate = f"opt_uvd * ({sym_phot}) * {spec.photon_yield()} * nmono * 4.0 * garea"
+        rate = f"mantabund > 1e-30 ? ({rate}) : 0.0"
         return rate
 
