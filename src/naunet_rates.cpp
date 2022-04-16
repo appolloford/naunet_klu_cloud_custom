@@ -4070,11 +4070,11 @@ int EvalRates(realtype *k, realtype *y, NaunetData *u_data) {
         sqrt(2.0*sites*kerg*eb_GHNCI/(pi*pi*amu*27.0)) * 2.0 * densites *
         exp(-eb_GHNCI/Tgas) + ksp * garea / mant)) : 0.0; }
         
-    if (Tgas<10000.0) { k[1331] = mantabund > 1e-30 ? (eb_h2d >= 855.0 ?
+    if (Tgas<10000.0) { k[1331] = mantabund > 1e-30 ? (eb_h2d >= 1100.0 ?
         (opt_h2d * h2deseff * 1.0e-17 * sqrt(Tgas) * y[IDX_HI] * nH / mant) :
         0.0) : 0.0; }
         
-    if (Tgas<10000.0) { k[1332] = mantabund > 1e-30 ? (eb_crd >= 855.0 ?
+    if (Tgas<10000.0) { k[1332] = mantabund > 1e-30 ? (eb_crd >= 1100.0 ?
         (opt_crd * 4.0 * pi * crdeseff * ((zeta / zism)) * 1.64e-4 * garea /
         mant) : 0.0) : 0.0; }
         
