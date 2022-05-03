@@ -139,48 +139,14 @@ int Naunet::HandleError(int cvflag, realtype *ab, realtype dt, realtype t0) {
 
     for (int level=1; level<6; level++) {
 
-        int nsubsteps = 1;
+        int nsubsteps = 10 * level;
 
-        if (cvflag == -1 || cvflag == -4) {
-            // if error handling has been tried once, continue with the current time and state
-            if (level > 1) {
-                for (int i=0; i<NEQUATIONS; i++) {
-                    ab_tmp_[i] = ab[i];
-                }
-                dt -= t0;
-            }
-            // t0 = 0.0;
-            nsubsteps = level * 10;
-            // cvflag = CVodeSetMaxNumSteps(cv_mem_, (level+1) * mxsteps_);
-            // if (CheckFlag(&cvflag, "CVodeSetMaxNumSteps", 1, errfp_) == NAUNET_FAIL) {
-            //     return NAUNET_FAIL;
-            // }
-        }
-        else if (cvflag == -2) {
-            cvflag = CVodeSStolerances(cv_mem_, rtol_, pow(10.0, level) * atol_);
-            if (CheckFlag(&cvflag, "CVodeSStolerances", 1, errfp_) == NAUNET_FAIL) {
-                return NAUNET_FAIL;
-            }
-        }
-        else if (cvflag == -3) {
-            // continue with the current time and state
+        if (cvflag < 0 && cvflag > -5) {
             for (int i=0; i<NEQUATIONS; i++) {
                 ab_tmp_[i] = ab[i];
             }
             dt -= t0;
-            // t0 = 0.0;
         }
-        // else if (cvflag == -4) {
-        //     // if error handling has been tried once, continue with the current time and state
-        //     if (level > 1) {
-        //         for (int i=0; i<NEQUATIONS; i++) {
-        //             ab_tmp[i] = ab[i];
-        //         }
-        //         dt -= t0;
-        //     }
-        //     // in case h = hmin, use smaller timesteps
-        //     nsubsteps = level * 10;
-        // }
         else if (cvflag == -6) {
             // The state may have something wrong
             // Reset to the initial state and try finer steps
@@ -411,6 +377,7 @@ int Naunet::Solve(realtype *ab, realtype dt, NaunetData *data) {
     // ab   = N_VGetArrayPointer(cv_y_);
 
     int flag = HandleError(cvflag, ab, dt, t0);
+    // int flag = cvflag == CV_SUCCESS? NAUNET_SUCCESS: NAUNET_FAIL;
 
     if (flag == NAUNET_FAIL) {
         fprintf(errfp_, "Some unrecoverable error occurred. cvFlag = %d\n", cvflag);
