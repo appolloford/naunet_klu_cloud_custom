@@ -26,6 +26,8 @@ set(SUNDIALS_MIN_VERSION "5.6.1")
 set(SUNDIALS_DIR "" CACHE PATH "Path to SUNDIALSConfig.cmake")
 find_package(SUNDIALS ${SUNDIALS_MIN_VERSION} REQUIRED CONFIG)
 
+message(STATUS "SUNDIALS_FOUND             = ${SUNDIALS_FOUND}")
+
 list(APPEND SUNDIALSLIB
     SUNDIALS::cvode
     SUNDIALS::sunlinsolklu
@@ -54,13 +56,13 @@ set(MAKE_TEST ON CACHE BOOL "")
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
 if(MAKE_PYTHON)
-    set(PYMODNAME "chemistry" CACHE STRING "")
-    find_package(PythonInterp REQUIRED)
+    set(PYMODNAME "pynaunet" CACHE STRING "")
+    find_package(Python3 REQUIRED COMPONENTS Interpreter Development)
 endif()
 
 add_subdirectory(src)
 
 if(MAKE_TEST)
     enable_testing()
-    add_subdirectory(test)
+    add_subdirectory(tests)
 endif()
