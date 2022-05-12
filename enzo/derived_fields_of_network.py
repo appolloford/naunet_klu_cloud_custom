@@ -1256,3 +1256,214 @@ def SiOHII_ndensity(field, data):
     num_unit = dunit / mh_cgs / 45.0
     arr = (num_unit*data['SiOHII_Density']).to_ndarray()
     return arr
+
+@derived_field(name='element_E_ndensity', sampling_type='cell')
+def element_E_ndensity(field, data):
+    if 'enzo' not in data.ds.dataset_type:
+        return
+    if data.ds.parameters['MultiSpecies'] < 4:
+        return
+    arr = (0.0 + 1*data['Electron_ndensity'])
+    return arr
+
+@derived_field(name='element_H_ndensity', sampling_type='cell')
+def element_H_ndensity(field, data):
+    if 'enzo' not in data.ds.dataset_type:
+        return
+    if data.ds.parameters['MultiSpecies'] < 4:
+        return
+    arr = (0.0 + 4*data['GCH3OHI_ndensity'] + 4*data['GCH4I_ndensity']
+          + 2*data['GH2CNI_ndensity'] + 2*data['GH2COI_ndensity'] +
+          2*data['GH2OI_ndensity'] + 2*data['GH2SiOI_ndensity'] +
+          1*data['GHCNI_ndensity'] + 1*data['GHNCI_ndensity'] +
+          1*data['GHNCOI_ndensity'] + 1*data['GHNOI_ndensity'] +
+          3*data['GNH3I_ndensity'] + 1*data['GO2HI_ndensity'] +
+          4*data['GSiH4I_ndensity'] + 1*data['CHI_ndensity'] +
+          1*data['CHII_ndensity'] + 2*data['CH2I_ndensity'] +
+          2*data['CH2II_ndensity'] + 3*data['CH3I_ndensity'] +
+          3*data['CH3II_ndensity'] + 4*data['CH3OHI_ndensity'] +
+          4*data['CH4I_ndensity'] + 4*data['CH4II_ndensity'] +
+          1*data['HI_ndensity'] + 1*data['HII_ndensity'] +
+          2*data['H2I_ndensity'] + 2*data['H2II_ndensity'] +
+          2*data['H2CNI_ndensity'] + 2*data['H2COI_ndensity'] +
+          2*data['H2COII_ndensity'] + 2*data['H2NOII_ndensity'] +
+          2*data['H2OI_ndensity'] + 2*data['H2OII_ndensity'] +
+          2*data['H2SiOI_ndensity'] + 3*data['H3II_ndensity'] +
+          3*data['H3COII_ndensity'] + 3*data['H3OII_ndensity'] +
+          1*data['HCNI_ndensity'] + 1*data['HCNII_ndensity'] +
+          2*data['HCNHII_ndensity'] + 1*data['HCOI_ndensity'] +
+          1*data['HCOII_ndensity'] + 1*data['HCO2II_ndensity'] +
+          1*data['HeHII_ndensity'] + 1*data['HNCI_ndensity'] +
+          1*data['HNCOI_ndensity'] + 1*data['HNOI_ndensity'] +
+          1*data['HNOII_ndensity'] + 1*data['HOCII_ndensity'] +
+          1*data['N2HII_ndensity'] + 1*data['NHI_ndensity'] +
+          1*data['NHII_ndensity'] + 2*data['NH2I_ndensity'] +
+          2*data['NH2II_ndensity'] + 3*data['NH3I_ndensity'] +
+          3*data['NH3II_ndensity'] + 1*data['O2HI_ndensity'] +
+          1*data['O2HII_ndensity'] + 1*data['OHI_ndensity'] +
+          1*data['OHII_ndensity'] + 1*data['SiHI_ndensity'] +
+          1*data['SiHII_ndensity'] + 2*data['SiH2I_ndensity'] +
+          2*data['SiH2II_ndensity'] + 3*data['SiH3I_ndensity'] +
+          3*data['SiH3II_ndensity'] + 4*data['SiH4I_ndensity'] +
+          4*data['SiH4II_ndensity'] + 5*data['SiH5II_ndensity'] +
+          1*data['SiOHII_ndensity'])
+    return arr
+
+@derived_field(name='element_D_ndensity', sampling_type='cell')
+def element_D_ndensity(field, data):
+    if 'enzo' not in data.ds.dataset_type:
+        return
+    if data.ds.parameters['MultiSpecies'] < 4:
+        return
+    arr = (0.0)
+    return arr
+
+@derived_field(name='element_HE_ndensity', sampling_type='cell')
+def element_HE_ndensity(field, data):
+    if 'enzo' not in data.ds.dataset_type:
+        return
+    if data.ds.parameters['MultiSpecies'] < 4:
+        return
+    arr = (0.0 + 1*data['HeI_ndensity'] + 1*data['HeII_ndensity'] +
+          1*data['HeHII_ndensity'])
+    return arr
+
+@derived_field(name='element_C_ndensity', sampling_type='cell')
+def element_C_ndensity(field, data):
+    if 'enzo' not in data.ds.dataset_type:
+        return
+    if data.ds.parameters['MultiSpecies'] < 4:
+        return
+    arr = (0.0 + 1*data['GCH3OHI_ndensity'] + 1*data['GCH4I_ndensity']
+          + 1*data['GCOI_ndensity'] + 1*data['GCO2I_ndensity'] +
+          1*data['GH2CNI_ndensity'] + 1*data['GH2COI_ndensity'] +
+          1*data['GHCNI_ndensity'] + 1*data['GHNCI_ndensity'] +
+          1*data['GHNCOI_ndensity'] + 1*data['GSiCI_ndensity'] +
+          2*data['GSiC2I_ndensity'] + 3*data['GSiC3I_ndensity'] +
+          1*data['CI_ndensity'] + 1*data['CII_ndensity'] +
+          1*data['CHI_ndensity'] + 1*data['CHII_ndensity'] +
+          1*data['CH2I_ndensity'] + 1*data['CH2II_ndensity'] +
+          1*data['CH3I_ndensity'] + 1*data['CH3II_ndensity'] +
+          1*data['CH3OHI_ndensity'] + 1*data['CH4I_ndensity'] +
+          1*data['CH4II_ndensity'] + 1*data['CNI_ndensity'] +
+          1*data['CNII_ndensity'] + 1*data['COI_ndensity'] +
+          1*data['COII_ndensity'] + 1*data['CO2I_ndensity'] +
+          1*data['H2CNI_ndensity'] + 1*data['H2COI_ndensity'] +
+          1*data['H2COII_ndensity'] + 1*data['H3COII_ndensity'] +
+          1*data['HCNI_ndensity'] + 1*data['HCNII_ndensity'] +
+          1*data['HCNHII_ndensity'] + 1*data['HCOI_ndensity'] +
+          1*data['HCOII_ndensity'] + 1*data['HCO2II_ndensity'] +
+          1*data['HNCI_ndensity'] + 1*data['HNCOI_ndensity'] +
+          1*data['HOCII_ndensity'] + 1*data['OCNI_ndensity'] +
+          1*data['SiCI_ndensity'] + 1*data['SiCII_ndensity'] +
+          2*data['SiC2I_ndensity'] + 2*data['SiC2II_ndensity'] +
+          3*data['SiC3I_ndensity'] + 3*data['SiC3II_ndensity'])
+    return arr
+
+@derived_field(name='element_N_ndensity', sampling_type='cell')
+def element_N_ndensity(field, data):
+    if 'enzo' not in data.ds.dataset_type:
+        return
+    if data.ds.parameters['MultiSpecies'] < 4:
+        return
+    arr = (0.0 + 1*data['GH2CNI_ndensity'] + 1*data['GHCNI_ndensity'] +
+          1*data['GHNCI_ndensity'] + 1*data['GHNCOI_ndensity'] +
+          1*data['GHNOI_ndensity'] + 2*data['GN2I_ndensity'] +
+          1*data['GNH3I_ndensity'] + 1*data['GNOI_ndensity'] +
+          1*data['GNO2I_ndensity'] + 1*data['CNI_ndensity'] +
+          1*data['CNII_ndensity'] + 1*data['H2CNI_ndensity'] +
+          1*data['H2NOII_ndensity'] + 1*data['HCNI_ndensity'] +
+          1*data['HCNII_ndensity'] + 1*data['HCNHII_ndensity'] +
+          1*data['HNCI_ndensity'] + 1*data['HNCOI_ndensity'] +
+          1*data['HNOI_ndensity'] + 1*data['HNOII_ndensity'] +
+          1*data['NI_ndensity'] + 1*data['NII_ndensity'] +
+          2*data['N2I_ndensity'] + 2*data['N2II_ndensity'] +
+          2*data['N2HII_ndensity'] + 1*data['NHI_ndensity'] +
+          1*data['NHII_ndensity'] + 1*data['NH2I_ndensity'] +
+          1*data['NH2II_ndensity'] + 1*data['NH3I_ndensity'] +
+          1*data['NH3II_ndensity'] + 1*data['NOI_ndensity'] +
+          1*data['NOII_ndensity'] + 1*data['NO2I_ndensity'] +
+          1*data['OCNI_ndensity'])
+    return arr
+
+@derived_field(name='element_O_ndensity', sampling_type='cell')
+def element_O_ndensity(field, data):
+    if 'enzo' not in data.ds.dataset_type:
+        return
+    if data.ds.parameters['MultiSpecies'] < 4:
+        return
+    arr = (0.0 + 1*data['GCH3OHI_ndensity'] + 1*data['GCOI_ndensity'] +
+          2*data['GCO2I_ndensity'] + 1*data['GH2COI_ndensity'] +
+          1*data['GH2OI_ndensity'] + 1*data['GH2SiOI_ndensity'] +
+          1*data['GHNCOI_ndensity'] + 1*data['GHNOI_ndensity'] +
+          1*data['GNOI_ndensity'] + 2*data['GNO2I_ndensity'] +
+          2*data['GO2I_ndensity'] + 2*data['GO2HI_ndensity'] +
+          1*data['GSiOI_ndensity'] + 1*data['CH3OHI_ndensity'] +
+          1*data['COI_ndensity'] + 1*data['COII_ndensity'] +
+          2*data['CO2I_ndensity'] + 1*data['H2COI_ndensity'] +
+          1*data['H2COII_ndensity'] + 1*data['H2NOII_ndensity'] +
+          1*data['H2OI_ndensity'] + 1*data['H2OII_ndensity'] +
+          1*data['H2SiOI_ndensity'] + 1*data['H3COII_ndensity'] +
+          1*data['H3OII_ndensity'] + 1*data['HCOI_ndensity'] +
+          1*data['HCOII_ndensity'] + 2*data['HCO2II_ndensity'] +
+          1*data['HNCOI_ndensity'] + 1*data['HNOI_ndensity'] +
+          1*data['HNOII_ndensity'] + 1*data['HOCII_ndensity'] +
+          1*data['NOI_ndensity'] + 1*data['NOII_ndensity'] +
+          2*data['NO2I_ndensity'] + 1*data['OI_ndensity'] +
+          1*data['OII_ndensity'] + 2*data['O2I_ndensity'] +
+          2*data['O2II_ndensity'] + 2*data['O2HI_ndensity'] +
+          2*data['O2HII_ndensity'] + 1*data['OCNI_ndensity'] +
+          1*data['OHI_ndensity'] + 1*data['OHII_ndensity'] +
+          1*data['SiOI_ndensity'] + 1*data['SiOII_ndensity'] +
+          1*data['SiOHII_ndensity'])
+    return arr
+
+@derived_field(name='element_MG_ndensity', sampling_type='cell')
+def element_MG_ndensity(field, data):
+    if 'enzo' not in data.ds.dataset_type:
+        return
+    if data.ds.parameters['MultiSpecies'] < 4:
+        return
+    arr = (0.0 + 1*data['GMgI_ndensity'] + 1*data['MgI_ndensity'] +
+          1*data['MgII_ndensity'])
+    return arr
+
+@derived_field(name='element_SI_ndensity', sampling_type='cell')
+def element_SI_ndensity(field, data):
+    if 'enzo' not in data.ds.dataset_type:
+        return
+    if data.ds.parameters['MultiSpecies'] < 4:
+        return
+    arr = (0.0 + 1*data['GH2SiOI_ndensity'] + 1*data['GSiCI_ndensity']
+          + 1*data['GSiC2I_ndensity'] + 1*data['GSiC3I_ndensity'] +
+          1*data['GSiH4I_ndensity'] + 1*data['GSiOI_ndensity'] +
+          1*data['H2SiOI_ndensity'] + 1*data['SiI_ndensity'] +
+          1*data['SiII_ndensity'] + 1*data['SiCI_ndensity'] +
+          1*data['SiCII_ndensity'] + 1*data['SiC2I_ndensity'] +
+          1*data['SiC2II_ndensity'] + 1*data['SiC3I_ndensity'] +
+          1*data['SiC3II_ndensity'] + 1*data['SiHI_ndensity'] +
+          1*data['SiHII_ndensity'] + 1*data['SiH2I_ndensity'] +
+          1*data['SiH2II_ndensity'] + 1*data['SiH3I_ndensity'] +
+          1*data['SiH3II_ndensity'] + 1*data['SiH4I_ndensity'] +
+          1*data['SiH4II_ndensity'] + 1*data['SiH5II_ndensity'] +
+          1*data['SiOI_ndensity'] + 1*data['SiOII_ndensity'] +
+          1*data['SiOHII_ndensity'])
+    return arr
+
+@derived_field(name='element_S_ndensity', sampling_type='cell')
+def element_S_ndensity(field, data):
+    if 'enzo' not in data.ds.dataset_type:
+        return
+    if data.ds.parameters['MultiSpecies'] < 4:
+        return
+    arr = (0.0)
+    return arr
+
+@derived_field(name='element_CL_ndensity', sampling_type='cell')
+def element_CL_ndensity(field, data):
+    if 'enzo' not in data.ds.dataset_type:
+        return
+    if data.ds.parameters['MultiSpecies'] < 4:
+        return
+    arr = (0.0)
+    return arr

@@ -205,7 +205,7 @@ int grid::NaunetWrapper()
       igrid = (k * GridDimension[1] + j) * GridDimension[0] + GridStartIndex[0];
       for (i = GridStartIndex[0]; i <= GridEndIndex[0]; i++, igrid++) {
 
-        data.nH = BaryonField[iden][i] / (1.4 * mh);
+        data.nH = BaryonField[iden][i] * DensityUnits / (1.4 * mh);
         data.Tgas = temperature[igrid];
 
         y[IDX_GCH3OHI] = max(BaryonField[GCH3OHINum][igrid], 1e-40) * NumberDensityUnits / 32.0;
@@ -323,7 +323,10 @@ int grid::NaunetWrapper()
         y[IDX_SiOII] = max(BaryonField[SiOIINum][igrid], 1e-40) * NumberDensityUnits / 44.0;
         y[IDX_SiOHII] = max(BaryonField[SiOHIINum][igrid], 1e-40) * NumberDensityUnits / 45.0;
         
-        naunet.Solve(y, dt_chem * TimeUnits, &data);
+        if (naunet.Solve(y, dt_chem * TimeUnits, &data) == NAUNET_FAIL) {    
+          naunet.Finalize();
+          ENZO_FAIL("Naunet failed in NaunetWrapper.C!");
+        }
 
         BaryonField[GCH3OHINum][igrid] = max(y[IDX_GCH3OHI] * 32.0 / NumberDensityUnits, 1e-40);
         BaryonField[GCH4INum][igrid] = max(y[IDX_GCH4I] * 16.0 / NumberDensityUnits, 1e-40);
@@ -449,7 +452,6 @@ int grid::NaunetWrapper()
 
   delete [] temperature;
 
-  delete [] TotalMetals;
   delete [] g_grid_dimension;
   delete [] g_grid_start;
   delete [] g_grid_end;

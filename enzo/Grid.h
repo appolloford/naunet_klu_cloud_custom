@@ -1826,7 +1826,7 @@ int TransferSubgridActiveParticles(grid* Subgrids[], int NumberOfSubgrids,
 			    int &HMNum, int &H2INum, int &H2IINum,
                             int &DINum, int &DIINum, int &HDINum);
 
-  /* Identify Multi-species fields from KROME. */
+  /* Identify Multi-species fields from Naunet. */
   int IdentifyNaunetSpeciesFields(int &GCH3OHINum, int &GCH4INum, int &GCOINum,
                                 int &GCO2INum, int &GH2CNINum, int &GH2COINum,
                                 int &GH2OINum, int &GH2SiOINum, int &GHCNINum,

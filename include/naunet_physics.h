@@ -2,6 +2,7 @@
 #define __NAUNET_PHYSICS_H__
 
 /*  */
+double GetElementAbund(double *y, int elemidx);
 double GetMantleDens(double *y);
 double GetHNuclei(double *y);
 double GetMu(double *y);

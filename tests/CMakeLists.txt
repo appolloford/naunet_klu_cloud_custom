@@ -4,8 +4,6 @@ elseif(MAKE_STATIC)
     set(NAUNETLIB naunet_static)
 endif()
 
-set(NAUNETLIB naunet_static)
-
 # check enabled languages
 get_property(
     languages 
@@ -16,6 +14,7 @@ get_property(
 set(
     TESTTARGETS
     singlegrid
+    renorm
 )
 
 # force cmake to have the same macro defined in naunet_macros.h
@@ -28,6 +27,7 @@ if("CUDA" IN_LIST languages)
     list(
         APPEND TESTTARGETS
             multiplegrid
+            
     )
 endif()
 
@@ -43,14 +43,6 @@ foreach(name ${TESTTARGETS})
             PROPERTIES
                 OUTPUT_NAME ${targetname}.x
     )
-
-    if("CUDA" IN_LIST languages)
-        target_include_directories(
-            ${targetname}
-                PRIVATE 
-                    ${CMAKE_CUDA_TOOLKIT_INCLUDE_DIRECTORIES}
-        )
-    endif()
 
     # for odeint test
     if(USE_BOOST)
@@ -78,7 +70,7 @@ foreach(name ${TESTTARGETS})
 endforeach(name ${TESTTARGETS})
 
 if(MAKE_PYTHON)
-    configure_file(test.py.in test.py)
+    configure_file(singlegrid.py.in singlegrid.py)
 
     if( ${NVIDIA_GPU_COUNT} OR NOT ("CUDA" IN_LIST languages) )
         add_test(
@@ -86,9 +78,10 @@ if(MAKE_PYTHON)
                 test_pymodule
             COMMAND
                 ${CMAKE_COMMAND} -E env 
-                    CHEMISTRY_MODULE_PATH=$<TARGET_FILE_DIR:${PYMODNAME}>
+                    PYNAUNET_PATH=$<TARGET_FILE_DIR:${PYMODNAME}>
                     NAUNET_CONFIG_PATH=${CMAKE_SOURCE_DIR}
-                ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_BINARY_DIR}/test.py
+                ${Python3_EXECUTABLE} ${CMAKE_CURRENT_BINARY_DIR}/singlegrid.py
         )
     endif()
 endif()
+

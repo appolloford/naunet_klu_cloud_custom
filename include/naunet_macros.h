@@ -5,6 +5,7 @@
 #define NAUNET_SUCCESS 0
 #define NAUNET_FAIL 1
 
+#define NELEMENTS 7
 #define NSPECIES 114
 #define NEQUATIONS 114
 #define NREACTIONS 1403
@@ -127,4 +128,13 @@
 #define IDX_SiOI 111
 #define IDX_SiOII 112
 #define IDX_SiOHII 113
+
+#define IDX_ELEM_C 0
+#define IDX_ELEM_H 1
+#define IDX_ELEM_HE 2
+#define IDX_ELEM_MG 3
+#define IDX_ELEM_N 4
+#define IDX_ELEM_O 5
+#define IDX_ELEM_SI 6
+
 #endif
