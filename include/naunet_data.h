@@ -24,7 +24,7 @@ struct NaunetData {
     double eb_uvd = 1.000e+04;
     double crdeseff = 1.000e+05;
     double h2deseff = 1.000e-02;
-    double ksp;
+    double ksp = 0.000e+00;
     
     // clang-format on
 };
