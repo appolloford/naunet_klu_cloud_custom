@@ -1865,6 +1865,8 @@ int TransferSubgridActiveParticles(grid* Subgrids[], int NumberOfSubgrids,
                                 &SiH4IINum, int &SiH5IINum, int &SiOINum, int
                                 &SiOIINum, int &SiOHIINum);
 
+  int IdentifyNaunetSpeciesFields(int *specnum);
+
   /* Identify shock fields. */
   int IdentifyShockSpeciesFields(int &MachNum,int &PSTempNum, int &PSDenNum);
 
