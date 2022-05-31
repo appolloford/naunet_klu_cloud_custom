@@ -5,9 +5,7 @@
 #include <sunlinsol/sunlinsol_klu.h>     // access to KLU sparse direct solver
 #include <sunmatrix/sunmatrix_sparse.h>  // access to sparse SUNMatrix
 /* */
-/*  */
 #include "naunet.h"
-/*  */
 #include "naunet_ode.h"
 #include "naunet_physics.h"
 /* */
@@ -955,6 +953,10 @@ int Naunet::Solve(realtype *ab, realtype dt, NaunetData *data) {
         fprintf(errfp_, "    data.h2deseff = %13.7e;\n", data->h2deseff);
         /* */
         fprintf(errfp_, "    data.ksp = %13.7e;\n", data->ksp);
+        /* */
+        fprintf(errfp_, "    data.duty = %13.7e;\n", data->duty);
+        /* */
+        fprintf(errfp_, "    data.Tcr = %13.7e;\n", data->Tcr);
         /*  */
 
         fprintf(errfp_, "\n");

@@ -7,7 +7,6 @@ from naunet.dusts.rr07dust import RR07Dust
 from naunet.species import Species
 
 
-
 @define_reaction(name="uclcustreaction")
 class CUSTOMReaction(Reaction):
     """
@@ -192,6 +191,7 @@ class CUSTOMReaction(Reaction):
                 self.create_species(p) for p in products if self.create_species(p)
             ]
 
+
 @define_dust(name="rr07custom")
 class CUSTOMDust(RR07Dust):
 
@@ -214,6 +214,8 @@ class CUSTOMDust(RR07Dust):
         "crdeseff": 1e5,  # cosmic ray desorption efficiency
         "h2deseff": 1.0e-2,  # H2 desorption efficiency
         "ksp": 0.0,  # Sputtering rate
+        "duty": 3.16e-19,  # duty cycle
+        "Tcr": 70.0,  # cosmic ray induced desorption temperature
     }
 
     locvars = [
@@ -223,12 +225,13 @@ class CUSTOMDust(RR07Dust):
         "double garea = (pi*rG*rG) * gdens",  # total grain cross-section
         "double garea_per_H = garea / nH",
         "double densites = 4.0 * garea * sites",
+        "double layers = mant/(nmono*densites)",
+        "double cov = (mant == 0.0) ? 0.0 : fmin(layers/mant, 1.0/mant)",
     ]
 
-    def __init__(self, species = None) -> None:
+    def __init__(self, species=None) -> None:
         super().__init__(species=species)
         self.model = "rr07custom"
-
 
     def _rate_thermal_desorption(
         self,
@@ -251,17 +254,16 @@ class CUSTOMDust(RR07Dust):
         spec = spec[0]
         rate = " * ".join(
             [
-                f"opt_thd",
+                f"opt_thd * cov",
                 f"sqrt(2.0*sites*kerg*eb_{spec.alias}/(pi*pi*amu*{spec.massnumber}))",
-                f"2.0 * densites",
+                f"nmono * densites",
                 f"exp(-eb_{spec.alias}/{sym_tdust})",
             ],
         )
 
         rate = f"({rate} + ksp * garea / mant)"
-        rate = f"mantabund > 1e-30 ? ({rate}) : 0.0"
+        # rate = f"mantabund > 1e-30 ? ({rate}) : 0.0"
         return rate
-
 
     def _rate_photon_desorption(
         self,
@@ -282,8 +284,37 @@ class CUSTOMDust(RR07Dust):
             raise ValueError("Number of species in photon desoprtion should be 1.")
 
         spec = spec[0]
+        rate = f"opt_uvd * cov * ({sym_phot}) * {spec.photon_yield()} * nmono * 4.0 * garea"
 
-        rate = f"opt_uvd * ({sym_phot}) * {spec.photon_yield()} * nmono * 4.0 * garea"
-        rate = f"mantabund > 1e-30 ? ({rate}) : 0.0"
         return rate
 
+    def _rate_cosmicray_desorption(
+        self,
+        spec: list[Species],
+        a: float,
+        b: float,
+        c: float,
+        sym_cr: str,
+    ) -> str:
+
+        if not isinstance(sym_cr, str):
+            raise TypeError("sym_cr should be a string")
+
+        if not sym_cr:
+            raise ValueError("Symbol of cosmic ray ionization rate does not exist")
+
+        if len(spec) != 1:
+            raise ValueError("Number of species in cosmic-ray desoprtion should be 1.")
+
+        spec = spec[0]
+        rate = " * ".join(
+            [
+                f"opt_crd * cov",
+                f"duty * nmono * densites",
+                f"({sym_cr})",
+                f"sqrt(2.0*sites*kerg*eb_{spec.alias}/(pi*pi*amu*{spec.massnumber}))",
+                f"exp(-eb_{spec.alias}/Tcr)",
+            ]
+        )
+
+        return rate

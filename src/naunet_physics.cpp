@@ -1,3 +1,4 @@
+// 
 #include <math.h>
 #include <stdio.h>
 
@@ -5,8 +6,8 @@
 
 #include "naunet_constants.h"
 #include "naunet_macros.h"
-#include "naunet_utilities.h"
 #include "naunet_physics.h"
+#include "naunet_utilities.h"
 
 // clang-format off
 double GetElementAbund(double *y, int elemidx) {

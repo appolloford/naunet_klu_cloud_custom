@@ -3,11 +3,9 @@
 #include <nvector/nvector_serial.h>
 #include <sunmatrix/sunmatrix_sparse.h>  // access to sparse SUNMatrix
 /* */
-/*  */
-#include "naunet_ode.h"
-/*  */
 #include "naunet_constants.h"
 #include "naunet_macros.h"
+#include "naunet_ode.h"
 #include "naunet_physics.h"
 
 #define IJth(A, i, j) SM_ELEMENT_D(A, i, j)
@@ -36,6 +34,8 @@ int EvalRates(realtype *k, realtype *y, NaunetData *u_data) {
     realtype crdeseff = u_data->crdeseff;
     realtype h2deseff = u_data->h2deseff;
     realtype ksp = u_data->ksp;
+    realtype duty = u_data->duty;
+    realtype Tcr = u_data->Tcr;
     
     double h2col = 0.5*1.59e21*Av;
     double cocol = 1e-5 * h2col;
@@ -48,6 +48,8 @@ int EvalRates(realtype *k, realtype *y, NaunetData *u_data) {
     double garea = (pi*rG*rG) * gdens;
     double garea_per_H = garea / nH;
     double densites = 4.0 * garea * sites;
+    double layers = mant/(nmono*densites);
+    double cov = (mant == 0.0) ? 0.0 : fmin(layers/mant, 1.0/mant);
     
     // clang-format on
 
@@ -3978,385 +3980,361 @@ int EvalRates(realtype *k, realtype *y, NaunetData *u_data) {
         (opt_h2d * h2deseff * 1.0e-17 * sqrt(Tgas) * y[IDX_HI] * nH / mant) :
         0.0) : 0.0; }
         
-    if (Tgas<10000.0) { k[1308] = mantabund > 1e-30 ? (eb_crd >= 1090.0 ?
-        (opt_crd * 4.0 * pi * crdeseff * ((zeta / zism)) * 1.64e-4 * garea /
-        mant) : 0.0) : 0.0; }
+    if (Tgas<10000.0) { k[1308] = opt_crd * cov * duty * nmono * densites *
+        ((zeta / zism)) * sqrt(2.0*sites*kerg*eb_GCH4I/(pi*pi*amu*16.0)) *
+        exp(-eb_GCH4I/Tcr); }
         
-    if (Tgas<10000.0) { k[1309] = mantabund > 1e-30 ? (opt_uvd *
-        (G0*1.0e8*exp(-Av*3.02) + 1.0e4 * (zeta / zism)) * 0.001 * nmono * 4.0 *
-        garea) : 0.0; }
+    if (Tgas<10000.0) { k[1309] = opt_uvd * cov * (G0*1.0e8*exp(-Av*3.02) +
+        1.0e4 * (zeta / zism)) * 0.001 * nmono * 4.0 * garea; }
         
-    if (Tgas<10000.0) { k[1310] = mantabund > 1e-30 ? ((opt_thd *
-        sqrt(2.0*sites*kerg*eb_GCH4I/(pi*pi*amu*16.0)) * 2.0 * densites *
-        exp(-eb_GCH4I/Tgas) + ksp * garea / mant)) : 0.0; }
+    if (Tgas<10000.0) { k[1310] = (opt_thd * cov *
+        sqrt(2.0*sites*kerg*eb_GCH4I/(pi*pi*amu*16.0)) * nmono * densites *
+        exp(-eb_GCH4I/Tgas) + ksp * garea / mant); }
         
     if (Tgas<10000.0) { k[1311] = mantabund > 1e-30 ? (eb_h2d >= 3130.0 ?
         (opt_h2d * h2deseff * 1.0e-17 * sqrt(Tgas) * y[IDX_HI] * nH / mant) :
         0.0) : 0.0; }
         
-    if (Tgas<10000.0) { k[1312] = mantabund > 1e-30 ? (eb_crd >= 3130.0 ?
-        (opt_crd * 4.0 * pi * crdeseff * ((zeta / zism)) * 1.64e-4 * garea /
-        mant) : 0.0) : 0.0; }
+    if (Tgas<10000.0) { k[1312] = opt_crd * cov * duty * nmono * densites *
+        ((zeta / zism)) * sqrt(2.0*sites*kerg*eb_GNH3I/(pi*pi*amu*17.0)) *
+        exp(-eb_GNH3I/Tcr); }
         
-    if (Tgas<10000.0) { k[1313] = mantabund > 1e-30 ? (opt_uvd *
-        (G0*1.0e8*exp(-Av*3.02) + 1.0e4 * (zeta / zism)) * 0.001 * nmono * 4.0 *
-        garea) : 0.0; }
+    if (Tgas<10000.0) { k[1313] = opt_uvd * cov * (G0*1.0e8*exp(-Av*3.02) +
+        1.0e4 * (zeta / zism)) * 0.001 * nmono * 4.0 * garea; }
         
-    if (Tgas<10000.0) { k[1314] = mantabund > 1e-30 ? ((opt_thd *
-        sqrt(2.0*sites*kerg*eb_GNH3I/(pi*pi*amu*17.0)) * 2.0 * densites *
-        exp(-eb_GNH3I/Tgas) + ksp * garea / mant)) : 0.0; }
+    if (Tgas<10000.0) { k[1314] = (opt_thd * cov *
+        sqrt(2.0*sites*kerg*eb_GNH3I/(pi*pi*amu*17.0)) * nmono * densites *
+        exp(-eb_GNH3I/Tgas) + ksp * garea / mant); }
         
     if (Tgas<10000.0) { k[1315] = mantabund > 1e-30 ? (eb_h2d >= 5770.0 ?
         (opt_h2d * h2deseff * 1.0e-17 * sqrt(Tgas) * y[IDX_HI] * nH / mant) :
         0.0) : 0.0; }
         
-    if (Tgas<10000.0) { k[1316] = mantabund > 1e-30 ? (eb_crd >= 5770.0 ?
-        (opt_crd * 4.0 * pi * crdeseff * ((zeta / zism)) * 1.64e-4 * garea /
-        mant) : 0.0) : 0.0; }
+    if (Tgas<10000.0) { k[1316] = opt_crd * cov * duty * nmono * densites *
+        ((zeta / zism)) * sqrt(2.0*sites*kerg*eb_GH2OI/(pi*pi*amu*18.0)) *
+        exp(-eb_GH2OI/Tcr); }
         
-    if (Tgas<10000.0) { k[1317] = mantabund > 1e-30 ? (opt_uvd *
-        (G0*1.0e8*exp(-Av*3.02) + 1.0e4 * (zeta / zism)) * 0.001 * nmono * 4.0 *
-        garea) : 0.0; }
+    if (Tgas<10000.0) { k[1317] = opt_uvd * cov * (G0*1.0e8*exp(-Av*3.02) +
+        1.0e4 * (zeta / zism)) * 0.001 * nmono * 4.0 * garea; }
         
-    if (Tgas<10000.0) { k[1318] = mantabund > 1e-30 ? ((opt_thd *
-        sqrt(2.0*sites*kerg*eb_GH2OI/(pi*pi*amu*18.0)) * 2.0 * densites *
-        exp(-eb_GH2OI/Tgas) + ksp * garea / mant)) : 0.0; }
+    if (Tgas<10000.0) { k[1318] = (opt_thd * cov *
+        sqrt(2.0*sites*kerg*eb_GH2OI/(pi*pi*amu*18.0)) * nmono * densites *
+        exp(-eb_GH2OI/Tgas) + ksp * garea / mant); }
         
     if (Tgas<10000.0) { k[1319] = mantabund > 1e-30 ? (eb_h2d >= 5300.0 ?
         (opt_h2d * h2deseff * 1.0e-17 * sqrt(Tgas) * y[IDX_HI] * nH / mant) :
         0.0) : 0.0; }
         
-    if (Tgas<10000.0) { k[1320] = mantabund > 1e-30 ? (eb_crd >= 5300.0 ?
-        (opt_crd * 4.0 * pi * crdeseff * ((zeta / zism)) * 1.64e-4 * garea /
-        mant) : 0.0) : 0.0; }
+    if (Tgas<10000.0) { k[1320] = opt_crd * cov * duty * nmono * densites *
+        ((zeta / zism)) * sqrt(2.0*sites*kerg*eb_GMgI/(pi*pi*amu*24.0)) *
+        exp(-eb_GMgI/Tcr); }
         
-    if (Tgas<10000.0) { k[1321] = mantabund > 1e-30 ? (opt_uvd *
-        (G0*1.0e8*exp(-Av*3.02) + 1.0e4 * (zeta / zism)) * 0.001 * nmono * 4.0 *
-        garea) : 0.0; }
+    if (Tgas<10000.0) { k[1321] = opt_uvd * cov * (G0*1.0e8*exp(-Av*3.02) +
+        1.0e4 * (zeta / zism)) * 0.001 * nmono * 4.0 * garea; }
         
-    if (Tgas<10000.0) { k[1322] = mantabund > 1e-30 ? ((opt_thd *
-        sqrt(2.0*sites*kerg*eb_GMgI/(pi*pi*amu*24.0)) * 2.0 * densites *
-        exp(-eb_GMgI/Tgas) + ksp * garea / mant)) : 0.0; }
+    if (Tgas<10000.0) { k[1322] = (opt_thd * cov *
+        sqrt(2.0*sites*kerg*eb_GMgI/(pi*pi*amu*24.0)) * nmono * densites *
+        exp(-eb_GMgI/Tgas) + ksp * garea / mant); }
         
     if (Tgas<10000.0) { k[1323] = mantabund > 1e-30 ? (eb_h2d >= 3610.0 ?
         (opt_h2d * h2deseff * 1.0e-17 * sqrt(Tgas) * y[IDX_HI] * nH / mant) :
         0.0) : 0.0; }
         
-    if (Tgas<10000.0) { k[1324] = mantabund > 1e-30 ? (eb_crd >= 3610.0 ?
-        (opt_crd * 4.0 * pi * crdeseff * ((zeta / zism)) * 1.64e-4 * garea /
-        mant) : 0.0) : 0.0; }
+    if (Tgas<10000.0) { k[1324] = opt_crd * cov * duty * nmono * densites *
+        ((zeta / zism)) * sqrt(2.0*sites*kerg*eb_GHCNI/(pi*pi*amu*27.0)) *
+        exp(-eb_GHCNI/Tcr); }
         
-    if (Tgas<10000.0) { k[1325] = mantabund > 1e-30 ? (opt_uvd *
-        (G0*1.0e8*exp(-Av*3.02) + 1.0e4 * (zeta / zism)) * 0.001 * nmono * 4.0 *
-        garea) : 0.0; }
+    if (Tgas<10000.0) { k[1325] = opt_uvd * cov * (G0*1.0e8*exp(-Av*3.02) +
+        1.0e4 * (zeta / zism)) * 0.001 * nmono * 4.0 * garea; }
         
-    if (Tgas<10000.0) { k[1326] = mantabund > 1e-30 ? ((opt_thd *
-        sqrt(2.0*sites*kerg*eb_GHCNI/(pi*pi*amu*27.0)) * 2.0 * densites *
-        exp(-eb_GHCNI/Tgas) + ksp * garea / mant)) : 0.0; }
+    if (Tgas<10000.0) { k[1326] = (opt_thd * cov *
+        sqrt(2.0*sites*kerg*eb_GHCNI/(pi*pi*amu*27.0)) * nmono * densites *
+        exp(-eb_GHCNI/Tgas) + ksp * garea / mant); }
         
     if (Tgas<10000.0) { k[1327] = mantabund > 1e-30 ? (eb_h2d >= 2050.0 ?
         (opt_h2d * h2deseff * 1.0e-17 * sqrt(Tgas) * y[IDX_HI] * nH / mant) :
         0.0) : 0.0; }
         
-    if (Tgas<10000.0) { k[1328] = mantabund > 1e-30 ? (eb_crd >= 2050.0 ?
-        (opt_crd * 4.0 * pi * crdeseff * ((zeta / zism)) * 1.64e-4 * garea /
-        mant) : 0.0) : 0.0; }
+    if (Tgas<10000.0) { k[1328] = opt_crd * cov * duty * nmono * densites *
+        ((zeta / zism)) * sqrt(2.0*sites*kerg*eb_GHNCI/(pi*pi*amu*27.0)) *
+        exp(-eb_GHNCI/Tcr); }
         
-    if (Tgas<10000.0) { k[1329] = mantabund > 1e-30 ? (opt_uvd *
-        (G0*1.0e8*exp(-Av*3.02) + 1.0e4 * (zeta / zism)) * 0.001 * nmono * 4.0 *
-        garea) : 0.0; }
+    if (Tgas<10000.0) { k[1329] = opt_uvd * cov * (G0*1.0e8*exp(-Av*3.02) +
+        1.0e4 * (zeta / zism)) * 0.001 * nmono * 4.0 * garea; }
         
-    if (Tgas<10000.0) { k[1330] = mantabund > 1e-30 ? ((opt_thd *
-        sqrt(2.0*sites*kerg*eb_GHNCI/(pi*pi*amu*27.0)) * 2.0 * densites *
-        exp(-eb_GHNCI/Tgas) + ksp * garea / mant)) : 0.0; }
+    if (Tgas<10000.0) { k[1330] = (opt_thd * cov *
+        sqrt(2.0*sites*kerg*eb_GHNCI/(pi*pi*amu*27.0)) * nmono * densites *
+        exp(-eb_GHNCI/Tgas) + ksp * garea / mant); }
         
     if (Tgas<10000.0) { k[1331] = mantabund > 1e-30 ? (eb_h2d >= 1100.0 ?
         (opt_h2d * h2deseff * 1.0e-17 * sqrt(Tgas) * y[IDX_HI] * nH / mant) :
         0.0) : 0.0; }
         
-    if (Tgas<10000.0) { k[1332] = mantabund > 1e-30 ? (eb_crd >= 1100.0 ?
-        (opt_crd * 4.0 * pi * crdeseff * ((zeta / zism)) * 1.64e-4 * garea /
-        mant) : 0.0) : 0.0; }
+    if (Tgas<10000.0) { k[1332] = opt_crd * cov * duty * nmono * densites *
+        ((zeta / zism)) * sqrt(2.0*sites*kerg*eb_GCOI/(pi*pi*amu*28.0)) *
+        exp(-eb_GCOI/Tcr); }
         
-    if (Tgas<10000.0) { k[1333] = mantabund > 1e-30 ? (opt_uvd *
-        (G0*1.0e8*exp(-Av*3.02) + 1.0e4 * (zeta / zism)) * 0.001 * nmono * 4.0 *
-        garea) : 0.0; }
+    if (Tgas<10000.0) { k[1333] = opt_uvd * cov * (G0*1.0e8*exp(-Av*3.02) +
+        1.0e4 * (zeta / zism)) * 0.001 * nmono * 4.0 * garea; }
         
-    if (Tgas<10000.0) { k[1334] = mantabund > 1e-30 ? ((opt_thd *
-        sqrt(2.0*sites*kerg*eb_GCOI/(pi*pi*amu*28.0)) * 2.0 * densites *
-        exp(-eb_GCOI/Tgas) + ksp * garea / mant)) : 0.0; }
+    if (Tgas<10000.0) { k[1334] = (opt_thd * cov *
+        sqrt(2.0*sites*kerg*eb_GCOI/(pi*pi*amu*28.0)) * nmono * densites *
+        exp(-eb_GCOI/Tgas) + ksp * garea / mant); }
         
     if (Tgas<10000.0) { k[1335] = mantabund > 1e-30 ? (eb_h2d >= 790.0 ?
         (opt_h2d * h2deseff * 1.0e-17 * sqrt(Tgas) * y[IDX_HI] * nH / mant) :
         0.0) : 0.0; }
         
-    if (Tgas<10000.0) { k[1336] = mantabund > 1e-30 ? (eb_crd >= 790.0 ?
-        (opt_crd * 4.0 * pi * crdeseff * ((zeta / zism)) * 1.64e-4 * garea /
-        mant) : 0.0) : 0.0; }
+    if (Tgas<10000.0) { k[1336] = opt_crd * cov * duty * nmono * densites *
+        ((zeta / zism)) * sqrt(2.0*sites*kerg*eb_GN2I/(pi*pi*amu*28.0)) *
+        exp(-eb_GN2I/Tcr); }
         
-    if (Tgas<10000.0) { k[1337] = mantabund > 1e-30 ? (opt_uvd *
-        (G0*1.0e8*exp(-Av*3.02) + 1.0e4 * (zeta / zism)) * 0.001 * nmono * 4.0 *
-        garea) : 0.0; }
+    if (Tgas<10000.0) { k[1337] = opt_uvd * cov * (G0*1.0e8*exp(-Av*3.02) +
+        1.0e4 * (zeta / zism)) * 0.001 * nmono * 4.0 * garea; }
         
-    if (Tgas<10000.0) { k[1338] = mantabund > 1e-30 ? ((opt_thd *
-        sqrt(2.0*sites*kerg*eb_GN2I/(pi*pi*amu*28.0)) * 2.0 * densites *
-        exp(-eb_GN2I/Tgas) + ksp * garea / mant)) : 0.0; }
+    if (Tgas<10000.0) { k[1338] = (opt_thd * cov *
+        sqrt(2.0*sites*kerg*eb_GN2I/(pi*pi*amu*28.0)) * nmono * densites *
+        exp(-eb_GN2I/Tgas) + ksp * garea / mant); }
         
     if (Tgas<10000.0) { k[1339] = mantabund > 1e-30 ? (eb_h2d >= 2400.0 ?
         (opt_h2d * h2deseff * 1.0e-17 * sqrt(Tgas) * y[IDX_HI] * nH / mant) :
         0.0) : 0.0; }
         
-    if (Tgas<10000.0) { k[1340] = mantabund > 1e-30 ? (eb_crd >= 2400.0 ?
-        (opt_crd * 4.0 * pi * crdeseff * ((zeta / zism)) * 1.64e-4 * garea /
-        mant) : 0.0) : 0.0; }
+    if (Tgas<10000.0) { k[1340] = opt_crd * cov * duty * nmono * densites *
+        ((zeta / zism)) * sqrt(2.0*sites*kerg*eb_GH2CNI/(pi*pi*amu*28.0)) *
+        exp(-eb_GH2CNI/Tcr); }
         
-    if (Tgas<10000.0) { k[1341] = mantabund > 1e-30 ? (opt_uvd *
-        (G0*1.0e8*exp(-Av*3.02) + 1.0e4 * (zeta / zism)) * 0.001 * nmono * 4.0 *
-        garea) : 0.0; }
+    if (Tgas<10000.0) { k[1341] = opt_uvd * cov * (G0*1.0e8*exp(-Av*3.02) +
+        1.0e4 * (zeta / zism)) * 0.001 * nmono * 4.0 * garea; }
         
-    if (Tgas<10000.0) { k[1342] = mantabund > 1e-30 ? ((opt_thd *
-        sqrt(2.0*sites*kerg*eb_GH2CNI/(pi*pi*amu*28.0)) * 2.0 * densites *
-        exp(-eb_GH2CNI/Tgas) + ksp * garea / mant)) : 0.0; }
+    if (Tgas<10000.0) { k[1342] = (opt_thd * cov *
+        sqrt(2.0*sites*kerg*eb_GH2CNI/(pi*pi*amu*28.0)) * nmono * densites *
+        exp(-eb_GH2CNI/Tgas) + ksp * garea / mant); }
         
     if (Tgas<10000.0) { k[1343] = mantabund > 1e-30 ? (eb_h2d >= 1600.0 ?
         (opt_h2d * h2deseff * 1.0e-17 * sqrt(Tgas) * y[IDX_HI] * nH / mant) :
         0.0) : 0.0; }
         
-    if (Tgas<10000.0) { k[1344] = mantabund > 1e-30 ? (eb_crd >= 1600.0 ?
-        (opt_crd * 4.0 * pi * crdeseff * ((zeta / zism)) * 1.64e-4 * garea /
-        mant) : 0.0) : 0.0; }
+    if (Tgas<10000.0) { k[1344] = opt_crd * cov * duty * nmono * densites *
+        ((zeta / zism)) * sqrt(2.0*sites*kerg*eb_GNOI/(pi*pi*amu*30.0)) *
+        exp(-eb_GNOI/Tcr); }
         
-    if (Tgas<10000.0) { k[1345] = mantabund > 1e-30 ? (opt_uvd *
-        (G0*1.0e8*exp(-Av*3.02) + 1.0e4 * (zeta / zism)) * 0.001 * nmono * 4.0 *
-        garea) : 0.0; }
+    if (Tgas<10000.0) { k[1345] = opt_uvd * cov * (G0*1.0e8*exp(-Av*3.02) +
+        1.0e4 * (zeta / zism)) * 0.001 * nmono * 4.0 * garea; }
         
-    if (Tgas<10000.0) { k[1346] = mantabund > 1e-30 ? ((opt_thd *
-        sqrt(2.0*sites*kerg*eb_GNOI/(pi*pi*amu*30.0)) * 2.0 * densites *
-        exp(-eb_GNOI/Tgas) + ksp * garea / mant)) : 0.0; }
+    if (Tgas<10000.0) { k[1346] = (opt_thd * cov *
+        sqrt(2.0*sites*kerg*eb_GNOI/(pi*pi*amu*30.0)) * nmono * densites *
+        exp(-eb_GNOI/Tgas) + ksp * garea / mant); }
         
     if (Tgas<10000.0) { k[1347] = mantabund > 1e-30 ? (eb_h2d >= 2050.0 ?
         (opt_h2d * h2deseff * 1.0e-17 * sqrt(Tgas) * y[IDX_HI] * nH / mant) :
         0.0) : 0.0; }
         
-    if (Tgas<10000.0) { k[1348] = mantabund > 1e-30 ? (eb_crd >= 2050.0 ?
-        (opt_crd * 4.0 * pi * crdeseff * ((zeta / zism)) * 1.64e-4 * garea /
-        mant) : 0.0) : 0.0; }
+    if (Tgas<10000.0) { k[1348] = opt_crd * cov * duty * nmono * densites *
+        ((zeta / zism)) * sqrt(2.0*sites*kerg*eb_GH2COI/(pi*pi*amu*30.0)) *
+        exp(-eb_GH2COI/Tcr); }
         
-    if (Tgas<10000.0) { k[1349] = mantabund > 1e-30 ? (opt_uvd *
-        (G0*1.0e8*exp(-Av*3.02) + 1.0e4 * (zeta / zism)) * 0.001 * nmono * 4.0 *
-        garea) : 0.0; }
+    if (Tgas<10000.0) { k[1349] = opt_uvd * cov * (G0*1.0e8*exp(-Av*3.02) +
+        1.0e4 * (zeta / zism)) * 0.001 * nmono * 4.0 * garea; }
         
-    if (Tgas<10000.0) { k[1350] = mantabund > 1e-30 ? ((opt_thd *
-        sqrt(2.0*sites*kerg*eb_GH2COI/(pi*pi*amu*30.0)) * 2.0 * densites *
-        exp(-eb_GH2COI/Tgas) + ksp * garea / mant)) : 0.0; }
+    if (Tgas<10000.0) { k[1350] = (opt_thd * cov *
+        sqrt(2.0*sites*kerg*eb_GH2COI/(pi*pi*amu*30.0)) * nmono * densites *
+        exp(-eb_GH2COI/Tgas) + ksp * garea / mant); }
         
     if (Tgas<10000.0) { k[1351] = mantabund > 1e-30 ? (eb_h2d >= 2050.0 ?
         (opt_h2d * h2deseff * 1.0e-17 * sqrt(Tgas) * y[IDX_HI] * nH / mant) :
         0.0) : 0.0; }
         
-    if (Tgas<10000.0) { k[1352] = mantabund > 1e-30 ? (eb_crd >= 2050.0 ?
-        (opt_crd * 4.0 * pi * crdeseff * ((zeta / zism)) * 1.64e-4 * garea /
-        mant) : 0.0) : 0.0; }
+    if (Tgas<10000.0) { k[1352] = opt_crd * cov * duty * nmono * densites *
+        ((zeta / zism)) * sqrt(2.0*sites*kerg*eb_GHNOI/(pi*pi*amu*31.0)) *
+        exp(-eb_GHNOI/Tcr); }
         
-    if (Tgas<10000.0) { k[1353] = mantabund > 1e-30 ? (opt_uvd *
-        (G0*1.0e8*exp(-Av*3.02) + 1.0e4 * (zeta / zism)) * 0.001 * nmono * 4.0 *
-        garea) : 0.0; }
+    if (Tgas<10000.0) { k[1353] = opt_uvd * cov * (G0*1.0e8*exp(-Av*3.02) +
+        1.0e4 * (zeta / zism)) * 0.001 * nmono * 4.0 * garea; }
         
-    if (Tgas<10000.0) { k[1354] = mantabund > 1e-30 ? ((opt_thd *
-        sqrt(2.0*sites*kerg*eb_GHNOI/(pi*pi*amu*31.0)) * 2.0 * densites *
-        exp(-eb_GHNOI/Tgas) + ksp * garea / mant)) : 0.0; }
+    if (Tgas<10000.0) { k[1354] = (opt_thd * cov *
+        sqrt(2.0*sites*kerg*eb_GHNOI/(pi*pi*amu*31.0)) * nmono * densites *
+        exp(-eb_GHNOI/Tgas) + ksp * garea / mant); }
         
     if (Tgas<10000.0) { k[1355] = mantabund > 1e-30 ? (eb_h2d >= 1000.0 ?
         (opt_h2d * h2deseff * 1.0e-17 * sqrt(Tgas) * y[IDX_HI] * nH / mant) :
         0.0) : 0.0; }
         
-    if (Tgas<10000.0) { k[1356] = mantabund > 1e-30 ? (eb_crd >= 1000.0 ?
-        (opt_crd * 4.0 * pi * crdeseff * ((zeta / zism)) * 1.64e-4 * garea /
-        mant) : 0.0) : 0.0; }
+    if (Tgas<10000.0) { k[1356] = opt_crd * cov * duty * nmono * densites *
+        ((zeta / zism)) * sqrt(2.0*sites*kerg*eb_GO2I/(pi*pi*amu*32.0)) *
+        exp(-eb_GO2I/Tcr); }
         
-    if (Tgas<10000.0) { k[1357] = mantabund > 1e-30 ? (opt_uvd *
-        (G0*1.0e8*exp(-Av*3.02) + 1.0e4 * (zeta / zism)) * 0.001 * nmono * 4.0 *
-        garea) : 0.0; }
+    if (Tgas<10000.0) { k[1357] = opt_uvd * cov * (G0*1.0e8*exp(-Av*3.02) +
+        1.0e4 * (zeta / zism)) * 0.001 * nmono * 4.0 * garea; }
         
-    if (Tgas<10000.0) { k[1358] = mantabund > 1e-30 ? ((opt_thd *
-        sqrt(2.0*sites*kerg*eb_GO2I/(pi*pi*amu*32.0)) * 2.0 * densites *
-        exp(-eb_GO2I/Tgas) + ksp * garea / mant)) : 0.0; }
+    if (Tgas<10000.0) { k[1358] = (opt_thd * cov *
+        sqrt(2.0*sites*kerg*eb_GO2I/(pi*pi*amu*32.0)) * nmono * densites *
+        exp(-eb_GO2I/Tgas) + ksp * garea / mant); }
         
     if (Tgas<10000.0) { k[1359] = mantabund > 1e-30 ? (eb_h2d >= 4930.0 ?
         (opt_h2d * h2deseff * 1.0e-17 * sqrt(Tgas) * y[IDX_HI] * nH / mant) :
         0.0) : 0.0; }
         
-    if (Tgas<10000.0) { k[1360] = mantabund > 1e-30 ? (eb_crd >= 4930.0 ?
-        (opt_crd * 4.0 * pi * crdeseff * ((zeta / zism)) * 1.64e-4 * garea /
-        mant) : 0.0) : 0.0; }
+    if (Tgas<10000.0) { k[1360] = opt_crd * cov * duty * nmono * densites *
+        ((zeta / zism)) * sqrt(2.0*sites*kerg*eb_GCH3OHI/(pi*pi*amu*32.0)) *
+        exp(-eb_GCH3OHI/Tcr); }
         
-    if (Tgas<10000.0) { k[1361] = mantabund > 1e-30 ? (opt_uvd *
-        (G0*1.0e8*exp(-Av*3.02) + 1.0e4 * (zeta / zism)) * 0.001 * nmono * 4.0 *
-        garea) : 0.0; }
+    if (Tgas<10000.0) { k[1361] = opt_uvd * cov * (G0*1.0e8*exp(-Av*3.02) +
+        1.0e4 * (zeta / zism)) * 0.001 * nmono * 4.0 * garea; }
         
-    if (Tgas<10000.0) { k[1362] = mantabund > 1e-30 ? ((opt_thd *
-        sqrt(2.0*sites*kerg*eb_GCH3OHI/(pi*pi*amu*32.0)) * 2.0 * densites *
-        exp(-eb_GCH3OHI/Tgas) + ksp * garea / mant)) : 0.0; }
+    if (Tgas<10000.0) { k[1362] = (opt_thd * cov *
+        sqrt(2.0*sites*kerg*eb_GCH3OHI/(pi*pi*amu*32.0)) * nmono * densites *
+        exp(-eb_GCH3OHI/Tgas) + ksp * garea / mant); }
         
     if (Tgas<10000.0) { k[1363] = mantabund > 1e-30 ? (eb_h2d >= 4500.0 ?
         (opt_h2d * h2deseff * 1.0e-17 * sqrt(Tgas) * y[IDX_HI] * nH / mant) :
         0.0) : 0.0; }
         
-    if (Tgas<10000.0) { k[1364] = mantabund > 1e-30 ? (eb_crd >= 4500.0 ?
-        (opt_crd * 4.0 * pi * crdeseff * ((zeta / zism)) * 1.64e-4 * garea /
-        mant) : 0.0) : 0.0; }
+    if (Tgas<10000.0) { k[1364] = opt_crd * cov * duty * nmono * densites *
+        ((zeta / zism)) * sqrt(2.0*sites*kerg*eb_GSiH4I/(pi*pi*amu*32.0)) *
+        exp(-eb_GSiH4I/Tcr); }
         
-    if (Tgas<10000.0) { k[1365] = mantabund > 1e-30 ? (opt_uvd *
-        (G0*1.0e8*exp(-Av*3.02) + 1.0e4 * (zeta / zism)) * 0.001 * nmono * 4.0 *
-        garea) : 0.0; }
+    if (Tgas<10000.0) { k[1365] = opt_uvd * cov * (G0*1.0e8*exp(-Av*3.02) +
+        1.0e4 * (zeta / zism)) * 0.001 * nmono * 4.0 * garea; }
         
-    if (Tgas<10000.0) { k[1366] = mantabund > 1e-30 ? ((opt_thd *
-        sqrt(2.0*sites*kerg*eb_GSiH4I/(pi*pi*amu*32.0)) * 2.0 * densites *
-        exp(-eb_GSiH4I/Tgas) + ksp * garea / mant)) : 0.0; }
+    if (Tgas<10000.0) { k[1366] = (opt_thd * cov *
+        sqrt(2.0*sites*kerg*eb_GSiH4I/(pi*pi*amu*32.0)) * nmono * densites *
+        exp(-eb_GSiH4I/Tgas) + ksp * garea / mant); }
         
     if (Tgas<10000.0) { k[1367] = mantabund > 1e-30 ? (eb_h2d >= 3650.0 ?
         (opt_h2d * h2deseff * 1.0e-17 * sqrt(Tgas) * y[IDX_HI] * nH / mant) :
         0.0) : 0.0; }
         
-    if (Tgas<10000.0) { k[1368] = mantabund > 1e-30 ? (eb_crd >= 3650.0 ?
-        (opt_crd * 4.0 * pi * crdeseff * ((zeta / zism)) * 1.64e-4 * garea /
-        mant) : 0.0) : 0.0; }
+    if (Tgas<10000.0) { k[1368] = opt_crd * cov * duty * nmono * densites *
+        ((zeta / zism)) * sqrt(2.0*sites*kerg*eb_GO2HI/(pi*pi*amu*33.0)) *
+        exp(-eb_GO2HI/Tcr); }
         
-    if (Tgas<10000.0) { k[1369] = mantabund > 1e-30 ? (opt_uvd *
-        (G0*1.0e8*exp(-Av*3.02) + 1.0e4 * (zeta / zism)) * 0.001 * nmono * 4.0 *
-        garea) : 0.0; }
+    if (Tgas<10000.0) { k[1369] = opt_uvd * cov * (G0*1.0e8*exp(-Av*3.02) +
+        1.0e4 * (zeta / zism)) * 0.001 * nmono * 4.0 * garea; }
         
-    if (Tgas<10000.0) { k[1370] = mantabund > 1e-30 ? ((opt_thd *
-        sqrt(2.0*sites*kerg*eb_GO2HI/(pi*pi*amu*33.0)) * 2.0 * densites *
-        exp(-eb_GO2HI/Tgas) + ksp * garea / mant)) : 0.0; }
+    if (Tgas<10000.0) { k[1370] = (opt_thd * cov *
+        sqrt(2.0*sites*kerg*eb_GO2HI/(pi*pi*amu*33.0)) * nmono * densites *
+        exp(-eb_GO2HI/Tgas) + ksp * garea / mant); }
         
     if (Tgas<10000.0) { k[1371] = mantabund > 1e-30 ? (eb_h2d >= 3500.0 ?
         (opt_h2d * h2deseff * 1.0e-17 * sqrt(Tgas) * y[IDX_HI] * nH / mant) :
         0.0) : 0.0; }
         
-    if (Tgas<10000.0) { k[1372] = mantabund > 1e-30 ? (eb_crd >= 3500.0 ?
-        (opt_crd * 4.0 * pi * crdeseff * ((zeta / zism)) * 1.64e-4 * garea /
-        mant) : 0.0) : 0.0; }
+    if (Tgas<10000.0) { k[1372] = opt_crd * cov * duty * nmono * densites *
+        ((zeta / zism)) * sqrt(2.0*sites*kerg*eb_GSiCI/(pi*pi*amu*40.0)) *
+        exp(-eb_GSiCI/Tcr); }
         
-    if (Tgas<10000.0) { k[1373] = mantabund > 1e-30 ? (opt_uvd *
-        (G0*1.0e8*exp(-Av*3.02) + 1.0e4 * (zeta / zism)) * 0.001 * nmono * 4.0 *
-        garea) : 0.0; }
+    if (Tgas<10000.0) { k[1373] = opt_uvd * cov * (G0*1.0e8*exp(-Av*3.02) +
+        1.0e4 * (zeta / zism)) * 0.001 * nmono * 4.0 * garea; }
         
-    if (Tgas<10000.0) { k[1374] = mantabund > 1e-30 ? ((opt_thd *
-        sqrt(2.0*sites*kerg*eb_GSiCI/(pi*pi*amu*40.0)) * 2.0 * densites *
-        exp(-eb_GSiCI/Tgas) + ksp * garea / mant)) : 0.0; }
+    if (Tgas<10000.0) { k[1374] = (opt_thd * cov *
+        sqrt(2.0*sites*kerg*eb_GSiCI/(pi*pi*amu*40.0)) * nmono * densites *
+        exp(-eb_GSiCI/Tgas) + ksp * garea / mant); }
         
     if (Tgas<10000.0) { k[1375] = mantabund > 1e-30 ? (eb_h2d >= 2850.0 ?
         (opt_h2d * h2deseff * 1.0e-17 * sqrt(Tgas) * y[IDX_HI] * nH / mant) :
         0.0) : 0.0; }
         
-    if (Tgas<10000.0) { k[1376] = mantabund > 1e-30 ? (eb_crd >= 2850.0 ?
-        (opt_crd * 4.0 * pi * crdeseff * ((zeta / zism)) * 1.64e-4 * garea /
-        mant) : 0.0) : 0.0; }
+    if (Tgas<10000.0) { k[1376] = opt_crd * cov * duty * nmono * densites *
+        ((zeta / zism)) * sqrt(2.0*sites*kerg*eb_GHNCOI/(pi*pi*amu*43.0)) *
+        exp(-eb_GHNCOI/Tcr); }
         
-    if (Tgas<10000.0) { k[1377] = mantabund > 1e-30 ? (opt_uvd *
-        (G0*1.0e8*exp(-Av*3.02) + 1.0e4 * (zeta / zism)) * 0.001 * nmono * 4.0 *
-        garea) : 0.0; }
+    if (Tgas<10000.0) { k[1377] = opt_uvd * cov * (G0*1.0e8*exp(-Av*3.02) +
+        1.0e4 * (zeta / zism)) * 0.001 * nmono * 4.0 * garea; }
         
-    if (Tgas<10000.0) { k[1378] = mantabund > 1e-30 ? ((opt_thd *
-        sqrt(2.0*sites*kerg*eb_GHNCOI/(pi*pi*amu*43.0)) * 2.0 * densites *
-        exp(-eb_GHNCOI/Tgas) + ksp * garea / mant)) : 0.0; }
+    if (Tgas<10000.0) { k[1378] = (opt_thd * cov *
+        sqrt(2.0*sites*kerg*eb_GHNCOI/(pi*pi*amu*43.0)) * nmono * densites *
+        exp(-eb_GHNCOI/Tgas) + ksp * garea / mant); }
         
     if (Tgas<10000.0) { k[1379] = mantabund > 1e-30 ? (eb_h2d >= 3500.0 ?
         (opt_h2d * h2deseff * 1.0e-17 * sqrt(Tgas) * y[IDX_HI] * nH / mant) :
         0.0) : 0.0; }
         
-    if (Tgas<10000.0) { k[1380] = mantabund > 1e-30 ? (eb_crd >= 3500.0 ?
-        (opt_crd * 4.0 * pi * crdeseff * ((zeta / zism)) * 1.64e-4 * garea /
-        mant) : 0.0) : 0.0; }
+    if (Tgas<10000.0) { k[1380] = opt_crd * cov * duty * nmono * densites *
+        ((zeta / zism)) * sqrt(2.0*sites*kerg*eb_GSiOI/(pi*pi*amu*44.0)) *
+        exp(-eb_GSiOI/Tcr); }
         
-    if (Tgas<10000.0) { k[1381] = mantabund > 1e-30 ? (opt_uvd *
-        (G0*1.0e8*exp(-Av*3.02) + 1.0e4 * (zeta / zism)) * 0.001 * nmono * 4.0 *
-        garea) : 0.0; }
+    if (Tgas<10000.0) { k[1381] = opt_uvd * cov * (G0*1.0e8*exp(-Av*3.02) +
+        1.0e4 * (zeta / zism)) * 0.001 * nmono * 4.0 * garea; }
         
-    if (Tgas<10000.0) { k[1382] = mantabund > 1e-30 ? ((opt_thd *
-        sqrt(2.0*sites*kerg*eb_GSiOI/(pi*pi*amu*44.0)) * 2.0 * densites *
-        exp(-eb_GSiOI/Tgas) + ksp * garea / mant)) : 0.0; }
+    if (Tgas<10000.0) { k[1382] = (opt_thd * cov *
+        sqrt(2.0*sites*kerg*eb_GSiOI/(pi*pi*amu*44.0)) * nmono * densites *
+        exp(-eb_GSiOI/Tgas) + ksp * garea / mant); }
         
     if (Tgas<10000.0) { k[1383] = mantabund > 1e-30 ? (eb_h2d >= 2990.0 ?
         (opt_h2d * h2deseff * 1.0e-17 * sqrt(Tgas) * y[IDX_HI] * nH / mant) :
         0.0) : 0.0; }
         
-    if (Tgas<10000.0) { k[1384] = mantabund > 1e-30 ? (eb_crd >= 2990.0 ?
-        (opt_crd * 4.0 * pi * crdeseff * ((zeta / zism)) * 1.64e-4 * garea /
-        mant) : 0.0) : 0.0; }
+    if (Tgas<10000.0) { k[1384] = opt_crd * cov * duty * nmono * densites *
+        ((zeta / zism)) * sqrt(2.0*sites*kerg*eb_GCO2I/(pi*pi*amu*44.0)) *
+        exp(-eb_GCO2I/Tcr); }
         
-    if (Tgas<10000.0) { k[1385] = mantabund > 1e-30 ? (opt_uvd *
-        (G0*1.0e8*exp(-Av*3.02) + 1.0e4 * (zeta / zism)) * 0.001 * nmono * 4.0 *
-        garea) : 0.0; }
+    if (Tgas<10000.0) { k[1385] = opt_uvd * cov * (G0*1.0e8*exp(-Av*3.02) +
+        1.0e4 * (zeta / zism)) * 0.001 * nmono * 4.0 * garea; }
         
-    if (Tgas<10000.0) { k[1386] = mantabund > 1e-30 ? ((opt_thd *
-        sqrt(2.0*sites*kerg*eb_GCO2I/(pi*pi*amu*44.0)) * 2.0 * densites *
-        exp(-eb_GCO2I/Tgas) + ksp * garea / mant)) : 0.0; }
+    if (Tgas<10000.0) { k[1386] = (opt_thd * cov *
+        sqrt(2.0*sites*kerg*eb_GCO2I/(pi*pi*amu*44.0)) * nmono * densites *
+        exp(-eb_GCO2I/Tgas) + ksp * garea / mant); }
         
     if (Tgas<10000.0) { k[1387] = mantabund > 1e-30 ? (eb_h2d >= 2400.0 ?
         (opt_h2d * h2deseff * 1.0e-17 * sqrt(Tgas) * y[IDX_HI] * nH / mant) :
         0.0) : 0.0; }
         
-    if (Tgas<10000.0) { k[1388] = mantabund > 1e-30 ? (eb_crd >= 2400.0 ?
-        (opt_crd * 4.0 * pi * crdeseff * ((zeta / zism)) * 1.64e-4 * garea /
-        mant) : 0.0) : 0.0; }
+    if (Tgas<10000.0) { k[1388] = opt_crd * cov * duty * nmono * densites *
+        ((zeta / zism)) * sqrt(2.0*sites*kerg*eb_GNO2I/(pi*pi*amu*46.0)) *
+        exp(-eb_GNO2I/Tcr); }
         
-    if (Tgas<10000.0) { k[1389] = mantabund > 1e-30 ? (opt_uvd *
-        (G0*1.0e8*exp(-Av*3.02) + 1.0e4 * (zeta / zism)) * 0.001 * nmono * 4.0 *
-        garea) : 0.0; }
+    if (Tgas<10000.0) { k[1389] = opt_uvd * cov * (G0*1.0e8*exp(-Av*3.02) +
+        1.0e4 * (zeta / zism)) * 0.001 * nmono * 4.0 * garea; }
         
-    if (Tgas<10000.0) { k[1390] = mantabund > 1e-30 ? ((opt_thd *
-        sqrt(2.0*sites*kerg*eb_GNO2I/(pi*pi*amu*46.0)) * 2.0 * densites *
-        exp(-eb_GNO2I/Tgas) + ksp * garea / mant)) : 0.0; }
+    if (Tgas<10000.0) { k[1390] = (opt_thd * cov *
+        sqrt(2.0*sites*kerg*eb_GNO2I/(pi*pi*amu*46.0)) * nmono * densites *
+        exp(-eb_GNO2I/Tgas) + ksp * garea / mant); }
         
     if (Tgas<10000.0) { k[1391] = mantabund > 1e-30 ? (eb_h2d >= 1200.0 ?
         (opt_h2d * h2deseff * 1.0e-17 * sqrt(Tgas) * y[IDX_HI] * nH / mant) :
         0.0) : 0.0; }
         
-    if (Tgas<10000.0) { k[1392] = mantabund > 1e-30 ? (eb_crd >= 1200.0 ?
-        (opt_crd * 4.0 * pi * crdeseff * ((zeta / zism)) * 1.64e-4 * garea /
-        mant) : 0.0) : 0.0; }
+    if (Tgas<10000.0) { k[1392] = opt_crd * cov * duty * nmono * densites *
+        ((zeta / zism)) * sqrt(2.0*sites*kerg*eb_GH2SiOI/(pi*pi*amu*46.0)) *
+        exp(-eb_GH2SiOI/Tcr); }
         
-    if (Tgas<10000.0) { k[1393] = mantabund > 1e-30 ? (opt_uvd *
-        (G0*1.0e8*exp(-Av*3.02) + 1.0e4 * (zeta / zism)) * 0.001 * nmono * 4.0 *
-        garea) : 0.0; }
+    if (Tgas<10000.0) { k[1393] = opt_uvd * cov * (G0*1.0e8*exp(-Av*3.02) +
+        1.0e4 * (zeta / zism)) * 0.001 * nmono * 4.0 * garea; }
         
-    if (Tgas<10000.0) { k[1394] = mantabund > 1e-30 ? ((opt_thd *
-        sqrt(2.0*sites*kerg*eb_GH2SiOI/(pi*pi*amu*46.0)) * 2.0 * densites *
-        exp(-eb_GH2SiOI/Tgas) + ksp * garea / mant)) : 0.0; }
+    if (Tgas<10000.0) { k[1394] = (opt_thd * cov *
+        sqrt(2.0*sites*kerg*eb_GH2SiOI/(pi*pi*amu*46.0)) * nmono * densites *
+        exp(-eb_GH2SiOI/Tgas) + ksp * garea / mant); }
         
     if (Tgas<10000.0) { k[1395] = mantabund > 1e-30 ? (eb_h2d >= 1300.0 ?
         (opt_h2d * h2deseff * 1.0e-17 * sqrt(Tgas) * y[IDX_HI] * nH / mant) :
         0.0) : 0.0; }
         
-    if (Tgas<10000.0) { k[1396] = mantabund > 1e-30 ? (eb_crd >= 1300.0 ?
-        (opt_crd * 4.0 * pi * crdeseff * ((zeta / zism)) * 1.64e-4 * garea /
-        mant) : 0.0) : 0.0; }
+    if (Tgas<10000.0) { k[1396] = opt_crd * cov * duty * nmono * densites *
+        ((zeta / zism)) * sqrt(2.0*sites*kerg*eb_GSiC2I/(pi*pi*amu*52.0)) *
+        exp(-eb_GSiC2I/Tcr); }
         
-    if (Tgas<10000.0) { k[1397] = mantabund > 1e-30 ? (opt_uvd *
-        (G0*1.0e8*exp(-Av*3.02) + 1.0e4 * (zeta / zism)) * 0.001 * nmono * 4.0 *
-        garea) : 0.0; }
+    if (Tgas<10000.0) { k[1397] = opt_uvd * cov * (G0*1.0e8*exp(-Av*3.02) +
+        1.0e4 * (zeta / zism)) * 0.001 * nmono * 4.0 * garea; }
         
-    if (Tgas<10000.0) { k[1398] = mantabund > 1e-30 ? ((opt_thd *
-        sqrt(2.0*sites*kerg*eb_GSiC2I/(pi*pi*amu*52.0)) * 2.0 * densites *
-        exp(-eb_GSiC2I/Tgas) + ksp * garea / mant)) : 0.0; }
+    if (Tgas<10000.0) { k[1398] = (opt_thd * cov *
+        sqrt(2.0*sites*kerg*eb_GSiC2I/(pi*pi*amu*52.0)) * nmono * densites *
+        exp(-eb_GSiC2I/Tgas) + ksp * garea / mant); }
         
     if (Tgas<10000.0) { k[1399] = mantabund > 1e-30 ? (eb_h2d >= 1600.0 ?
         (opt_h2d * h2deseff * 1.0e-17 * sqrt(Tgas) * y[IDX_HI] * nH / mant) :
         0.0) : 0.0; }
         
-    if (Tgas<10000.0) { k[1400] = mantabund > 1e-30 ? (eb_crd >= 1600.0 ?
-        (opt_crd * 4.0 * pi * crdeseff * ((zeta / zism)) * 1.64e-4 * garea /
-        mant) : 0.0) : 0.0; }
+    if (Tgas<10000.0) { k[1400] = opt_crd * cov * duty * nmono * densites *
+        ((zeta / zism)) * sqrt(2.0*sites*kerg*eb_GSiC3I/(pi*pi*amu*64.0)) *
+        exp(-eb_GSiC3I/Tcr); }
         
-    if (Tgas<10000.0) { k[1401] = mantabund > 1e-30 ? (opt_uvd *
-        (G0*1.0e8*exp(-Av*3.02) + 1.0e4 * (zeta / zism)) * 0.001 * nmono * 4.0 *
-        garea) : 0.0; }
+    if (Tgas<10000.0) { k[1401] = opt_uvd * cov * (G0*1.0e8*exp(-Av*3.02) +
+        1.0e4 * (zeta / zism)) * 0.001 * nmono * 4.0 * garea; }
         
-    if (Tgas<10000.0) { k[1402] = mantabund > 1e-30 ? ((opt_thd *
-        sqrt(2.0*sites*kerg*eb_GSiC3I/(pi*pi*amu*64.0)) * 2.0 * densites *
-        exp(-eb_GSiC3I/Tgas) + ksp * garea / mant)) : 0.0; }
+    if (Tgas<10000.0) { k[1402] = (opt_thd * cov *
+        sqrt(2.0*sites*kerg*eb_GSiC3I/(pi*pi*amu*64.0)) * nmono * densites *
+        exp(-eb_GSiC3I/Tgas) + ksp * garea / mant); }
         
     
         // clang-format on
@@ -4388,6 +4366,8 @@ int EvalHeatingRates(realtype *kh, realtype *y, NaunetData *u_data) {
     realtype crdeseff = u_data->crdeseff;
     realtype h2deseff = u_data->h2deseff;
     realtype ksp = u_data->ksp;
+    realtype duty = u_data->duty;
+    realtype Tcr = u_data->Tcr;
     
     double h2col = 0.5*1.59e21*Av;
     double cocol = 1e-5 * h2col;
@@ -4400,6 +4380,8 @@ int EvalHeatingRates(realtype *kh, realtype *y, NaunetData *u_data) {
     double garea = (pi*rG*rG) * gdens;
     double garea_per_H = garea / nH;
     double densites = 4.0 * garea * sites;
+    double layers = mant/(nmono*densites);
+    double cov = (mant == 0.0) ? 0.0 : fmin(layers/mant, 1.0/mant);
     
     // clang-format on
 
@@ -4443,6 +4425,8 @@ int EvalCoolingRates(realtype *kc, realtype *y, NaunetData *u_data) {
     realtype crdeseff = u_data->crdeseff;
     realtype h2deseff = u_data->h2deseff;
     realtype ksp = u_data->ksp;
+    realtype duty = u_data->duty;
+    realtype Tcr = u_data->Tcr;
     
     double h2col = 0.5*1.59e21*Av;
     double cocol = 1e-5 * h2col;
@@ -4455,6 +4439,8 @@ int EvalCoolingRates(realtype *kc, realtype *y, NaunetData *u_data) {
     double garea = (pi*rG*rG) * gdens;
     double garea_per_H = garea / nH;
     double densites = 4.0 * garea * sites;
+    double layers = mant/(nmono*densites);
+    double cov = (mant == 0.0) ? 0.0 : fmin(layers/mant, 1.0/mant);
     
     // clang-format on
 

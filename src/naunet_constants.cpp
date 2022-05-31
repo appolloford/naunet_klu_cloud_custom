@@ -1,3 +1,4 @@
+// 
 // clang-format off
 #include "naunet_constants.h"
 
@@ -57,8 +58,6 @@ const double eb_GSiOI        = 3500.0;
 
 
 
-
-
 // Table of CO self-shielding factor
 // H2 column density
 const
@@ -85,4 +84,5 @@ double COShieldingTable[6][7] =
 //  {-1.154  ,-1.272  ,-1.355  ,-1.602  ,-2.305  ,-4.739  },
 //  {-1.888  ,-1.973  ,-2.057  ,-2.303  ,-3.034  ,-5.165  },
 //  {-2.76   ,-2.818  ,-2.902  ,-3.146  ,-3.758  ,-5.441  }};
+
 

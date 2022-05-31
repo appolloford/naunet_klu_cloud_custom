@@ -1,3 +1,4 @@
+// 
 #ifndef __NAUNET_DATA_H__
 #define __NAUNET_DATA_H__
 
@@ -25,6 +26,8 @@ struct NaunetData {
     double crdeseff = 1.000e+05;
     double h2deseff = 1.000e-02;
     double ksp = 0.000e+00;
+    double duty = 3.160e-19;
+    double Tcr = 7.000e+01;
     
     // clang-format on
 };

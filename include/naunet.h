@@ -112,6 +112,8 @@ PYBIND11_MODULE(PYMODNAME, m) {
         .def_readwrite("crdeseff", &NaunetData::crdeseff)
         .def_readwrite("h2deseff", &NaunetData::h2deseff)
         .def_readwrite("ksp", &NaunetData::ksp)
+        .def_readwrite("duty", &NaunetData::duty)
+        .def_readwrite("Tcr", &NaunetData::Tcr)
         ;
     // clang-format on
 }
