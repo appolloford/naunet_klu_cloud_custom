@@ -1,3 +1,4 @@
+// 
 // clang-format off
 #include "naunet_constants.h"
 
@@ -53,9 +54,6 @@ const double eb_GSiC2I       = 1300.0;
 const double eb_GSiC3I       = 1600.0;
 const double eb_GSiH4I       = 4500.0;
 const double eb_GSiOI        = 3500.0;
-
-
-
 
 
 

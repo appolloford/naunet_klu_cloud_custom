@@ -1,18 +1,36 @@
 #ifndef __NAUNET_MACROS_H__
 #define __NAUNET_MACROS_H__
 
+#include <sunmatrix/sunmatrix_dense.h>
+
+// 
 // clang-format off
 #define NAUNET_SUCCESS 0
 #define NAUNET_FAIL 1
 
+#define MAX_NSYSTEMS 1
+
 #define NELEMENTS 7
 #define NSPECIES 114
-#define NEQUATIONS 114
-#define NREACTIONS 1403
 #define NHEATPROCS 0
 #define NCOOLPROCS 0
+#define THERMAL (NHEATPROCS || NCOOLPROCS)
+#if (NSPECIES + THERMAL)
+#define NEQUATIONS (NSPECIES + THERMAL)
+#else
+#define NEQUATIONS 1
+#endif
+#define NREACTIONS 1403
+// non-zero terms in jacobian matrix, used in sparse matrix
 #define NNZ 3028
-#define MAX_NSYSTEMS 1
+
+#define IDX_ELEM_C 0
+#define IDX_ELEM_H 1
+#define IDX_ELEM_HE 2
+#define IDX_ELEM_MG 3
+#define IDX_ELEM_N 4
+#define IDX_ELEM_O 5
+#define IDX_ELEM_SI 6
 
 #define IDX_GCH3OHI 0
 #define IDX_GCH4I 1
@@ -129,12 +147,9 @@
 #define IDX_SiOII 112
 #define IDX_SiOHII 113
 
-#define IDX_ELEM_C 0
-#define IDX_ELEM_H 1
-#define IDX_ELEM_HE 2
-#define IDX_ELEM_MG 3
-#define IDX_ELEM_N 4
-#define IDX_ELEM_O 5
-#define IDX_ELEM_SI 6
+#if THERMAL
+#define IDX_TGAS NSPECIES
+#endif
+#define IJth(A, i, j) SM_ELEMENT_D(A, i, j)
 
 #endif

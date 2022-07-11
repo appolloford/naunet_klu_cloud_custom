@@ -3,18 +3,19 @@
 #include <nvector/nvector_serial.h>
 #include <sunmatrix/sunmatrix_sparse.h>  // access to sparse SUNMatrix
 /* */
-/*  */
-#include "naunet_ode.h"
-/*  */
 #include "naunet_constants.h"
 #include "naunet_macros.h"
+#include "naunet_ode.h"
 #include "naunet_physics.h"
 
-#define IJth(A, i, j)            SM_ELEMENT_D(A, i, j)
-#define NVEC_CUDA_CONTENT(x)     ((N_VectorContent_Cuda)(x->content))
-#define NVEC_CUDA_STREAM(x)      (NVEC_CUDA_CONTENT(x)->stream_exec_policy->stream())
-#define NVEC_CUDA_BLOCKSIZE(x)   (NVEC_CUDA_CONTENT(x)->stream_exec_policy->blockSize())
-#define NVEC_CUDA_GRIDSIZE(x, n) (NVEC_CUDA_CONTENT(x)->stream_exec_policy->gridSize(n))
+#ifdef USE_CUDA
+#define NVEC_CUDA_CONTENT(x) ((N_VectorContent_Cuda)(x->content))
+#define NVEC_CUDA_STREAM(x) (NVEC_CUDA_CONTENT(x)->stream_exec_policy->stream())
+#define NVEC_CUDA_BLOCKSIZE(x) \
+    (NVEC_CUDA_CONTENT(x)->stream_exec_policy->blockSize())
+#define NVEC_CUDA_GRIDSIZE(x, n) \
+    (NVEC_CUDA_CONTENT(x)->stream_exec_policy->gridSize(n))
+#endif
 
 /* */
 
@@ -63,7 +64,7 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
 #if NHEATPROCS
     realtype kh[NHEATPROCS] = {0.0};
     EvalHeatingRates(kh, y, u_data);
-#endif 
+#endif
 
 #if NCOOLPROCS
     realtype kc[NCOOLPROCS] = {0.0};
@@ -3326,10 +3327,10 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
     data[104] = 0.0 + k[1238];
     data[105] = 0.0 + k[1248];
     data[106] = 0.0 - k[1379] - k[1380] - k[1381] - k[1382];
-    data[107] = 0.0 - k[27]*y[IDX_CNII] - k[28]*y[IDX_COII] -
-        k[29]*y[IDX_N2II] - k[30]*y[IDX_O2II] - k[139]*y[IDX_HeII] - k[231] -
-        k[240] - k[383]*y[IDX_H2OII] - k[384]*y[IDX_H3OII] - k[385]*y[IDX_HCNII]
-        - k[386]*y[IDX_HCOII] - k[387]*y[IDX_HCO2II] - k[388]*y[IDX_HNOII] -
+    data[107] = 0.0 - k[27]*y[IDX_CNII] - k[28]*y[IDX_COII] - k[29]*y[IDX_N2II] -
+        k[30]*y[IDX_O2II] - k[139]*y[IDX_HeII] - k[231] - k[240] -
+        k[383]*y[IDX_H2OII] - k[384]*y[IDX_H3OII] - k[385]*y[IDX_HCNII] -
+        k[386]*y[IDX_HCOII] - k[387]*y[IDX_HCO2II] - k[388]*y[IDX_HNOII] -
         k[389]*y[IDX_N2HII] - k[390]*y[IDX_NHII] - k[391]*y[IDX_O2II] -
         k[392]*y[IDX_O2HII] - k[393]*y[IDX_OHII] - k[394]*y[IDX_SiHII] -
         k[395]*y[IDX_SiOII] - k[509]*y[IDX_H2II] - k[576]*y[IDX_H3II] -
@@ -3341,34 +3342,31 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
         k[955]*y[IDX_H2I] - k[1004]*y[IDX_HNCOI] - k[1107] - k[1194]*y[IDX_NI] -
         k[1195]*y[IDX_OII] - k[1196]*y[IDX_OI] - k[1200]*y[IDX_H2I] -
         k[1206]*y[IDX_HI] - k[1250];
-    data[108] = 0.0 + k[14]*y[IDX_CH2I] + k[15]*y[IDX_CHI] +
-        k[16]*y[IDX_H2COI] + k[17]*y[IDX_HCOI] + k[18]*y[IDX_MgI] +
-        k[19]*y[IDX_NH3I] + k[20]*y[IDX_NOI] + k[21]*y[IDX_SiI] +
-        k[22]*y[IDX_SiC2I] + k[23]*y[IDX_SiC3I] + k[24]*y[IDX_SiCI] +
-        k[25]*y[IDX_SiH2I] + k[26]*y[IDX_SiH3I] + k[1214]*y[IDX_EM];
-    data[109] = 0.0 + k[2]*y[IDX_H2I] + k[9]*y[IDX_HI] + k[15]*y[IDX_CII] +
-        k[250] + k[458]*y[IDX_COII] + k[929]*y[IDX_NI] + k[940]*y[IDX_OI] +
+    data[108] = 0.0 + k[14]*y[IDX_CH2I] + k[15]*y[IDX_CHI] + k[16]*y[IDX_H2COI] +
+        k[17]*y[IDX_HCOI] + k[18]*y[IDX_MgI] + k[19]*y[IDX_NH3I] +
+        k[20]*y[IDX_NOI] + k[21]*y[IDX_SiI] + k[22]*y[IDX_SiC2I] +
+        k[23]*y[IDX_SiC3I] + k[24]*y[IDX_SiCI] + k[25]*y[IDX_SiH2I] +
+        k[26]*y[IDX_SiH3I] + k[1214]*y[IDX_EM];
+    data[109] = 0.0 + k[2]*y[IDX_H2I] + k[9]*y[IDX_HI] + k[15]*y[IDX_CII] + k[250] +
+        k[458]*y[IDX_COII] + k[929]*y[IDX_NI] + k[940]*y[IDX_OI] +
         k[970]*y[IDX_HI] + k[1128];
-    data[110] = 0.0 + k[294]*y[IDX_EM] + k[400]*y[IDX_H2COI] +
-        k[403]*y[IDX_H2OI] + k[405]*y[IDX_HCNI] + k[407]*y[IDX_HNCI] + k[1108];
+    data[110] = 0.0 + k[294]*y[IDX_EM] + k[400]*y[IDX_H2COI] + k[403]*y[IDX_H2OI] +
+        k[405]*y[IDX_HCNI] + k[407]*y[IDX_HNCI] + k[1108];
     data[111] = 0.0 + k[14]*y[IDX_CII] - k[863]*y[IDX_CI];
     data[112] = 0.0 + k[295]*y[IDX_EM] + k[296]*y[IDX_EM];
     data[113] = 0.0 + k[251] + k[663]*y[IDX_HeII] + k[811]*y[IDX_OII] +
         k[1011]*y[IDX_NI] + k[1058]*y[IDX_OI] + k[1130];
     data[114] = 0.0 - k[27]*y[IDX_CI] + k[303]*y[IDX_EM] + k[737]*y[IDX_NI];
-    data[115] = 0.0 + k[253] + k[720]*y[IDX_NII] + k[972]*y[IDX_HI] +
-        k[1104]*y[IDX_SiI] + k[1133];
-    data[116] = 0.0 - k[28]*y[IDX_CI] + k[304]*y[IDX_EM] +
-        k[458]*y[IDX_CHI];
+    data[115] = 0.0 + k[253] + k[720]*y[IDX_NII] + k[972]*y[IDX_HI] + k[1104]*y[IDX_SiI]
+        + k[1133];
+    data[116] = 0.0 - k[28]*y[IDX_CI] + k[304]*y[IDX_EM] + k[458]*y[IDX_CHI];
     data[117] = 0.0 + k[667]*y[IDX_HeII];
-    data[118] = 0.0 + k[294]*y[IDX_CHII] + k[295]*y[IDX_CH2II] +
-        k[296]*y[IDX_CH2II] + k[303]*y[IDX_CNII] + k[304]*y[IDX_COII] +
-        k[349]*y[IDX_SiCII] + k[350]*y[IDX_SiC2II] + k[351]*y[IDX_SiC3II] +
-        k[1214]*y[IDX_CII];
-    data[119] = 0.0 + k[9]*y[IDX_CHI] + k[970]*y[IDX_CHI] +
-        k[972]*y[IDX_COI] - k[1206]*y[IDX_CI];
-    data[120] = 0.0 + k[2]*y[IDX_CHI] - k[955]*y[IDX_CI] -
-        k[1200]*y[IDX_CI];
+    data[118] = 0.0 + k[294]*y[IDX_CHII] + k[295]*y[IDX_CH2II] + k[296]*y[IDX_CH2II] +
+        k[303]*y[IDX_CNII] + k[304]*y[IDX_COII] + k[349]*y[IDX_SiCII] +
+        k[350]*y[IDX_SiC2II] + k[351]*y[IDX_SiC3II] + k[1214]*y[IDX_CII];
+    data[119] = 0.0 + k[9]*y[IDX_CHI] + k[970]*y[IDX_CHI] + k[972]*y[IDX_COI] -
+        k[1206]*y[IDX_CI];
+    data[120] = 0.0 + k[2]*y[IDX_CHI] - k[955]*y[IDX_CI] - k[1200]*y[IDX_CI];
     data[121] = 0.0 - k[509]*y[IDX_CI];
     data[122] = 0.0 + k[16]*y[IDX_CII] + k[400]*y[IDX_CHII];
     data[123] = 0.0 + k[403]*y[IDX_CHII];
@@ -3380,28 +3378,25 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
     data[129] = 0.0 + k[17]*y[IDX_CII] - k[864]*y[IDX_CI];
     data[130] = 0.0 - k[386]*y[IDX_CI];
     data[131] = 0.0 - k[387]*y[IDX_CI];
-    data[132] = 0.0 - k[139]*y[IDX_CI] + k[663]*y[IDX_CNI] +
-        k[667]*y[IDX_CO2I] + k[685]*y[IDX_HNCI] + k[700]*y[IDX_SiC3I] +
-        k[701]*y[IDX_SiCI];
+    data[132] = 0.0 - k[139]*y[IDX_CI] + k[663]*y[IDX_CNI] + k[667]*y[IDX_CO2I] +
+        k[685]*y[IDX_HNCI] + k[700]*y[IDX_SiC3I] + k[701]*y[IDX_SiCI];
     data[133] = 0.0 + k[407]*y[IDX_CHII] + k[685]*y[IDX_HeII];
     data[134] = 0.0 - k[1004]*y[IDX_CI];
     data[135] = 0.0 - k[388]*y[IDX_CI];
     data[136] = 0.0 + k[18]*y[IDX_CII];
-    data[137] = 0.0 + k[737]*y[IDX_CNII] + k[929]*y[IDX_CHI] +
-        k[1011]*y[IDX_CNI] - k[1194]*y[IDX_CI];
+    data[137] = 0.0 + k[737]*y[IDX_CNII] + k[929]*y[IDX_CHI] + k[1011]*y[IDX_CNI] -
+        k[1194]*y[IDX_CI];
     data[138] = 0.0 + k[720]*y[IDX_COI];
     data[139] = 0.0 - k[865]*y[IDX_CI];
     data[140] = 0.0 - k[29]*y[IDX_CI];
     data[141] = 0.0 - k[389]*y[IDX_CI];
     data[142] = 0.0 - k[869]*y[IDX_CI] - k[870]*y[IDX_CI];
     data[143] = 0.0 - k[390]*y[IDX_CI];
-    data[144] = 0.0 - k[866]*y[IDX_CI] - k[867]*y[IDX_CI] -
-        k[868]*y[IDX_CI];
+    data[144] = 0.0 - k[866]*y[IDX_CI] - k[867]*y[IDX_CI] - k[868]*y[IDX_CI];
     data[145] = 0.0 + k[19]*y[IDX_CII];
-    data[146] = 0.0 + k[20]*y[IDX_CII] - k[871]*y[IDX_CI] -
-        k[872]*y[IDX_CI];
-    data[147] = 0.0 + k[831]*y[IDX_SiCII] + k[940]*y[IDX_CHI] +
-        k[1058]*y[IDX_CNI] + k[1084]*y[IDX_SiCI] - k[1196]*y[IDX_CI];
+    data[146] = 0.0 + k[20]*y[IDX_CII] - k[871]*y[IDX_CI] - k[872]*y[IDX_CI];
+    data[147] = 0.0 + k[831]*y[IDX_SiCII] + k[940]*y[IDX_CHI] + k[1058]*y[IDX_CNI] +
+        k[1084]*y[IDX_SiCI] - k[1196]*y[IDX_CI];
     data[148] = 0.0 + k[811]*y[IDX_CNI] - k[1195]*y[IDX_CI];
     data[149] = 0.0 - k[873]*y[IDX_CI];
     data[150] = 0.0 - k[30]*y[IDX_CI] - k[391]*y[IDX_CI];
@@ -3410,35 +3405,33 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
     data[153] = 0.0 - k[875]*y[IDX_CI] - k[876]*y[IDX_CI];
     data[154] = 0.0 - k[393]*y[IDX_CI];
     data[155] = 0.0 + k[21]*y[IDX_CII] + k[1104]*y[IDX_COI];
-    data[156] = 0.0 + k[24]*y[IDX_CII] + k[288] + k[701]*y[IDX_HeII] +
-        k[1084]*y[IDX_OI] + k[1178];
+    data[156] = 0.0 + k[24]*y[IDX_CII] + k[288] + k[701]*y[IDX_HeII] + k[1084]*y[IDX_OI]
+        + k[1178];
     data[157] = 0.0 + k[349]*y[IDX_EM] + k[831]*y[IDX_OI];
     data[158] = 0.0 + k[22]*y[IDX_CII] + k[286];
     data[159] = 0.0 + k[350]*y[IDX_EM];
-    data[160] = 0.0 + k[23]*y[IDX_CII] + k[287] + k[700]*y[IDX_HeII] +
-        k[1177];
+    data[160] = 0.0 + k[23]*y[IDX_CII] + k[287] + k[700]*y[IDX_HeII] + k[1177];
     data[161] = 0.0 + k[351]*y[IDX_EM];
     data[162] = 0.0 - k[877]*y[IDX_CI];
     data[163] = 0.0 - k[394]*y[IDX_CI];
     data[164] = 0.0 + k[25]*y[IDX_CII];
     data[165] = 0.0 + k[26]*y[IDX_CII];
     data[166] = 0.0 - k[395]*y[IDX_CI];
-    data[167] = 0.0 + k[27]*y[IDX_CNII] + k[28]*y[IDX_COII] +
-        k[29]*y[IDX_N2II] + k[30]*y[IDX_O2II] + k[139]*y[IDX_HeII] + k[231] +
-        k[240] + k[1107];
-    data[168] = 0.0 - k[14]*y[IDX_CH2I] - k[15]*y[IDX_CHI] -
-        k[16]*y[IDX_H2COI] - k[17]*y[IDX_HCOI] - k[18]*y[IDX_MgI] -
-        k[19]*y[IDX_NH3I] - k[20]*y[IDX_NOI] - k[21]*y[IDX_SiI] -
-        k[22]*y[IDX_SiC2I] - k[23]*y[IDX_SiC3I] - k[24]*y[IDX_SiCI] -
-        k[25]*y[IDX_SiH2I] - k[26]*y[IDX_SiH3I] - k[365]*y[IDX_CH3OHI] -
-        k[366]*y[IDX_CH3OHI] - k[367]*y[IDX_CO2I] - k[368]*y[IDX_H2COI] -
-        k[369]*y[IDX_H2COI] - k[370]*y[IDX_H2OI] - k[371]*y[IDX_H2OI] -
-        k[372]*y[IDX_HCOI] - k[373]*y[IDX_NH2I] - k[374]*y[IDX_NH3I] -
-        k[375]*y[IDX_NHI] - k[376]*y[IDX_O2I] - k[377]*y[IDX_O2I] -
-        k[378]*y[IDX_OCNI] - k[379]*y[IDX_OHI] - k[380]*y[IDX_SiH2I] -
-        k[381]*y[IDX_SiHI] - k[382]*y[IDX_SiOI] - k[528]*y[IDX_H2I] -
-        k[1192]*y[IDX_NI] - k[1193]*y[IDX_OI] - k[1199]*y[IDX_H2I] -
-        k[1205]*y[IDX_HI] - k[1214]*y[IDX_EM] - k[1264];
+    data[167] = 0.0 + k[27]*y[IDX_CNII] + k[28]*y[IDX_COII] + k[29]*y[IDX_N2II] +
+        k[30]*y[IDX_O2II] + k[139]*y[IDX_HeII] + k[231] + k[240] + k[1107];
+    data[168] = 0.0 - k[14]*y[IDX_CH2I] - k[15]*y[IDX_CHI] - k[16]*y[IDX_H2COI] -
+        k[17]*y[IDX_HCOI] - k[18]*y[IDX_MgI] - k[19]*y[IDX_NH3I] -
+        k[20]*y[IDX_NOI] - k[21]*y[IDX_SiI] - k[22]*y[IDX_SiC2I] -
+        k[23]*y[IDX_SiC3I] - k[24]*y[IDX_SiCI] - k[25]*y[IDX_SiH2I] -
+        k[26]*y[IDX_SiH3I] - k[365]*y[IDX_CH3OHI] - k[366]*y[IDX_CH3OHI] -
+        k[367]*y[IDX_CO2I] - k[368]*y[IDX_H2COI] - k[369]*y[IDX_H2COI] -
+        k[370]*y[IDX_H2OI] - k[371]*y[IDX_H2OI] - k[372]*y[IDX_HCOI] -
+        k[373]*y[IDX_NH2I] - k[374]*y[IDX_NH3I] - k[375]*y[IDX_NHI] -
+        k[376]*y[IDX_O2I] - k[377]*y[IDX_O2I] - k[378]*y[IDX_OCNI] -
+        k[379]*y[IDX_OHI] - k[380]*y[IDX_SiH2I] - k[381]*y[IDX_SiHI] -
+        k[382]*y[IDX_SiOI] - k[528]*y[IDX_H2I] - k[1192]*y[IDX_NI] -
+        k[1193]*y[IDX_OI] - k[1199]*y[IDX_H2I] - k[1205]*y[IDX_HI] -
+        k[1214]*y[IDX_EM] - k[1264];
     data[169] = 0.0 - k[15]*y[IDX_CII] + k[662]*y[IDX_HeII];
     data[170] = 0.0 + k[241] + k[614]*y[IDX_HI];
     data[171] = 0.0 - k[14]*y[IDX_CII] + k[653]*y[IDX_HeII];
@@ -3452,15 +3445,13 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
     data[179] = 0.0 - k[1214]*y[IDX_CII];
     data[180] = 0.0 + k[614]*y[IDX_CHII] - k[1205]*y[IDX_CII];
     data[181] = 0.0 - k[528]*y[IDX_CII] - k[1199]*y[IDX_CII];
-    data[182] = 0.0 - k[16]*y[IDX_CII] - k[368]*y[IDX_CII] -
-        k[369]*y[IDX_CII];
+    data[182] = 0.0 - k[16]*y[IDX_CII] - k[368]*y[IDX_CII] - k[369]*y[IDX_CII];
     data[183] = 0.0 - k[370]*y[IDX_CII] - k[371]*y[IDX_CII];
     data[184] = 0.0 + k[678]*y[IDX_HeII];
     data[185] = 0.0 - k[17]*y[IDX_CII] - k[372]*y[IDX_CII];
-    data[186] = 0.0 + k[139]*y[IDX_CI] + k[653]*y[IDX_CH2I] +
-        k[662]*y[IDX_CHI] + k[664]*y[IDX_CNI] + k[668]*y[IDX_CO2I] +
-        k[669]*y[IDX_COI] + k[678]*y[IDX_HCNI] + k[684]*y[IDX_HNCI] +
-        k[702]*y[IDX_SiCI];
+    data[186] = 0.0 + k[139]*y[IDX_CI] + k[653]*y[IDX_CH2I] + k[662]*y[IDX_CHI] +
+        k[664]*y[IDX_CNI] + k[668]*y[IDX_CO2I] + k[669]*y[IDX_COI] +
+        k[678]*y[IDX_HCNI] + k[684]*y[IDX_HNCI] + k[702]*y[IDX_SiCI];
     data[187] = 0.0 + k[684]*y[IDX_HeII];
     data[188] = 0.0 - k[18]*y[IDX_CII];
     data[189] = 0.0 - k[1192]*y[IDX_CII];
@@ -3482,11 +3473,10 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
     data[205] = 0.0 - k[25]*y[IDX_CII] - k[380]*y[IDX_CII];
     data[206] = 0.0 - k[26]*y[IDX_CII];
     data[207] = 0.0 - k[382]*y[IDX_CII];
-    data[208] = 0.0 + k[863]*y[IDX_CH2I] + k[863]*y[IDX_CH2I] +
-        k[864]*y[IDX_HCOI] + k[868]*y[IDX_NH2I] + k[870]*y[IDX_NHI] +
-        k[876]*y[IDX_OHI] + k[955]*y[IDX_H2I] + k[1206]*y[IDX_HI];
-    data[209] = 0.0 - k[15]*y[IDX_CHI] + k[365]*y[IDX_CH3OHI] +
-        k[369]*y[IDX_H2COI];
+    data[208] = 0.0 + k[863]*y[IDX_CH2I] + k[863]*y[IDX_CH2I] + k[864]*y[IDX_HCOI] +
+        k[868]*y[IDX_NH2I] + k[870]*y[IDX_NHI] + k[876]*y[IDX_OHI] +
+        k[955]*y[IDX_H2I] + k[1206]*y[IDX_HI];
+    data[209] = 0.0 - k[15]*y[IDX_CHI] + k[365]*y[IDX_CH3OHI] + k[369]*y[IDX_H2COI];
     data[210] = 0.0 - k[0]*y[IDX_OI] - k[2]*y[IDX_H2I] - k[9]*y[IDX_HI] -
         k[15]*y[IDX_CII] - k[53]*y[IDX_CNII] - k[54]*y[IDX_COII] -
         k[55]*y[IDX_H2COII] - k[56]*y[IDX_H2OII] - k[57]*y[IDX_NII] -
@@ -3509,12 +3499,12 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
         k[939]*y[IDX_OI] - k[940]*y[IDX_OI] - k[941]*y[IDX_OHI] -
         k[958]*y[IDX_H2I] - k[970]*y[IDX_HI] - k[1128] - k[1129] -
         k[1201]*y[IDX_H2I] - k[1253];
-    data[211] = 0.0 + k[31]*y[IDX_HCOI] + k[32]*y[IDX_MgI] +
-        k[33]*y[IDX_NH3I] + k[34]*y[IDX_NOI] + k[35]*y[IDX_SiI];
-    data[212] = 0.0 + k[243] + k[422]*y[IDX_COII] + k[863]*y[IDX_CI] +
-        k[863]*y[IDX_CI] + k[878]*y[IDX_CH2I] + k[878]*y[IDX_CH2I] +
-        k[880]*y[IDX_CNI] + k[897]*y[IDX_OI] + k[899]*y[IDX_OHI] +
-        k[967]*y[IDX_HI] + k[1007]*y[IDX_NI] + k[1113];
+    data[211] = 0.0 + k[31]*y[IDX_HCOI] + k[32]*y[IDX_MgI] + k[33]*y[IDX_NH3I] +
+        k[34]*y[IDX_NOI] + k[35]*y[IDX_SiI];
+    data[212] = 0.0 + k[243] + k[422]*y[IDX_COII] + k[863]*y[IDX_CI] + k[863]*y[IDX_CI]
+        + k[878]*y[IDX_CH2I] + k[878]*y[IDX_CH2I] + k[880]*y[IDX_CNI] +
+        k[897]*y[IDX_OI] + k[899]*y[IDX_OHI] + k[967]*y[IDX_HI] +
+        k[1007]*y[IDX_NI] + k[1113];
     data[213] = 0.0 + k[297]*y[IDX_EM] + k[1111];
     data[214] = 0.0 + k[246] + k[1118];
     data[215] = 0.0 + k[299]*y[IDX_EM] + k[300]*y[IDX_EM];
@@ -3522,16 +3512,15 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
     data[217] = 0.0 + k[1127];
     data[218] = 0.0 + k[880]*y[IDX_CH2I];
     data[219] = 0.0 - k[53]*y[IDX_CHI];
-    data[220] = 0.0 - k[54]*y[IDX_CHI] + k[422]*y[IDX_CH2I] -
-        k[458]*y[IDX_CHI];
+    data[220] = 0.0 - k[54]*y[IDX_CHI] + k[422]*y[IDX_CH2I] - k[458]*y[IDX_CHI];
     data[221] = 0.0 - k[923]*y[IDX_CHI];
-    data[222] = 0.0 + k[297]*y[IDX_CH2II] + k[299]*y[IDX_CH3II] +
-        k[300]*y[IDX_CH3II] + k[318]*y[IDX_H3COII];
-    data[223] = 0.0 - k[9]*y[IDX_CHI] + k[967]*y[IDX_CH2I] -
-        k[970]*y[IDX_CHI] + k[1206]*y[IDX_CI];
+    data[222] = 0.0 + k[297]*y[IDX_CH2II] + k[299]*y[IDX_CH3II] + k[300]*y[IDX_CH3II] +
+        k[318]*y[IDX_H3COII];
+    data[223] = 0.0 - k[9]*y[IDX_CHI] + k[967]*y[IDX_CH2I] - k[970]*y[IDX_CHI] +
+        k[1206]*y[IDX_CI];
     data[224] = 0.0 - k[78]*y[IDX_CHI];
-    data[225] = 0.0 - k[2]*y[IDX_CHI] + k[955]*y[IDX_CI] - k[958]*y[IDX_CHI]
-        - k[1201]*y[IDX_CHI];
+    data[225] = 0.0 - k[2]*y[IDX_CHI] + k[955]*y[IDX_CI] - k[958]*y[IDX_CHI] -
+        k[1201]*y[IDX_CHI];
     data[226] = 0.0 - k[102]*y[IDX_CHI] - k[512]*y[IDX_CHI];
     data[227] = 0.0 + k[369]*y[IDX_CII] - k[924]*y[IDX_CHI];
     data[228] = 0.0 - k[55]*y[IDX_CHI] - k[459]*y[IDX_CHI];
@@ -3542,16 +3531,13 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
     data[233] = 0.0 + k[677]*y[IDX_HeII] + k[815]*y[IDX_OII];
     data[234] = 0.0 - k[463]*y[IDX_CHI];
     data[235] = 0.0 - k[464]*y[IDX_CHI] - k[465]*y[IDX_CHI];
-    data[236] = 0.0 + k[31]*y[IDX_CHII] + k[864]*y[IDX_CI] -
-        k[925]*y[IDX_CHI];
+    data[236] = 0.0 + k[31]*y[IDX_CHII] + k[864]*y[IDX_CI] - k[925]*y[IDX_CHI];
     data[237] = 0.0 - k[466]*y[IDX_CHI];
-    data[238] = 0.0 - k[141]*y[IDX_CHI] - k[662]*y[IDX_CHI] +
-        k[677]*y[IDX_HCNI];
+    data[238] = 0.0 - k[141]*y[IDX_CHI] - k[662]*y[IDX_CHI] + k[677]*y[IDX_HCNI];
     data[239] = 0.0 - k[926]*y[IDX_CHI];
     data[240] = 0.0 - k[467]*y[IDX_CHI];
     data[241] = 0.0 + k[32]*y[IDX_CHII];
-    data[242] = 0.0 - k[928]*y[IDX_CHI] - k[929]*y[IDX_CHI] +
-        k[1007]*y[IDX_CH2I];
+    data[242] = 0.0 - k[928]*y[IDX_CHI] - k[929]*y[IDX_CHI] + k[1007]*y[IDX_CH2I];
     data[243] = 0.0 - k[57]*y[IDX_CHI] - k[468]*y[IDX_CHI];
     data[244] = 0.0 - k[927]*y[IDX_CHI];
     data[245] = 0.0 - k[58]*y[IDX_CHI];
@@ -3561,45 +3547,43 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
     data[249] = 0.0 + k[868]*y[IDX_CI];
     data[250] = 0.0 - k[59]*y[IDX_CHI] - k[471]*y[IDX_CHI];
     data[251] = 0.0 + k[33]*y[IDX_CHII];
-    data[252] = 0.0 + k[34]*y[IDX_CHII] - k[930]*y[IDX_CHI] -
-        k[931]*y[IDX_CHI] - k[932]*y[IDX_CHI];
-    data[253] = 0.0 - k[0]*y[IDX_CHI] + k[897]*y[IDX_CH2I] -
-        k[939]*y[IDX_CHI] - k[940]*y[IDX_CHI];
-    data[254] = 0.0 - k[60]*y[IDX_CHI] - k[472]*y[IDX_CHI] +
-        k[815]*y[IDX_HCNI];
-    data[255] = 0.0 - k[933]*y[IDX_CHI] - k[934]*y[IDX_CHI] -
-        k[935]*y[IDX_CHI] - k[936]*y[IDX_CHI];
+    data[252] = 0.0 + k[34]*y[IDX_CHII] - k[930]*y[IDX_CHI] - k[931]*y[IDX_CHI] -
+        k[932]*y[IDX_CHI];
+    data[253] = 0.0 - k[0]*y[IDX_CHI] + k[897]*y[IDX_CH2I] - k[939]*y[IDX_CHI] -
+        k[940]*y[IDX_CHI];
+    data[254] = 0.0 - k[60]*y[IDX_CHI] - k[472]*y[IDX_CHI] + k[815]*y[IDX_HCNI];
+    data[255] = 0.0 - k[933]*y[IDX_CHI] - k[934]*y[IDX_CHI] - k[935]*y[IDX_CHI] -
+        k[936]*y[IDX_CHI];
     data[256] = 0.0 - k[61]*y[IDX_CHI] - k[473]*y[IDX_CHI];
     data[257] = 0.0 - k[937]*y[IDX_CHI] - k[938]*y[IDX_CHI];
     data[258] = 0.0 - k[474]*y[IDX_CHI];
-    data[259] = 0.0 + k[876]*y[IDX_CI] + k[899]*y[IDX_CH2I] -
-        k[941]*y[IDX_CHI];
+    data[259] = 0.0 + k[876]*y[IDX_CI] + k[899]*y[IDX_CH2I] - k[941]*y[IDX_CHI];
     data[260] = 0.0 - k[62]*y[IDX_CHI] - k[475]*y[IDX_CHI];
     data[261] = 0.0 + k[35]*y[IDX_CHII];
     data[262] = 0.0 - k[476]*y[IDX_CHI];
     data[263] = 0.0 - k[477]*y[IDX_CHI];
     data[264] = 0.0 - k[478]*y[IDX_CHI];
-    data[265] = 0.0 + k[383]*y[IDX_H2OII] + k[385]*y[IDX_HCNII] +
-        k[386]*y[IDX_HCOII] + k[387]*y[IDX_HCO2II] + k[388]*y[IDX_HNOII] +
-        k[389]*y[IDX_N2HII] + k[390]*y[IDX_NHII] + k[392]*y[IDX_O2HII] +
-        k[393]*y[IDX_OHII] + k[509]*y[IDX_H2II] + k[576]*y[IDX_H3II];
-    data[266] = 0.0 + k[15]*y[IDX_CHI] + k[372]*y[IDX_HCOI] +
-        k[528]*y[IDX_H2I] + k[1205]*y[IDX_HI];
-    data[267] = 0.0 + k[15]*y[IDX_CII] + k[53]*y[IDX_CNII] +
-        k[54]*y[IDX_COII] + k[55]*y[IDX_H2COII] + k[56]*y[IDX_H2OII] +
-        k[57]*y[IDX_NII] + k[58]*y[IDX_N2II] + k[59]*y[IDX_NH2II] +
-        k[60]*y[IDX_OII] + k[61]*y[IDX_O2II] + k[62]*y[IDX_OHII] +
-        k[78]*y[IDX_HII] + k[102]*y[IDX_H2II] + k[141]*y[IDX_HeII] + k[1129];
-    data[268] = 0.0 - k[31]*y[IDX_HCOI] - k[32]*y[IDX_MgI] -
-        k[33]*y[IDX_NH3I] - k[34]*y[IDX_NOI] - k[35]*y[IDX_SiI] - k[241] -
-        k[294]*y[IDX_EM] - k[396]*y[IDX_CH3OHI] - k[397]*y[IDX_CH3OHI] -
-        k[398]*y[IDX_CO2I] - k[399]*y[IDX_H2COI] - k[400]*y[IDX_H2COI] -
-        k[401]*y[IDX_H2COI] - k[402]*y[IDX_H2OI] - k[403]*y[IDX_H2OI] -
-        k[404]*y[IDX_H2OI] - k[405]*y[IDX_HCNI] - k[406]*y[IDX_HCOI] -
-        k[407]*y[IDX_HNCI] - k[408]*y[IDX_NI] - k[409]*y[IDX_NH2I] -
-        k[410]*y[IDX_NHI] - k[411]*y[IDX_O2I] - k[412]*y[IDX_O2I] -
-        k[413]*y[IDX_O2I] - k[414]*y[IDX_OI] - k[415]*y[IDX_OHI] -
-        k[529]*y[IDX_H2I] - k[614]*y[IDX_HI] - k[1108] - k[1272];
+    data[265] = 0.0 + k[383]*y[IDX_H2OII] + k[385]*y[IDX_HCNII] + k[386]*y[IDX_HCOII] +
+        k[387]*y[IDX_HCO2II] + k[388]*y[IDX_HNOII] + k[389]*y[IDX_N2HII] +
+        k[390]*y[IDX_NHII] + k[392]*y[IDX_O2HII] + k[393]*y[IDX_OHII] +
+        k[509]*y[IDX_H2II] + k[576]*y[IDX_H3II];
+    data[266] = 0.0 + k[15]*y[IDX_CHI] + k[372]*y[IDX_HCOI] + k[528]*y[IDX_H2I] +
+        k[1205]*y[IDX_HI];
+    data[267] = 0.0 + k[15]*y[IDX_CII] + k[53]*y[IDX_CNII] + k[54]*y[IDX_COII] +
+        k[55]*y[IDX_H2COII] + k[56]*y[IDX_H2OII] + k[57]*y[IDX_NII] +
+        k[58]*y[IDX_N2II] + k[59]*y[IDX_NH2II] + k[60]*y[IDX_OII] +
+        k[61]*y[IDX_O2II] + k[62]*y[IDX_OHII] + k[78]*y[IDX_HII] +
+        k[102]*y[IDX_H2II] + k[141]*y[IDX_HeII] + k[1129];
+    data[268] = 0.0 - k[31]*y[IDX_HCOI] - k[32]*y[IDX_MgI] - k[33]*y[IDX_NH3I] -
+        k[34]*y[IDX_NOI] - k[35]*y[IDX_SiI] - k[241] - k[294]*y[IDX_EM] -
+        k[396]*y[IDX_CH3OHI] - k[397]*y[IDX_CH3OHI] - k[398]*y[IDX_CO2I] -
+        k[399]*y[IDX_H2COI] - k[400]*y[IDX_H2COI] - k[401]*y[IDX_H2COI] -
+        k[402]*y[IDX_H2OI] - k[403]*y[IDX_H2OI] - k[404]*y[IDX_H2OI] -
+        k[405]*y[IDX_HCNI] - k[406]*y[IDX_HCOI] - k[407]*y[IDX_HNCI] -
+        k[408]*y[IDX_NI] - k[409]*y[IDX_NH2I] - k[410]*y[IDX_NHI] -
+        k[411]*y[IDX_O2I] - k[412]*y[IDX_O2I] - k[413]*y[IDX_O2I] -
+        k[414]*y[IDX_OI] - k[415]*y[IDX_OHI] - k[529]*y[IDX_H2I] -
+        k[614]*y[IDX_HI] - k[1108] - k[1272];
     data[269] = 0.0 + k[491]*y[IDX_HII] + k[654]*y[IDX_HeII];
     data[270] = 0.0 + k[615]*y[IDX_HI] + k[1110];
     data[271] = 0.0 + k[655]*y[IDX_HeII];
@@ -3610,27 +3594,23 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
     data[276] = 0.0 + k[54]*y[IDX_CHI];
     data[277] = 0.0 - k[398]*y[IDX_CHII];
     data[278] = 0.0 - k[294]*y[IDX_CHII];
-    data[279] = 0.0 - k[614]*y[IDX_CHII] + k[615]*y[IDX_CH2II] +
-        k[1205]*y[IDX_CII];
+    data[279] = 0.0 - k[614]*y[IDX_CHII] + k[615]*y[IDX_CH2II] + k[1205]*y[IDX_CII];
     data[280] = 0.0 + k[78]*y[IDX_CHI] + k[491]*y[IDX_CH2I];
     data[281] = 0.0 + k[528]*y[IDX_CII] - k[529]*y[IDX_CHII];
     data[282] = 0.0 + k[102]*y[IDX_CHI] + k[509]*y[IDX_CI];
-    data[283] = 0.0 - k[399]*y[IDX_CHII] - k[400]*y[IDX_CHII] -
-        k[401]*y[IDX_CHII];
+    data[283] = 0.0 - k[399]*y[IDX_CHII] - k[400]*y[IDX_CHII] - k[401]*y[IDX_CHII];
     data[284] = 0.0 + k[55]*y[IDX_CHI];
-    data[285] = 0.0 - k[402]*y[IDX_CHII] - k[403]*y[IDX_CHII] -
-        k[404]*y[IDX_CHII];
+    data[285] = 0.0 - k[402]*y[IDX_CHII] - k[403]*y[IDX_CHII] - k[404]*y[IDX_CHII];
     data[286] = 0.0 + k[56]*y[IDX_CHI] + k[383]*y[IDX_CI];
     data[287] = 0.0 + k[576]*y[IDX_CI];
     data[288] = 0.0 - k[405]*y[IDX_CHII] + k[679]*y[IDX_HeII];
     data[289] = 0.0 + k[385]*y[IDX_CI];
-    data[290] = 0.0 - k[31]*y[IDX_CHII] + k[372]*y[IDX_CII] -
-        k[406]*y[IDX_CHII] + k[682]*y[IDX_HeII];
+    data[290] = 0.0 - k[31]*y[IDX_CHII] + k[372]*y[IDX_CII] - k[406]*y[IDX_CHII] +
+        k[682]*y[IDX_HeII];
     data[291] = 0.0 + k[386]*y[IDX_CI];
     data[292] = 0.0 + k[387]*y[IDX_CI];
-    data[293] = 0.0 + k[141]*y[IDX_CHI] + k[654]*y[IDX_CH2I] +
-        k[655]*y[IDX_CH3I] + k[658]*y[IDX_CH4I] + k[679]*y[IDX_HCNI] +
-        k[682]*y[IDX_HCOI];
+    data[293] = 0.0 + k[141]*y[IDX_CHI] + k[654]*y[IDX_CH2I] + k[655]*y[IDX_CH3I] +
+        k[658]*y[IDX_CH4I] + k[679]*y[IDX_HCNI] + k[682]*y[IDX_HCOI];
     data[294] = 0.0 - k[407]*y[IDX_CHII];
     data[295] = 0.0 + k[388]*y[IDX_CI];
     data[296] = 0.0 - k[32]*y[IDX_CHII];
@@ -3646,8 +3626,7 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
     data[306] = 0.0 - k[34]*y[IDX_CHII];
     data[307] = 0.0 - k[414]*y[IDX_CHII];
     data[308] = 0.0 + k[60]*y[IDX_CHI];
-    data[309] = 0.0 - k[411]*y[IDX_CHII] - k[412]*y[IDX_CHII] -
-        k[413]*y[IDX_CHII];
+    data[309] = 0.0 - k[411]*y[IDX_CHII] - k[412]*y[IDX_CHII] - k[413]*y[IDX_CHII];
     data[310] = 0.0 + k[61]*y[IDX_CHI];
     data[311] = 0.0 + k[392]*y[IDX_CI];
     data[312] = 0.0 - k[415]*y[IDX_CHII];
@@ -3655,71 +3634,64 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
     data[314] = 0.0 - k[35]*y[IDX_CHII];
     data[315] = 0.0 - k[863]*y[IDX_CH2I] + k[1200]*y[IDX_H2I];
     data[316] = 0.0 - k[14]*y[IDX_CH2I];
-    data[317] = 0.0 + k[924]*y[IDX_H2COI] + k[925]*y[IDX_HCOI] +
-        k[926]*y[IDX_HNOI] + k[938]*y[IDX_O2HI] + k[958]*y[IDX_H2I];
+    data[317] = 0.0 + k[924]*y[IDX_H2COI] + k[925]*y[IDX_HCOI] + k[926]*y[IDX_HNOI] +
+        k[938]*y[IDX_O2HI] + k[958]*y[IDX_H2I];
     data[318] = 0.0 + k[397]*y[IDX_CH3OHI] + k[401]*y[IDX_H2COI];
-    data[319] = 0.0 - k[14]*y[IDX_CII] - k[37]*y[IDX_CNII] -
-        k[38]*y[IDX_COII] - k[39]*y[IDX_H2COII] - k[40]*y[IDX_H2OII] -
-        k[41]*y[IDX_N2II] - k[42]*y[IDX_NH2II] - k[43]*y[IDX_OII] -
-        k[44]*y[IDX_O2II] - k[45]*y[IDX_OHII] - k[75]*y[IDX_HII] -
-        k[100]*y[IDX_H2II] - k[155]*y[IDX_NII] - k[242] - k[243] -
-        k[422]*y[IDX_COII] - k[423]*y[IDX_H2COII] - k[424]*y[IDX_H2OII] -
-        k[425]*y[IDX_H3OII] - k[426]*y[IDX_HCNII] - k[427]*y[IDX_HCNHII] -
-        k[428]*y[IDX_HCNHII] - k[429]*y[IDX_HCOII] - k[430]*y[IDX_HNOII] -
-        k[431]*y[IDX_N2HII] - k[432]*y[IDX_NHII] - k[433]*y[IDX_NH2II] -
-        k[434]*y[IDX_NH3II] - k[435]*y[IDX_O2II] - k[436]*y[IDX_O2HII] -
-        k[437]*y[IDX_OHII] - k[438]*y[IDX_SiOII] - k[491]*y[IDX_HII] -
-        k[510]*y[IDX_H2II] - k[577]*y[IDX_H3II] - k[653]*y[IDX_HeII] -
-        k[654]*y[IDX_HeII] - k[863]*y[IDX_CI] - k[878]*y[IDX_CH2I] -
-        k[878]*y[IDX_CH2I] - k[878]*y[IDX_CH2I] - k[878]*y[IDX_CH2I] -
-        k[879]*y[IDX_CH4I] - k[880]*y[IDX_CNI] - k[881]*y[IDX_H2COI] -
-        k[882]*y[IDX_HCOI] - k[883]*y[IDX_HNOI] - k[884]*y[IDX_N2I] -
-        k[885]*y[IDX_NO2I] - k[886]*y[IDX_NOI] - k[887]*y[IDX_NOI] -
-        k[888]*y[IDX_NOI] - k[889]*y[IDX_O2I] - k[890]*y[IDX_O2I] -
-        k[891]*y[IDX_O2I] - k[892]*y[IDX_O2I] - k[893]*y[IDX_O2I] -
-        k[894]*y[IDX_OI] - k[895]*y[IDX_OI] - k[896]*y[IDX_OI] -
-        k[897]*y[IDX_OI] - k[898]*y[IDX_OHI] - k[899]*y[IDX_OHI] -
-        k[900]*y[IDX_OHI] - k[956]*y[IDX_H2I] - k[967]*y[IDX_HI] -
-        k[1005]*y[IDX_NI] - k[1006]*y[IDX_NI] - k[1007]*y[IDX_NI] - k[1112] -
-        k[1113] - k[1256];
+    data[319] = 0.0 - k[14]*y[IDX_CII] - k[37]*y[IDX_CNII] - k[38]*y[IDX_COII] -
+        k[39]*y[IDX_H2COII] - k[40]*y[IDX_H2OII] - k[41]*y[IDX_N2II] -
+        k[42]*y[IDX_NH2II] - k[43]*y[IDX_OII] - k[44]*y[IDX_O2II] -
+        k[45]*y[IDX_OHII] - k[75]*y[IDX_HII] - k[100]*y[IDX_H2II] -
+        k[155]*y[IDX_NII] - k[242] - k[243] - k[422]*y[IDX_COII] -
+        k[423]*y[IDX_H2COII] - k[424]*y[IDX_H2OII] - k[425]*y[IDX_H3OII] -
+        k[426]*y[IDX_HCNII] - k[427]*y[IDX_HCNHII] - k[428]*y[IDX_HCNHII] -
+        k[429]*y[IDX_HCOII] - k[430]*y[IDX_HNOII] - k[431]*y[IDX_N2HII] -
+        k[432]*y[IDX_NHII] - k[433]*y[IDX_NH2II] - k[434]*y[IDX_NH3II] -
+        k[435]*y[IDX_O2II] - k[436]*y[IDX_O2HII] - k[437]*y[IDX_OHII] -
+        k[438]*y[IDX_SiOII] - k[491]*y[IDX_HII] - k[510]*y[IDX_H2II] -
+        k[577]*y[IDX_H3II] - k[653]*y[IDX_HeII] - k[654]*y[IDX_HeII] -
+        k[863]*y[IDX_CI] - k[878]*y[IDX_CH2I] - k[878]*y[IDX_CH2I] -
+        k[878]*y[IDX_CH2I] - k[878]*y[IDX_CH2I] - k[879]*y[IDX_CH4I] -
+        k[880]*y[IDX_CNI] - k[881]*y[IDX_H2COI] - k[882]*y[IDX_HCOI] -
+        k[883]*y[IDX_HNOI] - k[884]*y[IDX_N2I] - k[885]*y[IDX_NO2I] -
+        k[886]*y[IDX_NOI] - k[887]*y[IDX_NOI] - k[888]*y[IDX_NOI] -
+        k[889]*y[IDX_O2I] - k[890]*y[IDX_O2I] - k[891]*y[IDX_O2I] -
+        k[892]*y[IDX_O2I] - k[893]*y[IDX_O2I] - k[894]*y[IDX_OI] -
+        k[895]*y[IDX_OI] - k[896]*y[IDX_OI] - k[897]*y[IDX_OI] -
+        k[898]*y[IDX_OHI] - k[899]*y[IDX_OHI] - k[900]*y[IDX_OHI] -
+        k[956]*y[IDX_H2I] - k[967]*y[IDX_HI] - k[1005]*y[IDX_NI] -
+        k[1006]*y[IDX_NI] - k[1007]*y[IDX_NI] - k[1112] - k[1113] - k[1256];
     data[320] = 0.0 + k[36]*y[IDX_NOI];
     data[321] = 0.0 + k[244] + k[901]*y[IDX_CH3I] + k[901]*y[IDX_CH3I] +
         k[902]*y[IDX_CNI] + k[913]*y[IDX_O2I] + k[919]*y[IDX_OHI] +
         k[968]*y[IDX_HI] + k[1116];
     data[322] = 0.0 + k[298]*y[IDX_EM];
     data[323] = 0.0 + k[397]*y[IDX_CHII];
-    data[324] = 0.0 + k[249] + k[457]*y[IDX_OHII] - k[879]*y[IDX_CH2I] +
-        k[1124];
+    data[324] = 0.0 + k[249] + k[457]*y[IDX_OHII] - k[879]*y[IDX_CH2I] + k[1124];
     data[325] = 0.0 + k[301]*y[IDX_EM];
     data[326] = 0.0 - k[880]*y[IDX_CH2I] + k[902]*y[IDX_CH3I];
     data[327] = 0.0 - k[37]*y[IDX_CH2I];
     data[328] = 0.0 - k[38]*y[IDX_CH2I] - k[422]*y[IDX_CH2I];
-    data[329] = 0.0 + k[298]*y[IDX_CH3II] + k[301]*y[IDX_CH4II] +
-        k[306]*y[IDX_H2COII] + k[317]*y[IDX_H3COII];
-    data[330] = 0.0 - k[967]*y[IDX_CH2I] + k[968]*y[IDX_CH3I] +
-        k[978]*y[IDX_HCOI];
+    data[329] = 0.0 + k[298]*y[IDX_CH3II] + k[301]*y[IDX_CH4II] + k[306]*y[IDX_H2COII] +
+        k[317]*y[IDX_H3COII];
+    data[330] = 0.0 - k[967]*y[IDX_CH2I] + k[968]*y[IDX_CH3I] + k[978]*y[IDX_HCOI];
     data[331] = 0.0 - k[75]*y[IDX_CH2I] - k[491]*y[IDX_CH2I];
-    data[332] = 0.0 - k[956]*y[IDX_CH2I] + k[958]*y[IDX_CHI] +
-        k[1200]*y[IDX_CI];
+    data[332] = 0.0 - k[956]*y[IDX_CH2I] + k[958]*y[IDX_CHI] + k[1200]*y[IDX_CI];
     data[333] = 0.0 - k[100]*y[IDX_CH2I] - k[510]*y[IDX_CH2I];
-    data[334] = 0.0 + k[401]*y[IDX_CHII] + k[722]*y[IDX_NII] -
-        k[881]*y[IDX_CH2I] + k[924]*y[IDX_CHI];
-    data[335] = 0.0 - k[39]*y[IDX_CH2I] + k[306]*y[IDX_EM] -
-        k[423]*y[IDX_CH2I];
+    data[334] = 0.0 + k[401]*y[IDX_CHII] + k[722]*y[IDX_NII] - k[881]*y[IDX_CH2I] +
+        k[924]*y[IDX_CHI];
+    data[335] = 0.0 - k[39]*y[IDX_CH2I] + k[306]*y[IDX_EM] - k[423]*y[IDX_CH2I];
     data[336] = 0.0 - k[40]*y[IDX_CH2I] - k[424]*y[IDX_CH2I];
     data[337] = 0.0 - k[577]*y[IDX_CH2I];
     data[338] = 0.0 + k[317]*y[IDX_EM];
     data[339] = 0.0 - k[425]*y[IDX_CH2I];
     data[340] = 0.0 - k[426]*y[IDX_CH2I];
     data[341] = 0.0 - k[427]*y[IDX_CH2I] - k[428]*y[IDX_CH2I];
-    data[342] = 0.0 - k[882]*y[IDX_CH2I] + k[925]*y[IDX_CHI] +
-        k[978]*y[IDX_HI];
+    data[342] = 0.0 - k[882]*y[IDX_CH2I] + k[925]*y[IDX_CHI] + k[978]*y[IDX_HI];
     data[343] = 0.0 - k[429]*y[IDX_CH2I];
     data[344] = 0.0 - k[653]*y[IDX_CH2I] - k[654]*y[IDX_CH2I];
     data[345] = 0.0 - k[883]*y[IDX_CH2I] + k[926]*y[IDX_CHI];
     data[346] = 0.0 - k[430]*y[IDX_CH2I];
-    data[347] = 0.0 - k[1005]*y[IDX_CH2I] - k[1006]*y[IDX_CH2I] -
-        k[1007]*y[IDX_CH2I];
+    data[347] = 0.0 - k[1005]*y[IDX_CH2I] - k[1006]*y[IDX_CH2I] - k[1007]*y[IDX_CH2I];
     data[348] = 0.0 - k[155]*y[IDX_CH2I] + k[722]*y[IDX_H2COI];
     data[349] = 0.0 - k[884]*y[IDX_CH2I];
     data[350] = 0.0 - k[41]*y[IDX_CH2I];
@@ -3727,39 +3699,36 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
     data[352] = 0.0 - k[432]*y[IDX_CH2I];
     data[353] = 0.0 - k[42]*y[IDX_CH2I] - k[433]*y[IDX_CH2I];
     data[354] = 0.0 - k[434]*y[IDX_CH2I];
-    data[355] = 0.0 + k[36]*y[IDX_CH2II] - k[886]*y[IDX_CH2I] -
-        k[887]*y[IDX_CH2I] - k[888]*y[IDX_CH2I];
+    data[355] = 0.0 + k[36]*y[IDX_CH2II] - k[886]*y[IDX_CH2I] - k[887]*y[IDX_CH2I] -
+        k[888]*y[IDX_CH2I];
     data[356] = 0.0 - k[885]*y[IDX_CH2I];
-    data[357] = 0.0 - k[894]*y[IDX_CH2I] - k[895]*y[IDX_CH2I] -
-        k[896]*y[IDX_CH2I] - k[897]*y[IDX_CH2I];
+    data[357] = 0.0 - k[894]*y[IDX_CH2I] - k[895]*y[IDX_CH2I] - k[896]*y[IDX_CH2I] -
+        k[897]*y[IDX_CH2I];
     data[358] = 0.0 - k[43]*y[IDX_CH2I];
-    data[359] = 0.0 - k[889]*y[IDX_CH2I] - k[890]*y[IDX_CH2I] -
-        k[891]*y[IDX_CH2I] - k[892]*y[IDX_CH2I] - k[893]*y[IDX_CH2I] +
-        k[913]*y[IDX_CH3I];
+    data[359] = 0.0 - k[889]*y[IDX_CH2I] - k[890]*y[IDX_CH2I] - k[891]*y[IDX_CH2I] -
+        k[892]*y[IDX_CH2I] - k[893]*y[IDX_CH2I] + k[913]*y[IDX_CH3I];
     data[360] = 0.0 - k[44]*y[IDX_CH2I] - k[435]*y[IDX_CH2I];
     data[361] = 0.0 + k[938]*y[IDX_CHI];
     data[362] = 0.0 - k[436]*y[IDX_CH2I];
-    data[363] = 0.0 - k[898]*y[IDX_CH2I] - k[899]*y[IDX_CH2I] -
-        k[900]*y[IDX_CH2I] + k[919]*y[IDX_CH3I];
-    data[364] = 0.0 - k[45]*y[IDX_CH2I] - k[437]*y[IDX_CH2I] +
-        k[457]*y[IDX_CH4I];
+    data[363] = 0.0 - k[898]*y[IDX_CH2I] - k[899]*y[IDX_CH2I] - k[900]*y[IDX_CH2I] +
+        k[919]*y[IDX_CH3I];
+    data[364] = 0.0 - k[45]*y[IDX_CH2I] - k[437]*y[IDX_CH2I] + k[457]*y[IDX_CH4I];
     data[365] = 0.0 - k[438]*y[IDX_CH2I];
-    data[366] = 0.0 + k[14]*y[IDX_CH2I] + k[368]*y[IDX_H2COI] +
-        k[1199]*y[IDX_H2I];
-    data[367] = 0.0 + k[459]*y[IDX_H2COII] + k[460]*y[IDX_H2OII] +
-        k[461]*y[IDX_H3COII] + k[462]*y[IDX_H3OII] + k[463]*y[IDX_HCNII] +
-        k[464]*y[IDX_HCNHII] + k[465]*y[IDX_HCNHII] + k[466]*y[IDX_HCOII] +
-        k[467]*y[IDX_HNOII] + k[469]*y[IDX_N2HII] + k[470]*y[IDX_NHII] +
-        k[471]*y[IDX_NH2II] + k[474]*y[IDX_O2HII] + k[475]*y[IDX_OHII] +
-        k[477]*y[IDX_SiHII] + k[512]*y[IDX_H2II] + k[580]*y[IDX_H3II];
+    data[366] = 0.0 + k[14]*y[IDX_CH2I] + k[368]*y[IDX_H2COI] + k[1199]*y[IDX_H2I];
+    data[367] = 0.0 + k[459]*y[IDX_H2COII] + k[460]*y[IDX_H2OII] + k[461]*y[IDX_H3COII]
+        + k[462]*y[IDX_H3OII] + k[463]*y[IDX_HCNII] + k[464]*y[IDX_HCNHII] +
+        k[465]*y[IDX_HCNHII] + k[466]*y[IDX_HCOII] + k[467]*y[IDX_HNOII] +
+        k[469]*y[IDX_N2HII] + k[470]*y[IDX_NHII] + k[471]*y[IDX_NH2II] +
+        k[474]*y[IDX_O2HII] + k[475]*y[IDX_OHII] + k[477]*y[IDX_SiHII] +
+        k[512]*y[IDX_H2II] + k[580]*y[IDX_H3II];
     data[368] = 0.0 + k[406]*y[IDX_HCOI] + k[529]*y[IDX_H2I];
-    data[369] = 0.0 + k[14]*y[IDX_CII] + k[37]*y[IDX_CNII] +
-        k[38]*y[IDX_COII] + k[39]*y[IDX_H2COII] + k[40]*y[IDX_H2OII] +
-        k[41]*y[IDX_N2II] + k[42]*y[IDX_NH2II] + k[43]*y[IDX_OII] +
-        k[44]*y[IDX_O2II] + k[45]*y[IDX_OHII] + k[75]*y[IDX_HII] +
-        k[100]*y[IDX_H2II] + k[155]*y[IDX_NII] + k[242] + k[1112];
-    data[370] = 0.0 - k[36]*y[IDX_NOI] - k[295]*y[IDX_EM] - k[296]*y[IDX_EM]
-        - k[297]*y[IDX_EM] - k[416]*y[IDX_CO2I] - k[417]*y[IDX_H2COI] -
+    data[369] = 0.0 + k[14]*y[IDX_CII] + k[37]*y[IDX_CNII] + k[38]*y[IDX_COII] +
+        k[39]*y[IDX_H2COII] + k[40]*y[IDX_H2OII] + k[41]*y[IDX_N2II] +
+        k[42]*y[IDX_NH2II] + k[43]*y[IDX_OII] + k[44]*y[IDX_O2II] +
+        k[45]*y[IDX_OHII] + k[75]*y[IDX_HII] + k[100]*y[IDX_H2II] +
+        k[155]*y[IDX_NII] + k[242] + k[1112];
+    data[370] = 0.0 - k[36]*y[IDX_NOI] - k[295]*y[IDX_EM] - k[296]*y[IDX_EM] -
+        k[297]*y[IDX_EM] - k[416]*y[IDX_CO2I] - k[417]*y[IDX_H2COI] -
         k[418]*y[IDX_H2OI] - k[419]*y[IDX_HCOI] - k[420]*y[IDX_O2I] -
         k[421]*y[IDX_OI] - k[530]*y[IDX_H2I] - k[615]*y[IDX_HI] -
         k[736]*y[IDX_NI] - k[1109] - k[1110] - k[1111] - k[1278];
@@ -3769,15 +3738,12 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
     data[374] = 0.0 + k[37]*y[IDX_CH2I];
     data[375] = 0.0 + k[38]*y[IDX_CH2I];
     data[376] = 0.0 - k[416]*y[IDX_CH2II];
-    data[377] = 0.0 - k[295]*y[IDX_CH2II] - k[296]*y[IDX_CH2II] -
-        k[297]*y[IDX_CH2II];
+    data[377] = 0.0 - k[295]*y[IDX_CH2II] - k[296]*y[IDX_CH2II] - k[297]*y[IDX_CH2II];
     data[378] = 0.0 - k[615]*y[IDX_CH2II] + k[616]*y[IDX_CH3II];
     data[379] = 0.0 + k[75]*y[IDX_CH2I];
-    data[380] = 0.0 + k[529]*y[IDX_CHII] - k[530]*y[IDX_CH2II] +
-        k[1199]*y[IDX_CII];
+    data[380] = 0.0 + k[529]*y[IDX_CHII] - k[530]*y[IDX_CH2II] + k[1199]*y[IDX_CII];
     data[381] = 0.0 + k[100]*y[IDX_CH2I] + k[512]*y[IDX_CHI];
-    data[382] = 0.0 + k[368]*y[IDX_CII] - k[417]*y[IDX_CH2II] +
-        k[672]*y[IDX_HeII];
+    data[382] = 0.0 + k[368]*y[IDX_CII] - k[417]*y[IDX_CH2II] + k[672]*y[IDX_HeII];
     data[383] = 0.0 + k[39]*y[IDX_CH2I] + k[459]*y[IDX_CHI];
     data[384] = 0.0 - k[418]*y[IDX_CH2II];
     data[385] = 0.0 + k[40]*y[IDX_CH2I] + k[460]*y[IDX_CHI];
@@ -3805,34 +3771,32 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
     data[407] = 0.0 + k[45]*y[IDX_CH2I] + k[475]*y[IDX_CHI];
     data[408] = 0.0 + k[477]*y[IDX_CHI];
     data[409] = 0.0 + k[1201]*y[IDX_H2I];
-    data[410] = 0.0 + k[878]*y[IDX_CH2I] + k[878]*y[IDX_CH2I] +
-        k[879]*y[IDX_CH4I] + k[879]*y[IDX_CH4I] + k[881]*y[IDX_H2COI] +
-        k[882]*y[IDX_HCOI] + k[883]*y[IDX_HNOI] + k[900]*y[IDX_OHI] +
-        k[956]*y[IDX_H2I];
+    data[410] = 0.0 + k[878]*y[IDX_CH2I] + k[878]*y[IDX_CH2I] + k[879]*y[IDX_CH4I] +
+        k[879]*y[IDX_CH4I] + k[881]*y[IDX_H2COI] + k[882]*y[IDX_HCOI] +
+        k[883]*y[IDX_HNOI] + k[900]*y[IDX_OHI] + k[956]*y[IDX_H2I];
     data[411] = 0.0 + k[417]*y[IDX_H2COI];
-    data[412] = 0.0 - k[76]*y[IDX_HII] - k[244] - k[245] - k[246] -
-        k[578]*y[IDX_H3II] - k[655]*y[IDX_HeII] - k[901]*y[IDX_CH3I] -
-        k[901]*y[IDX_CH3I] - k[901]*y[IDX_CH3I] - k[901]*y[IDX_CH3I] -
-        k[902]*y[IDX_CNI] - k[903]*y[IDX_H2COI] - k[904]*y[IDX_H2OI] -
-        k[905]*y[IDX_HCOI] - k[906]*y[IDX_HNOI] - k[907]*y[IDX_NH2I] -
-        k[908]*y[IDX_NH3I] - k[909]*y[IDX_NO2I] - k[910]*y[IDX_NOI] -
-        k[911]*y[IDX_O2I] - k[912]*y[IDX_O2I] - k[913]*y[IDX_O2I] -
-        k[914]*y[IDX_O2HI] - k[915]*y[IDX_OI] - k[916]*y[IDX_OI] -
-        k[917]*y[IDX_OHI] - k[918]*y[IDX_OHI] - k[919]*y[IDX_OHI] -
-        k[957]*y[IDX_H2I] - k[968]*y[IDX_HI] - k[1008]*y[IDX_NI] -
-        k[1009]*y[IDX_NI] - k[1010]*y[IDX_NI] - k[1116] - k[1117] - k[1118] -
-        k[1259];
-    data[413] = 0.0 + k[46]*y[IDX_HCOI] + k[47]*y[IDX_MgI] +
-        k[48]*y[IDX_NOI] + k[1215]*y[IDX_EM];
+    data[412] = 0.0 - k[76]*y[IDX_HII] - k[244] - k[245] - k[246] - k[578]*y[IDX_H3II] -
+        k[655]*y[IDX_HeII] - k[901]*y[IDX_CH3I] - k[901]*y[IDX_CH3I] -
+        k[901]*y[IDX_CH3I] - k[901]*y[IDX_CH3I] - k[902]*y[IDX_CNI] -
+        k[903]*y[IDX_H2COI] - k[904]*y[IDX_H2OI] - k[905]*y[IDX_HCOI] -
+        k[906]*y[IDX_HNOI] - k[907]*y[IDX_NH2I] - k[908]*y[IDX_NH3I] -
+        k[909]*y[IDX_NO2I] - k[910]*y[IDX_NOI] - k[911]*y[IDX_O2I] -
+        k[912]*y[IDX_O2I] - k[913]*y[IDX_O2I] - k[914]*y[IDX_O2HI] -
+        k[915]*y[IDX_OI] - k[916]*y[IDX_OI] - k[917]*y[IDX_OHI] -
+        k[918]*y[IDX_OHI] - k[919]*y[IDX_OHI] - k[957]*y[IDX_H2I] -
+        k[968]*y[IDX_HI] - k[1008]*y[IDX_NI] - k[1009]*y[IDX_NI] -
+        k[1010]*y[IDX_NI] - k[1116] - k[1117] - k[1118] - k[1259];
+    data[413] = 0.0 + k[46]*y[IDX_HCOI] + k[47]*y[IDX_MgI] + k[48]*y[IDX_NOI] +
+        k[1215]*y[IDX_EM];
     data[414] = 0.0 + k[248] + k[656]*y[IDX_HeII] + k[714]*y[IDX_NII] +
         k[860]*y[IDX_SiII] + k[1121];
-    data[415] = 0.0 + k[451]*y[IDX_COII] + k[452]*y[IDX_H2COII] +
-        k[453]*y[IDX_H2OII] + k[454]*y[IDX_HCNII] + k[661]*y[IDX_HeII] +
-        k[879]*y[IDX_CH2I] + k[879]*y[IDX_CH2I] + k[920]*y[IDX_CNI] +
-        k[921]*y[IDX_O2I] + k[922]*y[IDX_OHI] + k[969]*y[IDX_HI] +
-        k[1028]*y[IDX_NH2I] + k[1034]*y[IDX_NHI] + k[1056]*y[IDX_OI] + k[1125];
-    data[416] = 0.0 + k[302]*y[IDX_EM] + k[447]*y[IDX_CO2I] +
-        k[448]*y[IDX_COI] + k[449]*y[IDX_H2COI] + k[450]*y[IDX_H2OI];
+    data[415] = 0.0 + k[451]*y[IDX_COII] + k[452]*y[IDX_H2COII] + k[453]*y[IDX_H2OII] +
+        k[454]*y[IDX_HCNII] + k[661]*y[IDX_HeII] + k[879]*y[IDX_CH2I] +
+        k[879]*y[IDX_CH2I] + k[920]*y[IDX_CNI] + k[921]*y[IDX_O2I] +
+        k[922]*y[IDX_OHI] + k[969]*y[IDX_HI] + k[1028]*y[IDX_NH2I] +
+        k[1034]*y[IDX_NHI] + k[1056]*y[IDX_OI] + k[1125];
+    data[416] = 0.0 + k[302]*y[IDX_EM] + k[447]*y[IDX_CO2I] + k[448]*y[IDX_COI] +
+        k[449]*y[IDX_H2COI] + k[450]*y[IDX_H2OI];
     data[417] = 0.0 - k[902]*y[IDX_CH3I] + k[920]*y[IDX_CH4I];
     data[418] = 0.0 + k[448]*y[IDX_CH4II];
     data[419] = 0.0 + k[451]*y[IDX_CH4I];
@@ -3840,66 +3804,58 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
     data[421] = 0.0 + k[302]*y[IDX_CH4II] + k[1215]*y[IDX_CH3II];
     data[422] = 0.0 - k[968]*y[IDX_CH3I] + k[969]*y[IDX_CH4I];
     data[423] = 0.0 - k[76]*y[IDX_CH3I];
-    data[424] = 0.0 + k[956]*y[IDX_CH2I] - k[957]*y[IDX_CH3I] +
-        k[1201]*y[IDX_CHI];
-    data[425] = 0.0 + k[417]*y[IDX_CH2II] + k[449]*y[IDX_CH4II] +
-        k[881]*y[IDX_CH2I] - k[903]*y[IDX_CH3I];
+    data[424] = 0.0 + k[956]*y[IDX_CH2I] - k[957]*y[IDX_CH3I] + k[1201]*y[IDX_CHI];
+    data[425] = 0.0 + k[417]*y[IDX_CH2II] + k[449]*y[IDX_CH4II] + k[881]*y[IDX_CH2I] -
+        k[903]*y[IDX_CH3I];
     data[426] = 0.0 + k[452]*y[IDX_CH4I];
     data[427] = 0.0 + k[450]*y[IDX_CH4II] - k[904]*y[IDX_CH3I];
     data[428] = 0.0 + k[453]*y[IDX_CH4I];
     data[429] = 0.0 - k[578]*y[IDX_CH3I];
     data[430] = 0.0 + k[454]*y[IDX_CH4I];
-    data[431] = 0.0 + k[46]*y[IDX_CH3II] + k[882]*y[IDX_CH2I] -
-        k[905]*y[IDX_CH3I];
-    data[432] = 0.0 - k[655]*y[IDX_CH3I] + k[656]*y[IDX_CH3OHI] +
-        k[661]*y[IDX_CH4I];
+    data[431] = 0.0 + k[46]*y[IDX_CH3II] + k[882]*y[IDX_CH2I] - k[905]*y[IDX_CH3I];
+    data[432] = 0.0 - k[655]*y[IDX_CH3I] + k[656]*y[IDX_CH3OHI] + k[661]*y[IDX_CH4I];
     data[433] = 0.0 + k[883]*y[IDX_CH2I] - k[906]*y[IDX_CH3I];
     data[434] = 0.0 + k[47]*y[IDX_CH3II];
-    data[435] = 0.0 - k[1008]*y[IDX_CH3I] - k[1009]*y[IDX_CH3I] -
-        k[1010]*y[IDX_CH3I];
+    data[435] = 0.0 - k[1008]*y[IDX_CH3I] - k[1009]*y[IDX_CH3I] - k[1010]*y[IDX_CH3I];
     data[436] = 0.0 + k[714]*y[IDX_CH3OHI];
     data[437] = 0.0 + k[1034]*y[IDX_CH4I];
     data[438] = 0.0 - k[907]*y[IDX_CH3I] + k[1028]*y[IDX_CH4I];
     data[439] = 0.0 - k[908]*y[IDX_CH3I];
     data[440] = 0.0 + k[48]*y[IDX_CH3II] - k[910]*y[IDX_CH3I];
     data[441] = 0.0 - k[909]*y[IDX_CH3I];
-    data[442] = 0.0 - k[915]*y[IDX_CH3I] - k[916]*y[IDX_CH3I] +
-        k[1056]*y[IDX_CH4I];
-    data[443] = 0.0 - k[911]*y[IDX_CH3I] - k[912]*y[IDX_CH3I] -
-        k[913]*y[IDX_CH3I] + k[921]*y[IDX_CH4I];
+    data[442] = 0.0 - k[915]*y[IDX_CH3I] - k[916]*y[IDX_CH3I] + k[1056]*y[IDX_CH4I];
+    data[443] = 0.0 - k[911]*y[IDX_CH3I] - k[912]*y[IDX_CH3I] - k[913]*y[IDX_CH3I] +
+        k[921]*y[IDX_CH4I];
     data[444] = 0.0 - k[914]*y[IDX_CH3I];
-    data[445] = 0.0 + k[900]*y[IDX_CH2I] - k[917]*y[IDX_CH3I] -
-        k[918]*y[IDX_CH3I] - k[919]*y[IDX_CH3I] + k[922]*y[IDX_CH4I];
+    data[445] = 0.0 + k[900]*y[IDX_CH2I] - k[917]*y[IDX_CH3I] - k[918]*y[IDX_CH3I] -
+        k[919]*y[IDX_CH3I] + k[922]*y[IDX_CH4I];
     data[446] = 0.0 + k[860]*y[IDX_CH3OHI];
     data[447] = 0.0 + k[366]*y[IDX_CH3OHI];
     data[448] = 0.0 + k[396]*y[IDX_CH3OHI] + k[399]*y[IDX_H2COI];
-    data[449] = 0.0 + k[423]*y[IDX_H2COII] + k[424]*y[IDX_H2OII] +
-        k[425]*y[IDX_H3OII] + k[426]*y[IDX_HCNII] + k[427]*y[IDX_HCNHII] +
-        k[428]*y[IDX_HCNHII] + k[429]*y[IDX_HCOII] + k[430]*y[IDX_HNOII] +
-        k[431]*y[IDX_N2HII] + k[432]*y[IDX_NHII] + k[433]*y[IDX_NH2II] +
-        k[434]*y[IDX_NH3II] + k[436]*y[IDX_O2HII] + k[437]*y[IDX_OHII] +
-        k[510]*y[IDX_H2II] + k[577]*y[IDX_H3II];
+    data[449] = 0.0 + k[423]*y[IDX_H2COII] + k[424]*y[IDX_H2OII] + k[425]*y[IDX_H3OII] +
+        k[426]*y[IDX_HCNII] + k[427]*y[IDX_HCNHII] + k[428]*y[IDX_HCNHII] +
+        k[429]*y[IDX_HCOII] + k[430]*y[IDX_HNOII] + k[431]*y[IDX_N2HII] +
+        k[432]*y[IDX_NHII] + k[433]*y[IDX_NH2II] + k[434]*y[IDX_NH3II] +
+        k[436]*y[IDX_O2HII] + k[437]*y[IDX_OHII] + k[510]*y[IDX_H2II] +
+        k[577]*y[IDX_H3II];
     data[450] = 0.0 + k[419]*y[IDX_HCOI] + k[530]*y[IDX_H2I];
     data[451] = 0.0 + k[76]*y[IDX_HII] + k[245] + k[1117];
-    data[452] = 0.0 - k[46]*y[IDX_HCOI] - k[47]*y[IDX_MgI] -
-        k[48]*y[IDX_NOI] - k[298]*y[IDX_EM] - k[299]*y[IDX_EM] -
-        k[300]*y[IDX_EM] - k[439]*y[IDX_CH3OHI] - k[440]*y[IDX_H2COI] -
-        k[441]*y[IDX_HCOI] - k[442]*y[IDX_O2I] - k[443]*y[IDX_OI] -
-        k[444]*y[IDX_OI] - k[445]*y[IDX_OHI] - k[446]*y[IDX_SiH4I] -
-        k[616]*y[IDX_HI] - k[794]*y[IDX_NHI] - k[1114] - k[1115] -
-        k[1215]*y[IDX_EM] - k[1285];
-    data[453] = 0.0 + k[366]*y[IDX_CII] + k[396]*y[IDX_CHII] -
-        k[439]*y[IDX_CH3II] + k[492]*y[IDX_HII] + k[579]*y[IDX_H3II] +
-        k[657]*y[IDX_HeII] + k[715]*y[IDX_NII];
-    data[454] = 0.0 + k[456]*y[IDX_N2II] + k[495]*y[IDX_HII] +
-        k[511]*y[IDX_H2II] + k[660]*y[IDX_HeII] + k[716]*y[IDX_NII] +
-        k[810]*y[IDX_OII];
+    data[452] = 0.0 - k[46]*y[IDX_HCOI] - k[47]*y[IDX_MgI] - k[48]*y[IDX_NOI] -
+        k[298]*y[IDX_EM] - k[299]*y[IDX_EM] - k[300]*y[IDX_EM] -
+        k[439]*y[IDX_CH3OHI] - k[440]*y[IDX_H2COI] - k[441]*y[IDX_HCOI] -
+        k[442]*y[IDX_O2I] - k[443]*y[IDX_OI] - k[444]*y[IDX_OI] -
+        k[445]*y[IDX_OHI] - k[446]*y[IDX_SiH4I] - k[616]*y[IDX_HI] -
+        k[794]*y[IDX_NHI] - k[1114] - k[1115] - k[1215]*y[IDX_EM] - k[1285];
+    data[453] = 0.0 + k[366]*y[IDX_CII] + k[396]*y[IDX_CHII] - k[439]*y[IDX_CH3II] +
+        k[492]*y[IDX_HII] + k[579]*y[IDX_H3II] + k[657]*y[IDX_HeII] +
+        k[715]*y[IDX_NII];
+    data[454] = 0.0 + k[456]*y[IDX_N2II] + k[495]*y[IDX_HII] + k[511]*y[IDX_H2II] +
+        k[660]*y[IDX_HeII] + k[716]*y[IDX_NII] + k[810]*y[IDX_OII];
     data[455] = 0.0 + k[617]*y[IDX_HI] + k[822]*y[IDX_OI] + k[1123];
-    data[456] = 0.0 - k[298]*y[IDX_CH3II] - k[299]*y[IDX_CH3II] -
-        k[300]*y[IDX_CH3II] - k[1215]*y[IDX_CH3II];
+    data[456] = 0.0 - k[298]*y[IDX_CH3II] - k[299]*y[IDX_CH3II] - k[300]*y[IDX_CH3II] -
+        k[1215]*y[IDX_CH3II];
     data[457] = 0.0 - k[616]*y[IDX_CH3II] + k[617]*y[IDX_CH4II];
-    data[458] = 0.0 + k[76]*y[IDX_CH3I] + k[492]*y[IDX_CH3OHI] +
-        k[495]*y[IDX_CH4I];
+    data[458] = 0.0 + k[76]*y[IDX_CH3I] + k[492]*y[IDX_CH3OHI] + k[495]*y[IDX_CH4I];
     data[459] = 0.0 + k[530]*y[IDX_CH2II];
     data[460] = 0.0 + k[510]*y[IDX_CH2I] + k[511]*y[IDX_CH4I];
     data[461] = 0.0 + k[399]*y[IDX_CHII] - k[440]*y[IDX_CH3II];
@@ -3909,8 +3865,7 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
     data[465] = 0.0 + k[425]*y[IDX_CH2I];
     data[466] = 0.0 + k[426]*y[IDX_CH2I];
     data[467] = 0.0 + k[427]*y[IDX_CH2I] + k[428]*y[IDX_CH2I];
-    data[468] = 0.0 - k[46]*y[IDX_CH3II] + k[419]*y[IDX_CH2II] -
-        k[441]*y[IDX_CH3II];
+    data[468] = 0.0 - k[46]*y[IDX_CH3II] + k[419]*y[IDX_CH2II] - k[441]*y[IDX_CH3II];
     data[469] = 0.0 + k[429]*y[IDX_CH2I];
     data[470] = 0.0 + k[657]*y[IDX_CH3OHI] + k[660]*y[IDX_CH4I];
     data[471] = 0.0 + k[430]*y[IDX_CH2I];
@@ -3923,8 +3878,7 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
     data[478] = 0.0 + k[433]*y[IDX_CH2I];
     data[479] = 0.0 + k[434]*y[IDX_CH2I];
     data[480] = 0.0 - k[48]*y[IDX_CH3II];
-    data[481] = 0.0 - k[443]*y[IDX_CH3II] - k[444]*y[IDX_CH3II] +
-        k[822]*y[IDX_CH4II];
+    data[481] = 0.0 - k[443]*y[IDX_CH3II] - k[444]*y[IDX_CH3II] + k[822]*y[IDX_CH4II];
     data[482] = 0.0 + k[810]*y[IDX_CH4I];
     data[483] = 0.0 - k[442]*y[IDX_CH3II];
     data[484] = 0.0 + k[436]*y[IDX_CH2I];
@@ -3935,64 +3889,59 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
     data[489] = 0.0 - k[365]*y[IDX_CH3OHI] - k[366]*y[IDX_CH3OHI];
     data[490] = 0.0 - k[396]*y[IDX_CH3OHI] - k[397]*y[IDX_CH3OHI];
     data[491] = 0.0 - k[439]*y[IDX_CH3OHI];
-    data[492] = 0.0 - k[247] - k[248] - k[365]*y[IDX_CII] -
-        k[366]*y[IDX_CII] - k[396]*y[IDX_CHII] - k[397]*y[IDX_CHII] -
-        k[439]*y[IDX_CH3II] - k[492]*y[IDX_HII] - k[493]*y[IDX_HII] -
-        k[494]*y[IDX_HII] - k[579]*y[IDX_H3II] - k[656]*y[IDX_HeII] -
-        k[657]*y[IDX_HeII] - k[712]*y[IDX_NII] - k[713]*y[IDX_NII] -
-        k[714]*y[IDX_NII] - k[715]*y[IDX_NII] - k[808]*y[IDX_OII] -
-        k[809]*y[IDX_OII] - k[820]*y[IDX_O2II] - k[860]*y[IDX_SiII] - k[1119] -
-        k[1120] - k[1121] - k[1223];
-    data[493] = 0.0 - k[492]*y[IDX_CH3OHI] - k[493]*y[IDX_CH3OHI] -
-        k[494]*y[IDX_CH3OHI];
+    data[492] = 0.0 - k[247] - k[248] - k[365]*y[IDX_CII] - k[366]*y[IDX_CII] -
+        k[396]*y[IDX_CHII] - k[397]*y[IDX_CHII] - k[439]*y[IDX_CH3II] -
+        k[492]*y[IDX_HII] - k[493]*y[IDX_HII] - k[494]*y[IDX_HII] -
+        k[579]*y[IDX_H3II] - k[656]*y[IDX_HeII] - k[657]*y[IDX_HeII] -
+        k[712]*y[IDX_NII] - k[713]*y[IDX_NII] - k[714]*y[IDX_NII] -
+        k[715]*y[IDX_NII] - k[808]*y[IDX_OII] - k[809]*y[IDX_OII] -
+        k[820]*y[IDX_O2II] - k[860]*y[IDX_SiII] - k[1119] - k[1120] - k[1121] -
+        k[1223];
+    data[493] = 0.0 - k[492]*y[IDX_CH3OHI] - k[493]*y[IDX_CH3OHI] - k[494]*y[IDX_CH3OHI];
     data[494] = 0.0 - k[579]*y[IDX_CH3OHI];
     data[495] = 0.0 - k[656]*y[IDX_CH3OHI] - k[657]*y[IDX_CH3OHI];
-    data[496] = 0.0 - k[712]*y[IDX_CH3OHI] - k[713]*y[IDX_CH3OHI] -
-        k[714]*y[IDX_CH3OHI] - k[715]*y[IDX_CH3OHI];
+    data[496] = 0.0 - k[712]*y[IDX_CH3OHI] - k[713]*y[IDX_CH3OHI] - k[714]*y[IDX_CH3OHI]
+        - k[715]*y[IDX_CH3OHI];
     data[497] = 0.0 - k[808]*y[IDX_CH3OHI] - k[809]*y[IDX_CH3OHI];
     data[498] = 0.0 - k[820]*y[IDX_CH3OHI];
     data[499] = 0.0 - k[860]*y[IDX_CH3OHI];
     data[500] = 0.0 + k[1307] + k[1308] + k[1309] + k[1310];
     data[501] = 0.0 - k[879]*y[IDX_CH4I];
-    data[502] = 0.0 + k[901]*y[IDX_CH3I] + k[901]*y[IDX_CH3I] +
-        k[903]*y[IDX_H2COI] + k[904]*y[IDX_H2OI] + k[905]*y[IDX_HCOI] +
-        k[906]*y[IDX_HNOI] + k[907]*y[IDX_NH2I] + k[908]*y[IDX_NH3I] +
-        k[914]*y[IDX_O2HI] + k[917]*y[IDX_OHI] + k[957]*y[IDX_H2I];
-    data[503] = 0.0 + k[439]*y[IDX_CH3OHI] + k[440]*y[IDX_H2COI] +
-        k[446]*y[IDX_SiH4I];
+    data[502] = 0.0 + k[901]*y[IDX_CH3I] + k[901]*y[IDX_CH3I] + k[903]*y[IDX_H2COI] +
+        k[904]*y[IDX_H2OI] + k[905]*y[IDX_HCOI] + k[906]*y[IDX_HNOI] +
+        k[907]*y[IDX_NH2I] + k[908]*y[IDX_NH3I] + k[914]*y[IDX_O2HI] +
+        k[917]*y[IDX_OHI] + k[957]*y[IDX_H2I];
+    data[503] = 0.0 + k[439]*y[IDX_CH3OHI] + k[440]*y[IDX_H2COI] + k[446]*y[IDX_SiH4I];
     data[504] = 0.0 + k[439]*y[IDX_CH3II];
-    data[505] = 0.0 - k[52]*y[IDX_COII] - k[77]*y[IDX_HII] -
-        k[101]*y[IDX_H2II] - k[140]*y[IDX_HeII] - k[156]*y[IDX_NII] -
-        k[207]*y[IDX_OII] - k[249] - k[451]*y[IDX_COII] - k[452]*y[IDX_H2COII] -
-        k[453]*y[IDX_H2OII] - k[454]*y[IDX_HCNII] - k[455]*y[IDX_N2II] -
-        k[456]*y[IDX_N2II] - k[457]*y[IDX_OHII] - k[495]*y[IDX_HII] -
-        k[511]*y[IDX_H2II] - k[658]*y[IDX_HeII] - k[659]*y[IDX_HeII] -
-        k[660]*y[IDX_HeII] - k[661]*y[IDX_HeII] - k[716]*y[IDX_NII] -
-        k[717]*y[IDX_NII] - k[718]*y[IDX_NII] - k[810]*y[IDX_OII] -
-        k[879]*y[IDX_CH2I] - k[920]*y[IDX_CNI] - k[921]*y[IDX_O2I] -
-        k[922]*y[IDX_OHI] - k[969]*y[IDX_HI] - k[1028]*y[IDX_NH2I] -
-        k[1034]*y[IDX_NHI] - k[1056]*y[IDX_OI] - k[1124] - k[1125] - k[1126] -
-        k[1127] - k[1260];
-    data[506] = 0.0 + k[49]*y[IDX_H2COI] + k[50]*y[IDX_NH3I] +
-        k[51]*y[IDX_O2I];
+    data[505] = 0.0 - k[52]*y[IDX_COII] - k[77]*y[IDX_HII] - k[101]*y[IDX_H2II] -
+        k[140]*y[IDX_HeII] - k[156]*y[IDX_NII] - k[207]*y[IDX_OII] - k[249] -
+        k[451]*y[IDX_COII] - k[452]*y[IDX_H2COII] - k[453]*y[IDX_H2OII] -
+        k[454]*y[IDX_HCNII] - k[455]*y[IDX_N2II] - k[456]*y[IDX_N2II] -
+        k[457]*y[IDX_OHII] - k[495]*y[IDX_HII] - k[511]*y[IDX_H2II] -
+        k[658]*y[IDX_HeII] - k[659]*y[IDX_HeII] - k[660]*y[IDX_HeII] -
+        k[661]*y[IDX_HeII] - k[716]*y[IDX_NII] - k[717]*y[IDX_NII] -
+        k[718]*y[IDX_NII] - k[810]*y[IDX_OII] - k[879]*y[IDX_CH2I] -
+        k[920]*y[IDX_CNI] - k[921]*y[IDX_O2I] - k[922]*y[IDX_OHI] -
+        k[969]*y[IDX_HI] - k[1028]*y[IDX_NH2I] - k[1034]*y[IDX_NHI] -
+        k[1056]*y[IDX_OI] - k[1124] - k[1125] - k[1126] - k[1127] - k[1260];
+    data[506] = 0.0 + k[49]*y[IDX_H2COI] + k[50]*y[IDX_NH3I] + k[51]*y[IDX_O2I];
     data[507] = 0.0 - k[920]*y[IDX_CH4I];
     data[508] = 0.0 - k[52]*y[IDX_CH4I] - k[451]*y[IDX_CH4I];
     data[509] = 0.0 - k[969]*y[IDX_CH4I];
     data[510] = 0.0 - k[77]*y[IDX_CH4I] - k[495]*y[IDX_CH4I];
     data[511] = 0.0 + k[957]*y[IDX_CH3I];
     data[512] = 0.0 - k[101]*y[IDX_CH4I] - k[511]*y[IDX_CH4I];
-    data[513] = 0.0 + k[49]*y[IDX_CH4II] + k[440]*y[IDX_CH3II] +
-        k[903]*y[IDX_CH3I];
+    data[513] = 0.0 + k[49]*y[IDX_CH4II] + k[440]*y[IDX_CH3II] + k[903]*y[IDX_CH3I];
     data[514] = 0.0 - k[452]*y[IDX_CH4I];
     data[515] = 0.0 + k[904]*y[IDX_CH3I];
     data[516] = 0.0 - k[453]*y[IDX_CH4I];
     data[517] = 0.0 - k[454]*y[IDX_CH4I];
     data[518] = 0.0 + k[905]*y[IDX_CH3I];
-    data[519] = 0.0 - k[140]*y[IDX_CH4I] - k[658]*y[IDX_CH4I] -
-        k[659]*y[IDX_CH4I] - k[660]*y[IDX_CH4I] - k[661]*y[IDX_CH4I];
+    data[519] = 0.0 - k[140]*y[IDX_CH4I] - k[658]*y[IDX_CH4I] - k[659]*y[IDX_CH4I] -
+        k[660]*y[IDX_CH4I] - k[661]*y[IDX_CH4I];
     data[520] = 0.0 + k[906]*y[IDX_CH3I];
-    data[521] = 0.0 - k[156]*y[IDX_CH4I] - k[716]*y[IDX_CH4I] -
-        k[717]*y[IDX_CH4I] - k[718]*y[IDX_CH4I];
+    data[521] = 0.0 - k[156]*y[IDX_CH4I] - k[716]*y[IDX_CH4I] - k[717]*y[IDX_CH4I] -
+        k[718]*y[IDX_CH4I];
     data[522] = 0.0 - k[455]*y[IDX_CH4I] - k[456]*y[IDX_CH4I];
     data[523] = 0.0 - k[1034]*y[IDX_CH4I];
     data[524] = 0.0 + k[907]*y[IDX_CH3I] - k[1028]*y[IDX_CH4I];
@@ -4006,14 +3955,12 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
     data[532] = 0.0 + k[446]*y[IDX_CH3II];
     data[533] = 0.0 + k[578]*y[IDX_H3II];
     data[534] = 0.0 + k[441]*y[IDX_HCOI];
-    data[535] = 0.0 + k[52]*y[IDX_COII] + k[77]*y[IDX_HII] +
-        k[101]*y[IDX_H2II] + k[140]*y[IDX_HeII] + k[156]*y[IDX_NII] +
-        k[207]*y[IDX_OII] + k[1126];
-    data[536] = 0.0 - k[49]*y[IDX_H2COI] - k[50]*y[IDX_NH3I] -
-        k[51]*y[IDX_O2I] - k[301]*y[IDX_EM] - k[302]*y[IDX_EM] -
-        k[447]*y[IDX_CO2I] - k[448]*y[IDX_COI] - k[449]*y[IDX_H2COI] -
-        k[450]*y[IDX_H2OI] - k[617]*y[IDX_HI] - k[822]*y[IDX_OI] - k[1122] -
-        k[1123] - k[1288];
+    data[535] = 0.0 + k[52]*y[IDX_COII] + k[77]*y[IDX_HII] + k[101]*y[IDX_H2II] +
+        k[140]*y[IDX_HeII] + k[156]*y[IDX_NII] + k[207]*y[IDX_OII] + k[1126];
+    data[536] = 0.0 - k[49]*y[IDX_H2COI] - k[50]*y[IDX_NH3I] - k[51]*y[IDX_O2I] -
+        k[301]*y[IDX_EM] - k[302]*y[IDX_EM] - k[447]*y[IDX_CO2I] -
+        k[448]*y[IDX_COI] - k[449]*y[IDX_H2COI] - k[450]*y[IDX_H2OI] -
+        k[617]*y[IDX_HI] - k[822]*y[IDX_OI] - k[1122] - k[1123] - k[1288];
     data[537] = 0.0 - k[448]*y[IDX_CH4II];
     data[538] = 0.0 + k[52]*y[IDX_CH4I];
     data[539] = 0.0 - k[447]*y[IDX_CH4II];
@@ -4031,82 +3978,74 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
     data[551] = 0.0 - k[822]*y[IDX_CH4II];
     data[552] = 0.0 + k[207]*y[IDX_CH4I];
     data[553] = 0.0 - k[51]*y[IDX_CH4II];
-    data[554] = 0.0 + k[27]*y[IDX_CNII] + k[385]*y[IDX_HCNII] +
-        k[865]*y[IDX_N2I] + k[869]*y[IDX_NHI] + k[871]*y[IDX_NOI] +
-        k[874]*y[IDX_OCNI] + k[1194]*y[IDX_NI];
+    data[554] = 0.0 + k[27]*y[IDX_CNII] + k[385]*y[IDX_HCNII] + k[865]*y[IDX_N2I] +
+        k[869]*y[IDX_NHI] + k[871]*y[IDX_NOI] + k[874]*y[IDX_OCNI] +
+        k[1194]*y[IDX_NI];
     data[555] = 0.0 + k[378]*y[IDX_OCNI];
-    data[556] = 0.0 + k[53]*y[IDX_CNII] + k[463]*y[IDX_HCNII] +
-        k[928]*y[IDX_NI];
-    data[557] = 0.0 + k[37]*y[IDX_CNII] + k[426]*y[IDX_HCNII] -
-        k[880]*y[IDX_CNI];
+    data[556] = 0.0 + k[53]*y[IDX_CNII] + k[463]*y[IDX_HCNII] + k[928]*y[IDX_NI];
+    data[557] = 0.0 + k[37]*y[IDX_CNII] + k[426]*y[IDX_HCNII] - k[880]*y[IDX_CNI];
     data[558] = 0.0 - k[902]*y[IDX_CNI];
     data[559] = 0.0 - k[920]*y[IDX_CNI];
-    data[560] = 0.0 - k[69]*y[IDX_N2II] - k[103]*y[IDX_H2II] -
-        k[157]*y[IDX_NII] - k[251] - k[482]*y[IDX_HNOII] - k[483]*y[IDX_O2HII] -
-        k[513]*y[IDX_H2II] - k[581]*y[IDX_H3II] - k[663]*y[IDX_HeII] -
-        k[664]*y[IDX_HeII] - k[747]*y[IDX_NHII] - k[811]*y[IDX_OII] -
-        k[836]*y[IDX_OHII] - k[880]*y[IDX_CH2I] - k[902]*y[IDX_CH3I] -
-        k[920]*y[IDX_CH4I] - k[942]*y[IDX_H2COI] - k[943]*y[IDX_HCOI] -
-        k[944]*y[IDX_HNOI] - k[945]*y[IDX_NO2I] - k[946]*y[IDX_NOI] -
-        k[947]*y[IDX_NOI] - k[948]*y[IDX_O2I] - k[949]*y[IDX_O2I] -
-        k[950]*y[IDX_SiH4I] - k[959]*y[IDX_H2I] - k[1011]*y[IDX_NI] -
-        k[1033]*y[IDX_NH3I] - k[1035]*y[IDX_NHI] - k[1057]*y[IDX_OI] -
-        k[1058]*y[IDX_OI] - k[1090]*y[IDX_OHI] - k[1091]*y[IDX_OHI] - k[1130] -
-        k[1263];
-    data[561] = 0.0 + k[27]*y[IDX_CI] + k[37]*y[IDX_CH2I] + k[53]*y[IDX_CHI]
-        + k[63]*y[IDX_COI] + k[64]*y[IDX_H2COI] + k[65]*y[IDX_HCNI] +
+    data[560] = 0.0 - k[69]*y[IDX_N2II] - k[103]*y[IDX_H2II] - k[157]*y[IDX_NII] -
+        k[251] - k[482]*y[IDX_HNOII] - k[483]*y[IDX_O2HII] - k[513]*y[IDX_H2II]
+        - k[581]*y[IDX_H3II] - k[663]*y[IDX_HeII] - k[664]*y[IDX_HeII] -
+        k[747]*y[IDX_NHII] - k[811]*y[IDX_OII] - k[836]*y[IDX_OHII] -
+        k[880]*y[IDX_CH2I] - k[902]*y[IDX_CH3I] - k[920]*y[IDX_CH4I] -
+        k[942]*y[IDX_H2COI] - k[943]*y[IDX_HCOI] - k[944]*y[IDX_HNOI] -
+        k[945]*y[IDX_NO2I] - k[946]*y[IDX_NOI] - k[947]*y[IDX_NOI] -
+        k[948]*y[IDX_O2I] - k[949]*y[IDX_O2I] - k[950]*y[IDX_SiH4I] -
+        k[959]*y[IDX_H2I] - k[1011]*y[IDX_NI] - k[1033]*y[IDX_NH3I] -
+        k[1035]*y[IDX_NHI] - k[1057]*y[IDX_OI] - k[1058]*y[IDX_OI] -
+        k[1090]*y[IDX_OHI] - k[1091]*y[IDX_OHI] - k[1130] - k[1263];
+    data[561] = 0.0 + k[27]*y[IDX_CI] + k[37]*y[IDX_CH2I] + k[53]*y[IDX_CHI] +
+        k[63]*y[IDX_COI] + k[64]*y[IDX_H2COI] + k[65]*y[IDX_HCNI] +
         k[66]*y[IDX_HCOI] + k[67]*y[IDX_NOI] + k[68]*y[IDX_O2I] +
         k[126]*y[IDX_HI] + k[183]*y[IDX_NH2I] + k[199]*y[IDX_NHI] +
         k[216]*y[IDX_OI] + k[225]*y[IDX_OHI];
     data[562] = 0.0 + k[63]*y[IDX_CNII] + k[621]*y[IDX_HCNII];
     data[563] = 0.0 + k[620]*y[IDX_HCNII];
     data[564] = 0.0 + k[326]*y[IDX_HCNII] + k[327]*y[IDX_HCNHII];
-    data[565] = 0.0 + k[126]*y[IDX_CNII] + k[976]*y[IDX_HCNI] +
-        k[995]*y[IDX_OCNI];
+    data[565] = 0.0 + k[126]*y[IDX_CNII] + k[976]*y[IDX_HCNI] + k[995]*y[IDX_OCNI];
     data[566] = 0.0 - k[959]*y[IDX_CNI];
     data[567] = 0.0 - k[103]*y[IDX_CNI] - k[513]*y[IDX_CNI];
-    data[568] = 0.0 + k[64]*y[IDX_CNII] + k[622]*y[IDX_HCNII] -
-        k[942]*y[IDX_CNI];
+    data[568] = 0.0 + k[64]*y[IDX_CNII] + k[622]*y[IDX_HCNII] - k[942]*y[IDX_CNI];
     data[569] = 0.0 + k[565]*y[IDX_HCNII];
     data[570] = 0.0 - k[581]*y[IDX_CNI];
     data[571] = 0.0 + k[65]*y[IDX_CNII] + k[259] + k[623]*y[IDX_HCNII] +
         k[976]*y[IDX_HI] + k[1063]*y[IDX_OI] + k[1094]*y[IDX_OHI] + k[1147];
-    data[572] = 0.0 + k[326]*y[IDX_EM] + k[385]*y[IDX_CI] +
-        k[426]*y[IDX_CH2I] + k[463]*y[IDX_CHI] + k[565]*y[IDX_H2OI] +
-        k[620]*y[IDX_CO2I] + k[621]*y[IDX_COI] + k[622]*y[IDX_H2COI] +
-        k[623]*y[IDX_HCNI] + k[624]*y[IDX_HCOI] + k[626]*y[IDX_HNCI] +
-        k[784]*y[IDX_NH2I] + k[798]*y[IDX_NHI] + k[853]*y[IDX_OHI];
+    data[572] = 0.0 + k[326]*y[IDX_EM] + k[385]*y[IDX_CI] + k[426]*y[IDX_CH2I] +
+        k[463]*y[IDX_CHI] + k[565]*y[IDX_H2OI] + k[620]*y[IDX_CO2I] +
+        k[621]*y[IDX_COI] + k[622]*y[IDX_H2COI] + k[623]*y[IDX_HCNI] +
+        k[624]*y[IDX_HCOI] + k[626]*y[IDX_HNCI] + k[784]*y[IDX_NH2I] +
+        k[798]*y[IDX_NHI] + k[853]*y[IDX_OHI];
     data[573] = 0.0 + k[327]*y[IDX_EM];
-    data[574] = 0.0 + k[66]*y[IDX_CNII] + k[624]*y[IDX_HCNII] -
-        k[943]*y[IDX_CNI];
-    data[575] = 0.0 - k[663]*y[IDX_CNI] - k[664]*y[IDX_CNI] +
-        k[698]*y[IDX_OCNI];
+    data[574] = 0.0 + k[66]*y[IDX_CNII] + k[624]*y[IDX_HCNII] - k[943]*y[IDX_CNI];
+    data[575] = 0.0 - k[663]*y[IDX_CNI] - k[664]*y[IDX_CNI] + k[698]*y[IDX_OCNI];
     data[576] = 0.0 + k[262] + k[626]*y[IDX_HCNII] + k[1151];
     data[577] = 0.0 - k[944]*y[IDX_CNI];
     data[578] = 0.0 - k[482]*y[IDX_CNI];
-    data[579] = 0.0 + k[744]*y[IDX_SiCII] + k[928]*y[IDX_CHI] -
-        k[1011]*y[IDX_CNI] + k[1027]*y[IDX_SiCI] + k[1194]*y[IDX_CI];
+    data[579] = 0.0 + k[744]*y[IDX_SiCII] + k[928]*y[IDX_CHI] - k[1011]*y[IDX_CNI] +
+        k[1027]*y[IDX_SiCI] + k[1194]*y[IDX_CI];
     data[580] = 0.0 - k[157]*y[IDX_CNI];
     data[581] = 0.0 + k[865]*y[IDX_CI];
     data[582] = 0.0 - k[69]*y[IDX_CNI];
-    data[583] = 0.0 + k[199]*y[IDX_CNII] + k[798]*y[IDX_HCNII] +
-        k[869]*y[IDX_CI] - k[1035]*y[IDX_CNI];
+    data[583] = 0.0 + k[199]*y[IDX_CNII] + k[798]*y[IDX_HCNII] + k[869]*y[IDX_CI] -
+        k[1035]*y[IDX_CNI];
     data[584] = 0.0 - k[747]*y[IDX_CNI];
     data[585] = 0.0 + k[183]*y[IDX_CNII] + k[784]*y[IDX_HCNII];
     data[586] = 0.0 - k[1033]*y[IDX_CNI];
-    data[587] = 0.0 + k[67]*y[IDX_CNII] + k[871]*y[IDX_CI] -
-        k[946]*y[IDX_CNI] - k[947]*y[IDX_CNI];
+    data[587] = 0.0 + k[67]*y[IDX_CNII] + k[871]*y[IDX_CI] - k[946]*y[IDX_CNI] -
+        k[947]*y[IDX_CNI];
     data[588] = 0.0 - k[945]*y[IDX_CNI];
-    data[589] = 0.0 + k[216]*y[IDX_CNII] - k[1057]*y[IDX_CNI] -
-        k[1058]*y[IDX_CNI] + k[1063]*y[IDX_HCNI] + k[1079]*y[IDX_OCNI];
+    data[589] = 0.0 + k[216]*y[IDX_CNII] - k[1057]*y[IDX_CNI] - k[1058]*y[IDX_CNI] +
+        k[1063]*y[IDX_HCNI] + k[1079]*y[IDX_OCNI];
     data[590] = 0.0 - k[811]*y[IDX_CNI];
-    data[591] = 0.0 + k[68]*y[IDX_CNII] - k[948]*y[IDX_CNI] -
-        k[949]*y[IDX_CNI];
+    data[591] = 0.0 + k[68]*y[IDX_CNII] - k[948]*y[IDX_CNI] - k[949]*y[IDX_CNI];
     data[592] = 0.0 - k[483]*y[IDX_CNI];
-    data[593] = 0.0 + k[283] + k[378]*y[IDX_CII] + k[698]*y[IDX_HeII] +
-        k[874]*y[IDX_CI] + k[995]*y[IDX_HI] + k[1079]*y[IDX_OI] + k[1172];
-    data[594] = 0.0 + k[225]*y[IDX_CNII] + k[853]*y[IDX_HCNII] -
-        k[1090]*y[IDX_CNI] - k[1091]*y[IDX_CNI] + k[1094]*y[IDX_HCNI];
+    data[593] = 0.0 + k[283] + k[378]*y[IDX_CII] + k[698]*y[IDX_HeII] + k[874]*y[IDX_CI]
+        + k[995]*y[IDX_HI] + k[1079]*y[IDX_OI] + k[1172];
+    data[594] = 0.0 + k[225]*y[IDX_CNII] + k[853]*y[IDX_HCNII] - k[1090]*y[IDX_CNI] -
+        k[1091]*y[IDX_CNI] + k[1094]*y[IDX_HCNI];
     data[595] = 0.0 - k[836]*y[IDX_CNI];
     data[596] = 0.0 + k[1027]*y[IDX_NI];
     data[597] = 0.0 + k[744]*y[IDX_NI];
@@ -4116,10 +4055,9 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
     data[601] = 0.0 - k[53]*y[IDX_CNII] + k[468]*y[IDX_NII];
     data[602] = 0.0 + k[408]*y[IDX_NI] + k[410]*y[IDX_NHI];
     data[603] = 0.0 - k[37]*y[IDX_CNII];
-    data[604] = 0.0 + k[69]*y[IDX_N2II] + k[103]*y[IDX_H2II] +
-        k[157]*y[IDX_NII];
-    data[605] = 0.0 - k[27]*y[IDX_CI] - k[37]*y[IDX_CH2I] - k[53]*y[IDX_CHI]
-        - k[63]*y[IDX_COI] - k[64]*y[IDX_H2COI] - k[65]*y[IDX_HCNI] -
+    data[604] = 0.0 + k[69]*y[IDX_N2II] + k[103]*y[IDX_H2II] + k[157]*y[IDX_NII];
+    data[605] = 0.0 - k[27]*y[IDX_CI] - k[37]*y[IDX_CH2I] - k[53]*y[IDX_CHI] -
+        k[63]*y[IDX_COI] - k[64]*y[IDX_H2COI] - k[65]*y[IDX_HCNI] -
         k[66]*y[IDX_HCOI] - k[67]*y[IDX_NOI] - k[68]*y[IDX_O2I] -
         k[126]*y[IDX_HI] - k[183]*y[IDX_NH2I] - k[199]*y[IDX_NHI] -
         k[216]*y[IDX_OI] - k[225]*y[IDX_OHI] - k[303]*y[IDX_EM] -
@@ -4135,15 +4073,12 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
     data[612] = 0.0 - k[560]*y[IDX_CNII] - k[561]*y[IDX_CNII];
     data[613] = 0.0 - k[65]*y[IDX_CNII] + k[676]*y[IDX_HeII];
     data[614] = 0.0 - k[66]*y[IDX_CNII] - k[480]*y[IDX_CNII];
-    data[615] = 0.0 + k[676]*y[IDX_HCNI] + k[683]*y[IDX_HNCI] +
-        k[697]*y[IDX_OCNI];
+    data[615] = 0.0 + k[676]*y[IDX_HCNI] + k[683]*y[IDX_HNCI] + k[697]*y[IDX_OCNI];
     data[616] = 0.0 + k[683]*y[IDX_HeII];
-    data[617] = 0.0 + k[408]*y[IDX_CHII] - k[737]*y[IDX_CNII] +
-        k[1192]*y[IDX_CII];
+    data[617] = 0.0 + k[408]*y[IDX_CHII] - k[737]*y[IDX_CNII] + k[1192]*y[IDX_CII];
     data[618] = 0.0 + k[157]*y[IDX_CNI] + k[468]*y[IDX_CHI];
     data[619] = 0.0 + k[69]*y[IDX_CNI];
-    data[620] = 0.0 - k[199]*y[IDX_CNII] + k[375]*y[IDX_CII] +
-        k[410]*y[IDX_CHII];
+    data[620] = 0.0 - k[199]*y[IDX_CNII] + k[375]*y[IDX_CII] + k[410]*y[IDX_CHII];
     data[621] = 0.0 - k[183]*y[IDX_CNII];
     data[622] = 0.0 - k[67]*y[IDX_CNII];
     data[623] = 0.0 - k[216]*y[IDX_CNII];
@@ -4151,68 +4086,63 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
     data[625] = 0.0 + k[697]*y[IDX_HeII];
     data[626] = 0.0 - k[225]*y[IDX_CNII];
     data[627] = 0.0 + k[1331] + k[1332] + k[1333] + k[1334];
-    data[628] = 0.0 + k[28]*y[IDX_COII] + k[386]*y[IDX_HCOII] +
-        k[395]*y[IDX_SiOII] + k[864]*y[IDX_HCOI] + k[872]*y[IDX_NOI] +
-        k[873]*y[IDX_O2I] + k[874]*y[IDX_OCNI] + k[875]*y[IDX_OHI] +
-        k[1004]*y[IDX_HNCOI] + k[1196]*y[IDX_OI];
-    data[629] = 0.0 + k[367]*y[IDX_CO2I] + k[368]*y[IDX_H2COI] +
-        k[372]*y[IDX_HCOI] + k[377]*y[IDX_O2I] + k[382]*y[IDX_SiOI];
-    data[630] = 0.0 + k[54]*y[IDX_COII] + k[466]*y[IDX_HCOII] +
-        k[923]*y[IDX_CO2I] + k[925]*y[IDX_HCOI] + k[934]*y[IDX_O2I] +
-        k[935]*y[IDX_O2I] + k[939]*y[IDX_OI];
-    data[631] = 0.0 + k[398]*y[IDX_CO2I] + k[399]*y[IDX_H2COI] +
-        k[406]*y[IDX_HCOI];
-    data[632] = 0.0 + k[38]*y[IDX_COII] + k[429]*y[IDX_HCOII] +
-        k[882]*y[IDX_HCOI] + k[891]*y[IDX_O2I] + k[894]*y[IDX_OI] +
-        k[895]*y[IDX_OI];
+    data[628] = 0.0 + k[28]*y[IDX_COII] + k[386]*y[IDX_HCOII] + k[395]*y[IDX_SiOII] +
+        k[864]*y[IDX_HCOI] + k[872]*y[IDX_NOI] + k[873]*y[IDX_O2I] +
+        k[874]*y[IDX_OCNI] + k[875]*y[IDX_OHI] + k[1004]*y[IDX_HNCOI] +
+        k[1196]*y[IDX_OI];
+    data[629] = 0.0 + k[367]*y[IDX_CO2I] + k[368]*y[IDX_H2COI] + k[372]*y[IDX_HCOI] +
+        k[377]*y[IDX_O2I] + k[382]*y[IDX_SiOI];
+    data[630] = 0.0 + k[54]*y[IDX_COII] + k[466]*y[IDX_HCOII] + k[923]*y[IDX_CO2I] +
+        k[925]*y[IDX_HCOI] + k[934]*y[IDX_O2I] + k[935]*y[IDX_O2I] +
+        k[939]*y[IDX_OI];
+    data[631] = 0.0 + k[398]*y[IDX_CO2I] + k[399]*y[IDX_H2COI] + k[406]*y[IDX_HCOI];
+    data[632] = 0.0 + k[38]*y[IDX_COII] + k[429]*y[IDX_HCOII] + k[882]*y[IDX_HCOI] +
+        k[891]*y[IDX_O2I] + k[894]*y[IDX_OI] + k[895]*y[IDX_OI];
     data[633] = 0.0 + k[416]*y[IDX_CO2I] + k[419]*y[IDX_HCOI];
     data[634] = 0.0 + k[905]*y[IDX_HCOI] + k[915]*y[IDX_OI];
     data[635] = 0.0 + k[441]*y[IDX_HCOI];
     data[636] = 0.0 + k[52]*y[IDX_COII];
     data[637] = 0.0 - k[448]*y[IDX_COI];
-    data[638] = 0.0 + k[943]*y[IDX_HCOI] + k[946]*y[IDX_NOI] +
-        k[948]*y[IDX_O2I] + k[1057]*y[IDX_OI];
-    data[639] = 0.0 - k[63]*y[IDX_COI] + k[480]*y[IDX_HCOI] +
-        k[481]*y[IDX_O2I];
-    data[640] = 0.0 - k[63]*y[IDX_CNII] - k[74]*y[IDX_N2II] -
-        k[104]*y[IDX_H2II] - k[158]*y[IDX_NII] - k[208]*y[IDX_OII] - k[232] -
-        k[253] - k[448]*y[IDX_CH4II] - k[485]*y[IDX_HCO2II] -
-        k[486]*y[IDX_HNOII] - k[487]*y[IDX_N2HII] - k[488]*y[IDX_O2HII] -
-        k[489]*y[IDX_SiH4II] - k[490]*y[IDX_SiOII] - k[515]*y[IDX_H2II] -
-        k[553]*y[IDX_H2OII] - k[583]*y[IDX_H3II] - k[584]*y[IDX_H3II] -
-        k[621]*y[IDX_HCNII] - k[669]*y[IDX_HeII] - k[720]*y[IDX_NII] -
-        k[751]*y[IDX_NHII] - k[838]*y[IDX_OHII] - k[951]*y[IDX_HNOI] -
-        k[952]*y[IDX_NO2I] - k[953]*y[IDX_O2I] - k[954]*y[IDX_O2HI] -
-        k[972]*y[IDX_HI] - k[1092]*y[IDX_OHI] - k[1104]*y[IDX_SiI] - k[1133] -
-        k[1227] - k[1251] - k[1304];
-    data[641] = 0.0 + k[28]*y[IDX_CI] + k[38]*y[IDX_CH2I] +
-        k[52]*y[IDX_CH4I] + k[54]*y[IDX_CHI] + k[70]*y[IDX_H2COI] +
-        k[71]*y[IDX_HCOI] + k[72]*y[IDX_NOI] + k[73]*y[IDX_O2I] +
-        k[123]*y[IDX_H2OI] + k[127]*y[IDX_HI] + k[134]*y[IDX_HCNI] +
-        k[184]*y[IDX_NH2I] + k[193]*y[IDX_NH3I] + k[200]*y[IDX_NHI] +
-        k[217]*y[IDX_OI] + k[226]*y[IDX_OHI];
+    data[638] = 0.0 + k[943]*y[IDX_HCOI] + k[946]*y[IDX_NOI] + k[948]*y[IDX_O2I] +
+        k[1057]*y[IDX_OI];
+    data[639] = 0.0 - k[63]*y[IDX_COI] + k[480]*y[IDX_HCOI] + k[481]*y[IDX_O2I];
+    data[640] = 0.0 - k[63]*y[IDX_CNII] - k[74]*y[IDX_N2II] - k[104]*y[IDX_H2II] -
+        k[158]*y[IDX_NII] - k[208]*y[IDX_OII] - k[232] - k[253] -
+        k[448]*y[IDX_CH4II] - k[485]*y[IDX_HCO2II] - k[486]*y[IDX_HNOII] -
+        k[487]*y[IDX_N2HII] - k[488]*y[IDX_O2HII] - k[489]*y[IDX_SiH4II] -
+        k[490]*y[IDX_SiOII] - k[515]*y[IDX_H2II] - k[553]*y[IDX_H2OII] -
+        k[583]*y[IDX_H3II] - k[584]*y[IDX_H3II] - k[621]*y[IDX_HCNII] -
+        k[669]*y[IDX_HeII] - k[720]*y[IDX_NII] - k[751]*y[IDX_NHII] -
+        k[838]*y[IDX_OHII] - k[951]*y[IDX_HNOI] - k[952]*y[IDX_NO2I] -
+        k[953]*y[IDX_O2I] - k[954]*y[IDX_O2HI] - k[972]*y[IDX_HI] -
+        k[1092]*y[IDX_OHI] - k[1104]*y[IDX_SiI] - k[1133] - k[1227] - k[1251] -
+        k[1304];
+    data[641] = 0.0 + k[28]*y[IDX_CI] + k[38]*y[IDX_CH2I] + k[52]*y[IDX_CH4I] +
+        k[54]*y[IDX_CHI] + k[70]*y[IDX_H2COI] + k[71]*y[IDX_HCOI] +
+        k[72]*y[IDX_NOI] + k[73]*y[IDX_O2I] + k[123]*y[IDX_H2OI] +
+        k[127]*y[IDX_HI] + k[134]*y[IDX_HCNI] + k[184]*y[IDX_NH2I] +
+        k[193]*y[IDX_NH3I] + k[200]*y[IDX_NHI] + k[217]*y[IDX_OI] +
+        k[226]*y[IDX_OHI];
     data[642] = 0.0 + k[252] + k[367]*y[IDX_CII] + k[398]*y[IDX_CHII] +
         k[416]*y[IDX_CH2II] + k[666]*y[IDX_HeII] + k[749]*y[IDX_NHII] +
         k[812]*y[IDX_OII] + k[923]*y[IDX_CHI] + k[971]*y[IDX_HI] +
         k[1012]*y[IDX_NI] + k[1059]*y[IDX_OI] + k[1103]*y[IDX_SiI] + k[1132];
-    data[643] = 0.0 + k[307]*y[IDX_H2COII] + k[308]*y[IDX_H2COII] +
-        k[319]*y[IDX_H3COII] + k[330]*y[IDX_HCOII] + k[332]*y[IDX_HCO2II] +
-        k[333]*y[IDX_HCO2II] + k[335]*y[IDX_HOCII];
-    data[644] = 0.0 + k[127]*y[IDX_COII] + k[971]*y[IDX_CO2I] -
-        k[972]*y[IDX_COI] + k[977]*y[IDX_HCOI] + k[994]*y[IDX_OCNI];
+    data[643] = 0.0 + k[307]*y[IDX_H2COII] + k[308]*y[IDX_H2COII] + k[319]*y[IDX_H3COII]
+        + k[330]*y[IDX_HCOII] + k[332]*y[IDX_HCO2II] + k[333]*y[IDX_HCO2II] +
+        k[335]*y[IDX_HOCII];
+    data[644] = 0.0 + k[127]*y[IDX_COII] + k[971]*y[IDX_CO2I] - k[972]*y[IDX_COI] +
+        k[977]*y[IDX_HCOI] + k[994]*y[IDX_OCNI];
     data[645] = 0.0 + k[501]*y[IDX_HCOI] + k[502]*y[IDX_HNCOI];
-    data[646] = 0.0 - k[104]*y[IDX_COI] - k[515]*y[IDX_COI] +
-        k[519]*y[IDX_HCOI];
+    data[646] = 0.0 - k[104]*y[IDX_COI] - k[515]*y[IDX_COI] + k[519]*y[IDX_HCOI];
     data[647] = 0.0 + k[70]*y[IDX_COII] + k[255] + k[368]*y[IDX_CII] +
         k[399]*y[IDX_CHII] + k[635]*y[IDX_HCOII] + k[1136] + k[1137];
-    data[648] = 0.0 + k[307]*y[IDX_EM] + k[308]*y[IDX_EM] +
-        k[641]*y[IDX_HCOI];
+    data[648] = 0.0 + k[307]*y[IDX_EM] + k[308]*y[IDX_EM] + k[641]*y[IDX_HCOI];
     data[649] = 0.0 + k[123]*y[IDX_COII] + k[566]*y[IDX_HCOII];
     data[650] = 0.0 - k[553]*y[IDX_COI] + k[557]*y[IDX_HCOI];
     data[651] = 0.0 - k[583]*y[IDX_COI] - k[584]*y[IDX_COI];
     data[652] = 0.0 + k[319]*y[IDX_EM];
-    data[653] = 0.0 + k[134]*y[IDX_COII] + k[629]*y[IDX_HCOII] +
-        k[1064]*y[IDX_OI] + k[1095]*y[IDX_OHI];
+    data[653] = 0.0 + k[134]*y[IDX_COII] + k[629]*y[IDX_HCOII] + k[1064]*y[IDX_OI] +
+        k[1095]*y[IDX_OHI];
     data[654] = 0.0 - k[621]*y[IDX_COI] + k[625]*y[IDX_HCOI];
     data[655] = 0.0 + k[71]*y[IDX_COII] + k[260] + k[372]*y[IDX_CII] +
         k[406]*y[IDX_CHII] + k[419]*y[IDX_CH2II] + k[441]*y[IDX_CH3II] +
@@ -4226,56 +4156,49 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
         k[997]*y[IDX_HCOI] + k[997]*y[IDX_HCOI] + k[998]*y[IDX_HCOI] +
         k[998]*y[IDX_HCOI] + k[1000]*y[IDX_NOI] + k[1002]*y[IDX_O2I] +
         k[1014]*y[IDX_NI] + k[1067]*y[IDX_OI] + k[1096]*y[IDX_OHI] + k[1149];
-    data[656] = 0.0 + k[330]*y[IDX_EM] + k[386]*y[IDX_CI] +
-        k[429]*y[IDX_CH2I] + k[466]*y[IDX_CHI] + k[566]*y[IDX_H2OI] +
-        k[629]*y[IDX_HCNI] + k[635]*y[IDX_H2COI] + k[636]*y[IDX_HCOI] +
-        k[637]*y[IDX_SiH2I] + k[638]*y[IDX_SiH4I] + k[639]*y[IDX_SiHI] +
-        k[640]*y[IDX_SiOI] + k[648]*y[IDX_HNCI] + k[787]*y[IDX_NH2I] +
-        k[799]*y[IDX_NHI] + k[854]*y[IDX_OHI] + k[861]*y[IDX_SiI];
-    data[657] = 0.0 + k[332]*y[IDX_EM] + k[333]*y[IDX_EM] -
-        k[485]*y[IDX_COI];
-    data[658] = 0.0 + k[666]*y[IDX_CO2I] - k[669]*y[IDX_COI] +
-        k[681]*y[IDX_HCOI];
+    data[656] = 0.0 + k[330]*y[IDX_EM] + k[386]*y[IDX_CI] + k[429]*y[IDX_CH2I] +
+        k[466]*y[IDX_CHI] + k[566]*y[IDX_H2OI] + k[629]*y[IDX_HCNI] +
+        k[635]*y[IDX_H2COI] + k[636]*y[IDX_HCOI] + k[637]*y[IDX_SiH2I] +
+        k[638]*y[IDX_SiH4I] + k[639]*y[IDX_SiHI] + k[640]*y[IDX_SiOI] +
+        k[648]*y[IDX_HNCI] + k[787]*y[IDX_NH2I] + k[799]*y[IDX_NHI] +
+        k[854]*y[IDX_OHI] + k[861]*y[IDX_SiI];
+    data[657] = 0.0 + k[332]*y[IDX_EM] + k[333]*y[IDX_EM] - k[485]*y[IDX_COI];
+    data[658] = 0.0 + k[666]*y[IDX_CO2I] - k[669]*y[IDX_COI] + k[681]*y[IDX_HCOI];
     data[659] = 0.0 + k[648]*y[IDX_HCOII];
-    data[660] = 0.0 + k[263] + k[502]*y[IDX_HII] + k[1004]*y[IDX_CI] +
-        k[1152];
+    data[660] = 0.0 + k[263] + k[502]*y[IDX_HII] + k[1004]*y[IDX_CI] + k[1152];
     data[661] = 0.0 - k[951]*y[IDX_COI];
     data[662] = 0.0 - k[486]*y[IDX_COI];
     data[663] = 0.0 + k[335]*y[IDX_EM];
     data[664] = 0.0 + k[1012]*y[IDX_CO2I] + k[1014]*y[IDX_HCOI];
-    data[665] = 0.0 - k[158]*y[IDX_COI] - k[720]*y[IDX_COI] +
-        k[723]*y[IDX_HCOI];
+    data[665] = 0.0 - k[158]*y[IDX_COI] - k[720]*y[IDX_COI] + k[723]*y[IDX_HCOI];
     data[666] = 0.0 - k[74]*y[IDX_COI] + k[731]*y[IDX_HCOI];
     data[667] = 0.0 - k[487]*y[IDX_COI];
     data[668] = 0.0 + k[200]*y[IDX_COII] + k[799]*y[IDX_HCOII];
     data[669] = 0.0 + k[749]*y[IDX_CO2I] - k[751]*y[IDX_COI];
     data[670] = 0.0 + k[184]*y[IDX_COII] + k[787]*y[IDX_HCOII];
     data[671] = 0.0 + k[193]*y[IDX_COII];
-    data[672] = 0.0 + k[72]*y[IDX_COII] + k[872]*y[IDX_CI] +
-        k[946]*y[IDX_CNI] + k[1000]*y[IDX_HCOI];
+    data[672] = 0.0 + k[72]*y[IDX_COII] + k[872]*y[IDX_CI] + k[946]*y[IDX_CNI] +
+        k[1000]*y[IDX_HCOI];
     data[673] = 0.0 - k[952]*y[IDX_COI];
-    data[674] = 0.0 + k[217]*y[IDX_COII] + k[894]*y[IDX_CH2I] +
-        k[895]*y[IDX_CH2I] + k[915]*y[IDX_CH3I] + k[939]*y[IDX_CHI] +
-        k[1057]*y[IDX_CNI] + k[1059]*y[IDX_CO2I] + k[1064]*y[IDX_HCNI] +
-        k[1067]*y[IDX_HCOI] + k[1078]*y[IDX_OCNI] + k[1081]*y[IDX_SiC2I] +
-        k[1082]*y[IDX_SiC3I] + k[1083]*y[IDX_SiCI] + k[1196]*y[IDX_CI];
-    data[675] = 0.0 - k[208]*y[IDX_COI] + k[812]*y[IDX_CO2I] +
-        k[816]*y[IDX_HCOI];
-    data[676] = 0.0 + k[73]*y[IDX_COII] + k[377]*y[IDX_CII] +
-        k[481]*y[IDX_CNII] + k[873]*y[IDX_CI] + k[891]*y[IDX_CH2I] +
-        k[934]*y[IDX_CHI] + k[935]*y[IDX_CHI] + k[948]*y[IDX_CNI] -
-        k[953]*y[IDX_COI] + k[1002]*y[IDX_HCOI] + k[1055]*y[IDX_OCNI];
+    data[674] = 0.0 + k[217]*y[IDX_COII] + k[894]*y[IDX_CH2I] + k[895]*y[IDX_CH2I] +
+        k[915]*y[IDX_CH3I] + k[939]*y[IDX_CHI] + k[1057]*y[IDX_CNI] +
+        k[1059]*y[IDX_CO2I] + k[1064]*y[IDX_HCNI] + k[1067]*y[IDX_HCOI] +
+        k[1078]*y[IDX_OCNI] + k[1081]*y[IDX_SiC2I] + k[1082]*y[IDX_SiC3I] +
+        k[1083]*y[IDX_SiCI] + k[1196]*y[IDX_CI];
+    data[675] = 0.0 - k[208]*y[IDX_COI] + k[812]*y[IDX_CO2I] + k[816]*y[IDX_HCOI];
+    data[676] = 0.0 + k[73]*y[IDX_COII] + k[377]*y[IDX_CII] + k[481]*y[IDX_CNII] +
+        k[873]*y[IDX_CI] + k[891]*y[IDX_CH2I] + k[934]*y[IDX_CHI] +
+        k[935]*y[IDX_CHI] + k[948]*y[IDX_CNI] - k[953]*y[IDX_COI] +
+        k[1002]*y[IDX_HCOI] + k[1055]*y[IDX_OCNI];
     data[677] = 0.0 + k[644]*y[IDX_HCOI];
     data[678] = 0.0 - k[954]*y[IDX_COI];
     data[679] = 0.0 - k[488]*y[IDX_COI];
-    data[680] = 0.0 + k[874]*y[IDX_CI] + k[994]*y[IDX_HI] +
-        k[1055]*y[IDX_O2I] + k[1078]*y[IDX_OI];
-    data[681] = 0.0 + k[226]*y[IDX_COII] + k[854]*y[IDX_HCOII] +
-        k[875]*y[IDX_CI] - k[1092]*y[IDX_COI] + k[1095]*y[IDX_HCNI] +
-        k[1096]*y[IDX_HCOI];
+    data[680] = 0.0 + k[874]*y[IDX_CI] + k[994]*y[IDX_HI] + k[1055]*y[IDX_O2I] +
+        k[1078]*y[IDX_OI];
+    data[681] = 0.0 + k[226]*y[IDX_COII] + k[854]*y[IDX_HCOII] + k[875]*y[IDX_CI] -
+        k[1092]*y[IDX_COI] + k[1095]*y[IDX_HCNI] + k[1096]*y[IDX_HCOI];
     data[682] = 0.0 - k[838]*y[IDX_COI] + k[842]*y[IDX_HCOI];
-    data[683] = 0.0 + k[861]*y[IDX_HCOII] + k[1103]*y[IDX_CO2I] -
-        k[1104]*y[IDX_COI];
+    data[683] = 0.0 + k[861]*y[IDX_HCOII] + k[1103]*y[IDX_CO2I] - k[1104]*y[IDX_COI];
     data[684] = 0.0 + k[1083]*y[IDX_OI];
     data[685] = 0.0 + k[1081]*y[IDX_OI];
     data[686] = 0.0 + k[1082]*y[IDX_OI];
@@ -4285,61 +4208,52 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
     data[690] = 0.0 - k[489]*y[IDX_COI];
     data[691] = 0.0 + k[382]*y[IDX_CII] + k[640]*y[IDX_HCOII];
     data[692] = 0.0 + k[395]*y[IDX_CI] - k[490]*y[IDX_COI];
-    data[693] = 0.0 - k[28]*y[IDX_COII] + k[391]*y[IDX_O2II] +
-        k[1195]*y[IDX_OII];
-    data[694] = 0.0 + k[367]*y[IDX_CO2I] + k[376]*y[IDX_O2I] +
-        k[378]*y[IDX_OCNI] + k[379]*y[IDX_OHI] + k[1193]*y[IDX_OI];
-    data[695] = 0.0 - k[54]*y[IDX_COII] - k[458]*y[IDX_COII] +
-        k[472]*y[IDX_OII];
-    data[696] = 0.0 + k[411]*y[IDX_O2I] + k[414]*y[IDX_OI] +
-        k[415]*y[IDX_OHI];
+    data[693] = 0.0 - k[28]*y[IDX_COII] + k[391]*y[IDX_O2II] + k[1195]*y[IDX_OII];
+    data[694] = 0.0 + k[367]*y[IDX_CO2I] + k[376]*y[IDX_O2I] + k[378]*y[IDX_OCNI] +
+        k[379]*y[IDX_OHI] + k[1193]*y[IDX_OI];
+    data[695] = 0.0 - k[54]*y[IDX_COII] - k[458]*y[IDX_COII] + k[472]*y[IDX_OII];
+    data[696] = 0.0 + k[411]*y[IDX_O2I] + k[414]*y[IDX_OI] + k[415]*y[IDX_OHI];
     data[697] = 0.0 - k[38]*y[IDX_COII] - k[422]*y[IDX_COII];
     data[698] = 0.0 - k[52]*y[IDX_COII] - k[451]*y[IDX_COII];
     data[699] = 0.0 + k[63]*y[IDX_COI];
-    data[700] = 0.0 + k[63]*y[IDX_CNII] + k[74]*y[IDX_N2II] +
-        k[104]*y[IDX_H2II] + k[158]*y[IDX_NII] + k[208]*y[IDX_OII] + k[232];
-    data[701] = 0.0 - k[28]*y[IDX_CI] - k[38]*y[IDX_CH2I] -
-        k[52]*y[IDX_CH4I] - k[54]*y[IDX_CHI] - k[70]*y[IDX_H2COI] -
-        k[71]*y[IDX_HCOI] - k[72]*y[IDX_NOI] - k[73]*y[IDX_O2I] -
-        k[123]*y[IDX_H2OI] - k[127]*y[IDX_HI] - k[134]*y[IDX_HCNI] -
-        k[184]*y[IDX_NH2I] - k[193]*y[IDX_NH3I] - k[200]*y[IDX_NHI] -
-        k[217]*y[IDX_OI] - k[226]*y[IDX_OHI] - k[304]*y[IDX_EM] -
-        k[422]*y[IDX_CH2I] - k[451]*y[IDX_CH4I] - k[458]*y[IDX_CHI] -
-        k[484]*y[IDX_H2COI] - k[532]*y[IDX_H2I] - k[533]*y[IDX_H2I] -
-        k[562]*y[IDX_H2OI] - k[779]*y[IDX_NH2I] - k[792]*y[IDX_NH3I] -
-        k[795]*y[IDX_NHI] - k[851]*y[IDX_OHI] - k[1131] - k[1275];
-    data[702] = 0.0 + k[367]*y[IDX_CII] + k[665]*y[IDX_HeII] +
-        k[719]*y[IDX_NII];
+    data[700] = 0.0 + k[63]*y[IDX_CNII] + k[74]*y[IDX_N2II] + k[104]*y[IDX_H2II] +
+        k[158]*y[IDX_NII] + k[208]*y[IDX_OII] + k[232];
+    data[701] = 0.0 - k[28]*y[IDX_CI] - k[38]*y[IDX_CH2I] - k[52]*y[IDX_CH4I] -
+        k[54]*y[IDX_CHI] - k[70]*y[IDX_H2COI] - k[71]*y[IDX_HCOI] -
+        k[72]*y[IDX_NOI] - k[73]*y[IDX_O2I] - k[123]*y[IDX_H2OI] -
+        k[127]*y[IDX_HI] - k[134]*y[IDX_HCNI] - k[184]*y[IDX_NH2I] -
+        k[193]*y[IDX_NH3I] - k[200]*y[IDX_NHI] - k[217]*y[IDX_OI] -
+        k[226]*y[IDX_OHI] - k[304]*y[IDX_EM] - k[422]*y[IDX_CH2I] -
+        k[451]*y[IDX_CH4I] - k[458]*y[IDX_CHI] - k[484]*y[IDX_H2COI] -
+        k[532]*y[IDX_H2I] - k[533]*y[IDX_H2I] - k[562]*y[IDX_H2OI] -
+        k[779]*y[IDX_NH2I] - k[792]*y[IDX_NH3I] - k[795]*y[IDX_NHI] -
+        k[851]*y[IDX_OHI] - k[1131] - k[1275];
+    data[702] = 0.0 + k[367]*y[IDX_CII] + k[665]*y[IDX_HeII] + k[719]*y[IDX_NII];
     data[703] = 0.0 - k[304]*y[IDX_COII];
     data[704] = 0.0 - k[127]*y[IDX_COII];
     data[705] = 0.0 + k[497]*y[IDX_H2COI] + k[500]*y[IDX_HCOI];
     data[706] = 0.0 - k[532]*y[IDX_COII] - k[533]*y[IDX_COII];
     data[707] = 0.0 + k[104]*y[IDX_COI];
-    data[708] = 0.0 - k[70]*y[IDX_COII] - k[484]*y[IDX_COII] +
-        k[497]*y[IDX_HII] + k[670]*y[IDX_HeII];
+    data[708] = 0.0 - k[70]*y[IDX_COII] - k[484]*y[IDX_COII] + k[497]*y[IDX_HII] +
+        k[670]*y[IDX_HeII];
     data[709] = 0.0 - k[123]*y[IDX_COII] - k[562]*y[IDX_COII];
     data[710] = 0.0 - k[134]*y[IDX_COII];
-    data[711] = 0.0 - k[71]*y[IDX_COII] + k[500]*y[IDX_HII] +
-        k[680]*y[IDX_HeII];
+    data[711] = 0.0 - k[71]*y[IDX_COII] + k[500]*y[IDX_HII] + k[680]*y[IDX_HeII];
     data[712] = 0.0 + k[1148];
-    data[713] = 0.0 + k[665]*y[IDX_CO2I] + k[670]*y[IDX_H2COI] +
-        k[680]*y[IDX_HCOI];
+    data[713] = 0.0 + k[665]*y[IDX_CO2I] + k[670]*y[IDX_H2COI] + k[680]*y[IDX_HCOI];
     data[714] = 0.0 + k[158]*y[IDX_COI] + k[719]*y[IDX_CO2I];
     data[715] = 0.0 + k[74]*y[IDX_COI];
     data[716] = 0.0 - k[200]*y[IDX_COII] - k[795]*y[IDX_COII];
     data[717] = 0.0 - k[184]*y[IDX_COII] - k[779]*y[IDX_COII];
     data[718] = 0.0 - k[193]*y[IDX_COII] - k[792]*y[IDX_COII];
     data[719] = 0.0 - k[72]*y[IDX_COII];
-    data[720] = 0.0 - k[217]*y[IDX_COII] + k[414]*y[IDX_CHII] +
-        k[1193]*y[IDX_CII];
-    data[721] = 0.0 + k[208]*y[IDX_COI] + k[472]*y[IDX_CHI] +
-        k[1195]*y[IDX_CI];
-    data[722] = 0.0 - k[73]*y[IDX_COII] + k[376]*y[IDX_CII] +
-        k[411]*y[IDX_CHII];
+    data[720] = 0.0 - k[217]*y[IDX_COII] + k[414]*y[IDX_CHII] + k[1193]*y[IDX_CII];
+    data[721] = 0.0 + k[208]*y[IDX_COI] + k[472]*y[IDX_CHI] + k[1195]*y[IDX_CI];
+    data[722] = 0.0 - k[73]*y[IDX_COII] + k[376]*y[IDX_CII] + k[411]*y[IDX_CHII];
     data[723] = 0.0 + k[391]*y[IDX_CI];
     data[724] = 0.0 + k[378]*y[IDX_CII];
-    data[725] = 0.0 - k[226]*y[IDX_COII] + k[379]*y[IDX_CII] +
-        k[415]*y[IDX_CHII] - k[851]*y[IDX_COII];
+    data[725] = 0.0 - k[226]*y[IDX_COII] + k[379]*y[IDX_CII] + k[415]*y[IDX_CHII] -
+        k[851]*y[IDX_COII];
     data[726] = 0.0 + k[1383] + k[1384] + k[1385] + k[1386];
     data[727] = 0.0 + k[387]*y[IDX_HCO2II];
     data[728] = 0.0 - k[367]*y[IDX_CO2I];
@@ -4348,9 +4262,9 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
     data[731] = 0.0 + k[889]*y[IDX_O2I] + k[890]*y[IDX_O2I];
     data[732] = 0.0 - k[416]*y[IDX_CO2I];
     data[733] = 0.0 - k[447]*y[IDX_CO2I];
-    data[734] = 0.0 + k[485]*y[IDX_HCO2II] + k[490]*y[IDX_SiOII] +
-        k[951]*y[IDX_HNOI] + k[952]*y[IDX_NO2I] + k[953]*y[IDX_O2I] +
-        k[954]*y[IDX_O2HI] + k[1092]*y[IDX_OHI];
+    data[734] = 0.0 + k[485]*y[IDX_HCO2II] + k[490]*y[IDX_SiOII] + k[951]*y[IDX_HNOI] +
+        k[952]*y[IDX_NO2I] + k[953]*y[IDX_O2I] + k[954]*y[IDX_O2HI] +
+        k[1092]*y[IDX_OHI];
     data[735] = 0.0 - k[252] - k[367]*y[IDX_CII] - k[398]*y[IDX_CHII] -
         k[416]*y[IDX_CH2II] - k[447]*y[IDX_CH4II] - k[496]*y[IDX_HII] -
         k[514]*y[IDX_H2II] - k[582]*y[IDX_H3II] - k[620]*y[IDX_HCNII] -
@@ -4369,24 +4283,22 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
     data[741] = 0.0 - k[582]*y[IDX_CO2I];
     data[742] = 0.0 - k[620]*y[IDX_CO2I];
     data[743] = 0.0 + k[1001]*y[IDX_O2I] + k[1066]*y[IDX_OI];
-    data[744] = 0.0 + k[331]*y[IDX_EM] + k[387]*y[IDX_CI] +
-        k[485]*y[IDX_COI] + k[567]*y[IDX_H2OI];
-    data[745] = 0.0 - k[665]*y[IDX_CO2I] - k[666]*y[IDX_CO2I] -
-        k[667]*y[IDX_CO2I] - k[668]*y[IDX_CO2I];
+    data[744] = 0.0 + k[331]*y[IDX_EM] + k[387]*y[IDX_CI] + k[485]*y[IDX_COI] +
+        k[567]*y[IDX_H2OI];
+    data[745] = 0.0 - k[665]*y[IDX_CO2I] - k[666]*y[IDX_CO2I] - k[667]*y[IDX_CO2I] -
+        k[668]*y[IDX_CO2I];
     data[746] = 0.0 + k[951]*y[IDX_COI];
     data[747] = 0.0 - k[652]*y[IDX_CO2I];
     data[748] = 0.0 - k[1012]*y[IDX_CO2I];
     data[749] = 0.0 - k[719]*y[IDX_CO2I];
     data[750] = 0.0 - k[734]*y[IDX_CO2I];
-    data[751] = 0.0 - k[748]*y[IDX_CO2I] - k[749]*y[IDX_CO2I] -
-        k[750]*y[IDX_CO2I];
+    data[751] = 0.0 - k[748]*y[IDX_CO2I] - k[749]*y[IDX_CO2I] - k[750]*y[IDX_CO2I];
     data[752] = 0.0 + k[1053]*y[IDX_OCNI];
     data[753] = 0.0 + k[952]*y[IDX_COI];
     data[754] = 0.0 - k[1059]*y[IDX_CO2I] + k[1066]*y[IDX_HCOI];
     data[755] = 0.0 - k[812]*y[IDX_CO2I];
-    data[756] = 0.0 + k[889]*y[IDX_CH2I] + k[890]*y[IDX_CH2I] +
-        k[933]*y[IDX_CHI] + k[953]*y[IDX_COI] + k[1001]*y[IDX_HCOI] +
-        k[1054]*y[IDX_OCNI];
+    data[756] = 0.0 + k[889]*y[IDX_CH2I] + k[890]*y[IDX_CH2I] + k[933]*y[IDX_CHI] +
+        k[953]*y[IDX_COI] + k[1001]*y[IDX_HCOI] + k[1054]*y[IDX_OCNI];
     data[757] = 0.0 + k[954]*y[IDX_COI];
     data[758] = 0.0 - k[821]*y[IDX_CO2I];
     data[759] = 0.0 + k[1053]*y[IDX_NOI] + k[1054]*y[IDX_O2I];
@@ -4399,19 +4311,18 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
     data[766] = 0.0 + k[0]*y[IDX_OI] + k[1129];
     data[767] = 0.0 - k[294]*y[IDX_EM];
     data[768] = 0.0 + k[242] + k[1112];
-    data[769] = 0.0 - k[295]*y[IDX_EM] - k[296]*y[IDX_EM] -
-        k[297]*y[IDX_EM];
+    data[769] = 0.0 - k[295]*y[IDX_EM] - k[296]*y[IDX_EM] - k[297]*y[IDX_EM];
     data[770] = 0.0 + k[245] + k[1117];
-    data[771] = 0.0 - k[298]*y[IDX_EM] - k[299]*y[IDX_EM] - k[300]*y[IDX_EM]
-        - k[1215]*y[IDX_EM];
+    data[771] = 0.0 - k[298]*y[IDX_EM] - k[299]*y[IDX_EM] - k[300]*y[IDX_EM] -
+        k[1215]*y[IDX_EM];
     data[772] = 0.0 + k[1120];
     data[773] = 0.0 + k[1126];
     data[774] = 0.0 - k[301]*y[IDX_EM] - k[302]*y[IDX_EM];
     data[775] = 0.0 - k[303]*y[IDX_EM];
     data[776] = 0.0 + k[232];
     data[777] = 0.0 - k[304]*y[IDX_EM];
-    data[778] = 0.0 - k[8]*y[IDX_H2I] + k[8]*y[IDX_H2I] - k[294]*y[IDX_CHII]
-        - k[295]*y[IDX_CH2II] - k[296]*y[IDX_CH2II] - k[297]*y[IDX_CH2II] -
+    data[778] = 0.0 - k[8]*y[IDX_H2I] + k[8]*y[IDX_H2I] - k[294]*y[IDX_CHII] -
+        k[295]*y[IDX_CH2II] - k[296]*y[IDX_CH2II] - k[297]*y[IDX_CH2II] -
         k[298]*y[IDX_CH3II] - k[299]*y[IDX_CH3II] - k[300]*y[IDX_CH3II] -
         k[301]*y[IDX_CH4II] - k[302]*y[IDX_CH4II] - k[303]*y[IDX_CNII] -
         k[304]*y[IDX_COII] - k[305]*y[IDX_H2II] - k[306]*y[IDX_H2COII] -
@@ -4443,24 +4354,21 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
     data[781] = 0.0 - k[8]*y[IDX_EM] + k[8]*y[IDX_EM] + k[233] + k[234];
     data[782] = 0.0 - k[305]*y[IDX_EM];
     data[783] = 0.0 + k[1138] + k[1139];
-    data[784] = 0.0 - k[306]*y[IDX_EM] - k[307]*y[IDX_EM] - k[308]*y[IDX_EM]
-        - k[309]*y[IDX_EM] - k[1217]*y[IDX_EM];
+    data[784] = 0.0 - k[306]*y[IDX_EM] - k[307]*y[IDX_EM] - k[308]*y[IDX_EM] -
+        k[309]*y[IDX_EM] - k[1217]*y[IDX_EM];
     data[785] = 0.0 - k[310]*y[IDX_EM] - k[311]*y[IDX_EM];
     data[786] = 0.0 + k[1141];
-    data[787] = 0.0 - k[312]*y[IDX_EM] - k[313]*y[IDX_EM] -
-        k[314]*y[IDX_EM];
+    data[787] = 0.0 - k[312]*y[IDX_EM] - k[313]*y[IDX_EM] - k[314]*y[IDX_EM];
     data[788] = 0.0 - k[315]*y[IDX_EM] - k[316]*y[IDX_EM];
-    data[789] = 0.0 - k[317]*y[IDX_EM] - k[318]*y[IDX_EM] - k[319]*y[IDX_EM]
-        - k[320]*y[IDX_EM] - k[321]*y[IDX_EM];
-    data[790] = 0.0 - k[322]*y[IDX_EM] - k[323]*y[IDX_EM] - k[324]*y[IDX_EM]
-        - k[325]*y[IDX_EM];
+    data[789] = 0.0 - k[317]*y[IDX_EM] - k[318]*y[IDX_EM] - k[319]*y[IDX_EM] -
+        k[320]*y[IDX_EM] - k[321]*y[IDX_EM];
+    data[790] = 0.0 - k[322]*y[IDX_EM] - k[323]*y[IDX_EM] - k[324]*y[IDX_EM] -
+        k[325]*y[IDX_EM];
     data[791] = 0.0 - k[326]*y[IDX_EM];
-    data[792] = 0.0 - k[327]*y[IDX_EM] - k[328]*y[IDX_EM] -
-        k[329]*y[IDX_EM];
+    data[792] = 0.0 - k[327]*y[IDX_EM] - k[328]*y[IDX_EM] - k[329]*y[IDX_EM];
     data[793] = 0.0 + k[261] + k[1150];
     data[794] = 0.0 - k[330]*y[IDX_EM];
-    data[795] = 0.0 - k[331]*y[IDX_EM] - k[332]*y[IDX_EM] -
-        k[333]*y[IDX_EM];
+    data[795] = 0.0 - k[331]*y[IDX_EM] - k[332]*y[IDX_EM] - k[333]*y[IDX_EM];
     data[796] = 0.0 + k[237] + k[265];
     data[797] = 0.0 - k[1218]*y[IDX_EM];
     data[798] = 0.0 - k[336]*y[IDX_EM];
@@ -4494,8 +4402,7 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
     data[826] = 0.0 - k[351]*y[IDX_EM];
     data[827] = 0.0 - k[352]*y[IDX_EM];
     data[828] = 0.0 + k[1180];
-    data[829] = 0.0 - k[353]*y[IDX_EM] - k[354]*y[IDX_EM] -
-        k[355]*y[IDX_EM];
+    data[829] = 0.0 - k[353]*y[IDX_EM] - k[354]*y[IDX_EM] - k[355]*y[IDX_EM];
     data[830] = 0.0 + k[1183];
     data[831] = 0.0 - k[356]*y[IDX_EM] - k[357]*y[IDX_EM];
     data[832] = 0.0 - k[358]*y[IDX_EM] - k[359]*y[IDX_EM];
@@ -4503,53 +4410,48 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
     data[834] = 0.0 + k[1191];
     data[835] = 0.0 - k[362]*y[IDX_EM];
     data[836] = 0.0 - k[363]*y[IDX_EM] - k[364]*y[IDX_EM];
-    data[837] = 0.0 + k[394]*y[IDX_SiHII] + k[509]*y[IDX_H2II] +
-        k[866]*y[IDX_NH2I] + k[867]*y[IDX_NH2I] + k[869]*y[IDX_NHI] +
-        k[875]*y[IDX_OHI] + k[877]*y[IDX_SiHI] + k[955]*y[IDX_H2I] -
-        k[1206]*y[IDX_HI];
-    data[838] = 0.0 + k[370]*y[IDX_H2OI] + k[371]*y[IDX_H2OI] +
-        k[373]*y[IDX_NH2I] + k[375]*y[IDX_NHI] + k[379]*y[IDX_OHI] +
-        k[381]*y[IDX_SiHI] + k[528]*y[IDX_H2I] - k[1205]*y[IDX_HI];
-    data[839] = 0.0 + k[2]*y[IDX_H2I] - k[9]*y[IDX_HI] + k[9]*y[IDX_HI] +
-        k[9]*y[IDX_HI] + k[78]*y[IDX_HII] + k[250] + k[468]*y[IDX_NII] +
-        k[472]*y[IDX_OII] + k[476]*y[IDX_SiII] + k[512]*y[IDX_H2II] +
-        k[662]*y[IDX_HeII] + k[928]*y[IDX_NI] + k[932]*y[IDX_NOI] +
-        k[933]*y[IDX_O2I] + k[934]*y[IDX_O2I] + k[939]*y[IDX_OI] +
-        k[941]*y[IDX_OHI] + k[958]*y[IDX_H2I] - k[970]*y[IDX_HI] + k[1128];
-    data[840] = 0.0 + k[241] + k[294]*y[IDX_EM] + k[402]*y[IDX_H2OI] +
-        k[408]*y[IDX_NI] + k[414]*y[IDX_OI] + k[529]*y[IDX_H2I] -
-        k[614]*y[IDX_HI];
+    data[837] = 0.0 + k[394]*y[IDX_SiHII] + k[509]*y[IDX_H2II] + k[866]*y[IDX_NH2I] +
+        k[867]*y[IDX_NH2I] + k[869]*y[IDX_NHI] + k[875]*y[IDX_OHI] +
+        k[877]*y[IDX_SiHI] + k[955]*y[IDX_H2I] - k[1206]*y[IDX_HI];
+    data[838] = 0.0 + k[370]*y[IDX_H2OI] + k[371]*y[IDX_H2OI] + k[373]*y[IDX_NH2I] +
+        k[375]*y[IDX_NHI] + k[379]*y[IDX_OHI] + k[381]*y[IDX_SiHI] +
+        k[528]*y[IDX_H2I] - k[1205]*y[IDX_HI];
+    data[839] = 0.0 + k[2]*y[IDX_H2I] - k[9]*y[IDX_HI] + k[9]*y[IDX_HI] + k[9]*y[IDX_HI]
+        + k[78]*y[IDX_HII] + k[250] + k[468]*y[IDX_NII] + k[472]*y[IDX_OII] +
+        k[476]*y[IDX_SiII] + k[512]*y[IDX_H2II] + k[662]*y[IDX_HeII] +
+        k[928]*y[IDX_NI] + k[932]*y[IDX_NOI] + k[933]*y[IDX_O2I] +
+        k[934]*y[IDX_O2I] + k[939]*y[IDX_OI] + k[941]*y[IDX_OHI] +
+        k[958]*y[IDX_H2I] - k[970]*y[IDX_HI] + k[1128];
+    data[840] = 0.0 + k[241] + k[294]*y[IDX_EM] + k[402]*y[IDX_H2OI] + k[408]*y[IDX_NI]
+        + k[414]*y[IDX_OI] + k[529]*y[IDX_H2I] - k[614]*y[IDX_HI];
     data[841] = 0.0 + k[75]*y[IDX_HII] + k[243] + k[510]*y[IDX_H2II] +
         k[654]*y[IDX_HeII] + k[888]*y[IDX_NOI] + k[890]*y[IDX_O2I] +
         k[890]*y[IDX_O2I] + k[895]*y[IDX_OI] + k[895]*y[IDX_OI] +
         k[896]*y[IDX_OI] + k[898]*y[IDX_OHI] + k[956]*y[IDX_H2I] -
         k[967]*y[IDX_HI] + k[1005]*y[IDX_NI] + k[1006]*y[IDX_NI] + k[1113];
-    data[842] = 0.0 + k[296]*y[IDX_EM] + k[296]*y[IDX_EM] + k[297]*y[IDX_EM]
-        + k[418]*y[IDX_H2OI] + k[421]*y[IDX_OI] + k[530]*y[IDX_H2I] -
+    data[842] = 0.0 + k[296]*y[IDX_EM] + k[296]*y[IDX_EM] + k[297]*y[IDX_EM] +
+        k[418]*y[IDX_H2OI] + k[421]*y[IDX_OI] + k[530]*y[IDX_H2I] -
         k[615]*y[IDX_HI] + k[736]*y[IDX_NI] + k[1110];
-    data[843] = 0.0 + k[76]*y[IDX_HII] + k[244] + k[915]*y[IDX_OI] +
-        k[916]*y[IDX_OI] + k[957]*y[IDX_H2I] - k[968]*y[IDX_HI] +
-        k[1008]*y[IDX_NI] + k[1010]*y[IDX_NI] + k[1010]*y[IDX_NI] + k[1116];
-    data[844] = 0.0 + k[298]*y[IDX_EM] + k[300]*y[IDX_EM] + k[300]*y[IDX_EM]
-        + k[443]*y[IDX_OI] - k[616]*y[IDX_HI] + k[1115];
-    data[845] = 0.0 + k[712]*y[IDX_NII] + k[714]*y[IDX_NII] +
-        k[715]*y[IDX_NII] + k[820]*y[IDX_O2II] + k[1120];
-    data[846] = 0.0 + k[77]*y[IDX_HII] + k[456]*y[IDX_N2II] +
-        k[511]*y[IDX_H2II] + k[658]*y[IDX_HeII] + k[660]*y[IDX_HeII] +
-        k[716]*y[IDX_NII] + k[717]*y[IDX_NII] + k[718]*y[IDX_NII] +
-        k[718]*y[IDX_NII] - k[969]*y[IDX_HI] + k[1125] + k[1127];
-    data[847] = 0.0 + k[301]*y[IDX_EM] + k[301]*y[IDX_EM] + k[302]*y[IDX_EM]
-        - k[617]*y[IDX_HI] + k[1123];
-    data[848] = 0.0 + k[513]*y[IDX_H2II] + k[959]*y[IDX_H2I] +
-        k[1091]*y[IDX_OHI];
+    data[843] = 0.0 + k[76]*y[IDX_HII] + k[244] + k[915]*y[IDX_OI] + k[916]*y[IDX_OI] +
+        k[957]*y[IDX_H2I] - k[968]*y[IDX_HI] + k[1008]*y[IDX_NI] +
+        k[1010]*y[IDX_NI] + k[1010]*y[IDX_NI] + k[1116];
+    data[844] = 0.0 + k[298]*y[IDX_EM] + k[300]*y[IDX_EM] + k[300]*y[IDX_EM] +
+        k[443]*y[IDX_OI] - k[616]*y[IDX_HI] + k[1115];
+    data[845] = 0.0 + k[712]*y[IDX_NII] + k[714]*y[IDX_NII] + k[715]*y[IDX_NII] +
+        k[820]*y[IDX_O2II] + k[1120];
+    data[846] = 0.0 + k[77]*y[IDX_HII] + k[456]*y[IDX_N2II] + k[511]*y[IDX_H2II] +
+        k[658]*y[IDX_HeII] + k[660]*y[IDX_HeII] + k[716]*y[IDX_NII] +
+        k[717]*y[IDX_NII] + k[718]*y[IDX_NII] + k[718]*y[IDX_NII] -
+        k[969]*y[IDX_HI] + k[1125] + k[1127];
+    data[847] = 0.0 + k[301]*y[IDX_EM] + k[301]*y[IDX_EM] + k[302]*y[IDX_EM] -
+        k[617]*y[IDX_HI] + k[1123];
+    data[848] = 0.0 + k[513]*y[IDX_H2II] + k[959]*y[IDX_H2I] + k[1091]*y[IDX_OHI];
     data[849] = 0.0 - k[126]*y[IDX_HI] + k[531]*y[IDX_H2I];
-    data[850] = 0.0 + k[515]*y[IDX_H2II] - k[972]*y[IDX_HI] +
-        k[1092]*y[IDX_OHI];
-    data[851] = 0.0 - k[127]*y[IDX_HI] + k[532]*y[IDX_H2I] +
-        k[533]*y[IDX_H2I];
+    data[850] = 0.0 + k[515]*y[IDX_H2II] - k[972]*y[IDX_HI] + k[1092]*y[IDX_OHI];
+    data[851] = 0.0 - k[127]*y[IDX_HI] + k[532]*y[IDX_H2I] + k[533]*y[IDX_H2I];
     data[852] = 0.0 + k[514]*y[IDX_H2II] - k[971]*y[IDX_HI];
-    data[853] = 0.0 + k[8]*y[IDX_H2I] + k[8]*y[IDX_H2I] + k[294]*y[IDX_CHII]
-        + k[296]*y[IDX_CH2II] + k[296]*y[IDX_CH2II] + k[297]*y[IDX_CH2II] +
+    data[853] = 0.0 + k[8]*y[IDX_H2I] + k[8]*y[IDX_H2I] + k[294]*y[IDX_CHII] +
+        k[296]*y[IDX_CH2II] + k[296]*y[IDX_CH2II] + k[297]*y[IDX_CH2II] +
         k[298]*y[IDX_CH3II] + k[300]*y[IDX_CH3II] + k[300]*y[IDX_CH3II] +
         k[301]*y[IDX_CH4II] + k[301]*y[IDX_CH4II] + k[302]*y[IDX_CH4II] +
         k[305]*y[IDX_H2II] + k[305]*y[IDX_H2II] + k[308]*y[IDX_H2COII] +
@@ -4591,16 +4493,15 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
         k[996]*y[IDX_OHI] - k[1197]*y[IDX_HII] - k[1205]*y[IDX_CII] -
         k[1206]*y[IDX_CI] - k[1207]*y[IDX_OI] - k[1208]*y[IDX_OHI] -
         k[1209]*y[IDX_SiII];
-    data[855] = 0.0 + k[75]*y[IDX_CH2I] + k[76]*y[IDX_CH3I] +
-        k[77]*y[IDX_CH4I] + k[78]*y[IDX_CHI] + k[79]*y[IDX_H2COI] +
-        k[80]*y[IDX_H2OI] + k[81]*y[IDX_HCNI] + k[82]*y[IDX_HCOI] +
-        k[83]*y[IDX_MgI] + k[84]*y[IDX_NH2I] + k[85]*y[IDX_NH3I] +
-        k[86]*y[IDX_NHI] + k[87]*y[IDX_NOI] + k[88]*y[IDX_O2I] + k[89]*y[IDX_OI]
-        + k[90]*y[IDX_OHI] + k[91]*y[IDX_SiI] + k[92]*y[IDX_SiC2I] +
-        k[93]*y[IDX_SiC3I] + k[94]*y[IDX_SiCI] + k[95]*y[IDX_SiH2I] +
-        k[96]*y[IDX_SiH3I] + k[97]*y[IDX_SiH4I] + k[98]*y[IDX_SiHI] +
-        k[99]*y[IDX_SiOI] + k[497]*y[IDX_H2COI] - k[1197]*y[IDX_HI] +
-        k[1216]*y[IDX_EM];
+    data[855] = 0.0 + k[75]*y[IDX_CH2I] + k[76]*y[IDX_CH3I] + k[77]*y[IDX_CH4I] +
+        k[78]*y[IDX_CHI] + k[79]*y[IDX_H2COI] + k[80]*y[IDX_H2OI] +
+        k[81]*y[IDX_HCNI] + k[82]*y[IDX_HCOI] + k[83]*y[IDX_MgI] +
+        k[84]*y[IDX_NH2I] + k[85]*y[IDX_NH3I] + k[86]*y[IDX_NHI] +
+        k[87]*y[IDX_NOI] + k[88]*y[IDX_O2I] + k[89]*y[IDX_OI] + k[90]*y[IDX_OHI]
+        + k[91]*y[IDX_SiI] + k[92]*y[IDX_SiC2I] + k[93]*y[IDX_SiC3I] +
+        k[94]*y[IDX_SiCI] + k[95]*y[IDX_SiH2I] + k[96]*y[IDX_SiH3I] +
+        k[97]*y[IDX_SiH4I] + k[98]*y[IDX_SiHI] + k[99]*y[IDX_SiOI] +
+        k[497]*y[IDX_H2COI] - k[1197]*y[IDX_HI] + k[1216]*y[IDX_EM];
     data[856] = 0.0 + k[2]*y[IDX_CHI] + k[3]*y[IDX_H2I] + k[3]*y[IDX_H2I] +
         k[3]*y[IDX_H2I] + k[3]*y[IDX_H2I] + k[4]*y[IDX_H2OI] + k[7]*y[IDX_OHI] +
         k[8]*y[IDX_EM] + k[8]*y[IDX_EM] - k[10]*y[IDX_HI] + k[10]*y[IDX_HI] +
@@ -4615,121 +4516,112 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
         k[958]*y[IDX_CHI] + k[959]*y[IDX_CNI] + k[960]*y[IDX_NI] +
         k[961]*y[IDX_NH2I] + k[962]*y[IDX_NHI] + k[963]*y[IDX_O2I] +
         k[965]*y[IDX_OI] + k[966]*y[IDX_OHI];
-    data[857] = 0.0 - k[128]*y[IDX_HI] + k[305]*y[IDX_EM] + k[305]*y[IDX_EM]
-        + k[509]*y[IDX_CI] + k[510]*y[IDX_CH2I] + k[511]*y[IDX_CH4I] +
+    data[857] = 0.0 - k[128]*y[IDX_HI] + k[305]*y[IDX_EM] + k[305]*y[IDX_EM] +
+        k[509]*y[IDX_CI] + k[510]*y[IDX_CH2I] + k[511]*y[IDX_CH4I] +
         k[512]*y[IDX_CHI] + k[513]*y[IDX_CNI] + k[514]*y[IDX_CO2I] +
         k[515]*y[IDX_COI] + k[516]*y[IDX_H2I] + k[517]*y[IDX_H2COI] +
         k[518]*y[IDX_H2OI] + k[520]*y[IDX_HeI] + k[521]*y[IDX_N2I] +
         k[522]*y[IDX_NI] + k[523]*y[IDX_NHI] + k[524]*y[IDX_NOI] +
         k[525]*y[IDX_O2I] + k[526]*y[IDX_OI] + k[527]*y[IDX_OHI] + k[1134];
     data[858] = 0.0 + k[254] - k[973]*y[IDX_HI] + k[1135];
-    data[859] = 0.0 + k[79]*y[IDX_HII] + k[497]*y[IDX_HII] +
-        k[517]*y[IDX_H2II] + k[551]*y[IDX_O2II] + k[671]*y[IDX_HeII] +
-        k[730]*y[IDX_N2II] - k[974]*y[IDX_HI] + k[1137] + k[1137] + k[1139];
-    data[860] = 0.0 + k[308]*y[IDX_EM] + k[308]*y[IDX_EM] +
-        k[309]*y[IDX_EM];
+    data[859] = 0.0 + k[79]*y[IDX_HII] + k[497]*y[IDX_HII] + k[517]*y[IDX_H2II] +
+        k[551]*y[IDX_O2II] + k[671]*y[IDX_HeII] + k[730]*y[IDX_N2II] -
+        k[974]*y[IDX_HI] + k[1137] + k[1137] + k[1139];
+    data[860] = 0.0 + k[308]*y[IDX_EM] + k[308]*y[IDX_EM] + k[309]*y[IDX_EM];
     data[861] = 0.0 + k[310]*y[IDX_EM] + k[1296];
     data[862] = 0.0 + k[4]*y[IDX_H2I] - k[11]*y[IDX_HI] + k[11]*y[IDX_HI] +
         k[11]*y[IDX_HI] + k[80]*y[IDX_HII] + k[256] + k[370]*y[IDX_CII] +
         k[371]*y[IDX_CII] + k[402]*y[IDX_CHII] + k[418]*y[IDX_CH2II] +
         k[518]*y[IDX_H2II] + k[572]*y[IDX_SiII] + k[673]*y[IDX_HeII] -
         k[975]*y[IDX_HI] + k[1142];
-    data[863] = 0.0 + k[313]*y[IDX_EM] + k[313]*y[IDX_EM] + k[314]*y[IDX_EM]
-        + k[534]*y[IDX_H2I] + k[738]*y[IDX_NI] + k[1140];
+    data[863] = 0.0 + k[313]*y[IDX_EM] + k[313]*y[IDX_EM] + k[314]*y[IDX_EM] +
+        k[534]*y[IDX_H2I] + k[738]*y[IDX_NI] + k[1140];
     data[864] = 0.0 + k[675]*y[IDX_HeII] + k[1144] + k[1144];
-    data[865] = 0.0 + k[315]*y[IDX_EM] + k[316]*y[IDX_EM] + k[316]*y[IDX_EM]
-        + k[316]*y[IDX_EM] + k[591]*y[IDX_MgI] + k[598]*y[IDX_OI] + k[1145];
-    data[866] = 0.0 + k[319]*y[IDX_EM] + k[320]*y[IDX_EM] + k[321]*y[IDX_EM]
-        + k[321]*y[IDX_EM];
-    data[867] = 0.0 + k[322]*y[IDX_EM] + k[323]*y[IDX_EM] + k[325]*y[IDX_EM]
-        + k[325]*y[IDX_EM] + k[1286];
+    data[865] = 0.0 + k[315]*y[IDX_EM] + k[316]*y[IDX_EM] + k[316]*y[IDX_EM] +
+        k[316]*y[IDX_EM] + k[591]*y[IDX_MgI] + k[598]*y[IDX_OI] + k[1145];
+    data[866] = 0.0 + k[319]*y[IDX_EM] + k[320]*y[IDX_EM] + k[321]*y[IDX_EM] +
+        k[321]*y[IDX_EM];
+    data[867] = 0.0 + k[322]*y[IDX_EM] + k[323]*y[IDX_EM] + k[325]*y[IDX_EM] +
+        k[325]*y[IDX_EM] + k[1286];
     data[868] = 0.0 + k[81]*y[IDX_HII] + k[259] + k[676]*y[IDX_HeII] +
         k[678]*y[IDX_HeII] - k[976]*y[IDX_HI] + k[1065]*y[IDX_OI] + k[1147];
-    data[869] = 0.0 - k[129]*y[IDX_HI] + k[326]*y[IDX_EM] +
-        k[535]*y[IDX_H2I];
-    data[870] = 0.0 + k[327]*y[IDX_EM] + k[327]*y[IDX_EM] + k[328]*y[IDX_EM]
-        + k[329]*y[IDX_EM] + k[1301];
-    data[871] = 0.0 + k[82]*y[IDX_HII] + k[260] + k[680]*y[IDX_HeII] -
-        k[977]*y[IDX_HI] - k[978]*y[IDX_HI] + k[1016]*y[IDX_NI] +
-        k[1066]*y[IDX_OI] + k[1149];
+    data[869] = 0.0 - k[129]*y[IDX_HI] + k[326]*y[IDX_EM] + k[535]*y[IDX_H2I];
+    data[870] = 0.0 + k[327]*y[IDX_EM] + k[327]*y[IDX_EM] + k[328]*y[IDX_EM] +
+        k[329]*y[IDX_EM] + k[1301];
+    data[871] = 0.0 + k[82]*y[IDX_HII] + k[260] + k[680]*y[IDX_HeII] - k[977]*y[IDX_HI]
+        - k[978]*y[IDX_HI] + k[1016]*y[IDX_NI] + k[1066]*y[IDX_OI] + k[1149];
     data[872] = 0.0 + k[330]*y[IDX_EM] + k[855]*y[IDX_OHI] + k[1148];
     data[873] = 0.0 + k[331]*y[IDX_EM] + k[332]*y[IDX_EM] + k[1287];
     data[874] = 0.0 + k[520]*y[IDX_H2II];
-    data[875] = 0.0 - k[130]*y[IDX_HI] + k[536]*y[IDX_H2I] +
-        k[654]*y[IDX_CH2I] + k[658]*y[IDX_CH4I] + k[660]*y[IDX_CH4I] +
-        k[662]*y[IDX_CHI] + k[671]*y[IDX_H2COI] + k[673]*y[IDX_H2OI] +
-        k[675]*y[IDX_H2SiOI] + k[676]*y[IDX_HCNI] + k[678]*y[IDX_HCNI] +
-        k[680]*y[IDX_HCOI] + k[683]*y[IDX_HNCI] + k[684]*y[IDX_HNCI] +
-        k[686]*y[IDX_HNOI] + k[690]*y[IDX_NH2I] + k[692]*y[IDX_NH3I] +
-        k[693]*y[IDX_NHI] + k[699]*y[IDX_OHI] + k[704]*y[IDX_SiH2I] +
-        k[706]*y[IDX_SiH3I] + k[708]*y[IDX_SiH4I] + k[709]*y[IDX_SiHI];
+    data[875] = 0.0 - k[130]*y[IDX_HI] + k[536]*y[IDX_H2I] + k[654]*y[IDX_CH2I] +
+        k[658]*y[IDX_CH4I] + k[660]*y[IDX_CH4I] + k[662]*y[IDX_CHI] +
+        k[671]*y[IDX_H2COI] + k[673]*y[IDX_H2OI] + k[675]*y[IDX_H2SiOI] +
+        k[676]*y[IDX_HCNI] + k[678]*y[IDX_HCNI] + k[680]*y[IDX_HCOI] +
+        k[683]*y[IDX_HNCI] + k[684]*y[IDX_HNCI] + k[686]*y[IDX_HNOI] +
+        k[690]*y[IDX_NH2I] + k[692]*y[IDX_NH3I] + k[693]*y[IDX_NHI] +
+        k[699]*y[IDX_OHI] + k[704]*y[IDX_SiH2I] + k[706]*y[IDX_SiH3I] +
+        k[708]*y[IDX_SiH4I] + k[709]*y[IDX_SiHI];
     data[876] = 0.0 + k[336]*y[IDX_EM] - k[618]*y[IDX_HI];
     data[877] = 0.0 + k[262] + k[683]*y[IDX_HeII] + k[684]*y[IDX_HeII] -
         k[979]*y[IDX_HI] + k[979]*y[IDX_HI] + k[1151];
-    data[878] = 0.0 + k[264] + k[686]*y[IDX_HeII] - k[980]*y[IDX_HI] -
-        k[981]*y[IDX_HI] - k[982]*y[IDX_HI] + k[1068]*y[IDX_OI] + k[1153];
+    data[878] = 0.0 + k[264] + k[686]*y[IDX_HeII] - k[980]*y[IDX_HI] - k[981]*y[IDX_HI]
+        - k[982]*y[IDX_HI] + k[1068]*y[IDX_OI] + k[1153];
     data[879] = 0.0 + k[334]*y[IDX_EM];
     data[880] = 0.0 + k[335]*y[IDX_EM];
     data[881] = 0.0 + k[83]*y[IDX_HII] + k[591]*y[IDX_H3II];
-    data[882] = 0.0 + k[408]*y[IDX_CHII] + k[522]*y[IDX_H2II] +
-        k[736]*y[IDX_CH2II] + k[738]*y[IDX_H2OII] + k[740]*y[IDX_NHII] +
-        k[741]*y[IDX_NH2II] + k[743]*y[IDX_OHII] + k[928]*y[IDX_CHI] +
-        k[960]*y[IDX_H2I] + k[1005]*y[IDX_CH2I] + k[1006]*y[IDX_CH2I] +
-        k[1008]*y[IDX_CH3I] + k[1010]*y[IDX_CH3I] + k[1010]*y[IDX_CH3I] +
-        k[1016]*y[IDX_HCOI] + k[1018]*y[IDX_NHI] + k[1025]*y[IDX_OHI];
-    data[883] = 0.0 + k[468]*y[IDX_CHI] + k[538]*y[IDX_H2I] +
-        k[712]*y[IDX_CH3OHI] + k[714]*y[IDX_CH3OHI] + k[715]*y[IDX_CH3OHI] +
-        k[716]*y[IDX_CH4I] + k[717]*y[IDX_CH4I] + k[718]*y[IDX_CH4I] +
-        k[718]*y[IDX_CH4I] + k[726]*y[IDX_NHI];
+    data[882] = 0.0 + k[408]*y[IDX_CHII] + k[522]*y[IDX_H2II] + k[736]*y[IDX_CH2II] +
+        k[738]*y[IDX_H2OII] + k[740]*y[IDX_NHII] + k[741]*y[IDX_NH2II] +
+        k[743]*y[IDX_OHII] + k[928]*y[IDX_CHI] + k[960]*y[IDX_H2I] +
+        k[1005]*y[IDX_CH2I] + k[1006]*y[IDX_CH2I] + k[1008]*y[IDX_CH3I] +
+        k[1010]*y[IDX_CH3I] + k[1010]*y[IDX_CH3I] + k[1016]*y[IDX_HCOI] +
+        k[1018]*y[IDX_NHI] + k[1025]*y[IDX_OHI];
+    data[883] = 0.0 + k[468]*y[IDX_CHI] + k[538]*y[IDX_H2I] + k[712]*y[IDX_CH3OHI] +
+        k[714]*y[IDX_CH3OHI] + k[715]*y[IDX_CH3OHI] + k[716]*y[IDX_CH4I] +
+        k[717]*y[IDX_CH4I] + k[718]*y[IDX_CH4I] + k[718]*y[IDX_CH4I] +
+        k[726]*y[IDX_NHI];
     data[884] = 0.0 + k[521]*y[IDX_H2II];
-    data[885] = 0.0 + k[456]*y[IDX_CH4I] + k[539]*y[IDX_H2I] +
-        k[730]*y[IDX_H2COI];
+    data[885] = 0.0 + k[456]*y[IDX_CH4I] + k[539]*y[IDX_H2I] + k[730]*y[IDX_H2COI];
     data[886] = 0.0 + k[338]*y[IDX_EM] + k[1302];
-    data[887] = 0.0 + k[86]*y[IDX_HII] + k[274] + k[375]*y[IDX_CII] +
-        k[523]*y[IDX_H2II] + k[693]*y[IDX_HeII] + k[726]*y[IDX_NII] +
-        k[803]*y[IDX_OII] + k[869]*y[IDX_CI] + k[962]*y[IDX_H2I] -
-        k[985]*y[IDX_HI] + k[1018]*y[IDX_NI] + k[1039]*y[IDX_NHI] +
-        k[1039]*y[IDX_NHI] + k[1039]*y[IDX_NHI] + k[1039]*y[IDX_NHI] +
-        k[1042]*y[IDX_NOI] + k[1046]*y[IDX_OI] + k[1049]*y[IDX_OHI] + k[1162];
-    data[888] = 0.0 + k[340]*y[IDX_EM] + k[541]*y[IDX_H2I] +
-        k[740]*y[IDX_NI];
-    data[889] = 0.0 + k[84]*y[IDX_HII] + k[270] + k[373]*y[IDX_CII] +
-        k[690]*y[IDX_HeII] + k[866]*y[IDX_CI] + k[867]*y[IDX_CI] +
-        k[961]*y[IDX_H2I] - k[983]*y[IDX_HI] + k[1030]*y[IDX_NOI] +
-        k[1072]*y[IDX_OI] + k[1158];
-    data[890] = 0.0 + k[341]*y[IDX_EM] + k[341]*y[IDX_EM] + k[342]*y[IDX_EM]
-        + k[542]*y[IDX_H2I] + k[741]*y[IDX_NI] + k[827]*y[IDX_OI];
-    data[891] = 0.0 + k[85]*y[IDX_HII] + k[271] + k[692]*y[IDX_HeII] -
-        k[984]*y[IDX_HI] + k[1159];
-    data[892] = 0.0 + k[343]*y[IDX_EM] + k[344]*y[IDX_EM] +
-        k[344]*y[IDX_EM];
-    data[893] = 0.0 + k[87]*y[IDX_HII] + k[524]*y[IDX_H2II] +
-        k[888]*y[IDX_CH2I] + k[932]*y[IDX_CHI] - k[987]*y[IDX_HI] -
-        k[988]*y[IDX_HI] + k[1030]*y[IDX_NH2I] + k[1042]*y[IDX_NHI] +
-        k[1099]*y[IDX_OHI];
+    data[887] = 0.0 + k[86]*y[IDX_HII] + k[274] + k[375]*y[IDX_CII] + k[523]*y[IDX_H2II]
+        + k[693]*y[IDX_HeII] + k[726]*y[IDX_NII] + k[803]*y[IDX_OII] +
+        k[869]*y[IDX_CI] + k[962]*y[IDX_H2I] - k[985]*y[IDX_HI] +
+        k[1018]*y[IDX_NI] + k[1039]*y[IDX_NHI] + k[1039]*y[IDX_NHI] +
+        k[1039]*y[IDX_NHI] + k[1039]*y[IDX_NHI] + k[1042]*y[IDX_NOI] +
+        k[1046]*y[IDX_OI] + k[1049]*y[IDX_OHI] + k[1162];
+    data[888] = 0.0 + k[340]*y[IDX_EM] + k[541]*y[IDX_H2I] + k[740]*y[IDX_NI];
+    data[889] = 0.0 + k[84]*y[IDX_HII] + k[270] + k[373]*y[IDX_CII] + k[690]*y[IDX_HeII]
+        + k[866]*y[IDX_CI] + k[867]*y[IDX_CI] + k[961]*y[IDX_H2I] -
+        k[983]*y[IDX_HI] + k[1030]*y[IDX_NOI] + k[1072]*y[IDX_OI] + k[1158];
+    data[890] = 0.0 + k[341]*y[IDX_EM] + k[341]*y[IDX_EM] + k[342]*y[IDX_EM] +
+        k[542]*y[IDX_H2I] + k[741]*y[IDX_NI] + k[827]*y[IDX_OI];
+    data[891] = 0.0 + k[85]*y[IDX_HII] + k[271] + k[692]*y[IDX_HeII] - k[984]*y[IDX_HI]
+        + k[1159];
+    data[892] = 0.0 + k[343]*y[IDX_EM] + k[344]*y[IDX_EM] + k[344]*y[IDX_EM];
+    data[893] = 0.0 + k[87]*y[IDX_HII] + k[524]*y[IDX_H2II] + k[888]*y[IDX_CH2I] +
+        k[932]*y[IDX_CHI] - k[987]*y[IDX_HI] - k[988]*y[IDX_HI] +
+        k[1030]*y[IDX_NH2I] + k[1042]*y[IDX_NHI] + k[1099]*y[IDX_OHI];
     data[894] = 0.0 - k[986]*y[IDX_HI];
-    data[895] = 0.0 + k[89]*y[IDX_HII] + k[414]*y[IDX_CHII] +
-        k[421]*y[IDX_CH2II] + k[443]*y[IDX_CH3II] + k[526]*y[IDX_H2II] +
-        k[598]*y[IDX_H3II] + k[827]*y[IDX_NH2II] + k[830]*y[IDX_OHII] +
-        k[832]*y[IDX_SiHII] + k[833]*y[IDX_SiH2II] + k[895]*y[IDX_CH2I] +
-        k[895]*y[IDX_CH2I] + k[896]*y[IDX_CH2I] + k[915]*y[IDX_CH3I] +
-        k[916]*y[IDX_CH3I] + k[939]*y[IDX_CHI] + k[965]*y[IDX_H2I] +
-        k[1046]*y[IDX_NHI] + k[1065]*y[IDX_HCNI] + k[1066]*y[IDX_HCOI] +
-        k[1068]*y[IDX_HNOI] + k[1072]*y[IDX_NH2I] + k[1080]*y[IDX_OHI] +
-        k[1086]*y[IDX_SiH2I] + k[1086]*y[IDX_SiH2I] + k[1087]*y[IDX_SiH3I] +
-        k[1089]*y[IDX_SiHI] - k[1207]*y[IDX_HI];
-    data[896] = 0.0 - k[131]*y[IDX_HI] + k[472]*y[IDX_CHI] +
-        k[543]*y[IDX_H2I] + k[803]*y[IDX_NHI] + k[819]*y[IDX_OHI];
+    data[895] = 0.0 + k[89]*y[IDX_HII] + k[414]*y[IDX_CHII] + k[421]*y[IDX_CH2II] +
+        k[443]*y[IDX_CH3II] + k[526]*y[IDX_H2II] + k[598]*y[IDX_H3II] +
+        k[827]*y[IDX_NH2II] + k[830]*y[IDX_OHII] + k[832]*y[IDX_SiHII] +
+        k[833]*y[IDX_SiH2II] + k[895]*y[IDX_CH2I] + k[895]*y[IDX_CH2I] +
+        k[896]*y[IDX_CH2I] + k[915]*y[IDX_CH3I] + k[916]*y[IDX_CH3I] +
+        k[939]*y[IDX_CHI] + k[965]*y[IDX_H2I] + k[1046]*y[IDX_NHI] +
+        k[1065]*y[IDX_HCNI] + k[1066]*y[IDX_HCOI] + k[1068]*y[IDX_HNOI] +
+        k[1072]*y[IDX_NH2I] + k[1080]*y[IDX_OHI] + k[1086]*y[IDX_SiH2I] +
+        k[1086]*y[IDX_SiH2I] + k[1087]*y[IDX_SiH3I] + k[1089]*y[IDX_SiHI] -
+        k[1207]*y[IDX_HI];
+    data[896] = 0.0 - k[131]*y[IDX_HI] + k[472]*y[IDX_CHI] + k[543]*y[IDX_H2I] +
+        k[803]*y[IDX_NHI] + k[819]*y[IDX_OHI];
     data[897] = 0.0 - k[12]*y[IDX_HI] + k[12]*y[IDX_HI] + k[88]*y[IDX_HII] +
         k[525]*y[IDX_H2II] + k[890]*y[IDX_CH2I] + k[890]*y[IDX_CH2I] +
         k[933]*y[IDX_CHI] + k[934]*y[IDX_CHI] + k[963]*y[IDX_H2I] -
         k[989]*y[IDX_HI];
     data[898] = 0.0 + k[551]*y[IDX_H2COI] + k[820]*y[IDX_CH3OHI];
-    data[899] = 0.0 + k[281] - k[990]*y[IDX_HI] - k[991]*y[IDX_HI] -
-        k[992]*y[IDX_HI] + k[1170];
+    data[899] = 0.0 + k[281] - k[990]*y[IDX_HI] - k[991]*y[IDX_HI] - k[992]*y[IDX_HI] +
+        k[1170];
     data[900] = 0.0 + k[347]*y[IDX_EM];
-    data[901] = 0.0 - k[993]*y[IDX_HI] - k[994]*y[IDX_HI] -
-        k[995]*y[IDX_HI];
+    data[901] = 0.0 - k[993]*y[IDX_HI] - k[994]*y[IDX_HI] - k[995]*y[IDX_HI];
     data[902] = 0.0 + k[7]*y[IDX_H2I] - k[13]*y[IDX_HI] + k[13]*y[IDX_HI] +
         k[13]*y[IDX_HI] + k[90]*y[IDX_HII] + k[284] + k[379]*y[IDX_CII] +
         k[527]*y[IDX_H2II] + k[699]*y[IDX_HeII] + k[819]*y[IDX_OII] +
@@ -4738,27 +4630,26 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
         k[996]*y[IDX_HI] + k[1025]*y[IDX_NI] + k[1049]*y[IDX_NHI] +
         k[1080]*y[IDX_OI] + k[1091]*y[IDX_CNI] + k[1092]*y[IDX_COI] +
         k[1099]*y[IDX_NOI] + k[1102]*y[IDX_SiI] + k[1174] - k[1208]*y[IDX_HI];
-    data[903] = 0.0 + k[348]*y[IDX_EM] + k[545]*y[IDX_H2I] +
-        k[743]*y[IDX_NI] + k[830]*y[IDX_OI] + k[1173];
+    data[903] = 0.0 + k[348]*y[IDX_EM] + k[545]*y[IDX_H2I] + k[743]*y[IDX_NI] +
+        k[830]*y[IDX_OI] + k[1173];
     data[904] = 0.0 + k[91]*y[IDX_HII] + k[1102]*y[IDX_OHI];
-    data[905] = 0.0 + k[476]*y[IDX_CHI] + k[572]*y[IDX_H2OI] +
-        k[859]*y[IDX_OHI] - k[1209]*y[IDX_HI];
+    data[905] = 0.0 + k[476]*y[IDX_CHI] + k[572]*y[IDX_H2OI] + k[859]*y[IDX_OHI] -
+        k[1209]*y[IDX_HI];
     data[906] = 0.0 + k[94]*y[IDX_HII];
     data[907] = 0.0 + k[92]*y[IDX_HII];
     data[908] = 0.0 + k[93]*y[IDX_HII];
-    data[909] = 0.0 + k[98]*y[IDX_HII] + k[292] + k[381]*y[IDX_CII] +
-        k[709]*y[IDX_HeII] + k[877]*y[IDX_CI] + k[1089]*y[IDX_OI] + k[1188];
-    data[910] = 0.0 + k[352]*y[IDX_EM] + k[394]*y[IDX_CI] - k[619]*y[IDX_HI]
-        + k[832]*y[IDX_OI] + k[1179];
-    data[911] = 0.0 + k[95]*y[IDX_HII] + k[289] + k[704]*y[IDX_HeII] +
-        k[1086]*y[IDX_OI] + k[1086]*y[IDX_OI] + k[1181];
-    data[912] = 0.0 + k[354]*y[IDX_EM] + k[354]*y[IDX_EM] + k[355]*y[IDX_EM]
-        + k[833]*y[IDX_OI];
-    data[913] = 0.0 + k[96]*y[IDX_HII] + k[290] + k[706]*y[IDX_HeII] +
-        k[1087]*y[IDX_OI] + k[1182];
+    data[909] = 0.0 + k[98]*y[IDX_HII] + k[292] + k[381]*y[IDX_CII] + k[709]*y[IDX_HeII]
+        + k[877]*y[IDX_CI] + k[1089]*y[IDX_OI] + k[1188];
+    data[910] = 0.0 + k[352]*y[IDX_EM] + k[394]*y[IDX_CI] - k[619]*y[IDX_HI] +
+        k[832]*y[IDX_OI] + k[1179];
+    data[911] = 0.0 + k[95]*y[IDX_HII] + k[289] + k[704]*y[IDX_HeII] + k[1086]*y[IDX_OI]
+        + k[1086]*y[IDX_OI] + k[1181];
+    data[912] = 0.0 + k[354]*y[IDX_EM] + k[354]*y[IDX_EM] + k[355]*y[IDX_EM] +
+        k[833]*y[IDX_OI];
+    data[913] = 0.0 + k[96]*y[IDX_HII] + k[290] + k[706]*y[IDX_HeII] + k[1087]*y[IDX_OI]
+        + k[1182];
     data[914] = 0.0 + k[356]*y[IDX_EM];
-    data[915] = 0.0 + k[97]*y[IDX_HII] + k[708]*y[IDX_HeII] + k[1186] +
-        k[1187];
+    data[915] = 0.0 + k[97]*y[IDX_HII] + k[708]*y[IDX_HeII] + k[1186] + k[1187];
     data[916] = 0.0 + k[359]*y[IDX_EM] + k[546]*y[IDX_H2I];
     data[917] = 0.0 + k[361]*y[IDX_EM] + k[1248];
     data[918] = 0.0 + k[99]*y[IDX_HII];
@@ -4769,47 +4660,43 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
     data[923] = 0.0 - k[75]*y[IDX_HII] - k[491]*y[IDX_HII];
     data[924] = 0.0 + k[1111];
     data[925] = 0.0 - k[76]*y[IDX_HII];
-    data[926] = 0.0 - k[492]*y[IDX_HII] - k[493]*y[IDX_HII] -
-        k[494]*y[IDX_HII];
-    data[927] = 0.0 - k[77]*y[IDX_HII] - k[495]*y[IDX_HII] +
-        k[661]*y[IDX_HeII];
+    data[926] = 0.0 - k[492]*y[IDX_HII] - k[493]*y[IDX_HII] - k[494]*y[IDX_HII];
+    data[927] = 0.0 - k[77]*y[IDX_HII] - k[495]*y[IDX_HII] + k[661]*y[IDX_HeII];
     data[928] = 0.0 + k[126]*y[IDX_HI];
     data[929] = 0.0 + k[127]*y[IDX_HI];
     data[930] = 0.0 - k[496]*y[IDX_HII];
     data[931] = 0.0 - k[1216]*y[IDX_HII];
-    data[932] = 0.0 + k[126]*y[IDX_CNII] + k[127]*y[IDX_COII] +
-        k[128]*y[IDX_H2II] + k[129]*y[IDX_HCNII] + k[130]*y[IDX_HeII] +
-        k[131]*y[IDX_OII] + k[236] + k[258] - k[1197]*y[IDX_HII];
-    data[933] = 0.0 - k[1]*y[IDX_HNCI] + k[1]*y[IDX_HNCI] -
-        k[75]*y[IDX_CH2I] - k[76]*y[IDX_CH3I] - k[77]*y[IDX_CH4I] -
-        k[78]*y[IDX_CHI] - k[79]*y[IDX_H2COI] - k[80]*y[IDX_H2OI] -
-        k[81]*y[IDX_HCNI] - k[82]*y[IDX_HCOI] - k[83]*y[IDX_MgI] -
-        k[84]*y[IDX_NH2I] - k[85]*y[IDX_NH3I] - k[86]*y[IDX_NHI] -
-        k[87]*y[IDX_NOI] - k[88]*y[IDX_O2I] - k[89]*y[IDX_OI] - k[90]*y[IDX_OHI]
-        - k[91]*y[IDX_SiI] - k[92]*y[IDX_SiC2I] - k[93]*y[IDX_SiC3I] -
-        k[94]*y[IDX_SiCI] - k[95]*y[IDX_SiH2I] - k[96]*y[IDX_SiH3I] -
-        k[97]*y[IDX_SiH4I] - k[98]*y[IDX_SiHI] - k[99]*y[IDX_SiOI] -
-        k[491]*y[IDX_CH2I] - k[492]*y[IDX_CH3OHI] - k[493]*y[IDX_CH3OHI] -
-        k[494]*y[IDX_CH3OHI] - k[495]*y[IDX_CH4I] - k[496]*y[IDX_CO2I] -
-        k[497]*y[IDX_H2COI] - k[498]*y[IDX_H2COI] - k[499]*y[IDX_H2SiOI] -
-        k[500]*y[IDX_HCOI] - k[501]*y[IDX_HCOI] - k[502]*y[IDX_HNCOI] -
-        k[503]*y[IDX_HNOI] - k[504]*y[IDX_NO2I] - k[505]*y[IDX_SiH2I] -
-        k[506]*y[IDX_SiH3I] - k[507]*y[IDX_SiH4I] - k[508]*y[IDX_SiHI] -
-        k[1197]*y[IDX_HI] - k[1198]*y[IDX_HeI] - k[1216]*y[IDX_EM];
+    data[932] = 0.0 + k[126]*y[IDX_CNII] + k[127]*y[IDX_COII] + k[128]*y[IDX_H2II] +
+        k[129]*y[IDX_HCNII] + k[130]*y[IDX_HeII] + k[131]*y[IDX_OII] + k[236] +
+        k[258] - k[1197]*y[IDX_HII];
+    data[933] = 0.0 - k[1]*y[IDX_HNCI] + k[1]*y[IDX_HNCI] - k[75]*y[IDX_CH2I] -
+        k[76]*y[IDX_CH3I] - k[77]*y[IDX_CH4I] - k[78]*y[IDX_CHI] -
+        k[79]*y[IDX_H2COI] - k[80]*y[IDX_H2OI] - k[81]*y[IDX_HCNI] -
+        k[82]*y[IDX_HCOI] - k[83]*y[IDX_MgI] - k[84]*y[IDX_NH2I] -
+        k[85]*y[IDX_NH3I] - k[86]*y[IDX_NHI] - k[87]*y[IDX_NOI] -
+        k[88]*y[IDX_O2I] - k[89]*y[IDX_OI] - k[90]*y[IDX_OHI] - k[91]*y[IDX_SiI]
+        - k[92]*y[IDX_SiC2I] - k[93]*y[IDX_SiC3I] - k[94]*y[IDX_SiCI] -
+        k[95]*y[IDX_SiH2I] - k[96]*y[IDX_SiH3I] - k[97]*y[IDX_SiH4I] -
+        k[98]*y[IDX_SiHI] - k[99]*y[IDX_SiOI] - k[491]*y[IDX_CH2I] -
+        k[492]*y[IDX_CH3OHI] - k[493]*y[IDX_CH3OHI] - k[494]*y[IDX_CH3OHI] -
+        k[495]*y[IDX_CH4I] - k[496]*y[IDX_CO2I] - k[497]*y[IDX_H2COI] -
+        k[498]*y[IDX_H2COI] - k[499]*y[IDX_H2SiOI] - k[500]*y[IDX_HCOI] -
+        k[501]*y[IDX_HCOI] - k[502]*y[IDX_HNCOI] - k[503]*y[IDX_HNOI] -
+        k[504]*y[IDX_NO2I] - k[505]*y[IDX_SiH2I] - k[506]*y[IDX_SiH3I] -
+        k[507]*y[IDX_SiH4I] - k[508]*y[IDX_SiHI] - k[1197]*y[IDX_HI] -
+        k[1198]*y[IDX_HeI] - k[1216]*y[IDX_EM];
     data[934] = 0.0 + k[233] + k[536]*y[IDX_HeII];
     data[935] = 0.0 + k[128]*y[IDX_HI] + k[1134];
-    data[936] = 0.0 - k[79]*y[IDX_HII] - k[497]*y[IDX_HII] -
-        k[498]*y[IDX_HII];
+    data[936] = 0.0 - k[79]*y[IDX_HII] - k[497]*y[IDX_HII] - k[498]*y[IDX_HII];
     data[937] = 0.0 - k[80]*y[IDX_HII] + k[674]*y[IDX_HeII];
     data[938] = 0.0 - k[499]*y[IDX_HII];
     data[939] = 0.0 + k[1146];
     data[940] = 0.0 - k[81]*y[IDX_HII];
     data[941] = 0.0 + k[129]*y[IDX_HI];
-    data[942] = 0.0 - k[82]*y[IDX_HII] - k[500]*y[IDX_HII] -
-        k[501]*y[IDX_HII];
+    data[942] = 0.0 - k[82]*y[IDX_HII] - k[500]*y[IDX_HII] - k[501]*y[IDX_HII];
     data[943] = 0.0 - k[1198]*y[IDX_HII];
-    data[944] = 0.0 + k[130]*y[IDX_HI] + k[536]*y[IDX_H2I] +
-        k[661]*y[IDX_CH4I] + k[674]*y[IDX_H2OI] + k[687]*y[IDX_HNOI];
+    data[944] = 0.0 + k[130]*y[IDX_HI] + k[536]*y[IDX_H2I] + k[661]*y[IDX_CH4I] +
+        k[674]*y[IDX_H2OI] + k[687]*y[IDX_HNOI];
     data[945] = 0.0 - k[1]*y[IDX_HII] + k[1]*y[IDX_HII];
     data[946] = 0.0 - k[502]*y[IDX_HII];
     data[947] = 0.0 - k[503]*y[IDX_HII] + k[687]*y[IDX_HeII];
@@ -4833,58 +4720,54 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
     data[965] = 0.0 - k[96]*y[IDX_HII] - k[506]*y[IDX_HII];
     data[966] = 0.0 - k[97]*y[IDX_HII] - k[507]*y[IDX_HII];
     data[967] = 0.0 - k[99]*y[IDX_HII];
-    data[968] = 0.0 + k[384]*y[IDX_H3OII] + k[576]*y[IDX_H3II] -
-        k[955]*y[IDX_H2I] - k[1200]*y[IDX_H2I];
-    data[969] = 0.0 + k[374]*y[IDX_NH3I] + k[380]*y[IDX_SiH2I] -
-        k[528]*y[IDX_H2I] - k[1199]*y[IDX_H2I];
-    data[970] = 0.0 - k[2]*y[IDX_H2I] + k[2]*y[IDX_H2I] + k[102]*y[IDX_H2II]
-        + k[580]*y[IDX_H3II] - k[958]*y[IDX_H2I] + k[970]*y[IDX_HI] -
+    data[968] = 0.0 + k[384]*y[IDX_H3OII] + k[576]*y[IDX_H3II] - k[955]*y[IDX_H2I] -
+        k[1200]*y[IDX_H2I];
+    data[969] = 0.0 + k[374]*y[IDX_NH3I] + k[380]*y[IDX_SiH2I] - k[528]*y[IDX_H2I] -
+        k[1199]*y[IDX_H2I];
+    data[970] = 0.0 - k[2]*y[IDX_H2I] + k[2]*y[IDX_H2I] + k[102]*y[IDX_H2II] +
+        k[580]*y[IDX_H3II] - k[958]*y[IDX_H2I] + k[970]*y[IDX_HI] -
         k[1201]*y[IDX_H2I];
-    data[971] = 0.0 + k[404]*y[IDX_H2OI] + k[409]*y[IDX_NH2I] +
-        k[410]*y[IDX_NHI] + k[415]*y[IDX_OHI] - k[529]*y[IDX_H2I] +
-        k[614]*y[IDX_HI];
-    data[972] = 0.0 + k[100]*y[IDX_H2II] + k[491]*y[IDX_HII] +
-        k[577]*y[IDX_H3II] + k[653]*y[IDX_HeII] + k[889]*y[IDX_O2I] +
-        k[894]*y[IDX_OI] - k[956]*y[IDX_H2I] + k[967]*y[IDX_HI];
-    data[973] = 0.0 + k[295]*y[IDX_EM] - k[530]*y[IDX_H2I] +
-        k[615]*y[IDX_HI] + k[1109];
+    data[971] = 0.0 + k[404]*y[IDX_H2OI] + k[409]*y[IDX_NH2I] + k[410]*y[IDX_NHI] +
+        k[415]*y[IDX_OHI] - k[529]*y[IDX_H2I] + k[614]*y[IDX_HI];
+    data[972] = 0.0 + k[100]*y[IDX_H2II] + k[491]*y[IDX_HII] + k[577]*y[IDX_H3II] +
+        k[653]*y[IDX_HeII] + k[889]*y[IDX_O2I] + k[894]*y[IDX_OI] -
+        k[956]*y[IDX_H2I] + k[967]*y[IDX_HI];
+    data[973] = 0.0 + k[295]*y[IDX_EM] - k[530]*y[IDX_H2I] + k[615]*y[IDX_HI] + k[1109];
     data[974] = 0.0 + k[246] + k[578]*y[IDX_H3II] + k[655]*y[IDX_HeII] +
         k[915]*y[IDX_OI] + k[918]*y[IDX_OHI] - k[957]*y[IDX_H2I] +
         k[968]*y[IDX_HI] + k[1009]*y[IDX_NI] + k[1118];
-    data[975] = 0.0 + k[299]*y[IDX_EM] + k[444]*y[IDX_OI] +
-        k[445]*y[IDX_OHI] + k[616]*y[IDX_HI] + k[794]*y[IDX_NHI] + k[1114];
-    data[976] = 0.0 + k[247] + k[493]*y[IDX_HII] + k[494]*y[IDX_HII] +
-        k[494]*y[IDX_HII] + k[579]*y[IDX_H3II] + k[1119];
+    data[975] = 0.0 + k[299]*y[IDX_EM] + k[444]*y[IDX_OI] + k[445]*y[IDX_OHI] +
+        k[616]*y[IDX_HI] + k[794]*y[IDX_NHI] + k[1114];
+    data[976] = 0.0 + k[247] + k[493]*y[IDX_HII] + k[494]*y[IDX_HII] + k[494]*y[IDX_HII]
+        + k[579]*y[IDX_H3II] + k[1119];
     data[977] = 0.0 + k[101]*y[IDX_H2II] + k[249] + k[455]*y[IDX_N2II] +
         k[495]*y[IDX_HII] + k[511]*y[IDX_H2II] + k[658]*y[IDX_HeII] +
         k[659]*y[IDX_HeII] + k[717]*y[IDX_NII] + k[969]*y[IDX_HI] + k[1124] +
         k[1127];
     data[978] = 0.0 + k[617]*y[IDX_HI] + k[1122];
-    data[979] = 0.0 + k[103]*y[IDX_H2II] + k[581]*y[IDX_H3II] -
-        k[959]*y[IDX_H2I];
+    data[979] = 0.0 + k[103]*y[IDX_H2II] + k[581]*y[IDX_H3II] - k[959]*y[IDX_H2I];
     data[980] = 0.0 - k[531]*y[IDX_H2I];
-    data[981] = 0.0 + k[104]*y[IDX_H2II] + k[583]*y[IDX_H3II] +
-        k[584]*y[IDX_H3II];
+    data[981] = 0.0 + k[104]*y[IDX_H2II] + k[583]*y[IDX_H3II] + k[584]*y[IDX_H3II];
     data[982] = 0.0 - k[532]*y[IDX_H2I] - k[533]*y[IDX_H2I];
     data[983] = 0.0 + k[582]*y[IDX_H3II];
-    data[984] = 0.0 - k[8]*y[IDX_H2I] + k[295]*y[IDX_CH2II] +
-        k[299]*y[IDX_CH3II] + k[307]*y[IDX_H2COII] + k[311]*y[IDX_H2NOII] +
-        k[312]*y[IDX_H2OII] + k[315]*y[IDX_H3II] + k[319]*y[IDX_H3COII] +
-        k[323]*y[IDX_H3OII] + k[324]*y[IDX_H3OII] + k[353]*y[IDX_SiH2II] +
-        k[357]*y[IDX_SiH3II] + k[358]*y[IDX_SiH4II] + k[360]*y[IDX_SiH5II];
-    data[985] = 0.0 - k[10]*y[IDX_H2I] + k[128]*y[IDX_H2II] +
-        k[614]*y[IDX_CHII] + k[615]*y[IDX_CH2II] + k[616]*y[IDX_CH3II] +
-        k[617]*y[IDX_CH4II] + k[619]*y[IDX_SiHII] + k[967]*y[IDX_CH2I] +
-        k[968]*y[IDX_CH3I] + k[969]*y[IDX_CH4I] + k[970]*y[IDX_CHI] +
-        k[973]*y[IDX_H2CNI] + k[974]*y[IDX_H2COI] + k[975]*y[IDX_H2OI] +
-        k[976]*y[IDX_HCNI] + k[977]*y[IDX_HCOI] + k[981]*y[IDX_HNOI] +
-        k[983]*y[IDX_NH2I] + k[984]*y[IDX_NH3I] + k[985]*y[IDX_NHI] +
-        k[991]*y[IDX_O2HI] + k[996]*y[IDX_OHI];
-    data[986] = 0.0 + k[491]*y[IDX_CH2I] + k[493]*y[IDX_CH3OHI] +
-        k[494]*y[IDX_CH3OHI] + k[494]*y[IDX_CH3OHI] + k[495]*y[IDX_CH4I] +
-        k[497]*y[IDX_H2COI] + k[498]*y[IDX_H2COI] + k[499]*y[IDX_H2SiOI] +
-        k[500]*y[IDX_HCOI] + k[503]*y[IDX_HNOI] + k[505]*y[IDX_SiH2I] +
-        k[506]*y[IDX_SiH3I] + k[507]*y[IDX_SiH4I] + k[508]*y[IDX_SiHI];
+    data[984] = 0.0 - k[8]*y[IDX_H2I] + k[295]*y[IDX_CH2II] + k[299]*y[IDX_CH3II] +
+        k[307]*y[IDX_H2COII] + k[311]*y[IDX_H2NOII] + k[312]*y[IDX_H2OII] +
+        k[315]*y[IDX_H3II] + k[319]*y[IDX_H3COII] + k[323]*y[IDX_H3OII] +
+        k[324]*y[IDX_H3OII] + k[353]*y[IDX_SiH2II] + k[357]*y[IDX_SiH3II] +
+        k[358]*y[IDX_SiH4II] + k[360]*y[IDX_SiH5II];
+    data[985] = 0.0 - k[10]*y[IDX_H2I] + k[128]*y[IDX_H2II] + k[614]*y[IDX_CHII] +
+        k[615]*y[IDX_CH2II] + k[616]*y[IDX_CH3II] + k[617]*y[IDX_CH4II] +
+        k[619]*y[IDX_SiHII] + k[967]*y[IDX_CH2I] + k[968]*y[IDX_CH3I] +
+        k[969]*y[IDX_CH4I] + k[970]*y[IDX_CHI] + k[973]*y[IDX_H2CNI] +
+        k[974]*y[IDX_H2COI] + k[975]*y[IDX_H2OI] + k[976]*y[IDX_HCNI] +
+        k[977]*y[IDX_HCOI] + k[981]*y[IDX_HNOI] + k[983]*y[IDX_NH2I] +
+        k[984]*y[IDX_NH3I] + k[985]*y[IDX_NHI] + k[991]*y[IDX_O2HI] +
+        k[996]*y[IDX_OHI];
+    data[986] = 0.0 + k[491]*y[IDX_CH2I] + k[493]*y[IDX_CH3OHI] + k[494]*y[IDX_CH3OHI] +
+        k[494]*y[IDX_CH3OHI] + k[495]*y[IDX_CH4I] + k[497]*y[IDX_H2COI] +
+        k[498]*y[IDX_H2COI] + k[499]*y[IDX_H2SiOI] + k[500]*y[IDX_HCOI] +
+        k[503]*y[IDX_HNOI] + k[505]*y[IDX_SiH2I] + k[506]*y[IDX_SiH3I] +
+        k[507]*y[IDX_SiH4I] + k[508]*y[IDX_SiHI];
     data[987] = 0.0 - k[2]*y[IDX_CHI] + k[2]*y[IDX_CHI] - k[3]*y[IDX_H2I] -
         k[3]*y[IDX_H2I] - k[3]*y[IDX_H2I] - k[3]*y[IDX_H2I] + k[3]*y[IDX_H2I] +
         k[3]*y[IDX_H2I] - k[4]*y[IDX_H2OI] + k[4]*y[IDX_H2OI] -
@@ -4904,102 +4787,92 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
         k[964]*y[IDX_O2I] - k[965]*y[IDX_OI] - k[966]*y[IDX_OHI] -
         k[1199]*y[IDX_CII] - k[1200]*y[IDX_CI] - k[1201]*y[IDX_CHI] -
         k[1202]*y[IDX_SiII] - k[1203]*y[IDX_SiHII] - k[1204]*y[IDX_SiH3II];
-    data[988] = 0.0 + k[100]*y[IDX_CH2I] + k[101]*y[IDX_CH4I] +
-        k[102]*y[IDX_CHI] + k[103]*y[IDX_CNI] + k[104]*y[IDX_COI] +
-        k[105]*y[IDX_H2COI] + k[106]*y[IDX_H2OI] + k[107]*y[IDX_HCNI] +
-        k[108]*y[IDX_HCOI] + k[109]*y[IDX_NH2I] + k[110]*y[IDX_NH3I] +
-        k[111]*y[IDX_NHI] + k[112]*y[IDX_NOI] + k[113]*y[IDX_O2I] +
-        k[114]*y[IDX_OHI] + k[128]*y[IDX_HI] + k[511]*y[IDX_CH4I] -
-        k[516]*y[IDX_H2I] + k[517]*y[IDX_H2COI];
+    data[988] = 0.0 + k[100]*y[IDX_CH2I] + k[101]*y[IDX_CH4I] + k[102]*y[IDX_CHI] +
+        k[103]*y[IDX_CNI] + k[104]*y[IDX_COI] + k[105]*y[IDX_H2COI] +
+        k[106]*y[IDX_H2OI] + k[107]*y[IDX_HCNI] + k[108]*y[IDX_HCOI] +
+        k[109]*y[IDX_NH2I] + k[110]*y[IDX_NH3I] + k[111]*y[IDX_NHI] +
+        k[112]*y[IDX_NOI] + k[113]*y[IDX_O2I] + k[114]*y[IDX_OHI] +
+        k[128]*y[IDX_HI] + k[511]*y[IDX_CH4I] - k[516]*y[IDX_H2I] +
+        k[517]*y[IDX_H2COI];
     data[989] = 0.0 + k[973]*y[IDX_HI] + k[1060]*y[IDX_OI];
     data[990] = 0.0 + k[105]*y[IDX_H2II] + k[255] + k[497]*y[IDX_HII] +
         k[498]*y[IDX_HII] + k[517]*y[IDX_H2II] + k[585]*y[IDX_H3II] +
         k[670]*y[IDX_HeII] + k[974]*y[IDX_HI] + k[1136];
     data[991] = 0.0 + k[307]*y[IDX_EM];
     data[992] = 0.0 + k[311]*y[IDX_EM];
-    data[993] = 0.0 - k[4]*y[IDX_H2I] + k[4]*y[IDX_H2I] + k[106]*y[IDX_H2II]
-        + k[404]*y[IDX_CHII] + k[586]*y[IDX_H3II] + k[755]*y[IDX_NHII] +
+    data[993] = 0.0 - k[4]*y[IDX_H2I] + k[4]*y[IDX_H2I] + k[106]*y[IDX_H2II] +
+        k[404]*y[IDX_CHII] + k[586]*y[IDX_H3II] + k[755]*y[IDX_NHII] +
         k[975]*y[IDX_HI];
-    data[994] = 0.0 + k[312]*y[IDX_EM] - k[534]*y[IDX_H2I] +
-        k[739]*y[IDX_NI] + k[823]*y[IDX_OI];
+    data[994] = 0.0 + k[312]*y[IDX_EM] - k[534]*y[IDX_H2I] + k[739]*y[IDX_NI] +
+        k[823]*y[IDX_OI];
     data[995] = 0.0 + k[257] + k[499]*y[IDX_HII] + k[1143];
-    data[996] = 0.0 + k[315]*y[IDX_EM] + k[576]*y[IDX_CI] +
-        k[577]*y[IDX_CH2I] + k[578]*y[IDX_CH3I] + k[579]*y[IDX_CH3OHI] +
-        k[580]*y[IDX_CHI] + k[581]*y[IDX_CNI] + k[582]*y[IDX_CO2I] +
-        k[583]*y[IDX_COI] + k[584]*y[IDX_COI] + k[585]*y[IDX_H2COI] +
-        k[586]*y[IDX_H2OI] + k[587]*y[IDX_HCNI] + k[588]*y[IDX_HCOI] +
-        k[589]*y[IDX_HNCI] + k[590]*y[IDX_HNOI] + k[591]*y[IDX_MgI] +
-        k[592]*y[IDX_N2I] + k[593]*y[IDX_NH2I] + k[594]*y[IDX_NHI] +
-        k[595]*y[IDX_NO2I] + k[596]*y[IDX_NOI] + k[597]*y[IDX_O2I] +
-        k[599]*y[IDX_OI] + k[600]*y[IDX_OHI] + k[601]*y[IDX_SiI] +
-        k[602]*y[IDX_SiH2I] + k[603]*y[IDX_SiH3I] + k[604]*y[IDX_SiH4I] +
-        k[605]*y[IDX_SiHI] + k[606]*y[IDX_SiOI] + k[1146];
+    data[996] = 0.0 + k[315]*y[IDX_EM] + k[576]*y[IDX_CI] + k[577]*y[IDX_CH2I] +
+        k[578]*y[IDX_CH3I] + k[579]*y[IDX_CH3OHI] + k[580]*y[IDX_CHI] +
+        k[581]*y[IDX_CNI] + k[582]*y[IDX_CO2I] + k[583]*y[IDX_COI] +
+        k[584]*y[IDX_COI] + k[585]*y[IDX_H2COI] + k[586]*y[IDX_H2OI] +
+        k[587]*y[IDX_HCNI] + k[588]*y[IDX_HCOI] + k[589]*y[IDX_HNCI] +
+        k[590]*y[IDX_HNOI] + k[591]*y[IDX_MgI] + k[592]*y[IDX_N2I] +
+        k[593]*y[IDX_NH2I] + k[594]*y[IDX_NHI] + k[595]*y[IDX_NO2I] +
+        k[596]*y[IDX_NOI] + k[597]*y[IDX_O2I] + k[599]*y[IDX_OI] +
+        k[600]*y[IDX_OHI] + k[601]*y[IDX_SiI] + k[602]*y[IDX_SiH2I] +
+        k[603]*y[IDX_SiH3I] + k[604]*y[IDX_SiH4I] + k[605]*y[IDX_SiHI] +
+        k[606]*y[IDX_SiOI] + k[1146];
     data[997] = 0.0 + k[319]*y[IDX_EM];
-    data[998] = 0.0 + k[323]*y[IDX_EM] + k[324]*y[IDX_EM] +
-        k[384]*y[IDX_CI];
-    data[999] = 0.0 + k[107]*y[IDX_H2II] + k[587]*y[IDX_H3II] +
-        k[976]*y[IDX_HI];
+    data[998] = 0.0 + k[323]*y[IDX_EM] + k[324]*y[IDX_EM] + k[384]*y[IDX_CI];
+    data[999] = 0.0 + k[107]*y[IDX_H2II] + k[587]*y[IDX_H3II] + k[976]*y[IDX_HI];
     data[1000] = 0.0 - k[535]*y[IDX_H2I];
-    data[1001] = 0.0 + k[108]*y[IDX_H2II] + k[500]*y[IDX_HII] +
-        k[588]*y[IDX_H3II] + k[977]*y[IDX_HI] + k[997]*y[IDX_HCOI] +
-        k[997]*y[IDX_HCOI];
-    data[1002] = 0.0 - k[115]*y[IDX_H2I] - k[536]*y[IDX_H2I] +
-        k[653]*y[IDX_CH2I] + k[655]*y[IDX_CH3I] + k[658]*y[IDX_CH4I] +
-        k[659]*y[IDX_CH4I] + k[670]*y[IDX_H2COI] + k[689]*y[IDX_NH2I] +
-        k[691]*y[IDX_NH3I] + k[703]*y[IDX_SiH2I] + k[705]*y[IDX_SiH3I] +
-        k[707]*y[IDX_SiH4I] + k[707]*y[IDX_SiH4I] + k[708]*y[IDX_SiH4I];
+    data[1001] = 0.0 + k[108]*y[IDX_H2II] + k[500]*y[IDX_HII] + k[588]*y[IDX_H3II] +
+        k[977]*y[IDX_HI] + k[997]*y[IDX_HCOI] + k[997]*y[IDX_HCOI];
+    data[1002] = 0.0 - k[115]*y[IDX_H2I] - k[536]*y[IDX_H2I] + k[653]*y[IDX_CH2I] +
+        k[655]*y[IDX_CH3I] + k[658]*y[IDX_CH4I] + k[659]*y[IDX_CH4I] +
+        k[670]*y[IDX_H2COI] + k[689]*y[IDX_NH2I] + k[691]*y[IDX_NH3I] +
+        k[703]*y[IDX_SiH2I] + k[705]*y[IDX_SiH3I] + k[707]*y[IDX_SiH4I] +
+        k[707]*y[IDX_SiH4I] + k[708]*y[IDX_SiH4I];
     data[1003] = 0.0 - k[537]*y[IDX_H2I];
     data[1004] = 0.0 + k[589]*y[IDX_H3II];
-    data[1005] = 0.0 + k[503]*y[IDX_HII] + k[590]*y[IDX_H3II] +
-        k[981]*y[IDX_HI];
+    data[1005] = 0.0 + k[503]*y[IDX_HII] + k[590]*y[IDX_H3II] + k[981]*y[IDX_HI];
     data[1006] = 0.0 - k[5]*y[IDX_H2I] + k[5]*y[IDX_H2I];
     data[1007] = 0.0 + k[591]*y[IDX_H3II];
-    data[1008] = 0.0 + k[739]*y[IDX_H2OII] - k[960]*y[IDX_H2I] +
-        k[1009]*y[IDX_CH3I];
-    data[1009] = 0.0 - k[538]*y[IDX_H2I] + k[717]*y[IDX_CH4I] +
-        k[724]*y[IDX_NH3I];
+    data[1008] = 0.0 + k[739]*y[IDX_H2OII] - k[960]*y[IDX_H2I] + k[1009]*y[IDX_CH3I];
+    data[1009] = 0.0 - k[538]*y[IDX_H2I] + k[717]*y[IDX_CH4I] + k[724]*y[IDX_NH3I];
     data[1010] = 0.0 + k[592]*y[IDX_H3II];
     data[1011] = 0.0 + k[455]*y[IDX_CH4I] - k[539]*y[IDX_H2I];
-    data[1012] = 0.0 + k[111]*y[IDX_H2II] + k[410]*y[IDX_CHII] +
-        k[594]*y[IDX_H3II] + k[794]*y[IDX_CH3II] - k[962]*y[IDX_H2I] +
-        k[985]*y[IDX_HI] + k[1038]*y[IDX_NHI] + k[1038]*y[IDX_NHI];
-    data[1013] = 0.0 - k[540]*y[IDX_H2I] - k[541]*y[IDX_H2I] +
-        k[755]*y[IDX_H2OI];
-    data[1014] = 0.0 + k[109]*y[IDX_H2II] + k[409]*y[IDX_CHII] +
-        k[593]*y[IDX_H3II] + k[689]*y[IDX_HeII] - k[961]*y[IDX_H2I] +
-        k[983]*y[IDX_HI];
+    data[1012] = 0.0 + k[111]*y[IDX_H2II] + k[410]*y[IDX_CHII] + k[594]*y[IDX_H3II] +
+        k[794]*y[IDX_CH3II] - k[962]*y[IDX_H2I] + k[985]*y[IDX_HI] +
+        k[1038]*y[IDX_NHI] + k[1038]*y[IDX_NHI];
+    data[1013] = 0.0 - k[540]*y[IDX_H2I] - k[541]*y[IDX_H2I] + k[755]*y[IDX_H2OI];
+    data[1014] = 0.0 + k[109]*y[IDX_H2II] + k[409]*y[IDX_CHII] + k[593]*y[IDX_H3II] +
+        k[689]*y[IDX_HeII] - k[961]*y[IDX_H2I] + k[983]*y[IDX_HI];
     data[1015] = 0.0 - k[542]*y[IDX_H2I];
     data[1016] = 0.0 + k[110]*y[IDX_H2II] + k[273] + k[374]*y[IDX_CII] +
         k[691]*y[IDX_HeII] + k[724]*y[IDX_NII] + k[984]*y[IDX_HI] + k[1161];
     data[1017] = 0.0 + k[828]*y[IDX_OI];
     data[1018] = 0.0 + k[112]*y[IDX_H2II] + k[596]*y[IDX_H3II];
     data[1019] = 0.0 + k[595]*y[IDX_H3II];
-    data[1020] = 0.0 + k[444]*y[IDX_CH3II] + k[599]*y[IDX_H3II] +
-        k[823]*y[IDX_H2OII] + k[828]*y[IDX_NH3II] + k[834]*y[IDX_SiH3II] +
-        k[894]*y[IDX_CH2I] + k[915]*y[IDX_CH3I] - k[965]*y[IDX_H2I] +
-        k[1060]*y[IDX_H2CNI] + k[1085]*y[IDX_SiH2I];
+    data[1020] = 0.0 + k[444]*y[IDX_CH3II] + k[599]*y[IDX_H3II] + k[823]*y[IDX_H2OII] +
+        k[828]*y[IDX_NH3II] + k[834]*y[IDX_SiH3II] + k[894]*y[IDX_CH2I] +
+        k[915]*y[IDX_CH3I] - k[965]*y[IDX_H2I] + k[1060]*y[IDX_H2CNI] +
+        k[1085]*y[IDX_SiH2I];
     data[1021] = 0.0 - k[543]*y[IDX_H2I];
-    data[1022] = 0.0 - k[6]*y[IDX_H2I] + k[6]*y[IDX_H2I] +
-        k[113]*y[IDX_H2II] + k[597]*y[IDX_H3II] + k[889]*y[IDX_CH2I] -
-        k[963]*y[IDX_H2I] - k[964]*y[IDX_H2I];
+    data[1022] = 0.0 - k[6]*y[IDX_H2I] + k[6]*y[IDX_H2I] + k[113]*y[IDX_H2II] +
+        k[597]*y[IDX_H3II] + k[889]*y[IDX_CH2I] - k[963]*y[IDX_H2I] -
+        k[964]*y[IDX_H2I];
     data[1023] = 0.0 + k[991]*y[IDX_HI];
     data[1024] = 0.0 - k[544]*y[IDX_H2I];
-    data[1025] = 0.0 - k[7]*y[IDX_H2I] + k[7]*y[IDX_H2I] +
-        k[114]*y[IDX_H2II] + k[415]*y[IDX_CHII] + k[445]*y[IDX_CH3II] +
-        k[600]*y[IDX_H3II] + k[918]*y[IDX_CH3I] - k[966]*y[IDX_H2I] +
-        k[996]*y[IDX_HI];
+    data[1025] = 0.0 - k[7]*y[IDX_H2I] + k[7]*y[IDX_H2I] + k[114]*y[IDX_H2II] +
+        k[415]*y[IDX_CHII] + k[445]*y[IDX_CH3II] + k[600]*y[IDX_H3II] +
+        k[918]*y[IDX_CH3I] - k[966]*y[IDX_H2I] + k[996]*y[IDX_HI];
     data[1026] = 0.0 - k[545]*y[IDX_H2I];
     data[1027] = 0.0 + k[601]*y[IDX_H3II];
     data[1028] = 0.0 - k[1202]*y[IDX_H2I];
     data[1029] = 0.0 + k[508]*y[IDX_HII] + k[605]*y[IDX_H3II];
     data[1030] = 0.0 + k[619]*y[IDX_HI] - k[1203]*y[IDX_H2I];
-    data[1031] = 0.0 + k[380]*y[IDX_CII] + k[505]*y[IDX_HII] +
-        k[602]*y[IDX_H3II] + k[703]*y[IDX_HeII] + k[1085]*y[IDX_OI];
+    data[1031] = 0.0 + k[380]*y[IDX_CII] + k[505]*y[IDX_HII] + k[602]*y[IDX_H3II] +
+        k[703]*y[IDX_HeII] + k[1085]*y[IDX_OI];
     data[1032] = 0.0 + k[353]*y[IDX_EM];
-    data[1033] = 0.0 + k[506]*y[IDX_HII] + k[603]*y[IDX_H3II] +
-        k[705]*y[IDX_HeII] + k[1184];
-    data[1034] = 0.0 + k[357]*y[IDX_EM] + k[834]*y[IDX_OI] -
-        k[1204]*y[IDX_H2I];
+    data[1033] = 0.0 + k[506]*y[IDX_HII] + k[603]*y[IDX_H3II] + k[705]*y[IDX_HeII] +
+        k[1184];
+    data[1034] = 0.0 + k[357]*y[IDX_EM] + k[834]*y[IDX_OI] - k[1204]*y[IDX_H2I];
     data[1035] = 0.0 + k[291] + k[507]*y[IDX_HII] + k[604]*y[IDX_H3II] +
         k[707]*y[IDX_HeII] + k[707]*y[IDX_HeII] + k[708]*y[IDX_HeII] + k[1185] +
         k[1187];
@@ -5015,29 +4888,26 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
     data[1045] = 0.0 - k[104]*y[IDX_H2II] - k[515]*y[IDX_H2II];
     data[1046] = 0.0 - k[514]*y[IDX_H2II];
     data[1047] = 0.0 - k[305]*y[IDX_H2II];
-    data[1048] = 0.0 - k[128]*y[IDX_H2II] + k[618]*y[IDX_HeHII] +
-        k[1197]*y[IDX_HII];
+    data[1048] = 0.0 - k[128]*y[IDX_H2II] + k[618]*y[IDX_HeHII] + k[1197]*y[IDX_HII];
     data[1049] = 0.0 + k[501]*y[IDX_HCOI] + k[1197]*y[IDX_HI];
     data[1050] = 0.0 + k[115]*y[IDX_HeII] + k[234] - k[516]*y[IDX_H2II];
-    data[1051] = 0.0 - k[100]*y[IDX_CH2I] - k[101]*y[IDX_CH4I] -
-        k[102]*y[IDX_CHI] - k[103]*y[IDX_CNI] - k[104]*y[IDX_COI] -
-        k[105]*y[IDX_H2COI] - k[106]*y[IDX_H2OI] - k[107]*y[IDX_HCNI] -
-        k[108]*y[IDX_HCOI] - k[109]*y[IDX_NH2I] - k[110]*y[IDX_NH3I] -
-        k[111]*y[IDX_NHI] - k[112]*y[IDX_NOI] - k[113]*y[IDX_O2I] -
-        k[114]*y[IDX_OHI] - k[128]*y[IDX_HI] - k[305]*y[IDX_EM] -
-        k[509]*y[IDX_CI] - k[510]*y[IDX_CH2I] - k[511]*y[IDX_CH4I] -
-        k[512]*y[IDX_CHI] - k[513]*y[IDX_CNI] - k[514]*y[IDX_CO2I] -
-        k[515]*y[IDX_COI] - k[516]*y[IDX_H2I] - k[517]*y[IDX_H2COI] -
-        k[518]*y[IDX_H2OI] - k[519]*y[IDX_HCOI] - k[520]*y[IDX_HeI] -
-        k[521]*y[IDX_N2I] - k[522]*y[IDX_NI] - k[523]*y[IDX_NHI] -
-        k[524]*y[IDX_NOI] - k[525]*y[IDX_O2I] - k[526]*y[IDX_OI] -
-        k[527]*y[IDX_OHI] - k[1134];
+    data[1051] = 0.0 - k[100]*y[IDX_CH2I] - k[101]*y[IDX_CH4I] - k[102]*y[IDX_CHI] -
+        k[103]*y[IDX_CNI] - k[104]*y[IDX_COI] - k[105]*y[IDX_H2COI] -
+        k[106]*y[IDX_H2OI] - k[107]*y[IDX_HCNI] - k[108]*y[IDX_HCOI] -
+        k[109]*y[IDX_NH2I] - k[110]*y[IDX_NH3I] - k[111]*y[IDX_NHI] -
+        k[112]*y[IDX_NOI] - k[113]*y[IDX_O2I] - k[114]*y[IDX_OHI] -
+        k[128]*y[IDX_HI] - k[305]*y[IDX_EM] - k[509]*y[IDX_CI] -
+        k[510]*y[IDX_CH2I] - k[511]*y[IDX_CH4I] - k[512]*y[IDX_CHI] -
+        k[513]*y[IDX_CNI] - k[514]*y[IDX_CO2I] - k[515]*y[IDX_COI] -
+        k[516]*y[IDX_H2I] - k[517]*y[IDX_H2COI] - k[518]*y[IDX_H2OI] -
+        k[519]*y[IDX_HCOI] - k[520]*y[IDX_HeI] - k[521]*y[IDX_N2I] -
+        k[522]*y[IDX_NI] - k[523]*y[IDX_NHI] - k[524]*y[IDX_NOI] -
+        k[525]*y[IDX_O2I] - k[526]*y[IDX_OI] - k[527]*y[IDX_OHI] - k[1134];
     data[1052] = 0.0 - k[105]*y[IDX_H2II] - k[517]*y[IDX_H2II];
     data[1053] = 0.0 - k[106]*y[IDX_H2II] - k[518]*y[IDX_H2II];
     data[1054] = 0.0 + k[1145];
     data[1055] = 0.0 - k[107]*y[IDX_H2II];
-    data[1056] = 0.0 - k[108]*y[IDX_H2II] + k[501]*y[IDX_HII] -
-        k[519]*y[IDX_H2II];
+    data[1056] = 0.0 - k[108]*y[IDX_H2II] + k[501]*y[IDX_HII] - k[519]*y[IDX_H2II];
     data[1057] = 0.0 - k[520]*y[IDX_H2II];
     data[1058] = 0.0 + k[115]*y[IDX_H2I];
     data[1059] = 0.0 + k[618]*y[IDX_HI];
@@ -5053,23 +4923,21 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
     data[1069] = 0.0 + k[1339] + k[1340] + k[1341] + k[1342];
     data[1070] = 0.0 + k[1008]*y[IDX_NI];
     data[1071] = 0.0 - k[973]*y[IDX_H2CNI];
-    data[1072] = 0.0 - k[254] - k[973]*y[IDX_HI] - k[1013]*y[IDX_NI] -
-        k[1060]*y[IDX_OI] - k[1135] - k[1298];
+    data[1072] = 0.0 - k[254] - k[973]*y[IDX_HI] - k[1013]*y[IDX_NI] - k[1060]*y[IDX_OI]
+        - k[1135] - k[1298];
     data[1073] = 0.0 + k[1008]*y[IDX_CH3I] - k[1013]*y[IDX_H2CNI];
     data[1074] = 0.0 - k[1060]*y[IDX_H2CNI];
     data[1075] = 0.0 + k[1347] + k[1348] + k[1349] + k[1350];
-    data[1076] = 0.0 - k[16]*y[IDX_H2COI] - k[368]*y[IDX_H2COI] -
-        k[369]*y[IDX_H2COI];
-    data[1077] = 0.0 + k[55]*y[IDX_H2COII] + k[461]*y[IDX_H3COII] -
-        k[924]*y[IDX_H2COI];
-    data[1078] = 0.0 + k[396]*y[IDX_CH3OHI] - k[399]*y[IDX_H2COI] -
-        k[400]*y[IDX_H2COI] - k[401]*y[IDX_H2COI];
-    data[1079] = 0.0 + k[39]*y[IDX_H2COII] + k[438]*y[IDX_SiOII] -
-        k[881]*y[IDX_H2COI] + k[885]*y[IDX_NO2I] + k[886]*y[IDX_NOI] +
-        k[892]*y[IDX_O2I] + k[898]*y[IDX_OHI];
+    data[1076] = 0.0 - k[16]*y[IDX_H2COI] - k[368]*y[IDX_H2COI] - k[369]*y[IDX_H2COI];
+    data[1077] = 0.0 + k[55]*y[IDX_H2COII] + k[461]*y[IDX_H3COII] - k[924]*y[IDX_H2COI];
+    data[1078] = 0.0 + k[396]*y[IDX_CH3OHI] - k[399]*y[IDX_H2COI] - k[400]*y[IDX_H2COI] -
+        k[401]*y[IDX_H2COI];
+    data[1079] = 0.0 + k[39]*y[IDX_H2COII] + k[438]*y[IDX_SiOII] - k[881]*y[IDX_H2COI] +
+        k[885]*y[IDX_NO2I] + k[886]*y[IDX_NOI] + k[892]*y[IDX_O2I] +
+        k[898]*y[IDX_OHI];
     data[1080] = 0.0 - k[417]*y[IDX_H2COI];
-    data[1081] = 0.0 - k[903]*y[IDX_H2COI] + k[909]*y[IDX_NO2I] +
-        k[911]*y[IDX_O2I] + k[916]*y[IDX_OI] + k[918]*y[IDX_OHI];
+    data[1081] = 0.0 - k[903]*y[IDX_H2COI] + k[909]*y[IDX_NO2I] + k[911]*y[IDX_O2I] +
+        k[916]*y[IDX_OI] + k[918]*y[IDX_OHI];
     data[1082] = 0.0 - k[440]*y[IDX_H2COI];
     data[1083] = 0.0 + k[247] + k[396]*y[IDX_CHII] + k[1119];
     data[1084] = 0.0 - k[49]*y[IDX_H2COI] - k[449]*y[IDX_H2COI];
@@ -5078,59 +4946,53 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
     data[1087] = 0.0 - k[70]*y[IDX_H2COI] - k[484]*y[IDX_H2COI];
     data[1088] = 0.0 + k[320]*y[IDX_H3COII] + k[1217]*y[IDX_H2COII];
     data[1089] = 0.0 - k[974]*y[IDX_H2COI];
-    data[1090] = 0.0 - k[79]*y[IDX_H2COI] - k[497]*y[IDX_H2COI] -
-        k[498]*y[IDX_H2COI];
+    data[1090] = 0.0 - k[79]*y[IDX_H2COI] - k[497]*y[IDX_H2COI] - k[498]*y[IDX_H2COI];
     data[1091] = 0.0 - k[105]*y[IDX_H2COI] - k[517]*y[IDX_H2COI];
-    data[1092] = 0.0 - k[16]*y[IDX_CII] - k[49]*y[IDX_CH4II] -
-        k[64]*y[IDX_CNII] - k[70]*y[IDX_COII] - k[79]*y[IDX_HII] -
-        k[105]*y[IDX_H2II] - k[116]*y[IDX_O2II] - k[117]*y[IDX_H2OII] -
-        k[142]*y[IDX_HeII] - k[159]*y[IDX_NII] - k[170]*y[IDX_N2II] -
-        k[175]*y[IDX_NHII] - k[209]*y[IDX_OII] - k[219]*y[IDX_OHII] - k[255] -
-        k[368]*y[IDX_CII] - k[369]*y[IDX_CII] - k[399]*y[IDX_CHII] -
-        k[400]*y[IDX_CHII] - k[401]*y[IDX_CHII] - k[417]*y[IDX_CH2II] -
-        k[440]*y[IDX_CH3II] - k[449]*y[IDX_CH4II] - k[479]*y[IDX_CNII] -
-        k[484]*y[IDX_COII] - k[497]*y[IDX_HII] - k[498]*y[IDX_HII] -
-        k[517]*y[IDX_H2II] - k[548]*y[IDX_H2COII] - k[550]*y[IDX_HNOII] -
-        k[551]*y[IDX_O2II] - k[552]*y[IDX_O2HII] - k[554]*y[IDX_H2OII] -
-        k[585]*y[IDX_H3II] - k[607]*y[IDX_H3OII] - k[622]*y[IDX_HCNII] -
-        k[633]*y[IDX_HCNHII] - k[634]*y[IDX_HCNHII] - k[635]*y[IDX_HCOII] -
-        k[670]*y[IDX_HeII] - k[671]*y[IDX_HeII] - k[672]*y[IDX_HeII] -
-        k[721]*y[IDX_NII] - k[722]*y[IDX_NII] - k[730]*y[IDX_N2II] -
-        k[735]*y[IDX_N2HII] - k[752]*y[IDX_NHII] - k[753]*y[IDX_NHII] -
-        k[769]*y[IDX_NH2II] - k[770]*y[IDX_NH2II] - k[813]*y[IDX_OII] -
-        k[839]*y[IDX_OHII] - k[881]*y[IDX_CH2I] - k[903]*y[IDX_CH3I] -
-        k[924]*y[IDX_CHI] - k[942]*y[IDX_CNI] - k[974]*y[IDX_HI] -
-        k[1061]*y[IDX_OI] - k[1093]*y[IDX_OHI] - k[1136] - k[1137] - k[1138] -
-        k[1139] - k[1252];
-    data[1093] = 0.0 + k[39]*y[IDX_CH2I] + k[55]*y[IDX_CHI] +
-        k[136]*y[IDX_HCOI] + k[148]*y[IDX_MgI] + k[194]*y[IDX_NH3I] +
-        k[203]*y[IDX_NOI] + k[228]*y[IDX_SiI] - k[548]*y[IDX_H2COI] +
-        k[1217]*y[IDX_EM];
+    data[1092] = 0.0 - k[16]*y[IDX_CII] - k[49]*y[IDX_CH4II] - k[64]*y[IDX_CNII] -
+        k[70]*y[IDX_COII] - k[79]*y[IDX_HII] - k[105]*y[IDX_H2II] -
+        k[116]*y[IDX_O2II] - k[117]*y[IDX_H2OII] - k[142]*y[IDX_HeII] -
+        k[159]*y[IDX_NII] - k[170]*y[IDX_N2II] - k[175]*y[IDX_NHII] -
+        k[209]*y[IDX_OII] - k[219]*y[IDX_OHII] - k[255] - k[368]*y[IDX_CII] -
+        k[369]*y[IDX_CII] - k[399]*y[IDX_CHII] - k[400]*y[IDX_CHII] -
+        k[401]*y[IDX_CHII] - k[417]*y[IDX_CH2II] - k[440]*y[IDX_CH3II] -
+        k[449]*y[IDX_CH4II] - k[479]*y[IDX_CNII] - k[484]*y[IDX_COII] -
+        k[497]*y[IDX_HII] - k[498]*y[IDX_HII] - k[517]*y[IDX_H2II] -
+        k[548]*y[IDX_H2COII] - k[550]*y[IDX_HNOII] - k[551]*y[IDX_O2II] -
+        k[552]*y[IDX_O2HII] - k[554]*y[IDX_H2OII] - k[585]*y[IDX_H3II] -
+        k[607]*y[IDX_H3OII] - k[622]*y[IDX_HCNII] - k[633]*y[IDX_HCNHII] -
+        k[634]*y[IDX_HCNHII] - k[635]*y[IDX_HCOII] - k[670]*y[IDX_HeII] -
+        k[671]*y[IDX_HeII] - k[672]*y[IDX_HeII] - k[721]*y[IDX_NII] -
+        k[722]*y[IDX_NII] - k[730]*y[IDX_N2II] - k[735]*y[IDX_N2HII] -
+        k[752]*y[IDX_NHII] - k[753]*y[IDX_NHII] - k[769]*y[IDX_NH2II] -
+        k[770]*y[IDX_NH2II] - k[813]*y[IDX_OII] - k[839]*y[IDX_OHII] -
+        k[881]*y[IDX_CH2I] - k[903]*y[IDX_CH3I] - k[924]*y[IDX_CHI] -
+        k[942]*y[IDX_CNI] - k[974]*y[IDX_HI] - k[1061]*y[IDX_OI] -
+        k[1093]*y[IDX_OHI] - k[1136] - k[1137] - k[1138] - k[1139] - k[1252];
+    data[1093] = 0.0 + k[39]*y[IDX_CH2I] + k[55]*y[IDX_CHI] + k[136]*y[IDX_HCOI] +
+        k[148]*y[IDX_MgI] + k[194]*y[IDX_NH3I] + k[203]*y[IDX_NOI] +
+        k[228]*y[IDX_SiI] - k[548]*y[IDX_H2COI] + k[1217]*y[IDX_EM];
     data[1094] = 0.0 + k[564]*y[IDX_H3COII];
     data[1095] = 0.0 - k[117]*y[IDX_H2COI] - k[554]*y[IDX_H2COI];
     data[1096] = 0.0 - k[585]*y[IDX_H2COI];
-    data[1097] = 0.0 + k[320]*y[IDX_EM] + k[461]*y[IDX_CHI] +
-        k[564]*y[IDX_H2OI] + k[628]*y[IDX_HCNI] + k[647]*y[IDX_HNCI] +
-        k[782]*y[IDX_NH2I];
+    data[1097] = 0.0 + k[320]*y[IDX_EM] + k[461]*y[IDX_CHI] + k[564]*y[IDX_H2OI] +
+        k[628]*y[IDX_HCNI] + k[647]*y[IDX_HNCI] + k[782]*y[IDX_NH2I];
     data[1098] = 0.0 - k[607]*y[IDX_H2COI];
     data[1099] = 0.0 + k[628]*y[IDX_H3COII];
     data[1100] = 0.0 - k[622]*y[IDX_H2COI];
     data[1101] = 0.0 - k[633]*y[IDX_H2COI] - k[634]*y[IDX_H2COI];
-    data[1102] = 0.0 + k[136]*y[IDX_H2COII] + k[998]*y[IDX_HCOI] +
-        k[998]*y[IDX_HCOI] + k[999]*y[IDX_HNOI] + k[1003]*y[IDX_O2HI];
+    data[1102] = 0.0 + k[136]*y[IDX_H2COII] + k[998]*y[IDX_HCOI] + k[998]*y[IDX_HCOI] +
+        k[999]*y[IDX_HNOI] + k[1003]*y[IDX_O2HI];
     data[1103] = 0.0 - k[635]*y[IDX_H2COI];
-    data[1104] = 0.0 - k[142]*y[IDX_H2COI] - k[670]*y[IDX_H2COI] -
-        k[671]*y[IDX_H2COI] - k[672]*y[IDX_H2COI];
+    data[1104] = 0.0 - k[142]*y[IDX_H2COI] - k[670]*y[IDX_H2COI] - k[671]*y[IDX_H2COI] -
+        k[672]*y[IDX_H2COI];
     data[1105] = 0.0 + k[647]*y[IDX_H3COII];
     data[1106] = 0.0 + k[999]*y[IDX_HCOI];
     data[1107] = 0.0 - k[550]*y[IDX_H2COI];
     data[1108] = 0.0 + k[148]*y[IDX_H2COII];
-    data[1109] = 0.0 - k[159]*y[IDX_H2COI] - k[721]*y[IDX_H2COI] -
-        k[722]*y[IDX_H2COI];
+    data[1109] = 0.0 - k[159]*y[IDX_H2COI] - k[721]*y[IDX_H2COI] - k[722]*y[IDX_H2COI];
     data[1110] = 0.0 - k[170]*y[IDX_H2COI] - k[730]*y[IDX_H2COI];
     data[1111] = 0.0 - k[735]*y[IDX_H2COI];
-    data[1112] = 0.0 - k[175]*y[IDX_H2COI] - k[752]*y[IDX_H2COI] -
-        k[753]*y[IDX_H2COI];
+    data[1112] = 0.0 - k[175]*y[IDX_H2COI] - k[752]*y[IDX_H2COI] - k[753]*y[IDX_H2COI];
     data[1113] = 0.0 + k[782]*y[IDX_H3COII];
     data[1114] = 0.0 - k[769]*y[IDX_H2COI] - k[770]*y[IDX_H2COI];
     data[1115] = 0.0 + k[194]*y[IDX_H2COII];
@@ -5142,16 +5004,14 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
     data[1121] = 0.0 - k[116]*y[IDX_H2COI] - k[551]*y[IDX_H2COI];
     data[1122] = 0.0 + k[1003]*y[IDX_HCOI];
     data[1123] = 0.0 - k[552]*y[IDX_H2COI];
-    data[1124] = 0.0 + k[898]*y[IDX_CH2I] + k[918]*y[IDX_CH3I] -
-        k[1093]*y[IDX_H2COI];
+    data[1124] = 0.0 + k[898]*y[IDX_CH2I] + k[918]*y[IDX_CH3I] - k[1093]*y[IDX_H2COI];
     data[1125] = 0.0 - k[219]*y[IDX_H2COI] - k[839]*y[IDX_H2COI];
     data[1126] = 0.0 + k[228]*y[IDX_H2COII];
     data[1127] = 0.0 + k[438]*y[IDX_CH2I];
     data[1128] = 0.0 + k[16]*y[IDX_H2COI];
     data[1129] = 0.0 - k[55]*y[IDX_H2COII] - k[459]*y[IDX_H2COII];
     data[1130] = 0.0 + k[402]*y[IDX_H2OI];
-    data[1131] = 0.0 - k[39]*y[IDX_H2COII] - k[423]*y[IDX_H2COII] +
-        k[435]*y[IDX_O2II];
+    data[1131] = 0.0 - k[39]*y[IDX_H2COII] - k[423]*y[IDX_H2COII] + k[435]*y[IDX_O2II];
     data[1132] = 0.0 + k[416]*y[IDX_CO2I];
     data[1133] = 0.0 + k[443]*y[IDX_OI] + k[445]*y[IDX_OHI];
     data[1134] = 0.0 + k[712]*y[IDX_NII] + k[808]*y[IDX_OII];
@@ -5160,34 +5020,32 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
     data[1137] = 0.0 + k[64]*y[IDX_H2COI];
     data[1138] = 0.0 + k[70]*y[IDX_H2COI];
     data[1139] = 0.0 + k[416]*y[IDX_CH2II];
-    data[1140] = 0.0 - k[306]*y[IDX_H2COII] - k[307]*y[IDX_H2COII] -
-        k[308]*y[IDX_H2COII] - k[309]*y[IDX_H2COII] - k[1217]*y[IDX_H2COII];
+    data[1140] = 0.0 - k[306]*y[IDX_H2COII] - k[307]*y[IDX_H2COII] - k[308]*y[IDX_H2COII]
+        - k[309]*y[IDX_H2COII] - k[1217]*y[IDX_H2COII];
     data[1141] = 0.0 + k[79]*y[IDX_H2COI];
     data[1142] = 0.0 + k[105]*y[IDX_H2COI];
-    data[1143] = 0.0 + k[16]*y[IDX_CII] + k[49]*y[IDX_CH4II] +
-        k[64]*y[IDX_CNII] + k[70]*y[IDX_COII] + k[79]*y[IDX_HII] +
-        k[105]*y[IDX_H2II] + k[116]*y[IDX_O2II] + k[117]*y[IDX_H2OII] +
-        k[142]*y[IDX_HeII] + k[159]*y[IDX_NII] + k[170]*y[IDX_N2II] +
-        k[175]*y[IDX_NHII] + k[209]*y[IDX_OII] + k[219]*y[IDX_OHII] -
-        k[548]*y[IDX_H2COII] + k[1138];
-    data[1144] = 0.0 - k[39]*y[IDX_CH2I] - k[55]*y[IDX_CHI] -
-        k[136]*y[IDX_HCOI] - k[148]*y[IDX_MgI] - k[194]*y[IDX_NH3I] -
-        k[203]*y[IDX_NOI] - k[228]*y[IDX_SiI] - k[306]*y[IDX_EM] -
-        k[307]*y[IDX_EM] - k[308]*y[IDX_EM] - k[309]*y[IDX_EM] -
-        k[423]*y[IDX_CH2I] - k[452]*y[IDX_CH4I] - k[459]*y[IDX_CHI] -
-        k[548]*y[IDX_H2COI] - k[549]*y[IDX_O2I] - k[563]*y[IDX_H2OI] -
-        k[627]*y[IDX_HCNI] - k[641]*y[IDX_HCOI] - k[646]*y[IDX_HNCI] -
-        k[780]*y[IDX_NH2I] - k[796]*y[IDX_NHI] - k[1217]*y[IDX_EM] - k[1284];
+    data[1143] = 0.0 + k[16]*y[IDX_CII] + k[49]*y[IDX_CH4II] + k[64]*y[IDX_CNII] +
+        k[70]*y[IDX_COII] + k[79]*y[IDX_HII] + k[105]*y[IDX_H2II] +
+        k[116]*y[IDX_O2II] + k[117]*y[IDX_H2OII] + k[142]*y[IDX_HeII] +
+        k[159]*y[IDX_NII] + k[170]*y[IDX_N2II] + k[175]*y[IDX_NHII] +
+        k[209]*y[IDX_OII] + k[219]*y[IDX_OHII] - k[548]*y[IDX_H2COII] + k[1138];
+    data[1144] = 0.0 - k[39]*y[IDX_CH2I] - k[55]*y[IDX_CHI] - k[136]*y[IDX_HCOI] -
+        k[148]*y[IDX_MgI] - k[194]*y[IDX_NH3I] - k[203]*y[IDX_NOI] -
+        k[228]*y[IDX_SiI] - k[306]*y[IDX_EM] - k[307]*y[IDX_EM] -
+        k[308]*y[IDX_EM] - k[309]*y[IDX_EM] - k[423]*y[IDX_CH2I] -
+        k[452]*y[IDX_CH4I] - k[459]*y[IDX_CHI] - k[548]*y[IDX_H2COI] -
+        k[549]*y[IDX_O2I] - k[563]*y[IDX_H2OI] - k[627]*y[IDX_HCNI] -
+        k[641]*y[IDX_HCOI] - k[646]*y[IDX_HNCI] - k[780]*y[IDX_NH2I] -
+        k[796]*y[IDX_NHI] - k[1217]*y[IDX_EM] - k[1284];
     data[1145] = 0.0 + k[402]*y[IDX_CHII] - k[563]*y[IDX_H2COII];
     data[1146] = 0.0 + k[117]*y[IDX_H2COI] + k[558]*y[IDX_HCOI];
     data[1147] = 0.0 + k[588]*y[IDX_HCOI];
     data[1148] = 0.0 - k[627]*y[IDX_H2COII];
     data[1149] = 0.0 + k[624]*y[IDX_HCOI];
-    data[1150] = 0.0 - k[136]*y[IDX_H2COII] + k[558]*y[IDX_H2OII] +
-        k[588]*y[IDX_H3II] + k[624]*y[IDX_HCNII] + k[636]*y[IDX_HCOII] -
-        k[641]*y[IDX_H2COII] + k[642]*y[IDX_HNOII] + k[643]*y[IDX_N2HII] +
-        k[645]*y[IDX_O2HII] + k[759]*y[IDX_NHII] + k[774]*y[IDX_NH2II] +
-        k[843]*y[IDX_OHII];
+    data[1150] = 0.0 - k[136]*y[IDX_H2COII] + k[558]*y[IDX_H2OII] + k[588]*y[IDX_H3II] +
+        k[624]*y[IDX_HCNII] + k[636]*y[IDX_HCOII] - k[641]*y[IDX_H2COII] +
+        k[642]*y[IDX_HNOII] + k[643]*y[IDX_N2HII] + k[645]*y[IDX_O2HII] +
+        k[759]*y[IDX_NHII] + k[774]*y[IDX_NH2II] + k[843]*y[IDX_OHII];
     data[1151] = 0.0 + k[636]*y[IDX_HCOI];
     data[1152] = 0.0 + k[142]*y[IDX_H2COI];
     data[1153] = 0.0 - k[646]*y[IDX_H2COII];
@@ -5219,30 +5077,27 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
     data[1179] = 0.0 + k[1315] + k[1316] + k[1317] + k[1318];
     data[1180] = 0.0 - k[370]*y[IDX_H2OI] - k[371]*y[IDX_H2OI];
     data[1181] = 0.0 + k[56]*y[IDX_H2OII] + k[462]*y[IDX_H3OII];
-    data[1182] = 0.0 - k[402]*y[IDX_H2OI] - k[403]*y[IDX_H2OI] -
-        k[404]*y[IDX_H2OI];
-    data[1183] = 0.0 + k[40]*y[IDX_H2OII] + k[425]*y[IDX_H3OII] +
-        k[891]*y[IDX_O2I] + k[899]*y[IDX_OHI];
+    data[1182] = 0.0 - k[402]*y[IDX_H2OI] - k[403]*y[IDX_H2OI] - k[404]*y[IDX_H2OI];
+    data[1183] = 0.0 + k[40]*y[IDX_H2OII] + k[425]*y[IDX_H3OII] + k[891]*y[IDX_O2I] +
+        k[899]*y[IDX_OHI];
     data[1184] = 0.0 - k[418]*y[IDX_H2OI];
-    data[1185] = 0.0 - k[904]*y[IDX_H2OI] + k[910]*y[IDX_NOI] +
-        k[912]*y[IDX_O2I] + k[919]*y[IDX_OHI];
-    data[1186] = 0.0 + k[492]*y[IDX_HII] + k[579]*y[IDX_H3II] +
-        k[808]*y[IDX_OII];
+    data[1185] = 0.0 - k[904]*y[IDX_H2OI] + k[910]*y[IDX_NOI] + k[912]*y[IDX_O2I] +
+        k[919]*y[IDX_OHI];
+    data[1186] = 0.0 + k[492]*y[IDX_HII] + k[579]*y[IDX_H3II] + k[808]*y[IDX_OII];
     data[1187] = 0.0 + k[922]*y[IDX_OHI];
     data[1188] = 0.0 - k[450]*y[IDX_H2OI];
     data[1189] = 0.0 - k[560]*y[IDX_H2OI] - k[561]*y[IDX_H2OI];
     data[1190] = 0.0 - k[123]*y[IDX_H2OI] - k[562]*y[IDX_H2OI];
     data[1191] = 0.0 + k[318]*y[IDX_H3COII] + k[322]*y[IDX_H3OII];
-    data[1192] = 0.0 - k[11]*y[IDX_H2OI] - k[975]*y[IDX_H2OI] +
-        k[990]*y[IDX_O2HI] + k[1208]*y[IDX_OHI];
+    data[1192] = 0.0 - k[11]*y[IDX_H2OI] - k[975]*y[IDX_H2OI] + k[990]*y[IDX_O2HI] +
+        k[1208]*y[IDX_OHI];
     data[1193] = 0.0 - k[80]*y[IDX_H2OI] + k[492]*y[IDX_CH3OHI];
     data[1194] = 0.0 - k[4]*y[IDX_H2OI] + k[966]*y[IDX_OHI];
     data[1195] = 0.0 - k[106]*y[IDX_H2OI] - k[518]*y[IDX_H2OI];
-    data[1196] = 0.0 + k[117]*y[IDX_H2OII] + k[607]*y[IDX_H3OII] +
-        k[1093]*y[IDX_OHI];
+    data[1196] = 0.0 + k[117]*y[IDX_H2OII] + k[607]*y[IDX_H3OII] + k[1093]*y[IDX_OHI];
     data[1197] = 0.0 - k[563]*y[IDX_H2OI];
-    data[1198] = 0.0 - k[4]*y[IDX_H2I] - k[11]*y[IDX_HI] - k[80]*y[IDX_HII]
-        - k[106]*y[IDX_H2II] - k[123]*y[IDX_COII] - k[124]*y[IDX_HCNII] -
+    data[1198] = 0.0 - k[4]*y[IDX_H2I] - k[11]*y[IDX_HI] - k[80]*y[IDX_HII] -
+        k[106]*y[IDX_H2II] - k[123]*y[IDX_COII] - k[124]*y[IDX_HCNII] -
         k[125]*y[IDX_N2II] - k[143]*y[IDX_HeII] - k[160]*y[IDX_NII] -
         k[176]*y[IDX_NHII] - k[210]*y[IDX_OII] - k[220]*y[IDX_OHII] - k[256] -
         k[370]*y[IDX_CII] - k[371]*y[IDX_CII] - k[402]*y[IDX_CHII] -
@@ -5259,23 +5114,22 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
         k[772]*y[IDX_NH2II] - k[840]*y[IDX_OHII] - k[904]*y[IDX_CH3I] -
         k[975]*y[IDX_HI] - k[1036]*y[IDX_NHI] - k[1062]*y[IDX_OI] - k[1141] -
         k[1142] - k[1257];
-    data[1199] = 0.0 + k[40]*y[IDX_CH2I] + k[56]*y[IDX_CHI] +
-        k[117]*y[IDX_H2COI] + k[118]*y[IDX_HCOI] + k[119]*y[IDX_MgI] +
-        k[120]*y[IDX_NOI] + k[121]*y[IDX_O2I] + k[122]*y[IDX_SiI] +
-        k[185]*y[IDX_NH2I] + k[195]*y[IDX_NH3I] - k[555]*y[IDX_H2OI];
+    data[1199] = 0.0 + k[40]*y[IDX_CH2I] + k[56]*y[IDX_CHI] + k[117]*y[IDX_H2COI] +
+        k[118]*y[IDX_HCOI] + k[119]*y[IDX_MgI] + k[120]*y[IDX_NOI] +
+        k[121]*y[IDX_O2I] + k[122]*y[IDX_SiI] + k[185]*y[IDX_NH2I] +
+        k[195]*y[IDX_NH3I] - k[555]*y[IDX_H2OI];
     data[1200] = 0.0 + k[579]*y[IDX_CH3OHI] - k[586]*y[IDX_H2OI];
     data[1201] = 0.0 + k[318]*y[IDX_EM] - k[564]*y[IDX_H2OI];
-    data[1202] = 0.0 + k[322]*y[IDX_EM] + k[425]*y[IDX_CH2I] +
-        k[462]*y[IDX_CHI] + k[607]*y[IDX_H2COI] + k[608]*y[IDX_HCNI] +
-        k[609]*y[IDX_HNCI] + k[610]*y[IDX_SiI] + k[611]*y[IDX_SiH2I] +
-        k[612]*y[IDX_SiHI] + k[613]*y[IDX_SiOI] + k[783]*y[IDX_NH2I];
+    data[1202] = 0.0 + k[322]*y[IDX_EM] + k[425]*y[IDX_CH2I] + k[462]*y[IDX_CHI] +
+        k[607]*y[IDX_H2COI] + k[608]*y[IDX_HCNI] + k[609]*y[IDX_HNCI] +
+        k[610]*y[IDX_SiI] + k[611]*y[IDX_SiH2I] + k[612]*y[IDX_SiHI] +
+        k[613]*y[IDX_SiOI] + k[783]*y[IDX_NH2I];
     data[1203] = 0.0 + k[608]*y[IDX_H3OII] + k[1094]*y[IDX_OHI];
     data[1204] = 0.0 - k[124]*y[IDX_H2OI] - k[565]*y[IDX_H2OI];
     data[1205] = 0.0 + k[118]*y[IDX_H2OII] + k[1096]*y[IDX_OHI];
     data[1206] = 0.0 - k[566]*y[IDX_H2OI];
     data[1207] = 0.0 - k[567]*y[IDX_H2OI];
-    data[1208] = 0.0 - k[143]*y[IDX_H2OI] - k[673]*y[IDX_H2OI] -
-        k[674]*y[IDX_H2OI];
+    data[1208] = 0.0 - k[143]*y[IDX_H2OI] - k[673]*y[IDX_H2OI] - k[674]*y[IDX_H2OI];
     data[1209] = 0.0 + k[609]*y[IDX_H3OII];
     data[1210] = 0.0 + k[1097]*y[IDX_OHI];
     data[1211] = 0.0 - k[568]*y[IDX_H2OI];
@@ -5284,26 +5138,23 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
     data[1214] = 0.0 - k[125]*y[IDX_H2OI] - k[569]*y[IDX_H2OI];
     data[1215] = 0.0 - k[570]*y[IDX_H2OI];
     data[1216] = 0.0 - k[1036]*y[IDX_H2OI] + k[1048]*y[IDX_OHI];
-    data[1217] = 0.0 - k[176]*y[IDX_H2OI] - k[754]*y[IDX_H2OI] -
-        k[755]*y[IDX_H2OI] - k[756]*y[IDX_H2OI] - k[757]*y[IDX_H2OI];
-    data[1218] = 0.0 + k[185]*y[IDX_H2OII] + k[783]*y[IDX_H3OII] +
-        k[1029]*y[IDX_NOI] + k[1031]*y[IDX_OHI];
+    data[1217] = 0.0 - k[176]*y[IDX_H2OI] - k[754]*y[IDX_H2OI] - k[755]*y[IDX_H2OI] -
+        k[756]*y[IDX_H2OI] - k[757]*y[IDX_H2OI];
+    data[1218] = 0.0 + k[185]*y[IDX_H2OII] + k[783]*y[IDX_H3OII] + k[1029]*y[IDX_NOI] +
+        k[1031]*y[IDX_OHI];
     data[1219] = 0.0 - k[771]*y[IDX_H2OI] - k[772]*y[IDX_H2OI];
     data[1220] = 0.0 + k[195]*y[IDX_H2OII] + k[1098]*y[IDX_OHI];
-    data[1221] = 0.0 + k[120]*y[IDX_H2OII] + k[910]*y[IDX_CH3I] +
-        k[1029]*y[IDX_NH2I];
+    data[1221] = 0.0 + k[120]*y[IDX_H2OII] + k[910]*y[IDX_CH3I] + k[1029]*y[IDX_NH2I];
     data[1222] = 0.0 - k[1062]*y[IDX_H2OI];
     data[1223] = 0.0 - k[210]*y[IDX_H2OI] + k[808]*y[IDX_CH3OHI];
-    data[1224] = 0.0 + k[121]*y[IDX_H2OII] + k[891]*y[IDX_CH2I] +
-        k[912]*y[IDX_CH3I];
+    data[1224] = 0.0 + k[121]*y[IDX_H2OII] + k[891]*y[IDX_CH2I] + k[912]*y[IDX_CH3I];
     data[1225] = 0.0 + k[990]*y[IDX_HI] + k[1100]*y[IDX_OHI];
     data[1226] = 0.0 - k[571]*y[IDX_H2OI];
-    data[1227] = 0.0 + k[899]*y[IDX_CH2I] + k[919]*y[IDX_CH3I] +
-        k[922]*y[IDX_CH4I] + k[966]*y[IDX_H2I] + k[1031]*y[IDX_NH2I] +
-        k[1048]*y[IDX_NHI] + k[1093]*y[IDX_H2COI] + k[1094]*y[IDX_HCNI] +
-        k[1096]*y[IDX_HCOI] + k[1097]*y[IDX_HNOI] + k[1098]*y[IDX_NH3I] +
-        k[1100]*y[IDX_O2HI] + k[1101]*y[IDX_OHI] + k[1101]*y[IDX_OHI] +
-        k[1208]*y[IDX_HI];
+    data[1227] = 0.0 + k[899]*y[IDX_CH2I] + k[919]*y[IDX_CH3I] + k[922]*y[IDX_CH4I] +
+        k[966]*y[IDX_H2I] + k[1031]*y[IDX_NH2I] + k[1048]*y[IDX_NHI] +
+        k[1093]*y[IDX_H2COI] + k[1094]*y[IDX_HCNI] + k[1096]*y[IDX_HCOI] +
+        k[1097]*y[IDX_HNOI] + k[1098]*y[IDX_NH3I] + k[1100]*y[IDX_O2HI] +
+        k[1101]*y[IDX_OHI] + k[1101]*y[IDX_OHI] + k[1208]*y[IDX_HI];
     data[1228] = 0.0 - k[220]*y[IDX_H2OI] - k[840]*y[IDX_H2OI];
     data[1229] = 0.0 + k[122]*y[IDX_H2OII] + k[610]*y[IDX_H3OII];
     data[1230] = 0.0 - k[572]*y[IDX_H2OI];
@@ -5319,32 +5170,31 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
     data[1240] = 0.0 - k[453]*y[IDX_H2OII];
     data[1241] = 0.0 - k[553]*y[IDX_H2OII];
     data[1242] = 0.0 + k[123]*y[IDX_H2OI];
-    data[1243] = 0.0 - k[312]*y[IDX_H2OII] - k[313]*y[IDX_H2OII] -
-        k[314]*y[IDX_H2OII];
+    data[1243] = 0.0 - k[312]*y[IDX_H2OII] - k[313]*y[IDX_H2OII] - k[314]*y[IDX_H2OII];
     data[1244] = 0.0 + k[80]*y[IDX_H2OI];
     data[1245] = 0.0 - k[534]*y[IDX_H2OII] + k[545]*y[IDX_OHII];
     data[1246] = 0.0 + k[106]*y[IDX_H2OI] + k[527]*y[IDX_OHI];
     data[1247] = 0.0 - k[117]*y[IDX_H2OII] - k[554]*y[IDX_H2OII];
-    data[1248] = 0.0 + k[80]*y[IDX_HII] + k[106]*y[IDX_H2II] +
-        k[123]*y[IDX_COII] + k[124]*y[IDX_HCNII] + k[125]*y[IDX_N2II] +
-        k[143]*y[IDX_HeII] + k[160]*y[IDX_NII] + k[176]*y[IDX_NHII] +
-        k[210]*y[IDX_OII] + k[220]*y[IDX_OHII] - k[555]*y[IDX_H2OII] + k[1141];
-    data[1249] = 0.0 - k[40]*y[IDX_CH2I] - k[56]*y[IDX_CHI] -
-        k[117]*y[IDX_H2COI] - k[118]*y[IDX_HCOI] - k[119]*y[IDX_MgI] -
-        k[120]*y[IDX_NOI] - k[121]*y[IDX_O2I] - k[122]*y[IDX_SiI] -
-        k[185]*y[IDX_NH2I] - k[195]*y[IDX_NH3I] - k[312]*y[IDX_EM] -
-        k[313]*y[IDX_EM] - k[314]*y[IDX_EM] - k[383]*y[IDX_CI] -
-        k[424]*y[IDX_CH2I] - k[453]*y[IDX_CH4I] - k[460]*y[IDX_CHI] -
-        k[534]*y[IDX_H2I] - k[553]*y[IDX_COI] - k[554]*y[IDX_H2COI] -
-        k[555]*y[IDX_H2OI] - k[556]*y[IDX_HCNI] - k[557]*y[IDX_HCOI] -
-        k[558]*y[IDX_HCOI] - k[559]*y[IDX_HNCI] - k[738]*y[IDX_NI] -
-        k[739]*y[IDX_NI] - k[781]*y[IDX_NH2I] - k[797]*y[IDX_NHI] -
-        k[823]*y[IDX_OI] - k[852]*y[IDX_OHI] - k[1140] - k[1280];
+    data[1248] = 0.0 + k[80]*y[IDX_HII] + k[106]*y[IDX_H2II] + k[123]*y[IDX_COII] +
+        k[124]*y[IDX_HCNII] + k[125]*y[IDX_N2II] + k[143]*y[IDX_HeII] +
+        k[160]*y[IDX_NII] + k[176]*y[IDX_NHII] + k[210]*y[IDX_OII] +
+        k[220]*y[IDX_OHII] - k[555]*y[IDX_H2OII] + k[1141];
+    data[1249] = 0.0 - k[40]*y[IDX_CH2I] - k[56]*y[IDX_CHI] - k[117]*y[IDX_H2COI] -
+        k[118]*y[IDX_HCOI] - k[119]*y[IDX_MgI] - k[120]*y[IDX_NOI] -
+        k[121]*y[IDX_O2I] - k[122]*y[IDX_SiI] - k[185]*y[IDX_NH2I] -
+        k[195]*y[IDX_NH3I] - k[312]*y[IDX_EM] - k[313]*y[IDX_EM] -
+        k[314]*y[IDX_EM] - k[383]*y[IDX_CI] - k[424]*y[IDX_CH2I] -
+        k[453]*y[IDX_CH4I] - k[460]*y[IDX_CHI] - k[534]*y[IDX_H2I] -
+        k[553]*y[IDX_COI] - k[554]*y[IDX_H2COI] - k[555]*y[IDX_H2OI] -
+        k[556]*y[IDX_HCNI] - k[557]*y[IDX_HCOI] - k[558]*y[IDX_HCOI] -
+        k[559]*y[IDX_HNCI] - k[738]*y[IDX_NI] - k[739]*y[IDX_NI] -
+        k[781]*y[IDX_NH2I] - k[797]*y[IDX_NHI] - k[823]*y[IDX_OI] -
+        k[852]*y[IDX_OHI] - k[1140] - k[1280];
     data[1250] = 0.0 + k[598]*y[IDX_OI] + k[600]*y[IDX_OHI];
     data[1251] = 0.0 - k[556]*y[IDX_H2OII];
     data[1252] = 0.0 + k[124]*y[IDX_H2OI] + k[853]*y[IDX_OHI];
-    data[1253] = 0.0 - k[118]*y[IDX_H2OII] - k[557]*y[IDX_H2OII] -
-        k[558]*y[IDX_H2OII] + k[842]*y[IDX_OHII];
+    data[1253] = 0.0 - k[118]*y[IDX_H2OII] - k[557]*y[IDX_H2OII] - k[558]*y[IDX_H2OII] +
+        k[842]*y[IDX_OHII];
     data[1254] = 0.0 + k[854]*y[IDX_OHI];
     data[1255] = 0.0 + k[143]*y[IDX_H2OI];
     data[1256] = 0.0 - k[559]*y[IDX_H2OII];
@@ -5363,17 +5213,17 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
     data[1269] = 0.0 + k[210]*y[IDX_H2OI];
     data[1270] = 0.0 - k[121]*y[IDX_H2OII];
     data[1271] = 0.0 + k[858]*y[IDX_OHI];
-    data[1272] = 0.0 + k[527]*y[IDX_H2II] + k[600]*y[IDX_H3II] +
-        k[768]*y[IDX_NHII] + k[847]*y[IDX_OHII] - k[852]*y[IDX_H2OII] +
-        k[853]*y[IDX_HCNII] + k[854]*y[IDX_HCOII] + k[856]*y[IDX_HNOII] +
-        k[857]*y[IDX_N2HII] + k[858]*y[IDX_O2HII];
-    data[1273] = 0.0 + k[220]*y[IDX_H2OI] + k[545]*y[IDX_H2I] +
-        k[842]*y[IDX_HCOI] + k[847]*y[IDX_OHI];
+    data[1272] = 0.0 + k[527]*y[IDX_H2II] + k[600]*y[IDX_H3II] + k[768]*y[IDX_NHII] +
+        k[847]*y[IDX_OHII] - k[852]*y[IDX_H2OII] + k[853]*y[IDX_HCNII] +
+        k[854]*y[IDX_HCOII] + k[856]*y[IDX_HNOII] + k[857]*y[IDX_N2HII] +
+        k[858]*y[IDX_O2HII];
+    data[1273] = 0.0 + k[220]*y[IDX_H2OI] + k[545]*y[IDX_H2I] + k[842]*y[IDX_HCOI] +
+        k[847]*y[IDX_OHI];
     data[1274] = 0.0 - k[122]*y[IDX_H2OII];
     data[1275] = 0.0 + k[1391] + k[1392] + k[1393] + k[1394];
     data[1276] = 0.0 - k[499]*y[IDX_H2SiOI];
-    data[1277] = 0.0 - k[257] - k[499]*y[IDX_HII] - k[675]*y[IDX_HeII] -
-        k[1143] - k[1144] - k[1247];
+    data[1277] = 0.0 - k[257] - k[499]*y[IDX_HII] - k[675]*y[IDX_HeII] - k[1143] -
+        k[1144] - k[1247];
     data[1278] = 0.0 - k[675]*y[IDX_H2SiOI];
     data[1279] = 0.0 + k[1087]*y[IDX_SiH3I];
     data[1280] = 0.0 + k[1087]*y[IDX_OI];
@@ -5386,23 +5236,23 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
     data[1287] = 0.0 - k[583]*y[IDX_H3II] - k[584]*y[IDX_H3II];
     data[1288] = 0.0 - k[582]*y[IDX_H3II];
     data[1289] = 0.0 - k[315]*y[IDX_H3II] - k[316]*y[IDX_H3II];
-    data[1290] = 0.0 + k[516]*y[IDX_H2II] + k[537]*y[IDX_HeHII] +
-        k[540]*y[IDX_NHII] + k[544]*y[IDX_O2HII];
+    data[1290] = 0.0 + k[516]*y[IDX_H2II] + k[537]*y[IDX_HeHII] + k[540]*y[IDX_NHII] +
+        k[544]*y[IDX_O2HII];
     data[1291] = 0.0 + k[516]*y[IDX_H2I] + k[519]*y[IDX_HCOI];
     data[1292] = 0.0 - k[585]*y[IDX_H3II];
     data[1293] = 0.0 - k[586]*y[IDX_H3II];
-    data[1294] = 0.0 - k[315]*y[IDX_EM] - k[316]*y[IDX_EM] -
-        k[576]*y[IDX_CI] - k[577]*y[IDX_CH2I] - k[578]*y[IDX_CH3I] -
-        k[579]*y[IDX_CH3OHI] - k[580]*y[IDX_CHI] - k[581]*y[IDX_CNI] -
-        k[582]*y[IDX_CO2I] - k[583]*y[IDX_COI] - k[584]*y[IDX_COI] -
-        k[585]*y[IDX_H2COI] - k[586]*y[IDX_H2OI] - k[587]*y[IDX_HCNI] -
-        k[588]*y[IDX_HCOI] - k[589]*y[IDX_HNCI] - k[590]*y[IDX_HNOI] -
-        k[591]*y[IDX_MgI] - k[592]*y[IDX_N2I] - k[593]*y[IDX_NH2I] -
-        k[594]*y[IDX_NHI] - k[595]*y[IDX_NO2I] - k[596]*y[IDX_NOI] -
-        k[597]*y[IDX_O2I] - k[598]*y[IDX_OI] - k[599]*y[IDX_OI] -
-        k[600]*y[IDX_OHI] - k[601]*y[IDX_SiI] - k[602]*y[IDX_SiH2I] -
-        k[603]*y[IDX_SiH3I] - k[604]*y[IDX_SiH4I] - k[605]*y[IDX_SiHI] -
-        k[606]*y[IDX_SiOI] - k[1145] - k[1146];
+    data[1294] = 0.0 - k[315]*y[IDX_EM] - k[316]*y[IDX_EM] - k[576]*y[IDX_CI] -
+        k[577]*y[IDX_CH2I] - k[578]*y[IDX_CH3I] - k[579]*y[IDX_CH3OHI] -
+        k[580]*y[IDX_CHI] - k[581]*y[IDX_CNI] - k[582]*y[IDX_CO2I] -
+        k[583]*y[IDX_COI] - k[584]*y[IDX_COI] - k[585]*y[IDX_H2COI] -
+        k[586]*y[IDX_H2OI] - k[587]*y[IDX_HCNI] - k[588]*y[IDX_HCOI] -
+        k[589]*y[IDX_HNCI] - k[590]*y[IDX_HNOI] - k[591]*y[IDX_MgI] -
+        k[592]*y[IDX_N2I] - k[593]*y[IDX_NH2I] - k[594]*y[IDX_NHI] -
+        k[595]*y[IDX_NO2I] - k[596]*y[IDX_NOI] - k[597]*y[IDX_O2I] -
+        k[598]*y[IDX_OI] - k[599]*y[IDX_OI] - k[600]*y[IDX_OHI] -
+        k[601]*y[IDX_SiI] - k[602]*y[IDX_SiH2I] - k[603]*y[IDX_SiH3I] -
+        k[604]*y[IDX_SiH4I] - k[605]*y[IDX_SiHI] - k[606]*y[IDX_SiOI] - k[1145]
+        - k[1146];
     data[1295] = 0.0 - k[587]*y[IDX_H3II];
     data[1296] = 0.0 + k[519]*y[IDX_H2II] - k[588]*y[IDX_H3II];
     data[1297] = 0.0 + k[537]*y[IDX_H2I];
@@ -5430,29 +5280,29 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
     data[1319] = 0.0 + k[397]*y[IDX_CH3OHI] + k[400]*y[IDX_H2COI];
     data[1320] = 0.0 + k[418]*y[IDX_H2OI];
     data[1321] = 0.0 + k[439]*y[IDX_CH3OHI] + k[442]*y[IDX_O2I];
-    data[1322] = 0.0 + k[365]*y[IDX_CII] + k[397]*y[IDX_CHII] +
-        k[439]*y[IDX_CH3II] + k[493]*y[IDX_HII] + k[713]*y[IDX_NII] +
-        k[809]*y[IDX_OII] + k[820]*y[IDX_O2II] + k[1120];
+    data[1322] = 0.0 + k[365]*y[IDX_CII] + k[397]*y[IDX_CHII] + k[439]*y[IDX_CH3II] +
+        k[493]*y[IDX_HII] + k[713]*y[IDX_NII] + k[809]*y[IDX_OII] +
+        k[820]*y[IDX_O2II] + k[1120];
     data[1323] = 0.0 + k[452]*y[IDX_H2COII];
     data[1324] = 0.0 + k[449]*y[IDX_H2COI];
-    data[1325] = 0.0 - k[317]*y[IDX_H3COII] - k[318]*y[IDX_H3COII] -
-        k[319]*y[IDX_H3COII] - k[320]*y[IDX_H3COII] - k[321]*y[IDX_H3COII];
+    data[1325] = 0.0 - k[317]*y[IDX_H3COII] - k[318]*y[IDX_H3COII] - k[319]*y[IDX_H3COII]
+        - k[320]*y[IDX_H3COII] - k[321]*y[IDX_H3COII];
     data[1326] = 0.0 + k[493]*y[IDX_CH3OHI];
-    data[1327] = 0.0 + k[400]*y[IDX_CHII] + k[449]*y[IDX_CH4II] +
-        k[548]*y[IDX_H2COII] + k[550]*y[IDX_HNOII] + k[552]*y[IDX_O2HII] +
-        k[554]*y[IDX_H2OII] + k[585]*y[IDX_H3II] + k[607]*y[IDX_H3OII] +
-        k[622]*y[IDX_HCNII] + k[633]*y[IDX_HCNHII] + k[634]*y[IDX_HCNHII] +
-        k[635]*y[IDX_HCOII] + k[735]*y[IDX_N2HII] + k[752]*y[IDX_NHII] +
-        k[769]*y[IDX_NH2II] + k[839]*y[IDX_OHII];
-    data[1328] = 0.0 + k[452]*y[IDX_CH4I] + k[548]*y[IDX_H2COI] +
-        k[641]*y[IDX_HCOI] + k[796]*y[IDX_NHI];
+    data[1327] = 0.0 + k[400]*y[IDX_CHII] + k[449]*y[IDX_CH4II] + k[548]*y[IDX_H2COII] +
+        k[550]*y[IDX_HNOII] + k[552]*y[IDX_O2HII] + k[554]*y[IDX_H2OII] +
+        k[585]*y[IDX_H3II] + k[607]*y[IDX_H3OII] + k[622]*y[IDX_HCNII] +
+        k[633]*y[IDX_HCNHII] + k[634]*y[IDX_HCNHII] + k[635]*y[IDX_HCOII] +
+        k[735]*y[IDX_N2HII] + k[752]*y[IDX_NHII] + k[769]*y[IDX_NH2II] +
+        k[839]*y[IDX_OHII];
+    data[1328] = 0.0 + k[452]*y[IDX_CH4I] + k[548]*y[IDX_H2COI] + k[641]*y[IDX_HCOI] +
+        k[796]*y[IDX_NHI];
     data[1329] = 0.0 + k[418]*y[IDX_CH2II] - k[564]*y[IDX_H3COII];
     data[1330] = 0.0 + k[554]*y[IDX_H2COI];
     data[1331] = 0.0 + k[585]*y[IDX_H2COI];
-    data[1332] = 0.0 - k[317]*y[IDX_EM] - k[318]*y[IDX_EM] -
-        k[319]*y[IDX_EM] - k[320]*y[IDX_EM] - k[321]*y[IDX_EM] -
-        k[461]*y[IDX_CHI] - k[564]*y[IDX_H2OI] - k[628]*y[IDX_HCNI] -
-        k[647]*y[IDX_HNCI] - k[782]*y[IDX_NH2I] - k[1249];
+    data[1332] = 0.0 - k[317]*y[IDX_EM] - k[318]*y[IDX_EM] - k[319]*y[IDX_EM] -
+        k[320]*y[IDX_EM] - k[321]*y[IDX_EM] - k[461]*y[IDX_CHI] -
+        k[564]*y[IDX_H2OI] - k[628]*y[IDX_HCNI] - k[647]*y[IDX_HNCI] -
+        k[782]*y[IDX_NH2I] - k[1249];
     data[1333] = 0.0 + k[607]*y[IDX_H2COI];
     data[1334] = 0.0 - k[628]*y[IDX_H3COII];
     data[1335] = 0.0 + k[622]*y[IDX_H2COI];
@@ -5478,30 +5328,28 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
     data[1355] = 0.0 - k[425]*y[IDX_H3OII];
     data[1356] = 0.0 + k[453]*y[IDX_H2OII] + k[457]*y[IDX_OHII];
     data[1357] = 0.0 + k[450]*y[IDX_H2OI];
-    data[1358] = 0.0 - k[322]*y[IDX_H3OII] - k[323]*y[IDX_H3OII] -
-        k[324]*y[IDX_H3OII] - k[325]*y[IDX_H3OII];
+    data[1358] = 0.0 - k[322]*y[IDX_H3OII] - k[323]*y[IDX_H3OII] - k[324]*y[IDX_H3OII] -
+        k[325]*y[IDX_H3OII];
     data[1359] = 0.0 + k[534]*y[IDX_H2OII];
     data[1360] = 0.0 + k[518]*y[IDX_H2OI];
     data[1361] = 0.0 - k[607]*y[IDX_H3OII];
     data[1362] = 0.0 + k[563]*y[IDX_H2OI];
-    data[1363] = 0.0 + k[403]*y[IDX_CHII] + k[450]*y[IDX_CH4II] +
-        k[518]*y[IDX_H2II] + k[555]*y[IDX_H2OII] + k[563]*y[IDX_H2COII] +
-        k[564]*y[IDX_H3COII] + k[565]*y[IDX_HCNII] + k[566]*y[IDX_HCOII] +
-        k[567]*y[IDX_HCO2II] + k[568]*y[IDX_HNOII] + k[570]*y[IDX_N2HII] +
-        k[571]*y[IDX_O2HII] + k[573]*y[IDX_SiHII] + k[574]*y[IDX_SiH4II] +
-        k[575]*y[IDX_SiH5II] + k[586]*y[IDX_H3II] + k[754]*y[IDX_NHII] +
-        k[771]*y[IDX_NH2II] + k[840]*y[IDX_OHII];
-    data[1364] = 0.0 + k[453]*y[IDX_CH4I] + k[534]*y[IDX_H2I] +
-        k[555]*y[IDX_H2OI] + k[557]*y[IDX_HCOI] + k[797]*y[IDX_NHI] +
-        k[852]*y[IDX_OHI];
+    data[1363] = 0.0 + k[403]*y[IDX_CHII] + k[450]*y[IDX_CH4II] + k[518]*y[IDX_H2II] +
+        k[555]*y[IDX_H2OII] + k[563]*y[IDX_H2COII] + k[564]*y[IDX_H3COII] +
+        k[565]*y[IDX_HCNII] + k[566]*y[IDX_HCOII] + k[567]*y[IDX_HCO2II] +
+        k[568]*y[IDX_HNOII] + k[570]*y[IDX_N2HII] + k[571]*y[IDX_O2HII] +
+        k[573]*y[IDX_SiHII] + k[574]*y[IDX_SiH4II] + k[575]*y[IDX_SiH5II] +
+        k[586]*y[IDX_H3II] + k[754]*y[IDX_NHII] + k[771]*y[IDX_NH2II] +
+        k[840]*y[IDX_OHII];
+    data[1364] = 0.0 + k[453]*y[IDX_CH4I] + k[534]*y[IDX_H2I] + k[555]*y[IDX_H2OI] +
+        k[557]*y[IDX_HCOI] + k[797]*y[IDX_NHI] + k[852]*y[IDX_OHI];
     data[1365] = 0.0 + k[586]*y[IDX_H2OI];
     data[1366] = 0.0 + k[564]*y[IDX_H2OI];
-    data[1367] = 0.0 - k[322]*y[IDX_EM] - k[323]*y[IDX_EM] -
-        k[324]*y[IDX_EM] - k[325]*y[IDX_EM] - k[384]*y[IDX_CI] -
-        k[425]*y[IDX_CH2I] - k[462]*y[IDX_CHI] - k[607]*y[IDX_H2COI] -
-        k[608]*y[IDX_HCNI] - k[609]*y[IDX_HNCI] - k[610]*y[IDX_SiI] -
-        k[611]*y[IDX_SiH2I] - k[612]*y[IDX_SiHI] - k[613]*y[IDX_SiOI] -
-        k[783]*y[IDX_NH2I] - k[1286];
+    data[1367] = 0.0 - k[322]*y[IDX_EM] - k[323]*y[IDX_EM] - k[324]*y[IDX_EM] -
+        k[325]*y[IDX_EM] - k[384]*y[IDX_CI] - k[425]*y[IDX_CH2I] -
+        k[462]*y[IDX_CHI] - k[607]*y[IDX_H2COI] - k[608]*y[IDX_HCNI] -
+        k[609]*y[IDX_HNCI] - k[610]*y[IDX_SiI] - k[611]*y[IDX_SiH2I] -
+        k[612]*y[IDX_SiHI] - k[613]*y[IDX_SiOI] - k[783]*y[IDX_NH2I] - k[1286];
     data[1368] = 0.0 - k[608]*y[IDX_H3OII];
     data[1369] = 0.0 + k[565]*y[IDX_H2OI];
     data[1370] = 0.0 + k[557]*y[IDX_H2OII];
@@ -5526,62 +5374,57 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
     data[1389] = 0.0 - k[613]*y[IDX_H3OII];
     data[1390] = 0.0 + k[1323] + k[1324] + k[1325] + k[1326];
     data[1391] = 0.0 + k[866]*y[IDX_NH2I];
-    data[1392] = 0.0 + k[464]*y[IDX_HCNHII] + k[927]*y[IDX_N2I] +
-        k[930]*y[IDX_NOI];
+    data[1392] = 0.0 + k[464]*y[IDX_HCNHII] + k[927]*y[IDX_N2I] + k[930]*y[IDX_NOI];
     data[1393] = 0.0 - k[405]*y[IDX_HCNI];
-    data[1394] = 0.0 + k[427]*y[IDX_HCNHII] + k[880]*y[IDX_CNI] +
-        k[884]*y[IDX_N2I] + k[887]*y[IDX_NOI] + k[1005]*y[IDX_NI];
-    data[1395] = 0.0 + k[902]*y[IDX_CNI] + k[910]*y[IDX_NOI] +
-        k[1009]*y[IDX_NI] + k[1010]*y[IDX_NI];
+    data[1394] = 0.0 + k[427]*y[IDX_HCNHII] + k[880]*y[IDX_CNI] + k[884]*y[IDX_N2I] +
+        k[887]*y[IDX_NOI] + k[1005]*y[IDX_NI];
+    data[1395] = 0.0 + k[902]*y[IDX_CNI] + k[910]*y[IDX_NOI] + k[1009]*y[IDX_NI] +
+        k[1010]*y[IDX_NI];
     data[1396] = 0.0 + k[920]*y[IDX_CNI];
-    data[1397] = 0.0 + k[880]*y[IDX_CH2I] + k[902]*y[IDX_CH3I] +
-        k[920]*y[IDX_CH4I] + k[942]*y[IDX_H2COI] + k[943]*y[IDX_HCOI] +
-        k[944]*y[IDX_HNOI] + k[950]*y[IDX_SiH4I] + k[959]*y[IDX_H2I] +
-        k[1033]*y[IDX_NH3I] + k[1035]*y[IDX_NHI] + k[1090]*y[IDX_OHI];
+    data[1397] = 0.0 + k[880]*y[IDX_CH2I] + k[902]*y[IDX_CH3I] + k[920]*y[IDX_CH4I] +
+        k[942]*y[IDX_H2COI] + k[943]*y[IDX_HCOI] + k[944]*y[IDX_HNOI] +
+        k[950]*y[IDX_SiH4I] + k[959]*y[IDX_H2I] + k[1033]*y[IDX_NH3I] +
+        k[1035]*y[IDX_NHI] + k[1090]*y[IDX_OHI];
     data[1398] = 0.0 - k[65]*y[IDX_HCNI] + k[479]*y[IDX_H2COI];
     data[1399] = 0.0 - k[134]*y[IDX_HCNI];
     data[1400] = 0.0 + k[328]*y[IDX_HCNHII];
-    data[1401] = 0.0 + k[129]*y[IDX_HCNII] + k[973]*y[IDX_H2CNI] -
-        k[976]*y[IDX_HCNI] + k[979]*y[IDX_HNCI] + k[993]*y[IDX_OCNI];
+    data[1401] = 0.0 + k[129]*y[IDX_HCNII] + k[973]*y[IDX_H2CNI] - k[976]*y[IDX_HCNI] +
+        k[979]*y[IDX_HNCI] + k[993]*y[IDX_OCNI];
     data[1402] = 0.0 + k[1]*y[IDX_HNCI] - k[81]*y[IDX_HCNI];
     data[1403] = 0.0 + k[959]*y[IDX_CNI];
     data[1404] = 0.0 - k[107]*y[IDX_HCNI];
-    data[1405] = 0.0 + k[254] + k[973]*y[IDX_HI] + k[1013]*y[IDX_NI] +
-        k[1135];
-    data[1406] = 0.0 + k[479]*y[IDX_CNII] + k[633]*y[IDX_HCNHII] +
-        k[942]*y[IDX_CNI];
+    data[1405] = 0.0 + k[254] + k[973]*y[IDX_HI] + k[1013]*y[IDX_NI] + k[1135];
+    data[1406] = 0.0 + k[479]*y[IDX_CNII] + k[633]*y[IDX_HCNHII] + k[942]*y[IDX_CNI];
     data[1407] = 0.0 - k[627]*y[IDX_HCNI];
     data[1408] = 0.0 + k[124]*y[IDX_HCNII];
     data[1409] = 0.0 - k[556]*y[IDX_HCNI];
     data[1410] = 0.0 - k[587]*y[IDX_HCNI];
     data[1411] = 0.0 - k[628]*y[IDX_HCNI];
     data[1412] = 0.0 - k[608]*y[IDX_HCNI];
-    data[1413] = 0.0 - k[65]*y[IDX_CNII] - k[81]*y[IDX_HII] -
-        k[107]*y[IDX_H2II] - k[134]*y[IDX_COII] - k[135]*y[IDX_N2II] -
-        k[161]*y[IDX_NII] - k[259] - k[405]*y[IDX_CHII] - k[556]*y[IDX_H2OII] -
-        k[587]*y[IDX_H3II] - k[608]*y[IDX_H3OII] - k[623]*y[IDX_HCNII] -
-        k[627]*y[IDX_H2COII] - k[628]*y[IDX_H3COII] - k[629]*y[IDX_HCOII] -
-        k[630]*y[IDX_HNOII] - k[631]*y[IDX_N2HII] - k[632]*y[IDX_O2HII] -
-        k[676]*y[IDX_HeII] - k[677]*y[IDX_HeII] - k[678]*y[IDX_HeII] -
-        k[679]*y[IDX_HeII] - k[758]*y[IDX_NHII] - k[773]*y[IDX_NH2II] -
-        k[814]*y[IDX_OII] - k[815]*y[IDX_OII] - k[841]*y[IDX_OHII] -
-        k[976]*y[IDX_HI] - k[1063]*y[IDX_OI] - k[1064]*y[IDX_OI] -
-        k[1065]*y[IDX_OI] - k[1094]*y[IDX_OHI] - k[1095]*y[IDX_OHI] - k[1147] -
-        k[1266];
-    data[1414] = 0.0 + k[124]*y[IDX_H2OI] + k[129]*y[IDX_HI] +
-        k[132]*y[IDX_NOI] + k[133]*y[IDX_O2I] + k[196]*y[IDX_NH3I] -
-        k[623]*y[IDX_HCNI];
-    data[1415] = 0.0 + k[328]*y[IDX_EM] + k[427]*y[IDX_CH2I] +
-        k[464]*y[IDX_CHI] + k[633]*y[IDX_H2COI] + k[785]*y[IDX_NH2I];
+    data[1413] = 0.0 - k[65]*y[IDX_CNII] - k[81]*y[IDX_HII] - k[107]*y[IDX_H2II] -
+        k[134]*y[IDX_COII] - k[135]*y[IDX_N2II] - k[161]*y[IDX_NII] - k[259] -
+        k[405]*y[IDX_CHII] - k[556]*y[IDX_H2OII] - k[587]*y[IDX_H3II] -
+        k[608]*y[IDX_H3OII] - k[623]*y[IDX_HCNII] - k[627]*y[IDX_H2COII] -
+        k[628]*y[IDX_H3COII] - k[629]*y[IDX_HCOII] - k[630]*y[IDX_HNOII] -
+        k[631]*y[IDX_N2HII] - k[632]*y[IDX_O2HII] - k[676]*y[IDX_HeII] -
+        k[677]*y[IDX_HeII] - k[678]*y[IDX_HeII] - k[679]*y[IDX_HeII] -
+        k[758]*y[IDX_NHII] - k[773]*y[IDX_NH2II] - k[814]*y[IDX_OII] -
+        k[815]*y[IDX_OII] - k[841]*y[IDX_OHII] - k[976]*y[IDX_HI] -
+        k[1063]*y[IDX_OI] - k[1064]*y[IDX_OI] - k[1065]*y[IDX_OI] -
+        k[1094]*y[IDX_OHI] - k[1095]*y[IDX_OHI] - k[1147] - k[1266];
+    data[1414] = 0.0 + k[124]*y[IDX_H2OI] + k[129]*y[IDX_HI] + k[132]*y[IDX_NOI] +
+        k[133]*y[IDX_O2I] + k[196]*y[IDX_NH3I] - k[623]*y[IDX_HCNI];
+    data[1415] = 0.0 + k[328]*y[IDX_EM] + k[427]*y[IDX_CH2I] + k[464]*y[IDX_CHI] +
+        k[633]*y[IDX_H2COI] + k[785]*y[IDX_NH2I];
     data[1416] = 0.0 + k[943]*y[IDX_CNI] + k[1015]*y[IDX_NI];
     data[1417] = 0.0 - k[629]*y[IDX_HCNI];
-    data[1418] = 0.0 - k[676]*y[IDX_HCNI] - k[677]*y[IDX_HCNI] -
-        k[678]*y[IDX_HCNI] - k[679]*y[IDX_HCNI];
+    data[1418] = 0.0 - k[676]*y[IDX_HCNI] - k[677]*y[IDX_HCNI] - k[678]*y[IDX_HCNI] -
+        k[679]*y[IDX_HCNI];
     data[1419] = 0.0 + k[1]*y[IDX_HII] + k[979]*y[IDX_HI];
     data[1420] = 0.0 + k[944]*y[IDX_CNI];
     data[1421] = 0.0 - k[630]*y[IDX_HCNI];
-    data[1422] = 0.0 + k[1005]*y[IDX_CH2I] + k[1009]*y[IDX_CH3I] +
-        k[1010]*y[IDX_CH3I] + k[1013]*y[IDX_H2CNI] + k[1015]*y[IDX_HCOI];
+    data[1422] = 0.0 + k[1005]*y[IDX_CH2I] + k[1009]*y[IDX_CH3I] + k[1010]*y[IDX_CH3I] +
+        k[1013]*y[IDX_H2CNI] + k[1015]*y[IDX_HCOI];
     data[1423] = 0.0 - k[161]*y[IDX_HCNI];
     data[1424] = 0.0 + k[884]*y[IDX_CH2I] + k[927]*y[IDX_CHI];
     data[1425] = 0.0 - k[135]*y[IDX_HCNI];
@@ -5591,16 +5434,14 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
     data[1429] = 0.0 + k[785]*y[IDX_HCNHII] + k[866]*y[IDX_CI];
     data[1430] = 0.0 - k[773]*y[IDX_HCNI];
     data[1431] = 0.0 + k[196]*y[IDX_HCNII] + k[1033]*y[IDX_CNI];
-    data[1432] = 0.0 + k[132]*y[IDX_HCNII] + k[887]*y[IDX_CH2I] +
-        k[910]*y[IDX_CH3I] + k[930]*y[IDX_CHI];
-    data[1433] = 0.0 - k[1063]*y[IDX_HCNI] - k[1064]*y[IDX_HCNI] -
-        k[1065]*y[IDX_HCNI];
+    data[1432] = 0.0 + k[132]*y[IDX_HCNII] + k[887]*y[IDX_CH2I] + k[910]*y[IDX_CH3I] +
+        k[930]*y[IDX_CHI];
+    data[1433] = 0.0 - k[1063]*y[IDX_HCNI] - k[1064]*y[IDX_HCNI] - k[1065]*y[IDX_HCNI];
     data[1434] = 0.0 - k[814]*y[IDX_HCNI] - k[815]*y[IDX_HCNI];
     data[1435] = 0.0 + k[133]*y[IDX_HCNII];
     data[1436] = 0.0 - k[632]*y[IDX_HCNI];
     data[1437] = 0.0 + k[993]*y[IDX_HI];
-    data[1438] = 0.0 + k[1090]*y[IDX_CNI] - k[1094]*y[IDX_HCNI] -
-        k[1095]*y[IDX_HCNI];
+    data[1438] = 0.0 + k[1090]*y[IDX_CNI] - k[1094]*y[IDX_HCNI] - k[1095]*y[IDX_HCNI];
     data[1439] = 0.0 - k[841]*y[IDX_HCNI];
     data[1440] = 0.0 + k[950]*y[IDX_CNI];
     data[1441] = 0.0 - k[385]*y[IDX_HCNII];
@@ -5610,11 +5451,10 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
     data[1445] = 0.0 - k[426]*y[IDX_HCNII];
     data[1446] = 0.0 + k[736]*y[IDX_NI];
     data[1447] = 0.0 - k[454]*y[IDX_HCNII] + k[717]*y[IDX_NII];
-    data[1448] = 0.0 + k[482]*y[IDX_HNOII] + k[483]*y[IDX_O2HII] +
-        k[513]*y[IDX_H2II] + k[581]*y[IDX_H3II] + k[747]*y[IDX_NHII] +
-        k[836]*y[IDX_OHII];
-    data[1449] = 0.0 + k[65]*y[IDX_HCNI] + k[480]*y[IDX_HCOI] +
-        k[531]*y[IDX_H2I] + k[560]*y[IDX_H2OI];
+    data[1448] = 0.0 + k[482]*y[IDX_HNOII] + k[483]*y[IDX_O2HII] + k[513]*y[IDX_H2II] +
+        k[581]*y[IDX_H3II] + k[747]*y[IDX_NHII] + k[836]*y[IDX_OHII];
+    data[1449] = 0.0 + k[65]*y[IDX_HCNI] + k[480]*y[IDX_HCOI] + k[531]*y[IDX_H2I] +
+        k[560]*y[IDX_H2OI];
     data[1450] = 0.0 - k[621]*y[IDX_HCNII];
     data[1451] = 0.0 + k[134]*y[IDX_HCNI];
     data[1452] = 0.0 - k[620]*y[IDX_HCNII];
@@ -5624,22 +5464,20 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
     data[1456] = 0.0 + k[531]*y[IDX_CNII] - k[535]*y[IDX_HCNII];
     data[1457] = 0.0 + k[107]*y[IDX_HCNI] + k[513]*y[IDX_CNI];
     data[1458] = 0.0 - k[622]*y[IDX_HCNII];
-    data[1459] = 0.0 - k[124]*y[IDX_HCNII] + k[560]*y[IDX_CNII] -
-        k[565]*y[IDX_HCNII];
+    data[1459] = 0.0 - k[124]*y[IDX_HCNII] + k[560]*y[IDX_CNII] - k[565]*y[IDX_HCNII];
     data[1460] = 0.0 + k[581]*y[IDX_CNI];
-    data[1461] = 0.0 + k[65]*y[IDX_CNII] + k[81]*y[IDX_HII] +
-        k[107]*y[IDX_H2II] + k[134]*y[IDX_COII] + k[135]*y[IDX_N2II] +
-        k[161]*y[IDX_NII] - k[623]*y[IDX_HCNII];
-    data[1462] = 0.0 - k[124]*y[IDX_H2OI] - k[129]*y[IDX_HI] -
-        k[132]*y[IDX_NOI] - k[133]*y[IDX_O2I] - k[196]*y[IDX_NH3I] -
-        k[326]*y[IDX_EM] - k[385]*y[IDX_CI] - k[426]*y[IDX_CH2I] -
-        k[454]*y[IDX_CH4I] - k[463]*y[IDX_CHI] - k[535]*y[IDX_H2I] -
-        k[565]*y[IDX_H2OI] - k[620]*y[IDX_CO2I] - k[621]*y[IDX_COI] -
-        k[622]*y[IDX_H2COI] - k[623]*y[IDX_HCNI] - k[624]*y[IDX_HCOI] -
-        k[625]*y[IDX_HCOI] - k[626]*y[IDX_HNCI] - k[784]*y[IDX_NH2I] -
-        k[793]*y[IDX_NH3I] - k[798]*y[IDX_NHI] - k[853]*y[IDX_OHI] - k[1282];
-    data[1463] = 0.0 + k[480]*y[IDX_CNII] - k[624]*y[IDX_HCNII] -
-        k[625]*y[IDX_HCNII];
+    data[1461] = 0.0 + k[65]*y[IDX_CNII] + k[81]*y[IDX_HII] + k[107]*y[IDX_H2II] +
+        k[134]*y[IDX_COII] + k[135]*y[IDX_N2II] + k[161]*y[IDX_NII] -
+        k[623]*y[IDX_HCNII];
+    data[1462] = 0.0 - k[124]*y[IDX_H2OI] - k[129]*y[IDX_HI] - k[132]*y[IDX_NOI] -
+        k[133]*y[IDX_O2I] - k[196]*y[IDX_NH3I] - k[326]*y[IDX_EM] -
+        k[385]*y[IDX_CI] - k[426]*y[IDX_CH2I] - k[454]*y[IDX_CH4I] -
+        k[463]*y[IDX_CHI] - k[535]*y[IDX_H2I] - k[565]*y[IDX_H2OI] -
+        k[620]*y[IDX_CO2I] - k[621]*y[IDX_COI] - k[622]*y[IDX_H2COI] -
+        k[623]*y[IDX_HCNI] - k[624]*y[IDX_HCOI] - k[625]*y[IDX_HCOI] -
+        k[626]*y[IDX_HNCI] - k[784]*y[IDX_NH2I] - k[793]*y[IDX_NH3I] -
+        k[798]*y[IDX_NHI] - k[853]*y[IDX_OHI] - k[1282];
+    data[1463] = 0.0 + k[480]*y[IDX_CNII] - k[624]*y[IDX_HCNII] - k[625]*y[IDX_HCNII];
     data[1464] = 0.0 - k[626]*y[IDX_HCNII];
     data[1465] = 0.0 + k[482]*y[IDX_CNI];
     data[1466] = 0.0 + k[736]*y[IDX_CH2II];
@@ -5647,10 +5485,8 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
     data[1468] = 0.0 + k[135]*y[IDX_HCNI];
     data[1469] = 0.0 - k[798]*y[IDX_HCNII];
     data[1470] = 0.0 + k[747]*y[IDX_CNI];
-    data[1471] = 0.0 + k[373]*y[IDX_CII] + k[409]*y[IDX_CHII] -
-        k[784]*y[IDX_HCNII];
-    data[1472] = 0.0 - k[196]*y[IDX_HCNII] + k[374]*y[IDX_CII] -
-        k[793]*y[IDX_HCNII];
+    data[1471] = 0.0 + k[373]*y[IDX_CII] + k[409]*y[IDX_CHII] - k[784]*y[IDX_HCNII];
+    data[1472] = 0.0 - k[196]*y[IDX_HCNII] + k[374]*y[IDX_CII] - k[793]*y[IDX_HCNII];
     data[1473] = 0.0 - k[132]*y[IDX_HCNII];
     data[1474] = 0.0 - k[133]*y[IDX_HCNII];
     data[1475] = 0.0 + k[483]*y[IDX_CNI];
@@ -5661,8 +5497,7 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
     data[1480] = 0.0 - k[427]*y[IDX_HCNHII] - k[428]*y[IDX_HCNHII];
     data[1481] = 0.0 + k[794]*y[IDX_NHI];
     data[1482] = 0.0 + k[454]*y[IDX_HCNII] + k[718]*y[IDX_NII];
-    data[1483] = 0.0 - k[327]*y[IDX_HCNHII] - k[328]*y[IDX_HCNHII] -
-        k[329]*y[IDX_HCNHII];
+    data[1483] = 0.0 - k[327]*y[IDX_HCNHII] - k[328]*y[IDX_HCNHII] - k[329]*y[IDX_HCNHII];
     data[1484] = 0.0 + k[535]*y[IDX_HCNII];
     data[1485] = 0.0 - k[633]*y[IDX_HCNHII] - k[634]*y[IDX_HCNHII];
     data[1486] = 0.0 + k[627]*y[IDX_HCNI] + k[646]*y[IDX_HNCI];
@@ -5670,25 +5505,24 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
     data[1488] = 0.0 + k[587]*y[IDX_HCNI] + k[589]*y[IDX_HNCI];
     data[1489] = 0.0 + k[628]*y[IDX_HCNI] + k[647]*y[IDX_HNCI];
     data[1490] = 0.0 + k[608]*y[IDX_HCNI] + k[609]*y[IDX_HNCI];
-    data[1491] = 0.0 + k[405]*y[IDX_CHII] + k[556]*y[IDX_H2OII] +
-        k[587]*y[IDX_H3II] + k[608]*y[IDX_H3OII] + k[623]*y[IDX_HCNII] +
-        k[627]*y[IDX_H2COII] + k[628]*y[IDX_H3COII] + k[629]*y[IDX_HCOII] +
-        k[630]*y[IDX_HNOII] + k[631]*y[IDX_N2HII] + k[632]*y[IDX_O2HII] +
-        k[758]*y[IDX_NHII] + k[773]*y[IDX_NH2II] + k[841]*y[IDX_OHII];
-    data[1492] = 0.0 + k[454]*y[IDX_CH4I] + k[535]*y[IDX_H2I] +
-        k[623]*y[IDX_HCNI] + k[625]*y[IDX_HCOI] + k[626]*y[IDX_HNCI] +
-        k[793]*y[IDX_NH3I];
-    data[1493] = 0.0 - k[327]*y[IDX_EM] - k[328]*y[IDX_EM] -
-        k[329]*y[IDX_EM] - k[427]*y[IDX_CH2I] - k[428]*y[IDX_CH2I] -
-        k[464]*y[IDX_CHI] - k[465]*y[IDX_CHI] - k[633]*y[IDX_H2COI] -
-        k[634]*y[IDX_H2COI] - k[785]*y[IDX_NH2I] - k[786]*y[IDX_NH2I] - k[1301];
+    data[1491] = 0.0 + k[405]*y[IDX_CHII] + k[556]*y[IDX_H2OII] + k[587]*y[IDX_H3II] +
+        k[608]*y[IDX_H3OII] + k[623]*y[IDX_HCNII] + k[627]*y[IDX_H2COII] +
+        k[628]*y[IDX_H3COII] + k[629]*y[IDX_HCOII] + k[630]*y[IDX_HNOII] +
+        k[631]*y[IDX_N2HII] + k[632]*y[IDX_O2HII] + k[758]*y[IDX_NHII] +
+        k[773]*y[IDX_NH2II] + k[841]*y[IDX_OHII];
+    data[1492] = 0.0 + k[454]*y[IDX_CH4I] + k[535]*y[IDX_H2I] + k[623]*y[IDX_HCNI] +
+        k[625]*y[IDX_HCOI] + k[626]*y[IDX_HNCI] + k[793]*y[IDX_NH3I];
+    data[1493] = 0.0 - k[327]*y[IDX_EM] - k[328]*y[IDX_EM] - k[329]*y[IDX_EM] -
+        k[427]*y[IDX_CH2I] - k[428]*y[IDX_CH2I] - k[464]*y[IDX_CHI] -
+        k[465]*y[IDX_CHI] - k[633]*y[IDX_H2COI] - k[634]*y[IDX_H2COI] -
+        k[785]*y[IDX_NH2I] - k[786]*y[IDX_NH2I] - k[1301];
     data[1494] = 0.0 + k[625]*y[IDX_HCNII];
     data[1495] = 0.0 + k[629]*y[IDX_HCNI] + k[648]*y[IDX_HNCI];
-    data[1496] = 0.0 + k[407]*y[IDX_CHII] + k[559]*y[IDX_H2OII] +
-        k[589]*y[IDX_H3II] + k[609]*y[IDX_H3OII] + k[626]*y[IDX_HCNII] +
-        k[646]*y[IDX_H2COII] + k[647]*y[IDX_H3COII] + k[648]*y[IDX_HCOII] +
-        k[649]*y[IDX_HNOII] + k[650]*y[IDX_N2HII] + k[651]*y[IDX_O2HII] +
-        k[760]*y[IDX_NHII] + k[775]*y[IDX_NH2II] + k[844]*y[IDX_OHII];
+    data[1496] = 0.0 + k[407]*y[IDX_CHII] + k[559]*y[IDX_H2OII] + k[589]*y[IDX_H3II] +
+        k[609]*y[IDX_H3OII] + k[626]*y[IDX_HCNII] + k[646]*y[IDX_H2COII] +
+        k[647]*y[IDX_H3COII] + k[648]*y[IDX_HCOII] + k[649]*y[IDX_HNOII] +
+        k[650]*y[IDX_N2HII] + k[651]*y[IDX_O2HII] + k[760]*y[IDX_NHII] +
+        k[775]*y[IDX_NH2II] + k[844]*y[IDX_OHII];
     data[1497] = 0.0 + k[630]*y[IDX_HCNI] + k[649]*y[IDX_HNCI];
     data[1498] = 0.0 + k[718]*y[IDX_CH4I];
     data[1499] = 0.0 + k[631]*y[IDX_HCNI] + k[650]*y[IDX_HNCI];
@@ -5700,18 +5534,15 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
     data[1505] = 0.0 + k[632]*y[IDX_HCNI] + k[651]*y[IDX_HNCI];
     data[1506] = 0.0 + k[841]*y[IDX_HCNI] + k[844]*y[IDX_HNCI];
     data[1507] = 0.0 - k[864]*y[IDX_HCOI];
-    data[1508] = 0.0 - k[17]*y[IDX_HCOI] + k[366]*y[IDX_CH3OHI] -
-        k[372]*y[IDX_HCOI];
-    data[1509] = 0.0 + k[459]*y[IDX_H2COII] + k[923]*y[IDX_CO2I] +
-        k[924]*y[IDX_H2COI] - k[925]*y[IDX_HCOI] + k[931]*y[IDX_NOI] +
-        k[936]*y[IDX_O2I] + k[937]*y[IDX_O2HI] + k[941]*y[IDX_OHI];
-    data[1510] = 0.0 - k[31]*y[IDX_HCOI] - k[406]*y[IDX_HCOI] +
-        k[413]*y[IDX_O2I];
-    data[1511] = 0.0 + k[423]*y[IDX_H2COII] + k[881]*y[IDX_H2COI] -
-        k[882]*y[IDX_HCOI] + k[893]*y[IDX_O2I] + k[896]*y[IDX_OI];
+    data[1508] = 0.0 - k[17]*y[IDX_HCOI] + k[366]*y[IDX_CH3OHI] - k[372]*y[IDX_HCOI];
+    data[1509] = 0.0 + k[459]*y[IDX_H2COII] + k[923]*y[IDX_CO2I] + k[924]*y[IDX_H2COI] -
+        k[925]*y[IDX_HCOI] + k[931]*y[IDX_NOI] + k[936]*y[IDX_O2I] +
+        k[937]*y[IDX_O2HI] + k[941]*y[IDX_OHI];
+    data[1510] = 0.0 - k[31]*y[IDX_HCOI] - k[406]*y[IDX_HCOI] + k[413]*y[IDX_O2I];
+    data[1511] = 0.0 + k[423]*y[IDX_H2COII] + k[881]*y[IDX_H2COI] - k[882]*y[IDX_HCOI] +
+        k[893]*y[IDX_O2I] + k[896]*y[IDX_OI];
     data[1512] = 0.0 - k[419]*y[IDX_HCOI];
-    data[1513] = 0.0 + k[903]*y[IDX_H2COI] - k[905]*y[IDX_HCOI] +
-        k[912]*y[IDX_O2I];
+    data[1513] = 0.0 + k[903]*y[IDX_H2COI] - k[905]*y[IDX_HCOI] + k[912]*y[IDX_O2I];
     data[1514] = 0.0 - k[46]*y[IDX_HCOI] - k[441]*y[IDX_HCOI];
     data[1515] = 0.0 + k[366]*y[IDX_CII];
     data[1516] = 0.0 + k[942]*y[IDX_H2COI] - k[943]*y[IDX_HCOI];
@@ -5719,33 +5550,30 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
     data[1518] = 0.0 - k[71]*y[IDX_HCOI] + k[484]*y[IDX_H2COI];
     data[1519] = 0.0 + k[750]*y[IDX_NHII] + k[923]*y[IDX_CHI];
     data[1520] = 0.0 + k[309]*y[IDX_H2COII] + k[321]*y[IDX_H3COII];
-    data[1521] = 0.0 + k[974]*y[IDX_H2COI] - k[977]*y[IDX_HCOI] -
-        k[978]*y[IDX_HCOI];
-    data[1522] = 0.0 - k[82]*y[IDX_HCOI] - k[500]*y[IDX_HCOI] -
-        k[501]*y[IDX_HCOI];
+    data[1521] = 0.0 + k[974]*y[IDX_H2COI] - k[977]*y[IDX_HCOI] - k[978]*y[IDX_HCOI];
+    data[1522] = 0.0 - k[82]*y[IDX_HCOI] - k[500]*y[IDX_HCOI] - k[501]*y[IDX_HCOI];
     data[1523] = 0.0 - k[108]*y[IDX_HCOI] - k[519]*y[IDX_HCOI];
-    data[1524] = 0.0 + k[484]*y[IDX_COII] + k[548]*y[IDX_H2COII] +
-        k[770]*y[IDX_NH2II] + k[881]*y[IDX_CH2I] + k[903]*y[IDX_CH3I] +
-        k[924]*y[IDX_CHI] + k[942]*y[IDX_CNI] + k[974]*y[IDX_HI] +
-        k[1061]*y[IDX_OI] + k[1093]*y[IDX_OHI];
-    data[1525] = 0.0 - k[136]*y[IDX_HCOI] + k[309]*y[IDX_EM] +
-        k[423]*y[IDX_CH2I] + k[459]*y[IDX_CHI] + k[548]*y[IDX_H2COI] +
-        k[563]*y[IDX_H2OI] + k[627]*y[IDX_HCNI] - k[641]*y[IDX_HCOI] +
-        k[646]*y[IDX_HNCI] + k[780]*y[IDX_NH2I];
+    data[1524] = 0.0 + k[484]*y[IDX_COII] + k[548]*y[IDX_H2COII] + k[770]*y[IDX_NH2II] +
+        k[881]*y[IDX_CH2I] + k[903]*y[IDX_CH3I] + k[924]*y[IDX_CHI] +
+        k[942]*y[IDX_CNI] + k[974]*y[IDX_HI] + k[1061]*y[IDX_OI] +
+        k[1093]*y[IDX_OHI];
+    data[1525] = 0.0 - k[136]*y[IDX_HCOI] + k[309]*y[IDX_EM] + k[423]*y[IDX_CH2I] +
+        k[459]*y[IDX_CHI] + k[548]*y[IDX_H2COI] + k[563]*y[IDX_H2OI] +
+        k[627]*y[IDX_HCNI] - k[641]*y[IDX_HCOI] + k[646]*y[IDX_HNCI] +
+        k[780]*y[IDX_NH2I];
     data[1526] = 0.0 + k[563]*y[IDX_H2COII];
-    data[1527] = 0.0 - k[118]*y[IDX_HCOI] - k[557]*y[IDX_HCOI] -
-        k[558]*y[IDX_HCOI];
+    data[1527] = 0.0 - k[118]*y[IDX_HCOI] - k[557]*y[IDX_HCOI] - k[558]*y[IDX_HCOI];
     data[1528] = 0.0 - k[588]*y[IDX_HCOI];
     data[1529] = 0.0 + k[321]*y[IDX_EM];
     data[1530] = 0.0 + k[627]*y[IDX_H2COII];
     data[1531] = 0.0 - k[624]*y[IDX_HCOI] - k[625]*y[IDX_HCOI];
-    data[1532] = 0.0 - k[17]*y[IDX_CII] - k[31]*y[IDX_CHII] -
-        k[46]*y[IDX_CH3II] - k[66]*y[IDX_CNII] - k[71]*y[IDX_COII] -
-        k[82]*y[IDX_HII] - k[108]*y[IDX_H2II] - k[118]*y[IDX_H2OII] -
-        k[136]*y[IDX_H2COII] - k[137]*y[IDX_O2II] - k[138]*y[IDX_SiOII] -
-        k[162]*y[IDX_NII] - k[171]*y[IDX_N2II] - k[180]*y[IDX_NH2II] -
-        k[189]*y[IDX_NH3II] - k[211]*y[IDX_OII] - k[221]*y[IDX_OHII] - k[260] -
-        k[261] - k[372]*y[IDX_CII] - k[406]*y[IDX_CHII] - k[419]*y[IDX_CH2II] -
+    data[1532] = 0.0 - k[17]*y[IDX_CII] - k[31]*y[IDX_CHII] - k[46]*y[IDX_CH3II] -
+        k[66]*y[IDX_CNII] - k[71]*y[IDX_COII] - k[82]*y[IDX_HII] -
+        k[108]*y[IDX_H2II] - k[118]*y[IDX_H2OII] - k[136]*y[IDX_H2COII] -
+        k[137]*y[IDX_O2II] - k[138]*y[IDX_SiOII] - k[162]*y[IDX_NII] -
+        k[171]*y[IDX_N2II] - k[180]*y[IDX_NH2II] - k[189]*y[IDX_NH3II] -
+        k[211]*y[IDX_OII] - k[221]*y[IDX_OHII] - k[260] - k[261] -
+        k[372]*y[IDX_CII] - k[406]*y[IDX_CHII] - k[419]*y[IDX_CH2II] -
         k[441]*y[IDX_CH3II] - k[480]*y[IDX_CNII] - k[500]*y[IDX_HII] -
         k[501]*y[IDX_HII] - k[519]*y[IDX_H2II] - k[557]*y[IDX_H2OII] -
         k[558]*y[IDX_H2OII] - k[588]*y[IDX_H3II] - k[624]*y[IDX_HCNII] -
@@ -5765,98 +5593,85 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
         k[1016]*y[IDX_NI] - k[1066]*y[IDX_OI] - k[1067]*y[IDX_OI] -
         k[1096]*y[IDX_OHI] - k[1149] - k[1150] - k[1261];
     data[1533] = 0.0 + k[149]*y[IDX_MgI] - k[636]*y[IDX_HCOI];
-    data[1534] = 0.0 - k[680]*y[IDX_HCOI] - k[681]*y[IDX_HCOI] -
-        k[682]*y[IDX_HCOI];
+    data[1534] = 0.0 - k[680]*y[IDX_HCOI] - k[681]*y[IDX_HCOI] - k[682]*y[IDX_HCOI];
     data[1535] = 0.0 + k[646]*y[IDX_H2COII];
     data[1536] = 0.0 - k[999]*y[IDX_HCOI];
     data[1537] = 0.0 - k[642]*y[IDX_HCOI];
     data[1538] = 0.0 + k[149]*y[IDX_HCOII];
-    data[1539] = 0.0 - k[1014]*y[IDX_HCOI] - k[1015]*y[IDX_HCOI] -
-        k[1016]*y[IDX_HCOI];
+    data[1539] = 0.0 - k[1014]*y[IDX_HCOI] - k[1015]*y[IDX_HCOI] - k[1016]*y[IDX_HCOI];
     data[1540] = 0.0 - k[162]*y[IDX_HCOI] - k[723]*y[IDX_HCOI];
     data[1541] = 0.0 - k[171]*y[IDX_HCOI] - k[731]*y[IDX_HCOI];
     data[1542] = 0.0 - k[643]*y[IDX_HCOI];
     data[1543] = 0.0 + k[750]*y[IDX_CO2I] - k[759]*y[IDX_HCOI];
     data[1544] = 0.0 + k[780]*y[IDX_H2COII];
-    data[1545] = 0.0 - k[180]*y[IDX_HCOI] + k[770]*y[IDX_H2COI] -
-        k[774]*y[IDX_HCOI];
+    data[1545] = 0.0 - k[180]*y[IDX_HCOI] + k[770]*y[IDX_H2COI] - k[774]*y[IDX_HCOI];
     data[1546] = 0.0 - k[189]*y[IDX_HCOI];
     data[1547] = 0.0 + k[931]*y[IDX_CHI] - k[1000]*y[IDX_HCOI];
-    data[1548] = 0.0 + k[896]*y[IDX_CH2I] + k[1061]*y[IDX_H2COI] -
-        k[1066]*y[IDX_HCOI] - k[1067]*y[IDX_HCOI];
+    data[1548] = 0.0 + k[896]*y[IDX_CH2I] + k[1061]*y[IDX_H2COI] - k[1066]*y[IDX_HCOI] -
+        k[1067]*y[IDX_HCOI];
     data[1549] = 0.0 - k[211]*y[IDX_HCOI] - k[816]*y[IDX_HCOI];
-    data[1550] = 0.0 + k[413]*y[IDX_CHII] + k[893]*y[IDX_CH2I] +
-        k[912]*y[IDX_CH3I] + k[936]*y[IDX_CHI] - k[1001]*y[IDX_HCOI] -
-        k[1002]*y[IDX_HCOI];
+    data[1550] = 0.0 + k[413]*y[IDX_CHII] + k[893]*y[IDX_CH2I] + k[912]*y[IDX_CH3I] +
+        k[936]*y[IDX_CHI] - k[1001]*y[IDX_HCOI] - k[1002]*y[IDX_HCOI];
     data[1551] = 0.0 - k[137]*y[IDX_HCOI] - k[644]*y[IDX_HCOI];
     data[1552] = 0.0 + k[937]*y[IDX_CHI] - k[1003]*y[IDX_HCOI];
     data[1553] = 0.0 - k[645]*y[IDX_HCOI];
-    data[1554] = 0.0 + k[941]*y[IDX_CHI] + k[1093]*y[IDX_H2COI] -
-        k[1096]*y[IDX_HCOI];
-    data[1555] = 0.0 - k[221]*y[IDX_HCOI] - k[842]*y[IDX_HCOI] -
-        k[843]*y[IDX_HCOI];
+    data[1554] = 0.0 + k[941]*y[IDX_CHI] + k[1093]*y[IDX_H2COI] - k[1096]*y[IDX_HCOI];
+    data[1555] = 0.0 - k[221]*y[IDX_HCOI] - k[842]*y[IDX_HCOI] - k[843]*y[IDX_HCOI];
     data[1556] = 0.0 - k[138]*y[IDX_HCOI];
     data[1557] = 0.0 + k[384]*y[IDX_H3OII] - k[386]*y[IDX_HCOII];
-    data[1558] = 0.0 + k[17]*y[IDX_HCOI] + k[369]*y[IDX_H2COI] +
-        k[370]*y[IDX_H2OI];
-    data[1559] = 0.0 + k[0]*y[IDX_OI] + k[458]*y[IDX_COII] -
-        k[466]*y[IDX_HCOII] + k[473]*y[IDX_O2II] + k[478]*y[IDX_SiOII];
-    data[1560] = 0.0 + k[31]*y[IDX_HCOI] + k[398]*y[IDX_CO2I] +
-        k[401]*y[IDX_H2COI] + k[404]*y[IDX_H2OI] + k[412]*y[IDX_O2I];
+    data[1558] = 0.0 + k[17]*y[IDX_HCOI] + k[369]*y[IDX_H2COI] + k[370]*y[IDX_H2OI];
+    data[1559] = 0.0 + k[0]*y[IDX_OI] + k[458]*y[IDX_COII] - k[466]*y[IDX_HCOII] +
+        k[473]*y[IDX_O2II] + k[478]*y[IDX_SiOII];
+    data[1560] = 0.0 + k[31]*y[IDX_HCOI] + k[398]*y[IDX_CO2I] + k[401]*y[IDX_H2COI] +
+        k[404]*y[IDX_H2OI] + k[412]*y[IDX_O2I];
     data[1561] = 0.0 + k[422]*y[IDX_COII] - k[429]*y[IDX_HCOII];
-    data[1562] = 0.0 + k[417]*y[IDX_H2COI] + k[420]*y[IDX_O2I] +
-        k[421]*y[IDX_OI];
-    data[1563] = 0.0 + k[46]*y[IDX_HCOI] + k[440]*y[IDX_H2COI] +
-        k[444]*y[IDX_OI];
+    data[1562] = 0.0 + k[417]*y[IDX_H2COI] + k[420]*y[IDX_O2I] + k[421]*y[IDX_OI];
+    data[1563] = 0.0 + k[46]*y[IDX_HCOI] + k[440]*y[IDX_H2COI] + k[444]*y[IDX_OI];
     data[1564] = 0.0 + k[494]*y[IDX_HII];
     data[1565] = 0.0 + k[451]*y[IDX_COII];
     data[1566] = 0.0 + k[448]*y[IDX_COI];
-    data[1567] = 0.0 + k[66]*y[IDX_HCOI] + k[479]*y[IDX_H2COI] +
-        k[561]*y[IDX_H2OI];
-    data[1568] = 0.0 + k[448]*y[IDX_CH4II] + k[485]*y[IDX_HCO2II] +
-        k[486]*y[IDX_HNOII] + k[487]*y[IDX_N2HII] + k[488]*y[IDX_O2HII] +
-        k[489]*y[IDX_SiH4II] + k[515]*y[IDX_H2II] + k[553]*y[IDX_H2OII] +
-        k[583]*y[IDX_H3II] + k[621]*y[IDX_HCNII] + k[751]*y[IDX_NHII] +
-        k[838]*y[IDX_OHII];
-    data[1569] = 0.0 + k[71]*y[IDX_HCOI] + k[422]*y[IDX_CH2I] +
-        k[451]*y[IDX_CH4I] + k[458]*y[IDX_CHI] + k[484]*y[IDX_H2COI] +
-        k[532]*y[IDX_H2I] + k[562]*y[IDX_H2OI] + k[779]*y[IDX_NH2I] +
-        k[792]*y[IDX_NH3I] + k[795]*y[IDX_NHI] + k[851]*y[IDX_OHI];
+    data[1567] = 0.0 + k[66]*y[IDX_HCOI] + k[479]*y[IDX_H2COI] + k[561]*y[IDX_H2OI];
+    data[1568] = 0.0 + k[448]*y[IDX_CH4II] + k[485]*y[IDX_HCO2II] + k[486]*y[IDX_HNOII] +
+        k[487]*y[IDX_N2HII] + k[488]*y[IDX_O2HII] + k[489]*y[IDX_SiH4II] +
+        k[515]*y[IDX_H2II] + k[553]*y[IDX_H2OII] + k[583]*y[IDX_H3II] +
+        k[621]*y[IDX_HCNII] + k[751]*y[IDX_NHII] + k[838]*y[IDX_OHII];
+    data[1569] = 0.0 + k[71]*y[IDX_HCOI] + k[422]*y[IDX_CH2I] + k[451]*y[IDX_CH4I] +
+        k[458]*y[IDX_CHI] + k[484]*y[IDX_H2COI] + k[532]*y[IDX_H2I] +
+        k[562]*y[IDX_H2OI] + k[779]*y[IDX_NH2I] + k[792]*y[IDX_NH3I] +
+        k[795]*y[IDX_NHI] + k[851]*y[IDX_OHI];
     data[1570] = 0.0 + k[398]*y[IDX_CHII] + k[496]*y[IDX_HII];
     data[1571] = 0.0 - k[330]*y[IDX_HCOII];
-    data[1572] = 0.0 + k[82]*y[IDX_HCOI] + k[494]*y[IDX_CH3OHI] +
-        k[496]*y[IDX_CO2I] + k[498]*y[IDX_H2COI];
+    data[1572] = 0.0 + k[82]*y[IDX_HCOI] + k[494]*y[IDX_CH3OHI] + k[496]*y[IDX_CO2I] +
+        k[498]*y[IDX_H2COI];
     data[1573] = 0.0 + k[5]*y[IDX_HOCII] + k[532]*y[IDX_COII];
-    data[1574] = 0.0 + k[108]*y[IDX_HCOI] + k[515]*y[IDX_COI] +
-        k[517]*y[IDX_H2COI];
-    data[1575] = 0.0 + k[369]*y[IDX_CII] + k[401]*y[IDX_CHII] +
-        k[417]*y[IDX_CH2II] + k[440]*y[IDX_CH3II] + k[479]*y[IDX_CNII] +
-        k[484]*y[IDX_COII] + k[498]*y[IDX_HII] + k[517]*y[IDX_H2II] +
-        k[551]*y[IDX_O2II] - k[635]*y[IDX_HCOII] + k[671]*y[IDX_HeII] +
-        k[721]*y[IDX_NII] + k[730]*y[IDX_N2II] + k[753]*y[IDX_NHII] +
-        k[813]*y[IDX_OII] + k[1139];
+    data[1574] = 0.0 + k[108]*y[IDX_HCOI] + k[515]*y[IDX_COI] + k[517]*y[IDX_H2COI];
+    data[1575] = 0.0 + k[369]*y[IDX_CII] + k[401]*y[IDX_CHII] + k[417]*y[IDX_CH2II] +
+        k[440]*y[IDX_CH3II] + k[479]*y[IDX_CNII] + k[484]*y[IDX_COII] +
+        k[498]*y[IDX_HII] + k[517]*y[IDX_H2II] + k[551]*y[IDX_O2II] -
+        k[635]*y[IDX_HCOII] + k[671]*y[IDX_HeII] + k[721]*y[IDX_NII] +
+        k[730]*y[IDX_N2II] + k[753]*y[IDX_NHII] + k[813]*y[IDX_OII] + k[1139];
     data[1576] = 0.0 + k[136]*y[IDX_HCOI] + k[549]*y[IDX_O2I];
-    data[1577] = 0.0 + k[370]*y[IDX_CII] + k[404]*y[IDX_CHII] +
-        k[561]*y[IDX_CNII] + k[562]*y[IDX_COII] - k[566]*y[IDX_HCOII];
+    data[1577] = 0.0 + k[370]*y[IDX_CII] + k[404]*y[IDX_CHII] + k[561]*y[IDX_CNII] +
+        k[562]*y[IDX_COII] - k[566]*y[IDX_HCOII];
     data[1578] = 0.0 + k[118]*y[IDX_HCOI] + k[553]*y[IDX_COI];
     data[1579] = 0.0 + k[583]*y[IDX_COI];
     data[1580] = 0.0 + k[384]*y[IDX_CI];
     data[1581] = 0.0 - k[629]*y[IDX_HCOII] + k[814]*y[IDX_OII];
     data[1582] = 0.0 + k[621]*y[IDX_COI];
-    data[1583] = 0.0 + k[17]*y[IDX_CII] + k[31]*y[IDX_CHII] +
-        k[46]*y[IDX_CH3II] + k[66]*y[IDX_CNII] + k[71]*y[IDX_COII] +
-        k[82]*y[IDX_HII] + k[108]*y[IDX_H2II] + k[118]*y[IDX_H2OII] +
-        k[136]*y[IDX_H2COII] + k[137]*y[IDX_O2II] + k[138]*y[IDX_SiOII] +
-        k[162]*y[IDX_NII] + k[171]*y[IDX_N2II] + k[180]*y[IDX_NH2II] +
-        k[189]*y[IDX_NH3II] + k[211]*y[IDX_OII] + k[221]*y[IDX_OHII] + k[261] -
-        k[636]*y[IDX_HCOII] + k[1150];
-    data[1584] = 0.0 - k[149]*y[IDX_MgI] - k[330]*y[IDX_EM] -
-        k[386]*y[IDX_CI] - k[429]*y[IDX_CH2I] - k[466]*y[IDX_CHI] -
-        k[566]*y[IDX_H2OI] - k[629]*y[IDX_HCNI] - k[635]*y[IDX_H2COI] -
-        k[636]*y[IDX_HCOI] - k[637]*y[IDX_SiH2I] - k[638]*y[IDX_SiH4I] -
-        k[639]*y[IDX_SiHI] - k[640]*y[IDX_SiOI] - k[648]*y[IDX_HNCI] -
-        k[787]*y[IDX_NH2I] - k[799]*y[IDX_NHI] - k[854]*y[IDX_OHI] -
-        k[855]*y[IDX_OHI] - k[861]*y[IDX_SiI] - k[1148] - k[1281];
+    data[1583] = 0.0 + k[17]*y[IDX_CII] + k[31]*y[IDX_CHII] + k[46]*y[IDX_CH3II] +
+        k[66]*y[IDX_CNII] + k[71]*y[IDX_COII] + k[82]*y[IDX_HII] +
+        k[108]*y[IDX_H2II] + k[118]*y[IDX_H2OII] + k[136]*y[IDX_H2COII] +
+        k[137]*y[IDX_O2II] + k[138]*y[IDX_SiOII] + k[162]*y[IDX_NII] +
+        k[171]*y[IDX_N2II] + k[180]*y[IDX_NH2II] + k[189]*y[IDX_NH3II] +
+        k[211]*y[IDX_OII] + k[221]*y[IDX_OHII] + k[261] - k[636]*y[IDX_HCOII] +
+        k[1150];
+    data[1584] = 0.0 - k[149]*y[IDX_MgI] - k[330]*y[IDX_EM] - k[386]*y[IDX_CI] -
+        k[429]*y[IDX_CH2I] - k[466]*y[IDX_CHI] - k[566]*y[IDX_H2OI] -
+        k[629]*y[IDX_HCNI] - k[635]*y[IDX_H2COI] - k[636]*y[IDX_HCOI] -
+        k[637]*y[IDX_SiH2I] - k[638]*y[IDX_SiH4I] - k[639]*y[IDX_SiHI] -
+        k[640]*y[IDX_SiOI] - k[648]*y[IDX_HNCI] - k[787]*y[IDX_NH2I] -
+        k[799]*y[IDX_NHI] - k[854]*y[IDX_OHI] - k[855]*y[IDX_OHI] -
+        k[861]*y[IDX_SiI] - k[1148] - k[1281];
     data[1585] = 0.0 + k[485]*y[IDX_COI] + k[824]*y[IDX_OI];
     data[1586] = 0.0 + k[671]*y[IDX_H2COI];
     data[1587] = 0.0 - k[648]*y[IDX_HCOII];
@@ -5872,17 +5687,13 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
     data[1597] = 0.0 + k[180]*y[IDX_HCOI];
     data[1598] = 0.0 + k[792]*y[IDX_COII];
     data[1599] = 0.0 + k[189]*y[IDX_HCOI];
-    data[1600] = 0.0 + k[0]*y[IDX_CHI] + k[421]*y[IDX_CH2II] +
-        k[444]*y[IDX_CH3II] + k[824]*y[IDX_HCO2II];
-    data[1601] = 0.0 + k[211]*y[IDX_HCOI] + k[813]*y[IDX_H2COI] +
-        k[814]*y[IDX_HCNI];
-    data[1602] = 0.0 + k[412]*y[IDX_CHII] + k[420]*y[IDX_CH2II] +
-        k[549]*y[IDX_H2COII];
-    data[1603] = 0.0 + k[137]*y[IDX_HCOI] + k[473]*y[IDX_CHI] +
-        k[551]*y[IDX_H2COI];
+    data[1600] = 0.0 + k[0]*y[IDX_CHI] + k[421]*y[IDX_CH2II] + k[444]*y[IDX_CH3II] +
+        k[824]*y[IDX_HCO2II];
+    data[1601] = 0.0 + k[211]*y[IDX_HCOI] + k[813]*y[IDX_H2COI] + k[814]*y[IDX_HCNI];
+    data[1602] = 0.0 + k[412]*y[IDX_CHII] + k[420]*y[IDX_CH2II] + k[549]*y[IDX_H2COII];
+    data[1603] = 0.0 + k[137]*y[IDX_HCOI] + k[473]*y[IDX_CHI] + k[551]*y[IDX_H2COI];
     data[1604] = 0.0 + k[488]*y[IDX_COI];
-    data[1605] = 0.0 + k[851]*y[IDX_COII] - k[854]*y[IDX_HCOII] -
-        k[855]*y[IDX_HCOII];
+    data[1605] = 0.0 + k[851]*y[IDX_COII] - k[854]*y[IDX_HCOII] - k[855]*y[IDX_HCOII];
     data[1606] = 0.0 + k[221]*y[IDX_HCOI] + k[838]*y[IDX_COI];
     data[1607] = 0.0 - k[861]*y[IDX_HCOII];
     data[1608] = 0.0 - k[639]*y[IDX_HCOII];
@@ -5894,20 +5705,18 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
     data[1614] = 0.0 - k[387]*y[IDX_HCO2II];
     data[1615] = 0.0 + k[447]*y[IDX_CO2I];
     data[1616] = 0.0 - k[485]*y[IDX_HCO2II];
-    data[1617] = 0.0 + k[447]*y[IDX_CH4II] + k[514]*y[IDX_H2II] +
-        k[582]*y[IDX_H3II] + k[620]*y[IDX_HCNII] + k[652]*y[IDX_HNOII] +
-        k[734]*y[IDX_N2HII] + k[748]*y[IDX_NHII] + k[821]*y[IDX_O2HII] +
-        k[837]*y[IDX_OHII];
-    data[1618] = 0.0 - k[331]*y[IDX_HCO2II] - k[332]*y[IDX_HCO2II] -
-        k[333]*y[IDX_HCO2II];
+    data[1617] = 0.0 + k[447]*y[IDX_CH4II] + k[514]*y[IDX_H2II] + k[582]*y[IDX_H3II] +
+        k[620]*y[IDX_HCNII] + k[652]*y[IDX_HNOII] + k[734]*y[IDX_N2HII] +
+        k[748]*y[IDX_NHII] + k[821]*y[IDX_O2HII] + k[837]*y[IDX_OHII];
+    data[1618] = 0.0 - k[331]*y[IDX_HCO2II] - k[332]*y[IDX_HCO2II] - k[333]*y[IDX_HCO2II];
     data[1619] = 0.0 + k[514]*y[IDX_CO2I];
     data[1620] = 0.0 - k[567]*y[IDX_HCO2II];
     data[1621] = 0.0 + k[582]*y[IDX_CO2I];
     data[1622] = 0.0 + k[620]*y[IDX_CO2I];
     data[1623] = 0.0 + k[855]*y[IDX_OHI];
-    data[1624] = 0.0 - k[331]*y[IDX_EM] - k[332]*y[IDX_EM] -
-        k[333]*y[IDX_EM] - k[387]*y[IDX_CI] - k[485]*y[IDX_COI] -
-        k[567]*y[IDX_H2OI] - k[824]*y[IDX_OI] - k[1287];
+    data[1624] = 0.0 - k[331]*y[IDX_EM] - k[332]*y[IDX_EM] - k[333]*y[IDX_EM] -
+        k[387]*y[IDX_CI] - k[485]*y[IDX_COI] - k[567]*y[IDX_H2OI] -
+        k[824]*y[IDX_OI] - k[1287];
     data[1625] = 0.0 + k[652]*y[IDX_CO2I];
     data[1626] = 0.0 + k[734]*y[IDX_CO2I];
     data[1627] = 0.0 + k[748]*y[IDX_CO2I];
@@ -5920,62 +5729,56 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
     data[1634] = 0.0 + k[653]*y[IDX_HeII] + k[654]*y[IDX_HeII];
     data[1635] = 0.0 + k[655]*y[IDX_HeII];
     data[1636] = 0.0 + k[656]*y[IDX_HeII] + k[657]*y[IDX_HeII];
-    data[1637] = 0.0 + k[140]*y[IDX_HeII] + k[658]*y[IDX_HeII] +
-        k[659]*y[IDX_HeII] + k[660]*y[IDX_HeII] + k[661]*y[IDX_HeII];
+    data[1637] = 0.0 + k[140]*y[IDX_HeII] + k[658]*y[IDX_HeII] + k[659]*y[IDX_HeII] +
+        k[660]*y[IDX_HeII] + k[661]*y[IDX_HeII];
     data[1638] = 0.0 + k[663]*y[IDX_HeII] + k[664]*y[IDX_HeII];
     data[1639] = 0.0 + k[669]*y[IDX_HeII];
-    data[1640] = 0.0 + k[665]*y[IDX_HeII] + k[666]*y[IDX_HeII] +
-        k[667]*y[IDX_HeII] + k[668]*y[IDX_HeII];
+    data[1640] = 0.0 + k[665]*y[IDX_HeII] + k[666]*y[IDX_HeII] + k[667]*y[IDX_HeII] +
+        k[668]*y[IDX_HeII];
     data[1641] = 0.0 + k[336]*y[IDX_HeHII] + k[1218]*y[IDX_HeII];
     data[1642] = 0.0 + k[130]*y[IDX_HeII] + k[618]*y[IDX_HeHII];
     data[1643] = 0.0 - k[1198]*y[IDX_HeI];
-    data[1644] = 0.0 + k[115]*y[IDX_HeII] + k[536]*y[IDX_HeII] +
-        k[537]*y[IDX_HeHII];
+    data[1644] = 0.0 + k[115]*y[IDX_HeII] + k[536]*y[IDX_HeII] + k[537]*y[IDX_HeHII];
     data[1645] = 0.0 - k[520]*y[IDX_HeI];
-    data[1646] = 0.0 + k[142]*y[IDX_HeII] + k[670]*y[IDX_HeII] +
-        k[671]*y[IDX_HeII] + k[672]*y[IDX_HeII];
-    data[1647] = 0.0 + k[143]*y[IDX_HeII] + k[673]*y[IDX_HeII] +
-        k[674]*y[IDX_HeII];
+    data[1646] = 0.0 + k[142]*y[IDX_HeII] + k[670]*y[IDX_HeII] + k[671]*y[IDX_HeII] +
+        k[672]*y[IDX_HeII];
+    data[1647] = 0.0 + k[143]*y[IDX_HeII] + k[673]*y[IDX_HeII] + k[674]*y[IDX_HeII];
     data[1648] = 0.0 + k[675]*y[IDX_HeII];
-    data[1649] = 0.0 + k[676]*y[IDX_HeII] + k[677]*y[IDX_HeII] +
-        k[678]*y[IDX_HeII] + k[679]*y[IDX_HeII];
+    data[1649] = 0.0 + k[676]*y[IDX_HeII] + k[677]*y[IDX_HeII] + k[678]*y[IDX_HeII] +
+        k[679]*y[IDX_HeII];
     data[1650] = 0.0 + k[680]*y[IDX_HeII] + k[682]*y[IDX_HeII];
-    data[1651] = 0.0 - k[237] - k[265] - k[520]*y[IDX_H2II] -
-        k[1198]*y[IDX_HII];
-    data[1652] = 0.0 + k[115]*y[IDX_H2I] + k[130]*y[IDX_HI] +
-        k[139]*y[IDX_CI] + k[140]*y[IDX_CH4I] + k[141]*y[IDX_CHI] +
-        k[142]*y[IDX_H2COI] + k[143]*y[IDX_H2OI] + k[144]*y[IDX_N2I] +
-        k[145]*y[IDX_NH3I] + k[146]*y[IDX_O2I] + k[147]*y[IDX_SiI] +
-        k[536]*y[IDX_H2I] + k[653]*y[IDX_CH2I] + k[654]*y[IDX_CH2I] +
-        k[655]*y[IDX_CH3I] + k[656]*y[IDX_CH3OHI] + k[657]*y[IDX_CH3OHI] +
-        k[658]*y[IDX_CH4I] + k[659]*y[IDX_CH4I] + k[660]*y[IDX_CH4I] +
-        k[661]*y[IDX_CH4I] + k[662]*y[IDX_CHI] + k[663]*y[IDX_CNI] +
-        k[664]*y[IDX_CNI] + k[665]*y[IDX_CO2I] + k[666]*y[IDX_CO2I] +
-        k[667]*y[IDX_CO2I] + k[668]*y[IDX_CO2I] + k[669]*y[IDX_COI] +
-        k[670]*y[IDX_H2COI] + k[671]*y[IDX_H2COI] + k[672]*y[IDX_H2COI] +
-        k[673]*y[IDX_H2OI] + k[674]*y[IDX_H2OI] + k[675]*y[IDX_H2SiOI] +
-        k[676]*y[IDX_HCNI] + k[677]*y[IDX_HCNI] + k[678]*y[IDX_HCNI] +
-        k[679]*y[IDX_HCNI] + k[680]*y[IDX_HCOI] + k[682]*y[IDX_HCOI] +
-        k[683]*y[IDX_HNCI] + k[684]*y[IDX_HNCI] + k[685]*y[IDX_HNCI] +
-        k[686]*y[IDX_HNOI] + k[687]*y[IDX_HNOI] + k[688]*y[IDX_N2I] +
-        k[689]*y[IDX_NH2I] + k[690]*y[IDX_NH2I] + k[691]*y[IDX_NH3I] +
-        k[692]*y[IDX_NH3I] + k[693]*y[IDX_NHI] + k[694]*y[IDX_NOI] +
-        k[695]*y[IDX_NOI] + k[696]*y[IDX_O2I] + k[697]*y[IDX_OCNI] +
-        k[698]*y[IDX_OCNI] + k[699]*y[IDX_OHI] + k[700]*y[IDX_SiC3I] +
-        k[701]*y[IDX_SiCI] + k[702]*y[IDX_SiCI] + k[703]*y[IDX_SiH2I] +
-        k[704]*y[IDX_SiH2I] + k[705]*y[IDX_SiH3I] + k[706]*y[IDX_SiH3I] +
-        k[707]*y[IDX_SiH4I] + k[708]*y[IDX_SiH4I] + k[709]*y[IDX_SiHI] +
-        k[710]*y[IDX_SiOI] + k[711]*y[IDX_SiOI] + k[1218]*y[IDX_EM];
-    data[1653] = 0.0 + k[336]*y[IDX_EM] + k[537]*y[IDX_H2I] +
-        k[618]*y[IDX_HI];
-    data[1654] = 0.0 + k[683]*y[IDX_HeII] + k[684]*y[IDX_HeII] +
-        k[685]*y[IDX_HeII];
+    data[1651] = 0.0 - k[237] - k[265] - k[520]*y[IDX_H2II] - k[1198]*y[IDX_HII];
+    data[1652] = 0.0 + k[115]*y[IDX_H2I] + k[130]*y[IDX_HI] + k[139]*y[IDX_CI] +
+        k[140]*y[IDX_CH4I] + k[141]*y[IDX_CHI] + k[142]*y[IDX_H2COI] +
+        k[143]*y[IDX_H2OI] + k[144]*y[IDX_N2I] + k[145]*y[IDX_NH3I] +
+        k[146]*y[IDX_O2I] + k[147]*y[IDX_SiI] + k[536]*y[IDX_H2I] +
+        k[653]*y[IDX_CH2I] + k[654]*y[IDX_CH2I] + k[655]*y[IDX_CH3I] +
+        k[656]*y[IDX_CH3OHI] + k[657]*y[IDX_CH3OHI] + k[658]*y[IDX_CH4I] +
+        k[659]*y[IDX_CH4I] + k[660]*y[IDX_CH4I] + k[661]*y[IDX_CH4I] +
+        k[662]*y[IDX_CHI] + k[663]*y[IDX_CNI] + k[664]*y[IDX_CNI] +
+        k[665]*y[IDX_CO2I] + k[666]*y[IDX_CO2I] + k[667]*y[IDX_CO2I] +
+        k[668]*y[IDX_CO2I] + k[669]*y[IDX_COI] + k[670]*y[IDX_H2COI] +
+        k[671]*y[IDX_H2COI] + k[672]*y[IDX_H2COI] + k[673]*y[IDX_H2OI] +
+        k[674]*y[IDX_H2OI] + k[675]*y[IDX_H2SiOI] + k[676]*y[IDX_HCNI] +
+        k[677]*y[IDX_HCNI] + k[678]*y[IDX_HCNI] + k[679]*y[IDX_HCNI] +
+        k[680]*y[IDX_HCOI] + k[682]*y[IDX_HCOI] + k[683]*y[IDX_HNCI] +
+        k[684]*y[IDX_HNCI] + k[685]*y[IDX_HNCI] + k[686]*y[IDX_HNOI] +
+        k[687]*y[IDX_HNOI] + k[688]*y[IDX_N2I] + k[689]*y[IDX_NH2I] +
+        k[690]*y[IDX_NH2I] + k[691]*y[IDX_NH3I] + k[692]*y[IDX_NH3I] +
+        k[693]*y[IDX_NHI] + k[694]*y[IDX_NOI] + k[695]*y[IDX_NOI] +
+        k[696]*y[IDX_O2I] + k[697]*y[IDX_OCNI] + k[698]*y[IDX_OCNI] +
+        k[699]*y[IDX_OHI] + k[700]*y[IDX_SiC3I] + k[701]*y[IDX_SiCI] +
+        k[702]*y[IDX_SiCI] + k[703]*y[IDX_SiH2I] + k[704]*y[IDX_SiH2I] +
+        k[705]*y[IDX_SiH3I] + k[706]*y[IDX_SiH3I] + k[707]*y[IDX_SiH4I] +
+        k[708]*y[IDX_SiH4I] + k[709]*y[IDX_SiHI] + k[710]*y[IDX_SiOI] +
+        k[711]*y[IDX_SiOI] + k[1218]*y[IDX_EM];
+    data[1653] = 0.0 + k[336]*y[IDX_EM] + k[537]*y[IDX_H2I] + k[618]*y[IDX_HI];
+    data[1654] = 0.0 + k[683]*y[IDX_HeII] + k[684]*y[IDX_HeII] + k[685]*y[IDX_HeII];
     data[1655] = 0.0 + k[686]*y[IDX_HeII] + k[687]*y[IDX_HeII];
     data[1656] = 0.0 + k[144]*y[IDX_HeII] + k[688]*y[IDX_HeII];
     data[1657] = 0.0 + k[693]*y[IDX_HeII];
     data[1658] = 0.0 + k[689]*y[IDX_HeII] + k[690]*y[IDX_HeII];
-    data[1659] = 0.0 + k[145]*y[IDX_HeII] + k[691]*y[IDX_HeII] +
-        k[692]*y[IDX_HeII];
+    data[1659] = 0.0 + k[145]*y[IDX_HeII] + k[691]*y[IDX_HeII] + k[692]*y[IDX_HeII];
     data[1660] = 0.0 + k[694]*y[IDX_HeII] + k[695]*y[IDX_HeII];
     data[1661] = 0.0 + k[146]*y[IDX_HeII] + k[696]*y[IDX_HeII];
     data[1662] = 0.0 + k[697]*y[IDX_HeII] + k[698]*y[IDX_HeII];
@@ -5993,58 +5796,53 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
     data[1674] = 0.0 - k[653]*y[IDX_HeII] - k[654]*y[IDX_HeII];
     data[1675] = 0.0 - k[655]*y[IDX_HeII];
     data[1676] = 0.0 - k[656]*y[IDX_HeII] - k[657]*y[IDX_HeII];
-    data[1677] = 0.0 - k[140]*y[IDX_HeII] - k[658]*y[IDX_HeII] -
-        k[659]*y[IDX_HeII] - k[660]*y[IDX_HeII] - k[661]*y[IDX_HeII];
+    data[1677] = 0.0 - k[140]*y[IDX_HeII] - k[658]*y[IDX_HeII] - k[659]*y[IDX_HeII] -
+        k[660]*y[IDX_HeII] - k[661]*y[IDX_HeII];
     data[1678] = 0.0 - k[663]*y[IDX_HeII] - k[664]*y[IDX_HeII];
     data[1679] = 0.0 - k[669]*y[IDX_HeII];
-    data[1680] = 0.0 - k[665]*y[IDX_HeII] - k[666]*y[IDX_HeII] -
-        k[667]*y[IDX_HeII] - k[668]*y[IDX_HeII];
+    data[1680] = 0.0 - k[665]*y[IDX_HeII] - k[666]*y[IDX_HeII] - k[667]*y[IDX_HeII] -
+        k[668]*y[IDX_HeII];
     data[1681] = 0.0 - k[1218]*y[IDX_HeII];
     data[1682] = 0.0 - k[130]*y[IDX_HeII];
     data[1683] = 0.0 - k[115]*y[IDX_HeII] - k[536]*y[IDX_HeII];
-    data[1684] = 0.0 - k[142]*y[IDX_HeII] - k[670]*y[IDX_HeII] -
-        k[671]*y[IDX_HeII] - k[672]*y[IDX_HeII];
-    data[1685] = 0.0 - k[143]*y[IDX_HeII] - k[673]*y[IDX_HeII] -
-        k[674]*y[IDX_HeII];
+    data[1684] = 0.0 - k[142]*y[IDX_HeII] - k[670]*y[IDX_HeII] - k[671]*y[IDX_HeII] -
+        k[672]*y[IDX_HeII];
+    data[1685] = 0.0 - k[143]*y[IDX_HeII] - k[673]*y[IDX_HeII] - k[674]*y[IDX_HeII];
     data[1686] = 0.0 - k[675]*y[IDX_HeII];
-    data[1687] = 0.0 - k[676]*y[IDX_HeII] - k[677]*y[IDX_HeII] -
-        k[678]*y[IDX_HeII] - k[679]*y[IDX_HeII];
-    data[1688] = 0.0 - k[680]*y[IDX_HeII] - k[681]*y[IDX_HeII] -
-        k[682]*y[IDX_HeII];
+    data[1687] = 0.0 - k[676]*y[IDX_HeII] - k[677]*y[IDX_HeII] - k[678]*y[IDX_HeII] -
+        k[679]*y[IDX_HeII];
+    data[1688] = 0.0 - k[680]*y[IDX_HeII] - k[681]*y[IDX_HeII] - k[682]*y[IDX_HeII];
     data[1689] = 0.0 + k[237] + k[265];
-    data[1690] = 0.0 - k[115]*y[IDX_H2I] - k[130]*y[IDX_HI] -
-        k[139]*y[IDX_CI] - k[140]*y[IDX_CH4I] - k[141]*y[IDX_CHI] -
-        k[142]*y[IDX_H2COI] - k[143]*y[IDX_H2OI] - k[144]*y[IDX_N2I] -
-        k[145]*y[IDX_NH3I] - k[146]*y[IDX_O2I] - k[147]*y[IDX_SiI] -
-        k[536]*y[IDX_H2I] - k[653]*y[IDX_CH2I] - k[654]*y[IDX_CH2I] -
-        k[655]*y[IDX_CH3I] - k[656]*y[IDX_CH3OHI] - k[657]*y[IDX_CH3OHI] -
-        k[658]*y[IDX_CH4I] - k[659]*y[IDX_CH4I] - k[660]*y[IDX_CH4I] -
-        k[661]*y[IDX_CH4I] - k[662]*y[IDX_CHI] - k[663]*y[IDX_CNI] -
-        k[664]*y[IDX_CNI] - k[665]*y[IDX_CO2I] - k[666]*y[IDX_CO2I] -
-        k[667]*y[IDX_CO2I] - k[668]*y[IDX_CO2I] - k[669]*y[IDX_COI] -
-        k[670]*y[IDX_H2COI] - k[671]*y[IDX_H2COI] - k[672]*y[IDX_H2COI] -
-        k[673]*y[IDX_H2OI] - k[674]*y[IDX_H2OI] - k[675]*y[IDX_H2SiOI] -
-        k[676]*y[IDX_HCNI] - k[677]*y[IDX_HCNI] - k[678]*y[IDX_HCNI] -
-        k[679]*y[IDX_HCNI] - k[680]*y[IDX_HCOI] - k[681]*y[IDX_HCOI] -
-        k[682]*y[IDX_HCOI] - k[683]*y[IDX_HNCI] - k[684]*y[IDX_HNCI] -
-        k[685]*y[IDX_HNCI] - k[686]*y[IDX_HNOI] - k[687]*y[IDX_HNOI] -
-        k[688]*y[IDX_N2I] - k[689]*y[IDX_NH2I] - k[690]*y[IDX_NH2I] -
-        k[691]*y[IDX_NH3I] - k[692]*y[IDX_NH3I] - k[693]*y[IDX_NHI] -
-        k[694]*y[IDX_NOI] - k[695]*y[IDX_NOI] - k[696]*y[IDX_O2I] -
-        k[697]*y[IDX_OCNI] - k[698]*y[IDX_OCNI] - k[699]*y[IDX_OHI] -
-        k[700]*y[IDX_SiC3I] - k[701]*y[IDX_SiCI] - k[702]*y[IDX_SiCI] -
-        k[703]*y[IDX_SiH2I] - k[704]*y[IDX_SiH2I] - k[705]*y[IDX_SiH3I] -
-        k[706]*y[IDX_SiH3I] - k[707]*y[IDX_SiH4I] - k[708]*y[IDX_SiH4I] -
-        k[709]*y[IDX_SiHI] - k[710]*y[IDX_SiOI] - k[711]*y[IDX_SiOI] -
-        k[1218]*y[IDX_EM];
-    data[1691] = 0.0 - k[683]*y[IDX_HeII] - k[684]*y[IDX_HeII] -
-        k[685]*y[IDX_HeII];
+    data[1690] = 0.0 - k[115]*y[IDX_H2I] - k[130]*y[IDX_HI] - k[139]*y[IDX_CI] -
+        k[140]*y[IDX_CH4I] - k[141]*y[IDX_CHI] - k[142]*y[IDX_H2COI] -
+        k[143]*y[IDX_H2OI] - k[144]*y[IDX_N2I] - k[145]*y[IDX_NH3I] -
+        k[146]*y[IDX_O2I] - k[147]*y[IDX_SiI] - k[536]*y[IDX_H2I] -
+        k[653]*y[IDX_CH2I] - k[654]*y[IDX_CH2I] - k[655]*y[IDX_CH3I] -
+        k[656]*y[IDX_CH3OHI] - k[657]*y[IDX_CH3OHI] - k[658]*y[IDX_CH4I] -
+        k[659]*y[IDX_CH4I] - k[660]*y[IDX_CH4I] - k[661]*y[IDX_CH4I] -
+        k[662]*y[IDX_CHI] - k[663]*y[IDX_CNI] - k[664]*y[IDX_CNI] -
+        k[665]*y[IDX_CO2I] - k[666]*y[IDX_CO2I] - k[667]*y[IDX_CO2I] -
+        k[668]*y[IDX_CO2I] - k[669]*y[IDX_COI] - k[670]*y[IDX_H2COI] -
+        k[671]*y[IDX_H2COI] - k[672]*y[IDX_H2COI] - k[673]*y[IDX_H2OI] -
+        k[674]*y[IDX_H2OI] - k[675]*y[IDX_H2SiOI] - k[676]*y[IDX_HCNI] -
+        k[677]*y[IDX_HCNI] - k[678]*y[IDX_HCNI] - k[679]*y[IDX_HCNI] -
+        k[680]*y[IDX_HCOI] - k[681]*y[IDX_HCOI] - k[682]*y[IDX_HCOI] -
+        k[683]*y[IDX_HNCI] - k[684]*y[IDX_HNCI] - k[685]*y[IDX_HNCI] -
+        k[686]*y[IDX_HNOI] - k[687]*y[IDX_HNOI] - k[688]*y[IDX_N2I] -
+        k[689]*y[IDX_NH2I] - k[690]*y[IDX_NH2I] - k[691]*y[IDX_NH3I] -
+        k[692]*y[IDX_NH3I] - k[693]*y[IDX_NHI] - k[694]*y[IDX_NOI] -
+        k[695]*y[IDX_NOI] - k[696]*y[IDX_O2I] - k[697]*y[IDX_OCNI] -
+        k[698]*y[IDX_OCNI] - k[699]*y[IDX_OHI] - k[700]*y[IDX_SiC3I] -
+        k[701]*y[IDX_SiCI] - k[702]*y[IDX_SiCI] - k[703]*y[IDX_SiH2I] -
+        k[704]*y[IDX_SiH2I] - k[705]*y[IDX_SiH3I] - k[706]*y[IDX_SiH3I] -
+        k[707]*y[IDX_SiH4I] - k[708]*y[IDX_SiH4I] - k[709]*y[IDX_SiHI] -
+        k[710]*y[IDX_SiOI] - k[711]*y[IDX_SiOI] - k[1218]*y[IDX_EM];
+    data[1691] = 0.0 - k[683]*y[IDX_HeII] - k[684]*y[IDX_HeII] - k[685]*y[IDX_HeII];
     data[1692] = 0.0 - k[686]*y[IDX_HeII] - k[687]*y[IDX_HeII];
     data[1693] = 0.0 - k[144]*y[IDX_HeII] - k[688]*y[IDX_HeII];
     data[1694] = 0.0 - k[693]*y[IDX_HeII];
     data[1695] = 0.0 - k[689]*y[IDX_HeII] - k[690]*y[IDX_HeII];
-    data[1696] = 0.0 - k[145]*y[IDX_HeII] - k[691]*y[IDX_HeII] -
-        k[692]*y[IDX_HeII];
+    data[1696] = 0.0 - k[145]*y[IDX_HeII] - k[691]*y[IDX_HeII] - k[692]*y[IDX_HeII];
     data[1697] = 0.0 - k[694]*y[IDX_HeII] - k[695]*y[IDX_HeII];
     data[1698] = 0.0 - k[146]*y[IDX_HeII] - k[696]*y[IDX_HeII];
     data[1699] = 0.0 - k[697]*y[IDX_HeII] - k[698]*y[IDX_HeII];
@@ -6065,8 +5863,7 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
     data[1714] = 0.0 + k[681]*y[IDX_HeII];
     data[1715] = 0.0 + k[520]*y[IDX_H2II] + k[1198]*y[IDX_HII];
     data[1716] = 0.0 + k[681]*y[IDX_HCOI];
-    data[1717] = 0.0 - k[336]*y[IDX_EM] - k[537]*y[IDX_H2I] -
-        k[618]*y[IDX_HI];
+    data[1717] = 0.0 - k[336]*y[IDX_EM] - k[537]*y[IDX_H2I] - k[618]*y[IDX_HI];
     data[1718] = 0.0 + k[1327] + k[1328] + k[1329] + k[1330];
     data[1719] = 0.0 + k[867]*y[IDX_NH2I] + k[1004]*y[IDX_HNCOI];
     data[1720] = 0.0 + k[465]*y[IDX_HCNHII];
@@ -6082,11 +5879,10 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
     data[1730] = 0.0 - k[647]*y[IDX_HNCI];
     data[1731] = 0.0 - k[609]*y[IDX_HNCI];
     data[1732] = 0.0 - k[626]*y[IDX_HNCI];
-    data[1733] = 0.0 + k[329]*y[IDX_EM] + k[428]*y[IDX_CH2I] +
-        k[465]*y[IDX_CHI] + k[634]*y[IDX_H2COI] + k[786]*y[IDX_NH2I];
+    data[1733] = 0.0 + k[329]*y[IDX_EM] + k[428]*y[IDX_CH2I] + k[465]*y[IDX_CHI] +
+        k[634]*y[IDX_H2COI] + k[786]*y[IDX_NH2I];
     data[1734] = 0.0 - k[648]*y[IDX_HNCI];
-    data[1735] = 0.0 - k[683]*y[IDX_HNCI] - k[684]*y[IDX_HNCI] -
-        k[685]*y[IDX_HNCI];
+    data[1735] = 0.0 - k[683]*y[IDX_HNCI] - k[684]*y[IDX_HNCI] - k[685]*y[IDX_HNCI];
     data[1736] = 0.0 - k[1]*y[IDX_HII] - k[262] - k[407]*y[IDX_CHII] -
         k[559]*y[IDX_H2OII] - k[589]*y[IDX_H3II] - k[609]*y[IDX_H3OII] -
         k[626]*y[IDX_HCNII] - k[646]*y[IDX_H2COII] - k[647]*y[IDX_H3COII] -
@@ -6107,8 +5903,7 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
     data[1747] = 0.0 - k[1004]*y[IDX_HNCOI];
     data[1748] = 0.0 + k[888]*y[IDX_NOI];
     data[1749] = 0.0 - k[502]*y[IDX_HNCOI];
-    data[1750] = 0.0 - k[263] - k[502]*y[IDX_HII] - k[1004]*y[IDX_CI] -
-        k[1152] - k[1224];
+    data[1750] = 0.0 - k[263] - k[502]*y[IDX_HII] - k[1004]*y[IDX_CI] - k[1152] - k[1224];
     data[1751] = 0.0 + k[888]*y[IDX_CH2I];
     data[1752] = 0.0 + k[1351] + k[1352] + k[1353] + k[1354];
     data[1753] = 0.0 - k[926]*y[IDX_HNOI];
@@ -6117,8 +5912,7 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
     data[1756] = 0.0 - k[944]*y[IDX_HNOI];
     data[1757] = 0.0 - k[951]*y[IDX_HNOI];
     data[1758] = 0.0 + k[310]*y[IDX_H2NOII];
-    data[1759] = 0.0 - k[980]*y[IDX_HNOI] - k[981]*y[IDX_HNOI] -
-        k[982]*y[IDX_HNOI];
+    data[1759] = 0.0 - k[980]*y[IDX_HNOI] - k[981]*y[IDX_HNOI] - k[982]*y[IDX_HNOI];
     data[1760] = 0.0 - k[503]*y[IDX_HNOI];
     data[1761] = 0.0 + k[310]*y[IDX_EM];
     data[1762] = 0.0 - k[590]*y[IDX_HNOI];
@@ -6133,13 +5927,12 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
         k[1097]*y[IDX_OHI] - k[1153] - k[1294];
     data[1766] = 0.0 + k[204]*y[IDX_NOI];
     data[1767] = 0.0 - k[1017]*y[IDX_HNOI];
-    data[1768] = 0.0 + k[1041]*y[IDX_NO2I] + k[1044]*y[IDX_O2I] +
-        k[1049]*y[IDX_OHI];
+    data[1768] = 0.0 + k[1041]*y[IDX_NO2I] + k[1044]*y[IDX_O2I] + k[1049]*y[IDX_OHI];
     data[1769] = 0.0 + k[1072]*y[IDX_OI];
     data[1770] = 0.0 + k[204]*y[IDX_HNOII] + k[1000]*y[IDX_HCOI];
     data[1771] = 0.0 + k[909]*y[IDX_CH3I] + k[1041]*y[IDX_NHI];
-    data[1772] = 0.0 - k[1068]*y[IDX_HNOI] - k[1069]*y[IDX_HNOI] -
-        k[1070]*y[IDX_HNOI] + k[1072]*y[IDX_NH2I];
+    data[1772] = 0.0 - k[1068]*y[IDX_HNOI] - k[1069]*y[IDX_HNOI] - k[1070]*y[IDX_HNOI] +
+        k[1072]*y[IDX_NH2I];
     data[1773] = 0.0 + k[1044]*y[IDX_NHI];
     data[1774] = 0.0 + k[1049]*y[IDX_NHI] - k[1097]*y[IDX_HNOI];
     data[1775] = 0.0 - k[388]*y[IDX_HNOII];
@@ -6157,12 +5950,12 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
     data[1787] = 0.0 - k[630]*y[IDX_HNOII];
     data[1788] = 0.0 - k[642]*y[IDX_HNOII];
     data[1789] = 0.0 - k[649]*y[IDX_HNOII];
-    data[1790] = 0.0 - k[204]*y[IDX_NOI] - k[334]*y[IDX_EM] -
-        k[388]*y[IDX_CI] - k[430]*y[IDX_CH2I] - k[467]*y[IDX_CHI] -
-        k[482]*y[IDX_CNI] - k[486]*y[IDX_COI] - k[550]*y[IDX_H2COI] -
-        k[568]*y[IDX_H2OI] - k[630]*y[IDX_HCNI] - k[642]*y[IDX_HCOI] -
-        k[649]*y[IDX_HNCI] - k[652]*y[IDX_CO2I] - k[732]*y[IDX_N2I] -
-        k[788]*y[IDX_NH2I] - k[800]*y[IDX_NHI] - k[856]*y[IDX_OHI] - k[1295];
+    data[1790] = 0.0 - k[204]*y[IDX_NOI] - k[334]*y[IDX_EM] - k[388]*y[IDX_CI] -
+        k[430]*y[IDX_CH2I] - k[467]*y[IDX_CHI] - k[482]*y[IDX_CNI] -
+        k[486]*y[IDX_COI] - k[550]*y[IDX_H2COI] - k[568]*y[IDX_H2OI] -
+        k[630]*y[IDX_HCNI] - k[642]*y[IDX_HCOI] - k[649]*y[IDX_HNCI] -
+        k[652]*y[IDX_CO2I] - k[732]*y[IDX_N2I] - k[788]*y[IDX_NH2I] -
+        k[800]*y[IDX_NHI] - k[856]*y[IDX_OHI] - k[1295];
     data[1791] = 0.0 + k[738]*y[IDX_H2OII];
     data[1792] = 0.0 - k[732]*y[IDX_HNOII];
     data[1793] = 0.0 - k[800]*y[IDX_HNOII] + k[804]*y[IDX_O2II];
@@ -6170,8 +5963,8 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
     data[1795] = 0.0 - k[788]*y[IDX_HNOII];
     data[1796] = 0.0 + k[778]*y[IDX_O2I] + k[827]*y[IDX_OI];
     data[1797] = 0.0 + k[828]*y[IDX_OI];
-    data[1798] = 0.0 - k[204]*y[IDX_HNOII] + k[524]*y[IDX_H2II] +
-        k[596]*y[IDX_H3II] + k[807]*y[IDX_O2HII] + k[846]*y[IDX_OHII];
+    data[1798] = 0.0 - k[204]*y[IDX_HNOII] + k[524]*y[IDX_H2II] + k[596]*y[IDX_H3II] +
+        k[807]*y[IDX_O2HII] + k[846]*y[IDX_OHII];
     data[1799] = 0.0 + k[827]*y[IDX_NH2II] + k[828]*y[IDX_NH3II];
     data[1800] = 0.0 + k[778]*y[IDX_NH2II];
     data[1801] = 0.0 + k[804]*y[IDX_NHI];
@@ -6196,12 +5989,12 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
     data[1820] = 0.0 - k[119]*y[IDX_MgI];
     data[1821] = 0.0 - k[591]*y[IDX_MgI];
     data[1822] = 0.0 - k[149]*y[IDX_MgI];
-    data[1823] = 0.0 - k[18]*y[IDX_CII] - k[32]*y[IDX_CHII] -
-        k[47]*y[IDX_CH3II] - k[83]*y[IDX_HII] - k[119]*y[IDX_H2OII] -
-        k[148]*y[IDX_H2COII] - k[149]*y[IDX_HCOII] - k[150]*y[IDX_N2II] -
-        k[151]*y[IDX_NOII] - k[152]*y[IDX_O2II] - k[153]*y[IDX_SiII] -
-        k[154]*y[IDX_SiOII] - k[163]*y[IDX_NII] - k[190]*y[IDX_NH3II] - k[266] -
-        k[591]*y[IDX_H3II] - k[1154] - k[1300];
+    data[1823] = 0.0 - k[18]*y[IDX_CII] - k[32]*y[IDX_CHII] - k[47]*y[IDX_CH3II] -
+        k[83]*y[IDX_HII] - k[119]*y[IDX_H2OII] - k[148]*y[IDX_H2COII] -
+        k[149]*y[IDX_HCOII] - k[150]*y[IDX_N2II] - k[151]*y[IDX_NOII] -
+        k[152]*y[IDX_O2II] - k[153]*y[IDX_SiII] - k[154]*y[IDX_SiOII] -
+        k[163]*y[IDX_NII] - k[190]*y[IDX_NH3II] - k[266] - k[591]*y[IDX_H3II] -
+        k[1154] - k[1300];
     data[1824] = 0.0 + k[1219]*y[IDX_EM];
     data[1825] = 0.0 - k[163]*y[IDX_MgI];
     data[1826] = 0.0 - k[150]*y[IDX_MgI];
@@ -6219,12 +6012,12 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
     data[1838] = 0.0 + k[119]*y[IDX_MgI];
     data[1839] = 0.0 + k[591]*y[IDX_MgI];
     data[1840] = 0.0 + k[149]*y[IDX_MgI];
-    data[1841] = 0.0 + k[18]*y[IDX_CII] + k[32]*y[IDX_CHII] +
-        k[47]*y[IDX_CH3II] + k[83]*y[IDX_HII] + k[119]*y[IDX_H2OII] +
-        k[148]*y[IDX_H2COII] + k[149]*y[IDX_HCOII] + k[150]*y[IDX_N2II] +
-        k[151]*y[IDX_NOII] + k[152]*y[IDX_O2II] + k[153]*y[IDX_SiII] +
-        k[154]*y[IDX_SiOII] + k[163]*y[IDX_NII] + k[190]*y[IDX_NH3II] + k[266] +
-        k[591]*y[IDX_H3II] + k[1154];
+    data[1841] = 0.0 + k[18]*y[IDX_CII] + k[32]*y[IDX_CHII] + k[47]*y[IDX_CH3II] +
+        k[83]*y[IDX_HII] + k[119]*y[IDX_H2OII] + k[148]*y[IDX_H2COII] +
+        k[149]*y[IDX_HCOII] + k[150]*y[IDX_N2II] + k[151]*y[IDX_NOII] +
+        k[152]*y[IDX_O2II] + k[153]*y[IDX_SiII] + k[154]*y[IDX_SiOII] +
+        k[163]*y[IDX_NII] + k[190]*y[IDX_NH3II] + k[266] + k[591]*y[IDX_H3II] +
+        k[1154];
     data[1842] = 0.0 - k[1219]*y[IDX_EM] - k[1299];
     data[1843] = 0.0 + k[163]*y[IDX_MgI];
     data[1844] = 0.0 + k[150]*y[IDX_MgI];
@@ -6233,19 +6026,16 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
     data[1847] = 0.0 + k[152]*y[IDX_MgI];
     data[1848] = 0.0 + k[153]*y[IDX_MgI];
     data[1849] = 0.0 + k[154]*y[IDX_MgI];
-    data[1850] = 0.0 + k[390]*y[IDX_NHII] + k[865]*y[IDX_N2I] +
-        k[870]*y[IDX_NHI] + k[872]*y[IDX_NOI] - k[1194]*y[IDX_NI];
+    data[1850] = 0.0 + k[390]*y[IDX_NHII] + k[865]*y[IDX_N2I] + k[870]*y[IDX_NHI] +
+        k[872]*y[IDX_NOI] - k[1194]*y[IDX_NI];
     data[1851] = 0.0 - k[1192]*y[IDX_NI];
-    data[1852] = 0.0 + k[57]*y[IDX_NII] + k[470]*y[IDX_NHII] +
-        k[927]*y[IDX_N2I] - k[928]*y[IDX_NI] - k[929]*y[IDX_NI] +
-        k[931]*y[IDX_NOI];
+    data[1852] = 0.0 + k[57]*y[IDX_NII] + k[470]*y[IDX_NHII] + k[927]*y[IDX_N2I] -
+        k[928]*y[IDX_NI] - k[929]*y[IDX_NI] + k[931]*y[IDX_NOI];
     data[1853] = 0.0 - k[408]*y[IDX_NI];
-    data[1854] = 0.0 + k[155]*y[IDX_NII] + k[432]*y[IDX_NHII] +
-        k[886]*y[IDX_NOI] - k[1005]*y[IDX_NI] - k[1006]*y[IDX_NI] -
-        k[1007]*y[IDX_NI];
+    data[1854] = 0.0 + k[155]*y[IDX_NII] + k[432]*y[IDX_NHII] + k[886]*y[IDX_NOI] -
+        k[1005]*y[IDX_NI] - k[1006]*y[IDX_NI] - k[1007]*y[IDX_NI];
     data[1855] = 0.0 - k[736]*y[IDX_NI];
-    data[1856] = 0.0 - k[1008]*y[IDX_NI] - k[1009]*y[IDX_NI] -
-        k[1010]*y[IDX_NI];
+    data[1856] = 0.0 - k[1008]*y[IDX_NI] - k[1009]*y[IDX_NI] - k[1010]*y[IDX_NI];
     data[1857] = 0.0 + k[156]*y[IDX_NII] + k[716]*y[IDX_NII];
     data[1858] = 0.0 + k[157]*y[IDX_NII] + k[251] + k[664]*y[IDX_HeII] +
         k[747]*y[IDX_NHII] + k[947]*y[IDX_NOI] - k[1011]*y[IDX_NI] +
@@ -6254,9 +6044,9 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
     data[1860] = 0.0 + k[158]*y[IDX_NII] + k[751]*y[IDX_NHII];
     data[1861] = 0.0 + k[795]*y[IDX_NHI];
     data[1862] = 0.0 + k[748]*y[IDX_NHII] - k[1012]*y[IDX_NI];
-    data[1863] = 0.0 + k[303]*y[IDX_CNII] + k[337]*y[IDX_N2II] +
-        k[337]*y[IDX_N2II] + k[339]*y[IDX_N2HII] + k[340]*y[IDX_NHII] +
-        k[341]*y[IDX_NH2II] + k[345]*y[IDX_NOII] + k[1220]*y[IDX_NII];
+    data[1863] = 0.0 + k[303]*y[IDX_CNII] + k[337]*y[IDX_N2II] + k[337]*y[IDX_N2II] +
+        k[339]*y[IDX_N2HII] + k[340]*y[IDX_NHII] + k[341]*y[IDX_NH2II] +
+        k[345]*y[IDX_NOII] + k[1220]*y[IDX_NII];
     data[1864] = 0.0 + k[985]*y[IDX_NHI] + k[988]*y[IDX_NOI];
     data[1865] = 0.0 + k[540]*y[IDX_NHII] - k[960]*y[IDX_NI];
     data[1866] = 0.0 - k[522]*y[IDX_NI];
@@ -6264,79 +6054,73 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
     data[1868] = 0.0 + k[159]*y[IDX_NII] + k[752]*y[IDX_NHII];
     data[1869] = 0.0 + k[796]*y[IDX_NHI];
     data[1870] = 0.0 + k[160]*y[IDX_NII] + k[754]*y[IDX_NHII];
-    data[1871] = 0.0 - k[738]*y[IDX_NI] - k[739]*y[IDX_NI] +
-        k[797]*y[IDX_NHI];
-    data[1872] = 0.0 + k[161]*y[IDX_NII] + k[678]*y[IDX_HeII] +
-        k[679]*y[IDX_HeII] + k[758]*y[IDX_NHII] + k[814]*y[IDX_OII];
-    data[1873] = 0.0 + k[162]*y[IDX_NII] + k[759]*y[IDX_NHII] -
-        k[1014]*y[IDX_NI] - k[1015]*y[IDX_NI] - k[1016]*y[IDX_NI];
-    data[1874] = 0.0 + k[664]*y[IDX_CNI] + k[678]*y[IDX_HCNI] +
-        k[679]*y[IDX_HCNI] + k[684]*y[IDX_HNCI] + k[688]*y[IDX_N2I] +
-        k[694]*y[IDX_NOI];
+    data[1871] = 0.0 - k[738]*y[IDX_NI] - k[739]*y[IDX_NI] + k[797]*y[IDX_NHI];
+    data[1872] = 0.0 + k[161]*y[IDX_NII] + k[678]*y[IDX_HeII] + k[679]*y[IDX_HeII] +
+        k[758]*y[IDX_NHII] + k[814]*y[IDX_OII];
+    data[1873] = 0.0 + k[162]*y[IDX_NII] + k[759]*y[IDX_NHII] - k[1014]*y[IDX_NI] -
+        k[1015]*y[IDX_NI] - k[1016]*y[IDX_NI];
+    data[1874] = 0.0 + k[664]*y[IDX_CNI] + k[678]*y[IDX_HCNI] + k[679]*y[IDX_HCNI] +
+        k[684]*y[IDX_HNCI] + k[688]*y[IDX_N2I] + k[694]*y[IDX_NOI];
     data[1875] = 0.0 + k[684]*y[IDX_HeII] + k[760]*y[IDX_NHII];
     data[1876] = 0.0 - k[1017]*y[IDX_NI];
     data[1877] = 0.0 + k[163]*y[IDX_NII];
-    data[1878] = 0.0 - k[174]*y[IDX_N2II] - k[238] - k[268] -
-        k[408]*y[IDX_CHII] - k[522]*y[IDX_H2II] - k[736]*y[IDX_CH2II] -
-        k[737]*y[IDX_CNII] - k[738]*y[IDX_H2OII] - k[739]*y[IDX_H2OII] -
-        k[740]*y[IDX_NHII] - k[741]*y[IDX_NH2II] - k[742]*y[IDX_O2II] -
-        k[743]*y[IDX_OHII] - k[744]*y[IDX_SiCII] - k[745]*y[IDX_SiOII] -
-        k[746]*y[IDX_SiOII] - k[928]*y[IDX_CHI] - k[929]*y[IDX_CHI] -
-        k[960]*y[IDX_H2I] - k[1005]*y[IDX_CH2I] - k[1006]*y[IDX_CH2I] -
-        k[1007]*y[IDX_CH2I] - k[1008]*y[IDX_CH3I] - k[1009]*y[IDX_CH3I] -
-        k[1010]*y[IDX_CH3I] - k[1011]*y[IDX_CNI] - k[1012]*y[IDX_CO2I] -
-        k[1013]*y[IDX_H2CNI] - k[1014]*y[IDX_HCOI] - k[1015]*y[IDX_HCOI] -
-        k[1016]*y[IDX_HCOI] - k[1017]*y[IDX_HNOI] - k[1018]*y[IDX_NHI] -
-        k[1019]*y[IDX_NO2I] - k[1020]*y[IDX_NO2I] - k[1021]*y[IDX_NO2I] -
-        k[1022]*y[IDX_NOI] - k[1023]*y[IDX_O2I] - k[1024]*y[IDX_O2HI] -
-        k[1025]*y[IDX_OHI] - k[1026]*y[IDX_OHI] - k[1027]*y[IDX_SiCI] -
-        k[1192]*y[IDX_CII] - k[1194]*y[IDX_CI] - k[1210]*y[IDX_NII] - k[1290];
-    data[1879] = 0.0 + k[57]*y[IDX_CHI] + k[155]*y[IDX_CH2I] +
-        k[156]*y[IDX_CH4I] + k[157]*y[IDX_CNI] + k[158]*y[IDX_COI] +
-        k[159]*y[IDX_H2COI] + k[160]*y[IDX_H2OI] + k[161]*y[IDX_HCNI] +
-        k[162]*y[IDX_HCOI] + k[163]*y[IDX_MgI] + k[164]*y[IDX_NH2I] +
-        k[165]*y[IDX_NH3I] + k[166]*y[IDX_NHI] + k[167]*y[IDX_NOI] +
-        k[168]*y[IDX_O2I] + k[169]*y[IDX_OHI] + k[716]*y[IDX_CH4I] -
-        k[1210]*y[IDX_NI] + k[1220]*y[IDX_EM];
-    data[1880] = 0.0 + k[267] + k[267] + k[688]*y[IDX_HeII] +
-        k[761]*y[IDX_NHII] + k[817]*y[IDX_OII] + k[865]*y[IDX_CI] +
-        k[927]*y[IDX_CHI] + k[1071]*y[IDX_OI] + k[1155] + k[1155];
-    data[1881] = 0.0 - k[174]*y[IDX_NI] + k[337]*y[IDX_EM] +
-        k[337]*y[IDX_EM] + k[825]*y[IDX_OI];
+    data[1878] = 0.0 - k[174]*y[IDX_N2II] - k[238] - k[268] - k[408]*y[IDX_CHII] -
+        k[522]*y[IDX_H2II] - k[736]*y[IDX_CH2II] - k[737]*y[IDX_CNII] -
+        k[738]*y[IDX_H2OII] - k[739]*y[IDX_H2OII] - k[740]*y[IDX_NHII] -
+        k[741]*y[IDX_NH2II] - k[742]*y[IDX_O2II] - k[743]*y[IDX_OHII] -
+        k[744]*y[IDX_SiCII] - k[745]*y[IDX_SiOII] - k[746]*y[IDX_SiOII] -
+        k[928]*y[IDX_CHI] - k[929]*y[IDX_CHI] - k[960]*y[IDX_H2I] -
+        k[1005]*y[IDX_CH2I] - k[1006]*y[IDX_CH2I] - k[1007]*y[IDX_CH2I] -
+        k[1008]*y[IDX_CH3I] - k[1009]*y[IDX_CH3I] - k[1010]*y[IDX_CH3I] -
+        k[1011]*y[IDX_CNI] - k[1012]*y[IDX_CO2I] - k[1013]*y[IDX_H2CNI] -
+        k[1014]*y[IDX_HCOI] - k[1015]*y[IDX_HCOI] - k[1016]*y[IDX_HCOI] -
+        k[1017]*y[IDX_HNOI] - k[1018]*y[IDX_NHI] - k[1019]*y[IDX_NO2I] -
+        k[1020]*y[IDX_NO2I] - k[1021]*y[IDX_NO2I] - k[1022]*y[IDX_NOI] -
+        k[1023]*y[IDX_O2I] - k[1024]*y[IDX_O2HI] - k[1025]*y[IDX_OHI] -
+        k[1026]*y[IDX_OHI] - k[1027]*y[IDX_SiCI] - k[1192]*y[IDX_CII] -
+        k[1194]*y[IDX_CI] - k[1210]*y[IDX_NII] - k[1290];
+    data[1879] = 0.0 + k[57]*y[IDX_CHI] + k[155]*y[IDX_CH2I] + k[156]*y[IDX_CH4I] +
+        k[157]*y[IDX_CNI] + k[158]*y[IDX_COI] + k[159]*y[IDX_H2COI] +
+        k[160]*y[IDX_H2OI] + k[161]*y[IDX_HCNI] + k[162]*y[IDX_HCOI] +
+        k[163]*y[IDX_MgI] + k[164]*y[IDX_NH2I] + k[165]*y[IDX_NH3I] +
+        k[166]*y[IDX_NHI] + k[167]*y[IDX_NOI] + k[168]*y[IDX_O2I] +
+        k[169]*y[IDX_OHI] + k[716]*y[IDX_CH4I] - k[1210]*y[IDX_NI] +
+        k[1220]*y[IDX_EM];
+    data[1880] = 0.0 + k[267] + k[267] + k[688]*y[IDX_HeII] + k[761]*y[IDX_NHII] +
+        k[817]*y[IDX_OII] + k[865]*y[IDX_CI] + k[927]*y[IDX_CHI] +
+        k[1071]*y[IDX_OI] + k[1155] + k[1155];
+    data[1881] = 0.0 - k[174]*y[IDX_NI] + k[337]*y[IDX_EM] + k[337]*y[IDX_EM] +
+        k[825]*y[IDX_OI];
     data[1882] = 0.0 + k[339]*y[IDX_EM];
     data[1883] = 0.0 + k[166]*y[IDX_NII] + k[274] + k[763]*y[IDX_NHII] +
         k[795]*y[IDX_COII] + k[796]*y[IDX_H2COII] + k[797]*y[IDX_H2OII] +
         k[802]*y[IDX_NH2II] + k[870]*y[IDX_CI] + k[985]*y[IDX_HI] -
         k[1018]*y[IDX_NI] + k[1035]*y[IDX_CNI] + k[1040]*y[IDX_NHI] +
         k[1040]*y[IDX_NHI] + k[1047]*y[IDX_OI] + k[1048]*y[IDX_OHI] + k[1162];
-    data[1884] = 0.0 + k[340]*y[IDX_EM] + k[390]*y[IDX_CI] +
-        k[432]*y[IDX_CH2I] + k[470]*y[IDX_CHI] + k[540]*y[IDX_H2I] -
-        k[740]*y[IDX_NI] + k[747]*y[IDX_CNI] + k[748]*y[IDX_CO2I] +
-        k[751]*y[IDX_COI] + k[752]*y[IDX_H2COI] + k[754]*y[IDX_H2OI] +
-        k[758]*y[IDX_HCNI] + k[759]*y[IDX_HCOI] + k[760]*y[IDX_HNCI] +
-        k[761]*y[IDX_N2I] + k[762]*y[IDX_NH2I] + k[763]*y[IDX_NHI] +
-        k[766]*y[IDX_O2I] + k[767]*y[IDX_OI] + k[768]*y[IDX_OHI] + k[1156];
+    data[1884] = 0.0 + k[340]*y[IDX_EM] + k[390]*y[IDX_CI] + k[432]*y[IDX_CH2I] +
+        k[470]*y[IDX_CHI] + k[540]*y[IDX_H2I] - k[740]*y[IDX_NI] +
+        k[747]*y[IDX_CNI] + k[748]*y[IDX_CO2I] + k[751]*y[IDX_COI] +
+        k[752]*y[IDX_H2COI] + k[754]*y[IDX_H2OI] + k[758]*y[IDX_HCNI] +
+        k[759]*y[IDX_HCOI] + k[760]*y[IDX_HNCI] + k[761]*y[IDX_N2I] +
+        k[762]*y[IDX_NH2I] + k[763]*y[IDX_NHI] + k[766]*y[IDX_O2I] +
+        k[767]*y[IDX_OI] + k[768]*y[IDX_OHI] + k[1156];
     data[1885] = 0.0 + k[164]*y[IDX_NII] + k[762]*y[IDX_NHII];
-    data[1886] = 0.0 + k[341]*y[IDX_EM] - k[741]*y[IDX_NI] +
-        k[802]*y[IDX_NHI];
+    data[1886] = 0.0 + k[341]*y[IDX_EM] - k[741]*y[IDX_NI] + k[802]*y[IDX_NHI];
     data[1887] = 0.0 + k[165]*y[IDX_NII];
-    data[1888] = 0.0 + k[167]*y[IDX_NII] + k[278] + k[694]*y[IDX_HeII] +
-        k[872]*y[IDX_CI] + k[886]*y[IDX_CH2I] + k[931]*y[IDX_CHI] +
-        k[947]*y[IDX_CNI] + k[988]*y[IDX_HI] - k[1022]*y[IDX_NI] +
-        k[1076]*y[IDX_OI] + k[1105]*y[IDX_SiI] + k[1166];
+    data[1888] = 0.0 + k[167]*y[IDX_NII] + k[278] + k[694]*y[IDX_HeII] + k[872]*y[IDX_CI]
+        + k[886]*y[IDX_CH2I] + k[931]*y[IDX_CHI] + k[947]*y[IDX_CNI] +
+        k[988]*y[IDX_HI] - k[1022]*y[IDX_NI] + k[1076]*y[IDX_OI] +
+        k[1105]*y[IDX_SiI] + k[1166];
     data[1889] = 0.0 + k[345]*y[IDX_EM];
-    data[1890] = 0.0 - k[1019]*y[IDX_NI] - k[1020]*y[IDX_NI] -
-        k[1021]*y[IDX_NI];
-    data[1891] = 0.0 + k[767]*y[IDX_NHII] + k[825]*y[IDX_N2II] +
-        k[1047]*y[IDX_NHI] + k[1057]*y[IDX_CNI] + k[1071]*y[IDX_N2I] +
-        k[1076]*y[IDX_NOI];
+    data[1890] = 0.0 - k[1019]*y[IDX_NI] - k[1020]*y[IDX_NI] - k[1021]*y[IDX_NI];
+    data[1891] = 0.0 + k[767]*y[IDX_NHII] + k[825]*y[IDX_N2II] + k[1047]*y[IDX_NHI] +
+        k[1057]*y[IDX_CNI] + k[1071]*y[IDX_N2I] + k[1076]*y[IDX_NOI];
     data[1892] = 0.0 + k[814]*y[IDX_HCNI] + k[817]*y[IDX_N2I];
-    data[1893] = 0.0 + k[168]*y[IDX_NII] + k[766]*y[IDX_NHII] -
-        k[1023]*y[IDX_NI];
+    data[1893] = 0.0 + k[168]*y[IDX_NII] + k[766]*y[IDX_NHII] - k[1023]*y[IDX_NI];
     data[1894] = 0.0 - k[742]*y[IDX_NI];
     data[1895] = 0.0 - k[1024]*y[IDX_NI];
-    data[1896] = 0.0 + k[169]*y[IDX_NII] + k[768]*y[IDX_NHII] -
-        k[1025]*y[IDX_NI] - k[1026]*y[IDX_NI] + k[1048]*y[IDX_NHI];
+    data[1896] = 0.0 + k[169]*y[IDX_NII] + k[768]*y[IDX_NHII] - k[1025]*y[IDX_NI] -
+        k[1026]*y[IDX_NI] + k[1048]*y[IDX_NHI];
     data[1897] = 0.0 - k[743]*y[IDX_NI];
     data[1898] = 0.0 + k[1105]*y[IDX_NOI];
     data[1899] = 0.0 - k[1027]*y[IDX_NI];
@@ -6344,67 +6128,55 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
     data[1901] = 0.0 - k[745]*y[IDX_NI] - k[746]*y[IDX_NI];
     data[1902] = 0.0 - k[57]*y[IDX_NII] - k[468]*y[IDX_NII];
     data[1903] = 0.0 - k[155]*y[IDX_NII];
-    data[1904] = 0.0 - k[712]*y[IDX_NII] - k[713]*y[IDX_NII] -
-        k[714]*y[IDX_NII] - k[715]*y[IDX_NII];
-    data[1905] = 0.0 - k[156]*y[IDX_NII] - k[716]*y[IDX_NII] -
-        k[717]*y[IDX_NII] - k[718]*y[IDX_NII];
+    data[1904] = 0.0 - k[712]*y[IDX_NII] - k[713]*y[IDX_NII] - k[714]*y[IDX_NII] -
+        k[715]*y[IDX_NII];
+    data[1905] = 0.0 - k[156]*y[IDX_NII] - k[716]*y[IDX_NII] - k[717]*y[IDX_NII] -
+        k[718]*y[IDX_NII];
     data[1906] = 0.0 - k[157]*y[IDX_NII] + k[663]*y[IDX_HeII];
     data[1907] = 0.0 - k[158]*y[IDX_NII] - k[720]*y[IDX_NII];
     data[1908] = 0.0 - k[719]*y[IDX_NII];
     data[1909] = 0.0 - k[1220]*y[IDX_NII];
     data[1910] = 0.0 - k[538]*y[IDX_NII];
-    data[1911] = 0.0 - k[159]*y[IDX_NII] - k[721]*y[IDX_NII] -
-        k[722]*y[IDX_NII];
+    data[1911] = 0.0 - k[159]*y[IDX_NII] - k[721]*y[IDX_NII] - k[722]*y[IDX_NII];
     data[1912] = 0.0 - k[160]*y[IDX_NII];
     data[1913] = 0.0 - k[161]*y[IDX_NII] + k[677]*y[IDX_HeII];
     data[1914] = 0.0 - k[162]*y[IDX_NII] - k[723]*y[IDX_NII];
-    data[1915] = 0.0 + k[663]*y[IDX_CNI] + k[677]*y[IDX_HCNI] +
-        k[688]*y[IDX_N2I] + k[689]*y[IDX_NH2I] + k[693]*y[IDX_NHI] +
-        k[695]*y[IDX_NOI];
+    data[1915] = 0.0 + k[663]*y[IDX_CNI] + k[677]*y[IDX_HCNI] + k[688]*y[IDX_N2I] +
+        k[689]*y[IDX_NH2I] + k[693]*y[IDX_NHI] + k[695]*y[IDX_NOI];
     data[1916] = 0.0 - k[163]*y[IDX_NII];
-    data[1917] = 0.0 + k[174]*y[IDX_N2II] + k[238] + k[268] -
-        k[1210]*y[IDX_NII];
-    data[1918] = 0.0 - k[57]*y[IDX_CHI] - k[155]*y[IDX_CH2I] -
-        k[156]*y[IDX_CH4I] - k[157]*y[IDX_CNI] - k[158]*y[IDX_COI] -
-        k[159]*y[IDX_H2COI] - k[160]*y[IDX_H2OI] - k[161]*y[IDX_HCNI] -
-        k[162]*y[IDX_HCOI] - k[163]*y[IDX_MgI] - k[164]*y[IDX_NH2I] -
-        k[165]*y[IDX_NH3I] - k[166]*y[IDX_NHI] - k[167]*y[IDX_NOI] -
-        k[168]*y[IDX_O2I] - k[169]*y[IDX_OHI] - k[468]*y[IDX_CHI] -
-        k[538]*y[IDX_H2I] - k[712]*y[IDX_CH3OHI] - k[713]*y[IDX_CH3OHI] -
-        k[714]*y[IDX_CH3OHI] - k[715]*y[IDX_CH3OHI] - k[716]*y[IDX_CH4I] -
-        k[717]*y[IDX_CH4I] - k[718]*y[IDX_CH4I] - k[719]*y[IDX_CO2I] -
-        k[720]*y[IDX_COI] - k[721]*y[IDX_H2COI] - k[722]*y[IDX_H2COI] -
-        k[723]*y[IDX_HCOI] - k[724]*y[IDX_NH3I] - k[725]*y[IDX_NH3I] -
-        k[726]*y[IDX_NHI] - k[727]*y[IDX_NOI] - k[728]*y[IDX_O2I] -
-        k[729]*y[IDX_O2I] - k[1210]*y[IDX_NI] - k[1220]*y[IDX_EM] - k[1268];
+    data[1917] = 0.0 + k[174]*y[IDX_N2II] + k[238] + k[268] - k[1210]*y[IDX_NII];
+    data[1918] = 0.0 - k[57]*y[IDX_CHI] - k[155]*y[IDX_CH2I] - k[156]*y[IDX_CH4I] -
+        k[157]*y[IDX_CNI] - k[158]*y[IDX_COI] - k[159]*y[IDX_H2COI] -
+        k[160]*y[IDX_H2OI] - k[161]*y[IDX_HCNI] - k[162]*y[IDX_HCOI] -
+        k[163]*y[IDX_MgI] - k[164]*y[IDX_NH2I] - k[165]*y[IDX_NH3I] -
+        k[166]*y[IDX_NHI] - k[167]*y[IDX_NOI] - k[168]*y[IDX_O2I] -
+        k[169]*y[IDX_OHI] - k[468]*y[IDX_CHI] - k[538]*y[IDX_H2I] -
+        k[712]*y[IDX_CH3OHI] - k[713]*y[IDX_CH3OHI] - k[714]*y[IDX_CH3OHI] -
+        k[715]*y[IDX_CH3OHI] - k[716]*y[IDX_CH4I] - k[717]*y[IDX_CH4I] -
+        k[718]*y[IDX_CH4I] - k[719]*y[IDX_CO2I] - k[720]*y[IDX_COI] -
+        k[721]*y[IDX_H2COI] - k[722]*y[IDX_H2COI] - k[723]*y[IDX_HCOI] -
+        k[724]*y[IDX_NH3I] - k[725]*y[IDX_NH3I] - k[726]*y[IDX_NHI] -
+        k[727]*y[IDX_NOI] - k[728]*y[IDX_O2I] - k[729]*y[IDX_O2I] -
+        k[1210]*y[IDX_NI] - k[1220]*y[IDX_EM] - k[1268];
     data[1919] = 0.0 + k[688]*y[IDX_HeII];
     data[1920] = 0.0 + k[174]*y[IDX_NI];
-    data[1921] = 0.0 - k[166]*y[IDX_NII] + k[693]*y[IDX_HeII] -
-        k[726]*y[IDX_NII];
+    data[1921] = 0.0 - k[166]*y[IDX_NII] + k[693]*y[IDX_HeII] - k[726]*y[IDX_NII];
     data[1922] = 0.0 - k[164]*y[IDX_NII] + k[689]*y[IDX_HeII];
-    data[1923] = 0.0 - k[165]*y[IDX_NII] - k[724]*y[IDX_NII] -
-        k[725]*y[IDX_NII];
-    data[1924] = 0.0 - k[167]*y[IDX_NII] + k[695]*y[IDX_HeII] -
-        k[727]*y[IDX_NII];
-    data[1925] = 0.0 - k[168]*y[IDX_NII] - k[728]*y[IDX_NII] -
-        k[729]*y[IDX_NII];
+    data[1923] = 0.0 - k[165]*y[IDX_NII] - k[724]*y[IDX_NII] - k[725]*y[IDX_NII];
+    data[1924] = 0.0 - k[167]*y[IDX_NII] + k[695]*y[IDX_HeII] - k[727]*y[IDX_NII];
+    data[1925] = 0.0 - k[168]*y[IDX_NII] - k[728]*y[IDX_NII] - k[729]*y[IDX_NII];
     data[1926] = 0.0 - k[169]*y[IDX_NII];
     data[1927] = 0.0 + k[1335] + k[1336] + k[1337] + k[1338];
-    data[1928] = 0.0 + k[29]*y[IDX_N2II] + k[389]*y[IDX_N2HII] -
-        k[865]*y[IDX_N2I];
-    data[1929] = 0.0 + k[58]*y[IDX_N2II] + k[469]*y[IDX_N2HII] -
-        k[927]*y[IDX_N2I];
-    data[1930] = 0.0 + k[41]*y[IDX_N2II] + k[431]*y[IDX_N2HII] -
-        k[884]*y[IDX_N2I];
+    data[1928] = 0.0 + k[29]*y[IDX_N2II] + k[389]*y[IDX_N2HII] - k[865]*y[IDX_N2I];
+    data[1929] = 0.0 + k[58]*y[IDX_N2II] + k[469]*y[IDX_N2HII] - k[927]*y[IDX_N2I];
+    data[1930] = 0.0 + k[41]*y[IDX_N2II] + k[431]*y[IDX_N2HII] - k[884]*y[IDX_N2I];
     data[1931] = 0.0 + k[455]*y[IDX_N2II] + k[456]*y[IDX_N2II];
-    data[1932] = 0.0 + k[69]*y[IDX_N2II] + k[946]*y[IDX_NOI] +
-        k[1011]*y[IDX_NI];
+    data[1932] = 0.0 + k[69]*y[IDX_N2II] + k[946]*y[IDX_NOI] + k[1011]*y[IDX_NI];
     data[1933] = 0.0 + k[74]*y[IDX_N2II] + k[487]*y[IDX_N2HII];
     data[1934] = 0.0 + k[734]*y[IDX_N2HII];
     data[1935] = 0.0 + k[338]*y[IDX_N2HII];
     data[1936] = 0.0 - k[521]*y[IDX_N2I];
-    data[1937] = 0.0 + k[170]*y[IDX_N2II] + k[730]*y[IDX_N2II] +
-        k[735]*y[IDX_N2HII];
+    data[1937] = 0.0 + k[170]*y[IDX_N2II] + k[730]*y[IDX_N2II] + k[735]*y[IDX_N2HII];
     data[1938] = 0.0 + k[125]*y[IDX_N2II] + k[570]*y[IDX_N2HII];
     data[1939] = 0.0 - k[592]*y[IDX_N2I];
     data[1940] = 0.0 + k[135]*y[IDX_N2II] + k[631]*y[IDX_N2HII];
@@ -6413,43 +6185,38 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
     data[1943] = 0.0 + k[650]*y[IDX_N2HII];
     data[1944] = 0.0 - k[732]*y[IDX_N2I];
     data[1945] = 0.0 + k[150]*y[IDX_N2II];
-    data[1946] = 0.0 + k[174]*y[IDX_N2II] + k[1011]*y[IDX_CNI] +
-        k[1018]*y[IDX_NHI] + k[1019]*y[IDX_NO2I] + k[1021]*y[IDX_NO2I] +
-        k[1022]*y[IDX_NOI];
+    data[1946] = 0.0 + k[174]*y[IDX_N2II] + k[1011]*y[IDX_CNI] + k[1018]*y[IDX_NHI] +
+        k[1019]*y[IDX_NO2I] + k[1021]*y[IDX_NO2I] + k[1022]*y[IDX_NOI];
     data[1947] = 0.0 - k[144]*y[IDX_HeII] - k[267] - k[521]*y[IDX_H2II] -
         k[592]*y[IDX_H3II] - k[688]*y[IDX_HeII] - k[732]*y[IDX_HNOII] -
         k[733]*y[IDX_O2HII] - k[761]*y[IDX_NHII] - k[817]*y[IDX_OII] -
         k[845]*y[IDX_OHII] - k[865]*y[IDX_CI] - k[884]*y[IDX_CH2I] -
         k[927]*y[IDX_CHI] - k[1071]*y[IDX_OI] - k[1155] - k[1262];
-    data[1948] = 0.0 + k[29]*y[IDX_CI] + k[41]*y[IDX_CH2I] +
-        k[58]*y[IDX_CHI] + k[69]*y[IDX_CNI] + k[74]*y[IDX_COI] +
-        k[125]*y[IDX_H2OI] + k[135]*y[IDX_HCNI] + k[150]*y[IDX_MgI] +
-        k[170]*y[IDX_H2COI] + k[171]*y[IDX_HCOI] + k[172]*y[IDX_NOI] +
-        k[173]*y[IDX_O2I] + k[174]*y[IDX_NI] + k[186]*y[IDX_NH2I] +
-        k[197]*y[IDX_NH3I] + k[201]*y[IDX_NHI] + k[218]*y[IDX_OI] +
-        k[227]*y[IDX_OHI] + k[455]*y[IDX_CH4I] + k[456]*y[IDX_CH4I] +
-        k[730]*y[IDX_H2COI];
-    data[1949] = 0.0 + k[338]*y[IDX_EM] + k[389]*y[IDX_CI] +
-        k[431]*y[IDX_CH2I] + k[469]*y[IDX_CHI] + k[487]*y[IDX_COI] +
-        k[570]*y[IDX_H2OI] + k[631]*y[IDX_HCNI] + k[643]*y[IDX_HCOI] +
-        k[650]*y[IDX_HNCI] + k[734]*y[IDX_CO2I] + k[735]*y[IDX_H2COI] +
-        k[789]*y[IDX_NH2I] + k[801]*y[IDX_NHI] + k[826]*y[IDX_OI] +
-        k[857]*y[IDX_OHI];
-    data[1950] = 0.0 + k[201]*y[IDX_N2II] + k[801]*y[IDX_N2HII] +
-        k[1018]*y[IDX_NI] + k[1038]*y[IDX_NHI] + k[1038]*y[IDX_NHI] +
-        k[1039]*y[IDX_NHI] + k[1039]*y[IDX_NHI] + k[1042]*y[IDX_NOI] +
-        k[1043]*y[IDX_NOI];
+    data[1948] = 0.0 + k[29]*y[IDX_CI] + k[41]*y[IDX_CH2I] + k[58]*y[IDX_CHI] +
+        k[69]*y[IDX_CNI] + k[74]*y[IDX_COI] + k[125]*y[IDX_H2OI] +
+        k[135]*y[IDX_HCNI] + k[150]*y[IDX_MgI] + k[170]*y[IDX_H2COI] +
+        k[171]*y[IDX_HCOI] + k[172]*y[IDX_NOI] + k[173]*y[IDX_O2I] +
+        k[174]*y[IDX_NI] + k[186]*y[IDX_NH2I] + k[197]*y[IDX_NH3I] +
+        k[201]*y[IDX_NHI] + k[218]*y[IDX_OI] + k[227]*y[IDX_OHI] +
+        k[455]*y[IDX_CH4I] + k[456]*y[IDX_CH4I] + k[730]*y[IDX_H2COI];
+    data[1949] = 0.0 + k[338]*y[IDX_EM] + k[389]*y[IDX_CI] + k[431]*y[IDX_CH2I] +
+        k[469]*y[IDX_CHI] + k[487]*y[IDX_COI] + k[570]*y[IDX_H2OI] +
+        k[631]*y[IDX_HCNI] + k[643]*y[IDX_HCOI] + k[650]*y[IDX_HNCI] +
+        k[734]*y[IDX_CO2I] + k[735]*y[IDX_H2COI] + k[789]*y[IDX_NH2I] +
+        k[801]*y[IDX_NHI] + k[826]*y[IDX_OI] + k[857]*y[IDX_OHI];
+    data[1950] = 0.0 + k[201]*y[IDX_N2II] + k[801]*y[IDX_N2HII] + k[1018]*y[IDX_NI] +
+        k[1038]*y[IDX_NHI] + k[1038]*y[IDX_NHI] + k[1039]*y[IDX_NHI] +
+        k[1039]*y[IDX_NHI] + k[1042]*y[IDX_NOI] + k[1043]*y[IDX_NOI];
     data[1951] = 0.0 - k[761]*y[IDX_N2I];
-    data[1952] = 0.0 + k[186]*y[IDX_N2II] + k[789]*y[IDX_N2HII] +
-        k[1029]*y[IDX_NOI] + k[1030]*y[IDX_NOI];
+    data[1952] = 0.0 + k[186]*y[IDX_N2II] + k[789]*y[IDX_N2HII] + k[1029]*y[IDX_NOI] +
+        k[1030]*y[IDX_NOI];
     data[1953] = 0.0 + k[197]*y[IDX_N2II];
-    data[1954] = 0.0 + k[172]*y[IDX_N2II] + k[946]*y[IDX_CNI] +
-        k[1022]*y[IDX_NI] + k[1029]*y[IDX_NH2I] + k[1030]*y[IDX_NH2I] +
-        k[1042]*y[IDX_NHI] + k[1043]*y[IDX_NHI] + k[1051]*y[IDX_NOI] +
-        k[1051]*y[IDX_NOI] + k[1053]*y[IDX_OCNI];
+    data[1954] = 0.0 + k[172]*y[IDX_N2II] + k[946]*y[IDX_CNI] + k[1022]*y[IDX_NI] +
+        k[1029]*y[IDX_NH2I] + k[1030]*y[IDX_NH2I] + k[1042]*y[IDX_NHI] +
+        k[1043]*y[IDX_NHI] + k[1051]*y[IDX_NOI] + k[1051]*y[IDX_NOI] +
+        k[1053]*y[IDX_OCNI];
     data[1955] = 0.0 + k[1019]*y[IDX_NI] + k[1021]*y[IDX_NI];
-    data[1956] = 0.0 + k[218]*y[IDX_N2II] + k[826]*y[IDX_N2HII] -
-        k[1071]*y[IDX_N2I];
+    data[1956] = 0.0 + k[218]*y[IDX_N2II] + k[826]*y[IDX_N2HII] - k[1071]*y[IDX_N2I];
     data[1957] = 0.0 - k[817]*y[IDX_N2I];
     data[1958] = 0.0 + k[173]*y[IDX_N2II];
     data[1959] = 0.0 - k[733]*y[IDX_N2I];
@@ -6471,20 +6238,19 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
     data[1975] = 0.0 - k[171]*y[IDX_N2II] - k[731]*y[IDX_N2II];
     data[1976] = 0.0 + k[144]*y[IDX_N2I];
     data[1977] = 0.0 - k[150]*y[IDX_N2II];
-    data[1978] = 0.0 - k[174]*y[IDX_N2II] + k[737]*y[IDX_CNII] +
-        k[740]*y[IDX_NHII] + k[1210]*y[IDX_NII];
-    data[1979] = 0.0 + k[726]*y[IDX_NHI] + k[727]*y[IDX_NOI] +
-        k[1210]*y[IDX_NI];
+    data[1978] = 0.0 - k[174]*y[IDX_N2II] + k[737]*y[IDX_CNII] + k[740]*y[IDX_NHII] +
+        k[1210]*y[IDX_NII];
+    data[1979] = 0.0 + k[726]*y[IDX_NHI] + k[727]*y[IDX_NOI] + k[1210]*y[IDX_NI];
     data[1980] = 0.0 + k[144]*y[IDX_HeII];
-    data[1981] = 0.0 - k[29]*y[IDX_CI] - k[41]*y[IDX_CH2I] -
-        k[58]*y[IDX_CHI] - k[69]*y[IDX_CNI] - k[74]*y[IDX_COI] -
-        k[125]*y[IDX_H2OI] - k[135]*y[IDX_HCNI] - k[150]*y[IDX_MgI] -
-        k[170]*y[IDX_H2COI] - k[171]*y[IDX_HCOI] - k[172]*y[IDX_NOI] -
-        k[173]*y[IDX_O2I] - k[174]*y[IDX_NI] - k[186]*y[IDX_NH2I] -
-        k[197]*y[IDX_NH3I] - k[201]*y[IDX_NHI] - k[218]*y[IDX_OI] -
-        k[227]*y[IDX_OHI] - k[337]*y[IDX_EM] - k[455]*y[IDX_CH4I] -
-        k[456]*y[IDX_CH4I] - k[539]*y[IDX_H2I] - k[569]*y[IDX_H2OI] -
-        k[730]*y[IDX_H2COI] - k[731]*y[IDX_HCOI] - k[825]*y[IDX_OI] - k[1271];
+    data[1981] = 0.0 - k[29]*y[IDX_CI] - k[41]*y[IDX_CH2I] - k[58]*y[IDX_CHI] -
+        k[69]*y[IDX_CNI] - k[74]*y[IDX_COI] - k[125]*y[IDX_H2OI] -
+        k[135]*y[IDX_HCNI] - k[150]*y[IDX_MgI] - k[170]*y[IDX_H2COI] -
+        k[171]*y[IDX_HCOI] - k[172]*y[IDX_NOI] - k[173]*y[IDX_O2I] -
+        k[174]*y[IDX_NI] - k[186]*y[IDX_NH2I] - k[197]*y[IDX_NH3I] -
+        k[201]*y[IDX_NHI] - k[218]*y[IDX_OI] - k[227]*y[IDX_OHI] -
+        k[337]*y[IDX_EM] - k[455]*y[IDX_CH4I] - k[456]*y[IDX_CH4I] -
+        k[539]*y[IDX_H2I] - k[569]*y[IDX_H2OI] - k[730]*y[IDX_H2COI] -
+        k[731]*y[IDX_HCOI] - k[825]*y[IDX_OI] - k[1271];
     data[1982] = 0.0 - k[201]*y[IDX_N2II] + k[726]*y[IDX_NII];
     data[1983] = 0.0 + k[740]*y[IDX_NI];
     data[1984] = 0.0 - k[186]*y[IDX_N2II];
@@ -6510,17 +6276,15 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
     data[2004] = 0.0 + k[732]*y[IDX_N2I];
     data[2005] = 0.0 + k[741]*y[IDX_NH2II];
     data[2006] = 0.0 + k[724]*y[IDX_NH3I];
-    data[2007] = 0.0 + k[521]*y[IDX_H2II] + k[592]*y[IDX_H3II] +
-        k[732]*y[IDX_HNOII] + k[733]*y[IDX_O2HII] + k[761]*y[IDX_NHII] +
-        k[845]*y[IDX_OHII];
-    data[2008] = 0.0 + k[539]*y[IDX_H2I] + k[569]*y[IDX_H2OI] +
-        k[731]*y[IDX_HCOI];
-    data[2009] = 0.0 - k[338]*y[IDX_EM] - k[339]*y[IDX_EM] -
-        k[389]*y[IDX_CI] - k[431]*y[IDX_CH2I] - k[469]*y[IDX_CHI] -
-        k[487]*y[IDX_COI] - k[570]*y[IDX_H2OI] - k[631]*y[IDX_HCNI] -
-        k[643]*y[IDX_HCOI] - k[650]*y[IDX_HNCI] - k[734]*y[IDX_CO2I] -
-        k[735]*y[IDX_H2COI] - k[789]*y[IDX_NH2I] - k[801]*y[IDX_NHI] -
-        k[826]*y[IDX_OI] - k[857]*y[IDX_OHI] - k[1302];
+    data[2007] = 0.0 + k[521]*y[IDX_H2II] + k[592]*y[IDX_H3II] + k[732]*y[IDX_HNOII] +
+        k[733]*y[IDX_O2HII] + k[761]*y[IDX_NHII] + k[845]*y[IDX_OHII];
+    data[2008] = 0.0 + k[539]*y[IDX_H2I] + k[569]*y[IDX_H2OI] + k[731]*y[IDX_HCOI];
+    data[2009] = 0.0 - k[338]*y[IDX_EM] - k[339]*y[IDX_EM] - k[389]*y[IDX_CI] -
+        k[431]*y[IDX_CH2I] - k[469]*y[IDX_CHI] - k[487]*y[IDX_COI] -
+        k[570]*y[IDX_H2OI] - k[631]*y[IDX_HCNI] - k[643]*y[IDX_HCOI] -
+        k[650]*y[IDX_HNCI] - k[734]*y[IDX_CO2I] - k[735]*y[IDX_H2COI] -
+        k[789]*y[IDX_NH2I] - k[801]*y[IDX_NHI] - k[826]*y[IDX_OI] -
+        k[857]*y[IDX_OHI] - k[1302];
     data[2010] = 0.0 - k[801]*y[IDX_N2HII];
     data[2011] = 0.0 + k[761]*y[IDX_N2I] + k[764]*y[IDX_NOI];
     data[2012] = 0.0 - k[789]*y[IDX_N2HII];
@@ -6531,13 +6295,11 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
     data[2017] = 0.0 + k[733]*y[IDX_N2I];
     data[2018] = 0.0 - k[857]*y[IDX_N2HII];
     data[2019] = 0.0 + k[845]*y[IDX_N2I];
-    data[2020] = 0.0 + k[868]*y[IDX_NH2I] - k[869]*y[IDX_NHI] -
-        k[870]*y[IDX_NHI];
+    data[2020] = 0.0 + k[868]*y[IDX_NH2I] - k[869]*y[IDX_NHI] - k[870]*y[IDX_NHI];
     data[2021] = 0.0 - k[375]*y[IDX_NHI];
     data[2022] = 0.0 + k[471]*y[IDX_NH2II] + k[929]*y[IDX_NI];
     data[2023] = 0.0 - k[410]*y[IDX_NHI];
-    data[2024] = 0.0 + k[433]*y[IDX_NH2II] + k[884]*y[IDX_N2I] +
-        k[1007]*y[IDX_NI];
+    data[2024] = 0.0 + k[433]*y[IDX_NH2II] + k[884]*y[IDX_N2I] + k[1007]*y[IDX_NI];
     data[2025] = 0.0 + k[907]*y[IDX_NH2I];
     data[2026] = 0.0 - k[794]*y[IDX_NHI];
     data[2027] = 0.0 + k[712]*y[IDX_NII] + k[713]*y[IDX_NII];
@@ -6545,21 +6307,18 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
     data[2029] = 0.0 - k[1035]*y[IDX_NHI];
     data[2030] = 0.0 - k[199]*y[IDX_NHI] + k[561]*y[IDX_H2OI];
     data[2031] = 0.0 + k[951]*y[IDX_HNOI];
-    data[2032] = 0.0 - k[200]*y[IDX_NHI] + k[779]*y[IDX_NH2I] -
-        k[795]*y[IDX_NHI];
-    data[2033] = 0.0 + k[339]*y[IDX_N2HII] + k[342]*y[IDX_NH2II] +
-        k[344]*y[IDX_NH3II];
-    data[2034] = 0.0 + k[982]*y[IDX_HNOI] + k[983]*y[IDX_NH2I] -
-        k[985]*y[IDX_NHI] + k[987]*y[IDX_NOI] + k[994]*y[IDX_OCNI];
+    data[2032] = 0.0 - k[200]*y[IDX_NHI] + k[779]*y[IDX_NH2I] - k[795]*y[IDX_NHI];
+    data[2033] = 0.0 + k[339]*y[IDX_N2HII] + k[342]*y[IDX_NH2II] + k[344]*y[IDX_NH3II];
+    data[2034] = 0.0 + k[982]*y[IDX_HNOI] + k[983]*y[IDX_NH2I] - k[985]*y[IDX_NHI] +
+        k[987]*y[IDX_NOI] + k[994]*y[IDX_OCNI];
     data[2035] = 0.0 - k[86]*y[IDX_NHI];
     data[2036] = 0.0 + k[960]*y[IDX_NI] - k[962]*y[IDX_NHI];
     data[2037] = 0.0 - k[111]*y[IDX_NHI] - k[523]*y[IDX_NHI];
     data[2038] = 0.0 + k[1013]*y[IDX_NI];
-    data[2039] = 0.0 + k[175]*y[IDX_NHII] + k[721]*y[IDX_NII] +
-        k[769]*y[IDX_NH2II];
+    data[2039] = 0.0 + k[175]*y[IDX_NHII] + k[721]*y[IDX_NII] + k[769]*y[IDX_NH2II];
     data[2040] = 0.0 - k[796]*y[IDX_NHI];
-    data[2041] = 0.0 + k[176]*y[IDX_NHII] + k[561]*y[IDX_CNII] +
-        k[771]*y[IDX_NH2II] - k[1036]*y[IDX_NHI];
+    data[2041] = 0.0 + k[176]*y[IDX_NHII] + k[561]*y[IDX_CNII] + k[771]*y[IDX_NH2II] -
+        k[1036]*y[IDX_NHI];
     data[2042] = 0.0 - k[797]*y[IDX_NHI];
     data[2043] = 0.0 - k[594]*y[IDX_NHI];
     data[2044] = 0.0 + k[773]*y[IDX_NH2II] + k[1064]*y[IDX_OI];
@@ -6569,67 +6328,62 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
     data[2048] = 0.0 - k[693]*y[IDX_NHI];
     data[2049] = 0.0 + k[775]*y[IDX_NH2II];
     data[2050] = 0.0 + k[263] + k[1152];
-    data[2051] = 0.0 + k[951]*y[IDX_COI] + k[982]*y[IDX_HI] +
-        k[1017]*y[IDX_NI] + k[1070]*y[IDX_OI];
+    data[2051] = 0.0 + k[951]*y[IDX_COI] + k[982]*y[IDX_HI] + k[1017]*y[IDX_NI] +
+        k[1070]*y[IDX_OI];
     data[2052] = 0.0 - k[800]*y[IDX_NHI];
-    data[2053] = 0.0 + k[929]*y[IDX_CHI] + k[960]*y[IDX_H2I] +
-        k[1007]*y[IDX_CH2I] + k[1013]*y[IDX_H2CNI] + k[1014]*y[IDX_HCOI] +
-        k[1017]*y[IDX_HNOI] - k[1018]*y[IDX_NHI] + k[1024]*y[IDX_O2HI] +
-        k[1026]*y[IDX_OHI];
-    data[2054] = 0.0 - k[166]*y[IDX_NHI] + k[712]*y[IDX_CH3OHI] +
-        k[713]*y[IDX_CH3OHI] + k[721]*y[IDX_H2COI] + k[725]*y[IDX_NH3I] -
-        k[726]*y[IDX_NHI];
+    data[2053] = 0.0 + k[929]*y[IDX_CHI] + k[960]*y[IDX_H2I] + k[1007]*y[IDX_CH2I] +
+        k[1013]*y[IDX_H2CNI] + k[1014]*y[IDX_HCOI] + k[1017]*y[IDX_HNOI] -
+        k[1018]*y[IDX_NHI] + k[1024]*y[IDX_O2HI] + k[1026]*y[IDX_OHI];
+    data[2054] = 0.0 - k[166]*y[IDX_NHI] + k[712]*y[IDX_CH3OHI] + k[713]*y[IDX_CH3OHI] +
+        k[721]*y[IDX_H2COI] + k[725]*y[IDX_NH3I] - k[726]*y[IDX_NHI];
     data[2055] = 0.0 + k[884]*y[IDX_CH2I];
     data[2056] = 0.0 - k[201]*y[IDX_NHI];
     data[2057] = 0.0 + k[339]*y[IDX_EM] - k[801]*y[IDX_NHI];
-    data[2058] = 0.0 - k[86]*y[IDX_HII] - k[111]*y[IDX_H2II] -
-        k[166]*y[IDX_NII] - k[199]*y[IDX_CNII] - k[200]*y[IDX_COII] -
-        k[201]*y[IDX_N2II] - k[202]*y[IDX_OII] - k[274] - k[275] -
-        k[375]*y[IDX_CII] - k[410]*y[IDX_CHII] - k[523]*y[IDX_H2II] -
-        k[594]*y[IDX_H3II] - k[693]*y[IDX_HeII] - k[726]*y[IDX_NII] -
-        k[763]*y[IDX_NHII] - k[794]*y[IDX_CH3II] - k[795]*y[IDX_COII] -
-        k[796]*y[IDX_H2COII] - k[797]*y[IDX_H2OII] - k[798]*y[IDX_HCNII] -
-        k[799]*y[IDX_HCOII] - k[800]*y[IDX_HNOII] - k[801]*y[IDX_N2HII] -
-        k[802]*y[IDX_NH2II] - k[803]*y[IDX_OII] - k[804]*y[IDX_O2II] -
-        k[805]*y[IDX_O2HII] - k[806]*y[IDX_OHII] - k[869]*y[IDX_CI] -
-        k[870]*y[IDX_CI] - k[962]*y[IDX_H2I] - k[985]*y[IDX_HI] -
-        k[1018]*y[IDX_NI] - k[1034]*y[IDX_CH4I] - k[1035]*y[IDX_CNI] -
-        k[1036]*y[IDX_H2OI] - k[1037]*y[IDX_NH3I] - k[1038]*y[IDX_NHI] -
-        k[1038]*y[IDX_NHI] - k[1038]*y[IDX_NHI] - k[1038]*y[IDX_NHI] -
+    data[2058] = 0.0 - k[86]*y[IDX_HII] - k[111]*y[IDX_H2II] - k[166]*y[IDX_NII] -
+        k[199]*y[IDX_CNII] - k[200]*y[IDX_COII] - k[201]*y[IDX_N2II] -
+        k[202]*y[IDX_OII] - k[274] - k[275] - k[375]*y[IDX_CII] -
+        k[410]*y[IDX_CHII] - k[523]*y[IDX_H2II] - k[594]*y[IDX_H3II] -
+        k[693]*y[IDX_HeII] - k[726]*y[IDX_NII] - k[763]*y[IDX_NHII] -
+        k[794]*y[IDX_CH3II] - k[795]*y[IDX_COII] - k[796]*y[IDX_H2COII] -
+        k[797]*y[IDX_H2OII] - k[798]*y[IDX_HCNII] - k[799]*y[IDX_HCOII] -
+        k[800]*y[IDX_HNOII] - k[801]*y[IDX_N2HII] - k[802]*y[IDX_NH2II] -
+        k[803]*y[IDX_OII] - k[804]*y[IDX_O2II] - k[805]*y[IDX_O2HII] -
+        k[806]*y[IDX_OHII] - k[869]*y[IDX_CI] - k[870]*y[IDX_CI] -
+        k[962]*y[IDX_H2I] - k[985]*y[IDX_HI] - k[1018]*y[IDX_NI] -
+        k[1034]*y[IDX_CH4I] - k[1035]*y[IDX_CNI] - k[1036]*y[IDX_H2OI] -
+        k[1037]*y[IDX_NH3I] - k[1038]*y[IDX_NHI] - k[1038]*y[IDX_NHI] -
+        k[1038]*y[IDX_NHI] - k[1038]*y[IDX_NHI] - k[1039]*y[IDX_NHI] -
         k[1039]*y[IDX_NHI] - k[1039]*y[IDX_NHI] - k[1039]*y[IDX_NHI] -
-        k[1039]*y[IDX_NHI] - k[1040]*y[IDX_NHI] - k[1040]*y[IDX_NHI] -
-        k[1040]*y[IDX_NHI] - k[1040]*y[IDX_NHI] - k[1041]*y[IDX_NO2I] -
-        k[1042]*y[IDX_NOI] - k[1043]*y[IDX_NOI] - k[1044]*y[IDX_O2I] -
-        k[1045]*y[IDX_O2I] - k[1046]*y[IDX_OI] - k[1047]*y[IDX_OI] -
-        k[1048]*y[IDX_OHI] - k[1049]*y[IDX_OHI] - k[1050]*y[IDX_OHI] - k[1162] -
-        k[1163] - k[1265];
-    data[2059] = 0.0 + k[175]*y[IDX_H2COI] + k[176]*y[IDX_H2OI] +
-        k[177]*y[IDX_NH3I] + k[178]*y[IDX_NOI] + k[179]*y[IDX_O2I] -
-        k[763]*y[IDX_NHI];
+        k[1040]*y[IDX_NHI] - k[1040]*y[IDX_NHI] - k[1040]*y[IDX_NHI] -
+        k[1040]*y[IDX_NHI] - k[1041]*y[IDX_NO2I] - k[1042]*y[IDX_NOI] -
+        k[1043]*y[IDX_NOI] - k[1044]*y[IDX_O2I] - k[1045]*y[IDX_O2I] -
+        k[1046]*y[IDX_OI] - k[1047]*y[IDX_OI] - k[1048]*y[IDX_OHI] -
+        k[1049]*y[IDX_OHI] - k[1050]*y[IDX_OHI] - k[1162] - k[1163] - k[1265];
+    data[2059] = 0.0 + k[175]*y[IDX_H2COI] + k[176]*y[IDX_H2OI] + k[177]*y[IDX_NH3I] +
+        k[178]*y[IDX_NOI] + k[179]*y[IDX_O2I] - k[763]*y[IDX_NHI];
     data[2060] = 0.0 + k[270] + k[776]*y[IDX_NH2II] + k[779]*y[IDX_COII] +
         k[868]*y[IDX_CI] + k[907]*y[IDX_CH3I] + k[983]*y[IDX_HI] +
         k[1031]*y[IDX_OHI] + k[1073]*y[IDX_OI] + k[1158];
-    data[2061] = 0.0 + k[342]*y[IDX_EM] + k[433]*y[IDX_CH2I] +
-        k[471]*y[IDX_CHI] + k[769]*y[IDX_H2COI] + k[771]*y[IDX_H2OI] +
-        k[773]*y[IDX_HCNI] + k[774]*y[IDX_HCOI] + k[775]*y[IDX_HNCI] +
-        k[776]*y[IDX_NH2I] - k[802]*y[IDX_NHI];
+    data[2061] = 0.0 + k[342]*y[IDX_EM] + k[433]*y[IDX_CH2I] + k[471]*y[IDX_CHI] +
+        k[769]*y[IDX_H2COI] + k[771]*y[IDX_H2OI] + k[773]*y[IDX_HCNI] +
+        k[774]*y[IDX_HCOI] + k[775]*y[IDX_HNCI] + k[776]*y[IDX_NH2I] -
+        k[802]*y[IDX_NHI];
     data[2062] = 0.0 + k[177]*y[IDX_NHII] + k[273] + k[725]*y[IDX_NII] -
         k[1037]*y[IDX_NHI] + k[1161];
     data[2063] = 0.0 + k[344]*y[IDX_EM];
-    data[2064] = 0.0 + k[178]*y[IDX_NHII] + k[987]*y[IDX_HI] -
-        k[1042]*y[IDX_NHI] - k[1043]*y[IDX_NHI];
+    data[2064] = 0.0 + k[178]*y[IDX_NHII] + k[987]*y[IDX_HI] - k[1042]*y[IDX_NHI] -
+        k[1043]*y[IDX_NHI];
     data[2065] = 0.0 - k[1041]*y[IDX_NHI];
-    data[2066] = 0.0 - k[1046]*y[IDX_NHI] - k[1047]*y[IDX_NHI] +
-        k[1064]*y[IDX_HCNI] + k[1070]*y[IDX_HNOI] + k[1073]*y[IDX_NH2I];
+    data[2066] = 0.0 - k[1046]*y[IDX_NHI] - k[1047]*y[IDX_NHI] + k[1064]*y[IDX_HCNI] +
+        k[1070]*y[IDX_HNOI] + k[1073]*y[IDX_NH2I];
     data[2067] = 0.0 - k[202]*y[IDX_NHI] - k[803]*y[IDX_NHI];
-    data[2068] = 0.0 + k[179]*y[IDX_NHII] - k[1044]*y[IDX_NHI] -
-        k[1045]*y[IDX_NHI];
+    data[2068] = 0.0 + k[179]*y[IDX_NHII] - k[1044]*y[IDX_NHI] - k[1045]*y[IDX_NHI];
     data[2069] = 0.0 - k[804]*y[IDX_NHI];
     data[2070] = 0.0 + k[1024]*y[IDX_NI];
     data[2071] = 0.0 - k[805]*y[IDX_NHI];
     data[2072] = 0.0 + k[994]*y[IDX_HI];
-    data[2073] = 0.0 + k[1026]*y[IDX_NI] + k[1031]*y[IDX_NH2I] -
-        k[1048]*y[IDX_NHI] - k[1049]*y[IDX_NHI] - k[1050]*y[IDX_NHI];
+    data[2073] = 0.0 + k[1026]*y[IDX_NI] + k[1031]*y[IDX_NH2I] - k[1048]*y[IDX_NHI] -
+        k[1049]*y[IDX_NHI] - k[1050]*y[IDX_NHI];
     data[2074] = 0.0 - k[806]*y[IDX_NHI];
     data[2075] = 0.0 - k[390]*y[IDX_NHII];
     data[2076] = 0.0 - k[470]*y[IDX_NHII];
@@ -6638,53 +6392,45 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
     data[2079] = 0.0 + k[199]*y[IDX_NHI];
     data[2080] = 0.0 - k[751]*y[IDX_NHII];
     data[2081] = 0.0 + k[200]*y[IDX_NHI];
-    data[2082] = 0.0 - k[748]*y[IDX_NHII] - k[749]*y[IDX_NHII] -
-        k[750]*y[IDX_NHII];
+    data[2082] = 0.0 - k[748]*y[IDX_NHII] - k[749]*y[IDX_NHII] - k[750]*y[IDX_NHII];
     data[2083] = 0.0 - k[340]*y[IDX_NHII];
     data[2084] = 0.0 + k[86]*y[IDX_NHI];
-    data[2085] = 0.0 + k[538]*y[IDX_NII] - k[540]*y[IDX_NHII] -
-        k[541]*y[IDX_NHII];
+    data[2085] = 0.0 + k[538]*y[IDX_NII] - k[540]*y[IDX_NHII] - k[541]*y[IDX_NHII];
     data[2086] = 0.0 + k[111]*y[IDX_NHI] + k[522]*y[IDX_NI];
-    data[2087] = 0.0 - k[175]*y[IDX_NHII] - k[752]*y[IDX_NHII] -
-        k[753]*y[IDX_NHII];
-    data[2088] = 0.0 - k[176]*y[IDX_NHII] - k[754]*y[IDX_NHII] -
-        k[755]*y[IDX_NHII] - k[756]*y[IDX_NHII] - k[757]*y[IDX_NHII];
+    data[2087] = 0.0 - k[175]*y[IDX_NHII] - k[752]*y[IDX_NHII] - k[753]*y[IDX_NHII];
+    data[2088] = 0.0 - k[176]*y[IDX_NHII] - k[754]*y[IDX_NHII] - k[755]*y[IDX_NHII] -
+        k[756]*y[IDX_NHII] - k[757]*y[IDX_NHII];
     data[2089] = 0.0 - k[758]*y[IDX_NHII];
     data[2090] = 0.0 + k[723]*y[IDX_NII] - k[759]*y[IDX_NHII];
-    data[2091] = 0.0 + k[685]*y[IDX_HNCI] + k[690]*y[IDX_NH2I] +
-        k[691]*y[IDX_NH3I];
+    data[2091] = 0.0 + k[685]*y[IDX_HNCI] + k[690]*y[IDX_NH2I] + k[691]*y[IDX_NH3I];
     data[2092] = 0.0 + k[685]*y[IDX_HeII] - k[760]*y[IDX_NHII];
     data[2093] = 0.0 + k[522]*y[IDX_H2II] - k[740]*y[IDX_NHII];
-    data[2094] = 0.0 + k[166]*y[IDX_NHI] + k[538]*y[IDX_H2I] +
-        k[723]*y[IDX_HCOI];
+    data[2094] = 0.0 + k[166]*y[IDX_NHI] + k[538]*y[IDX_H2I] + k[723]*y[IDX_HCOI];
     data[2095] = 0.0 - k[761]*y[IDX_NHII];
     data[2096] = 0.0 + k[201]*y[IDX_NHI];
-    data[2097] = 0.0 + k[86]*y[IDX_HII] + k[111]*y[IDX_H2II] +
-        k[166]*y[IDX_NII] + k[199]*y[IDX_CNII] + k[200]*y[IDX_COII] +
-        k[201]*y[IDX_N2II] + k[202]*y[IDX_OII] + k[275] - k[763]*y[IDX_NHII] +
-        k[1163];
-    data[2098] = 0.0 - k[175]*y[IDX_H2COI] - k[176]*y[IDX_H2OI] -
-        k[177]*y[IDX_NH3I] - k[178]*y[IDX_NOI] - k[179]*y[IDX_O2I] -
-        k[340]*y[IDX_EM] - k[390]*y[IDX_CI] - k[432]*y[IDX_CH2I] -
-        k[470]*y[IDX_CHI] - k[540]*y[IDX_H2I] - k[541]*y[IDX_H2I] -
-        k[740]*y[IDX_NI] - k[747]*y[IDX_CNI] - k[748]*y[IDX_CO2I] -
-        k[749]*y[IDX_CO2I] - k[750]*y[IDX_CO2I] - k[751]*y[IDX_COI] -
-        k[752]*y[IDX_H2COI] - k[753]*y[IDX_H2COI] - k[754]*y[IDX_H2OI] -
-        k[755]*y[IDX_H2OI] - k[756]*y[IDX_H2OI] - k[757]*y[IDX_H2OI] -
-        k[758]*y[IDX_HCNI] - k[759]*y[IDX_HCOI] - k[760]*y[IDX_HNCI] -
-        k[761]*y[IDX_N2I] - k[762]*y[IDX_NH2I] - k[763]*y[IDX_NHI] -
-        k[764]*y[IDX_NOI] - k[765]*y[IDX_O2I] - k[766]*y[IDX_O2I] -
-        k[767]*y[IDX_OI] - k[768]*y[IDX_OHI] - k[1156] - k[1273];
+    data[2097] = 0.0 + k[86]*y[IDX_HII] + k[111]*y[IDX_H2II] + k[166]*y[IDX_NII] +
+        k[199]*y[IDX_CNII] + k[200]*y[IDX_COII] + k[201]*y[IDX_N2II] +
+        k[202]*y[IDX_OII] + k[275] - k[763]*y[IDX_NHII] + k[1163];
+    data[2098] = 0.0 - k[175]*y[IDX_H2COI] - k[176]*y[IDX_H2OI] - k[177]*y[IDX_NH3I] -
+        k[178]*y[IDX_NOI] - k[179]*y[IDX_O2I] - k[340]*y[IDX_EM] -
+        k[390]*y[IDX_CI] - k[432]*y[IDX_CH2I] - k[470]*y[IDX_CHI] -
+        k[540]*y[IDX_H2I] - k[541]*y[IDX_H2I] - k[740]*y[IDX_NI] -
+        k[747]*y[IDX_CNI] - k[748]*y[IDX_CO2I] - k[749]*y[IDX_CO2I] -
+        k[750]*y[IDX_CO2I] - k[751]*y[IDX_COI] - k[752]*y[IDX_H2COI] -
+        k[753]*y[IDX_H2COI] - k[754]*y[IDX_H2OI] - k[755]*y[IDX_H2OI] -
+        k[756]*y[IDX_H2OI] - k[757]*y[IDX_H2OI] - k[758]*y[IDX_HCNI] -
+        k[759]*y[IDX_HCOI] - k[760]*y[IDX_HNCI] - k[761]*y[IDX_N2I] -
+        k[762]*y[IDX_NH2I] - k[763]*y[IDX_NHI] - k[764]*y[IDX_NOI] -
+        k[765]*y[IDX_O2I] - k[766]*y[IDX_O2I] - k[767]*y[IDX_OI] -
+        k[768]*y[IDX_OHI] - k[1156] - k[1273];
     data[2099] = 0.0 + k[690]*y[IDX_HeII] - k[762]*y[IDX_NHII];
     data[2100] = 0.0 - k[177]*y[IDX_NHII] + k[691]*y[IDX_HeII];
     data[2101] = 0.0 - k[178]*y[IDX_NHII] - k[764]*y[IDX_NHII];
     data[2102] = 0.0 - k[767]*y[IDX_NHII];
     data[2103] = 0.0 + k[202]*y[IDX_NHI];
-    data[2104] = 0.0 - k[179]*y[IDX_NHII] - k[765]*y[IDX_NHII] -
-        k[766]*y[IDX_NHII];
+    data[2104] = 0.0 - k[179]*y[IDX_NHII] - k[765]*y[IDX_NHII] - k[766]*y[IDX_NHII];
     data[2105] = 0.0 - k[768]*y[IDX_NHII];
-    data[2106] = 0.0 - k[866]*y[IDX_NH2I] - k[867]*y[IDX_NH2I] -
-        k[868]*y[IDX_NH2I];
+    data[2106] = 0.0 - k[866]*y[IDX_NH2I] - k[867]*y[IDX_NH2I] - k[868]*y[IDX_NH2I];
     data[2107] = 0.0 - k[373]*y[IDX_NH2I];
     data[2108] = 0.0 + k[59]*y[IDX_NH2II];
     data[2109] = 0.0 - k[409]*y[IDX_NH2I];
@@ -6693,11 +6439,9 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
     data[2112] = 0.0 - k[1028]*y[IDX_NH2I] + k[1034]*y[IDX_NHI];
     data[2113] = 0.0 + k[1033]*y[IDX_NH3I];
     data[2114] = 0.0 - k[183]*y[IDX_NH2I];
-    data[2115] = 0.0 - k[184]*y[IDX_NH2I] - k[779]*y[IDX_NH2I] +
-        k[792]*y[IDX_NH3I];
+    data[2115] = 0.0 - k[184]*y[IDX_NH2I] - k[779]*y[IDX_NH2I] + k[792]*y[IDX_NH3I];
     data[2116] = 0.0 + k[343]*y[IDX_NH3II];
-    data[2117] = 0.0 + k[980]*y[IDX_HNOI] - k[983]*y[IDX_NH2I] +
-        k[984]*y[IDX_NH3I];
+    data[2117] = 0.0 + k[980]*y[IDX_HNOI] - k[983]*y[IDX_NH2I] + k[984]*y[IDX_NH3I];
     data[2118] = 0.0 - k[84]*y[IDX_NH2I];
     data[2119] = 0.0 - k[961]*y[IDX_NH2I] + k[962]*y[IDX_NHI];
     data[2120] = 0.0 - k[109]*y[IDX_NH2I];
@@ -6719,43 +6463,39 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
     data[2136] = 0.0 - k[164]*y[IDX_NH2I];
     data[2137] = 0.0 - k[186]*y[IDX_NH2I];
     data[2138] = 0.0 - k[789]*y[IDX_NH2I];
-    data[2139] = 0.0 + k[962]*y[IDX_H2I] + k[1034]*y[IDX_CH4I] +
-        k[1036]*y[IDX_H2OI] + k[1037]*y[IDX_NH3I] + k[1037]*y[IDX_NH3I] +
-        k[1040]*y[IDX_NHI] + k[1040]*y[IDX_NHI] + k[1050]*y[IDX_OHI];
+    data[2139] = 0.0 + k[962]*y[IDX_H2I] + k[1034]*y[IDX_CH4I] + k[1036]*y[IDX_H2OI] +
+        k[1037]*y[IDX_NH3I] + k[1037]*y[IDX_NH3I] + k[1040]*y[IDX_NHI] +
+        k[1040]*y[IDX_NHI] + k[1050]*y[IDX_OHI];
     data[2140] = 0.0 + k[753]*y[IDX_H2COI] - k[762]*y[IDX_NH2I];
-    data[2141] = 0.0 - k[84]*y[IDX_HII] - k[109]*y[IDX_H2II] -
-        k[164]*y[IDX_NII] - k[183]*y[IDX_CNII] - k[184]*y[IDX_COII] -
-        k[185]*y[IDX_H2OII] - k[186]*y[IDX_N2II] - k[187]*y[IDX_O2II] -
-        k[188]*y[IDX_OHII] - k[212]*y[IDX_OII] - k[269] - k[270] -
-        k[373]*y[IDX_CII] - k[409]*y[IDX_CHII] - k[593]*y[IDX_H3II] -
-        k[689]*y[IDX_HeII] - k[690]*y[IDX_HeII] - k[762]*y[IDX_NHII] -
-        k[776]*y[IDX_NH2II] - k[779]*y[IDX_COII] - k[780]*y[IDX_H2COII] -
-        k[781]*y[IDX_H2OII] - k[782]*y[IDX_H3COII] - k[783]*y[IDX_H3OII] -
-        k[784]*y[IDX_HCNII] - k[785]*y[IDX_HCNHII] - k[786]*y[IDX_HCNHII] -
-        k[787]*y[IDX_HCOII] - k[788]*y[IDX_HNOII] - k[789]*y[IDX_N2HII] -
-        k[790]*y[IDX_O2HII] - k[791]*y[IDX_OHII] - k[866]*y[IDX_CI] -
-        k[867]*y[IDX_CI] - k[868]*y[IDX_CI] - k[907]*y[IDX_CH3I] -
-        k[961]*y[IDX_H2I] - k[983]*y[IDX_HI] - k[1028]*y[IDX_CH4I] -
-        k[1029]*y[IDX_NOI] - k[1030]*y[IDX_NOI] - k[1031]*y[IDX_OHI] -
-        k[1032]*y[IDX_OHI] - k[1072]*y[IDX_OI] - k[1073]*y[IDX_OI] - k[1157] -
-        k[1158] - k[1289];
-    data[2142] = 0.0 + k[42]*y[IDX_CH2I] + k[59]*y[IDX_CHI] +
-        k[180]*y[IDX_HCOI] + k[181]*y[IDX_NH3I] + k[182]*y[IDX_NOI] -
-        k[776]*y[IDX_NH2I];
+    data[2141] = 0.0 - k[84]*y[IDX_HII] - k[109]*y[IDX_H2II] - k[164]*y[IDX_NII] -
+        k[183]*y[IDX_CNII] - k[184]*y[IDX_COII] - k[185]*y[IDX_H2OII] -
+        k[186]*y[IDX_N2II] - k[187]*y[IDX_O2II] - k[188]*y[IDX_OHII] -
+        k[212]*y[IDX_OII] - k[269] - k[270] - k[373]*y[IDX_CII] -
+        k[409]*y[IDX_CHII] - k[593]*y[IDX_H3II] - k[689]*y[IDX_HeII] -
+        k[690]*y[IDX_HeII] - k[762]*y[IDX_NHII] - k[776]*y[IDX_NH2II] -
+        k[779]*y[IDX_COII] - k[780]*y[IDX_H2COII] - k[781]*y[IDX_H2OII] -
+        k[782]*y[IDX_H3COII] - k[783]*y[IDX_H3OII] - k[784]*y[IDX_HCNII] -
+        k[785]*y[IDX_HCNHII] - k[786]*y[IDX_HCNHII] - k[787]*y[IDX_HCOII] -
+        k[788]*y[IDX_HNOII] - k[789]*y[IDX_N2HII] - k[790]*y[IDX_O2HII] -
+        k[791]*y[IDX_OHII] - k[866]*y[IDX_CI] - k[867]*y[IDX_CI] -
+        k[868]*y[IDX_CI] - k[907]*y[IDX_CH3I] - k[961]*y[IDX_H2I] -
+        k[983]*y[IDX_HI] - k[1028]*y[IDX_CH4I] - k[1029]*y[IDX_NOI] -
+        k[1030]*y[IDX_NOI] - k[1031]*y[IDX_OHI] - k[1032]*y[IDX_OHI] -
+        k[1072]*y[IDX_OI] - k[1073]*y[IDX_OI] - k[1157] - k[1158] - k[1289];
+    data[2142] = 0.0 + k[42]*y[IDX_CH2I] + k[59]*y[IDX_CHI] + k[180]*y[IDX_HCOI] +
+        k[181]*y[IDX_NH3I] + k[182]*y[IDX_NOI] - k[776]*y[IDX_NH2I];
     data[2143] = 0.0 + k[181]*y[IDX_NH2II] + k[271] + k[792]*y[IDX_COII] +
         k[793]*y[IDX_HCNII] + k[908]*y[IDX_CH3I] + k[984]*y[IDX_HI] +
         k[1033]*y[IDX_CNI] + k[1037]*y[IDX_NHI] + k[1037]*y[IDX_NHI] +
         k[1074]*y[IDX_OI] + k[1098]*y[IDX_OHI] + k[1159];
     data[2144] = 0.0 + k[343]*y[IDX_EM] + k[434]*y[IDX_CH2I];
-    data[2145] = 0.0 + k[182]*y[IDX_NH2II] - k[1029]*y[IDX_NH2I] -
-        k[1030]*y[IDX_NH2I];
-    data[2146] = 0.0 - k[1072]*y[IDX_NH2I] - k[1073]*y[IDX_NH2I] +
-        k[1074]*y[IDX_NH3I];
+    data[2145] = 0.0 + k[182]*y[IDX_NH2II] - k[1029]*y[IDX_NH2I] - k[1030]*y[IDX_NH2I];
+    data[2146] = 0.0 - k[1072]*y[IDX_NH2I] - k[1073]*y[IDX_NH2I] + k[1074]*y[IDX_NH3I];
     data[2147] = 0.0 - k[212]*y[IDX_NH2I];
     data[2148] = 0.0 - k[187]*y[IDX_NH2I];
     data[2149] = 0.0 - k[790]*y[IDX_NH2I];
-    data[2150] = 0.0 - k[1031]*y[IDX_NH2I] - k[1032]*y[IDX_NH2I] +
-        k[1050]*y[IDX_NHI] + k[1095]*y[IDX_HCNI] + k[1098]*y[IDX_NH3I];
+    data[2150] = 0.0 - k[1031]*y[IDX_NH2I] - k[1032]*y[IDX_NH2I] + k[1050]*y[IDX_NHI] +
+        k[1095]*y[IDX_HCNI] + k[1098]*y[IDX_NH3I];
     data[2151] = 0.0 - k[188]*y[IDX_NH2I] - k[791]*y[IDX_NH2I];
     data[2152] = 0.0 - k[59]*y[IDX_NH2II] - k[471]*y[IDX_NH2II];
     data[2153] = 0.0 - k[42]*y[IDX_NH2II] - k[433]*y[IDX_NH2II];
@@ -6766,8 +6506,7 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
     data[2158] = 0.0 + k[541]*y[IDX_NHII] - k[542]*y[IDX_NH2II];
     data[2159] = 0.0 + k[109]*y[IDX_NH2I] + k[523]*y[IDX_NHI];
     data[2160] = 0.0 - k[769]*y[IDX_NH2II] - k[770]*y[IDX_NH2II];
-    data[2161] = 0.0 + k[757]*y[IDX_NHII] - k[771]*y[IDX_NH2II] -
-        k[772]*y[IDX_NH2II];
+    data[2161] = 0.0 + k[757]*y[IDX_NHII] - k[771]*y[IDX_NH2II] - k[772]*y[IDX_NH2II];
     data[2162] = 0.0 + k[185]*y[IDX_NH2I];
     data[2163] = 0.0 + k[594]*y[IDX_NHI];
     data[2164] = 0.0 - k[773]*y[IDX_NH2II];
@@ -6782,27 +6521,24 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
     data[2173] = 0.0 + k[164]*y[IDX_NH2I] + k[725]*y[IDX_NH3I];
     data[2174] = 0.0 + k[186]*y[IDX_NH2I];
     data[2175] = 0.0 + k[801]*y[IDX_NHI];
-    data[2176] = 0.0 + k[523]*y[IDX_H2II] + k[594]*y[IDX_H3II] +
-        k[763]*y[IDX_NHII] + k[798]*y[IDX_HCNII] + k[799]*y[IDX_HCOII] +
-        k[800]*y[IDX_HNOII] + k[801]*y[IDX_N2HII] - k[802]*y[IDX_NH2II] +
-        k[805]*y[IDX_O2HII] + k[806]*y[IDX_OHII];
-    data[2177] = 0.0 + k[541]*y[IDX_H2I] + k[757]*y[IDX_H2OI] +
-        k[763]*y[IDX_NHI];
-    data[2178] = 0.0 + k[84]*y[IDX_HII] + k[109]*y[IDX_H2II] +
-        k[164]*y[IDX_NII] + k[183]*y[IDX_CNII] + k[184]*y[IDX_COII] +
-        k[185]*y[IDX_H2OII] + k[186]*y[IDX_N2II] + k[187]*y[IDX_O2II] +
-        k[188]*y[IDX_OHII] + k[212]*y[IDX_OII] + k[269] - k[776]*y[IDX_NH2II] +
-        k[1157];
-    data[2179] = 0.0 - k[42]*y[IDX_CH2I] - k[59]*y[IDX_CHI] -
-        k[180]*y[IDX_HCOI] - k[181]*y[IDX_NH3I] - k[182]*y[IDX_NOI] -
-        k[341]*y[IDX_EM] - k[342]*y[IDX_EM] - k[433]*y[IDX_CH2I] -
-        k[471]*y[IDX_CHI] - k[542]*y[IDX_H2I] - k[741]*y[IDX_NI] -
-        k[769]*y[IDX_H2COI] - k[770]*y[IDX_H2COI] - k[771]*y[IDX_H2OI] -
-        k[772]*y[IDX_H2OI] - k[773]*y[IDX_HCNI] - k[774]*y[IDX_HCOI] -
-        k[775]*y[IDX_HNCI] - k[776]*y[IDX_NH2I] - k[777]*y[IDX_O2I] -
-        k[778]*y[IDX_O2I] - k[802]*y[IDX_NHI] - k[827]*y[IDX_OI] - k[1279];
-    data[2180] = 0.0 - k[181]*y[IDX_NH2II] + k[692]*y[IDX_HeII] +
-        k[725]*y[IDX_NII];
+    data[2176] = 0.0 + k[523]*y[IDX_H2II] + k[594]*y[IDX_H3II] + k[763]*y[IDX_NHII] +
+        k[798]*y[IDX_HCNII] + k[799]*y[IDX_HCOII] + k[800]*y[IDX_HNOII] +
+        k[801]*y[IDX_N2HII] - k[802]*y[IDX_NH2II] + k[805]*y[IDX_O2HII] +
+        k[806]*y[IDX_OHII];
+    data[2177] = 0.0 + k[541]*y[IDX_H2I] + k[757]*y[IDX_H2OI] + k[763]*y[IDX_NHI];
+    data[2178] = 0.0 + k[84]*y[IDX_HII] + k[109]*y[IDX_H2II] + k[164]*y[IDX_NII] +
+        k[183]*y[IDX_CNII] + k[184]*y[IDX_COII] + k[185]*y[IDX_H2OII] +
+        k[186]*y[IDX_N2II] + k[187]*y[IDX_O2II] + k[188]*y[IDX_OHII] +
+        k[212]*y[IDX_OII] + k[269] - k[776]*y[IDX_NH2II] + k[1157];
+    data[2179] = 0.0 - k[42]*y[IDX_CH2I] - k[59]*y[IDX_CHI] - k[180]*y[IDX_HCOI] -
+        k[181]*y[IDX_NH3I] - k[182]*y[IDX_NOI] - k[341]*y[IDX_EM] -
+        k[342]*y[IDX_EM] - k[433]*y[IDX_CH2I] - k[471]*y[IDX_CHI] -
+        k[542]*y[IDX_H2I] - k[741]*y[IDX_NI] - k[769]*y[IDX_H2COI] -
+        k[770]*y[IDX_H2COI] - k[771]*y[IDX_H2OI] - k[772]*y[IDX_H2OI] -
+        k[773]*y[IDX_HCNI] - k[774]*y[IDX_HCOI] - k[775]*y[IDX_HNCI] -
+        k[776]*y[IDX_NH2I] - k[777]*y[IDX_O2I] - k[778]*y[IDX_O2I] -
+        k[802]*y[IDX_NHI] - k[827]*y[IDX_OI] - k[1279];
+    data[2180] = 0.0 - k[181]*y[IDX_NH2II] + k[692]*y[IDX_HeII] + k[725]*y[IDX_NII];
     data[2181] = 0.0 - k[182]*y[IDX_NH2II];
     data[2182] = 0.0 - k[827]*y[IDX_NH2II];
     data[2183] = 0.0 + k[212]*y[IDX_NH2I];
@@ -6826,31 +6562,27 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
     data[2201] = 0.0 - k[195]*y[IDX_NH3I];
     data[2202] = 0.0 - k[196]*y[IDX_NH3I] - k[793]*y[IDX_NH3I];
     data[2203] = 0.0 + k[189]*y[IDX_NH3II];
-    data[2204] = 0.0 - k[145]*y[IDX_NH3I] - k[691]*y[IDX_NH3I] -
-        k[692]*y[IDX_NH3I];
+    data[2204] = 0.0 - k[145]*y[IDX_NH3I] - k[691]*y[IDX_NH3I] - k[692]*y[IDX_NH3I];
     data[2205] = 0.0 + k[190]*y[IDX_NH3II];
-    data[2206] = 0.0 - k[165]*y[IDX_NH3I] - k[724]*y[IDX_NH3I] -
-        k[725]*y[IDX_NH3I];
+    data[2206] = 0.0 - k[165]*y[IDX_NH3I] - k[724]*y[IDX_NH3I] - k[725]*y[IDX_NH3I];
     data[2207] = 0.0 - k[197]*y[IDX_NH3I];
     data[2208] = 0.0 - k[1037]*y[IDX_NH3I];
     data[2209] = 0.0 - k[177]*y[IDX_NH3I];
-    data[2210] = 0.0 + k[961]*y[IDX_H2I] + k[1028]*y[IDX_CH4I] +
-        k[1032]*y[IDX_OHI];
+    data[2210] = 0.0 + k[961]*y[IDX_H2I] + k[1028]*y[IDX_CH4I] + k[1032]*y[IDX_OHI];
     data[2211] = 0.0 - k[181]*y[IDX_NH3I];
-    data[2212] = 0.0 - k[19]*y[IDX_CII] - k[33]*y[IDX_CHII] -
-        k[50]*y[IDX_CH4II] - k[85]*y[IDX_HII] - k[110]*y[IDX_H2II] -
-        k[145]*y[IDX_HeII] - k[165]*y[IDX_NII] - k[177]*y[IDX_NHII] -
-        k[181]*y[IDX_NH2II] - k[193]*y[IDX_COII] - k[194]*y[IDX_H2COII] -
-        k[195]*y[IDX_H2OII] - k[196]*y[IDX_HCNII] - k[197]*y[IDX_N2II] -
-        k[198]*y[IDX_O2II] - k[213]*y[IDX_OII] - k[222]*y[IDX_OHII] - k[271] -
-        k[272] - k[273] - k[374]*y[IDX_CII] - k[691]*y[IDX_HeII] -
-        k[692]*y[IDX_HeII] - k[724]*y[IDX_NII] - k[725]*y[IDX_NII] -
-        k[792]*y[IDX_COII] - k[793]*y[IDX_HCNII] - k[908]*y[IDX_CH3I] -
-        k[984]*y[IDX_HI] - k[1033]*y[IDX_CNI] - k[1037]*y[IDX_NHI] -
-        k[1074]*y[IDX_OI] - k[1098]*y[IDX_OHI] - k[1159] - k[1160] - k[1161] -
-        k[1267];
-    data[2213] = 0.0 + k[189]*y[IDX_HCOI] + k[190]*y[IDX_MgI] +
-        k[191]*y[IDX_NOI] + k[192]*y[IDX_SiI];
+    data[2212] = 0.0 - k[19]*y[IDX_CII] - k[33]*y[IDX_CHII] - k[50]*y[IDX_CH4II] -
+        k[85]*y[IDX_HII] - k[110]*y[IDX_H2II] - k[145]*y[IDX_HeII] -
+        k[165]*y[IDX_NII] - k[177]*y[IDX_NHII] - k[181]*y[IDX_NH2II] -
+        k[193]*y[IDX_COII] - k[194]*y[IDX_H2COII] - k[195]*y[IDX_H2OII] -
+        k[196]*y[IDX_HCNII] - k[197]*y[IDX_N2II] - k[198]*y[IDX_O2II] -
+        k[213]*y[IDX_OII] - k[222]*y[IDX_OHII] - k[271] - k[272] - k[273] -
+        k[374]*y[IDX_CII] - k[691]*y[IDX_HeII] - k[692]*y[IDX_HeII] -
+        k[724]*y[IDX_NII] - k[725]*y[IDX_NII] - k[792]*y[IDX_COII] -
+        k[793]*y[IDX_HCNII] - k[908]*y[IDX_CH3I] - k[984]*y[IDX_HI] -
+        k[1033]*y[IDX_CNI] - k[1037]*y[IDX_NHI] - k[1074]*y[IDX_OI] -
+        k[1098]*y[IDX_OHI] - k[1159] - k[1160] - k[1161] - k[1267];
+    data[2213] = 0.0 + k[189]*y[IDX_HCOI] + k[190]*y[IDX_MgI] + k[191]*y[IDX_NOI] +
+        k[192]*y[IDX_SiI];
     data[2214] = 0.0 + k[191]*y[IDX_NH3II];
     data[2215] = 0.0 - k[1074]*y[IDX_NH3I];
     data[2216] = 0.0 - k[213]*y[IDX_NH3I];
@@ -6885,27 +6617,23 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
     data[2245] = 0.0 + k[197]*y[IDX_NH3I];
     data[2246] = 0.0 + k[789]*y[IDX_NH2I];
     data[2247] = 0.0 + k[802]*y[IDX_NH2II];
-    data[2248] = 0.0 + k[177]*y[IDX_NH3I] + k[756]*y[IDX_H2OI] +
-        k[762]*y[IDX_NH2I];
-    data[2249] = 0.0 + k[593]*y[IDX_H3II] + k[762]*y[IDX_NHII] +
-        k[776]*y[IDX_NH2II] + k[780]*y[IDX_H2COII] + k[781]*y[IDX_H2OII] +
-        k[782]*y[IDX_H3COII] + k[783]*y[IDX_H3OII] + k[784]*y[IDX_HCNII] +
-        k[785]*y[IDX_HCNHII] + k[786]*y[IDX_HCNHII] + k[787]*y[IDX_HCOII] +
-        k[788]*y[IDX_HNOII] + k[789]*y[IDX_N2HII] + k[790]*y[IDX_O2HII] +
-        k[791]*y[IDX_OHII];
-    data[2250] = 0.0 + k[181]*y[IDX_NH3I] + k[542]*y[IDX_H2I] +
-        k[770]*y[IDX_H2COI] + k[772]*y[IDX_H2OI] + k[776]*y[IDX_NH2I] +
-        k[802]*y[IDX_NHI];
-    data[2251] = 0.0 + k[19]*y[IDX_CII] + k[33]*y[IDX_CHII] +
-        k[50]*y[IDX_CH4II] + k[85]*y[IDX_HII] + k[110]*y[IDX_H2II] +
-        k[145]*y[IDX_HeII] + k[165]*y[IDX_NII] + k[177]*y[IDX_NHII] +
-        k[181]*y[IDX_NH2II] + k[193]*y[IDX_COII] + k[194]*y[IDX_H2COII] +
-        k[195]*y[IDX_H2OII] + k[196]*y[IDX_HCNII] + k[197]*y[IDX_N2II] +
-        k[198]*y[IDX_O2II] + k[213]*y[IDX_OII] + k[222]*y[IDX_OHII] + k[272] +
-        k[1160];
-    data[2252] = 0.0 - k[189]*y[IDX_HCOI] - k[190]*y[IDX_MgI] -
-        k[191]*y[IDX_NOI] - k[192]*y[IDX_SiI] - k[343]*y[IDX_EM] -
-        k[344]*y[IDX_EM] - k[434]*y[IDX_CH2I] - k[828]*y[IDX_OI] - k[1283];
+    data[2248] = 0.0 + k[177]*y[IDX_NH3I] + k[756]*y[IDX_H2OI] + k[762]*y[IDX_NH2I];
+    data[2249] = 0.0 + k[593]*y[IDX_H3II] + k[762]*y[IDX_NHII] + k[776]*y[IDX_NH2II] +
+        k[780]*y[IDX_H2COII] + k[781]*y[IDX_H2OII] + k[782]*y[IDX_H3COII] +
+        k[783]*y[IDX_H3OII] + k[784]*y[IDX_HCNII] + k[785]*y[IDX_HCNHII] +
+        k[786]*y[IDX_HCNHII] + k[787]*y[IDX_HCOII] + k[788]*y[IDX_HNOII] +
+        k[789]*y[IDX_N2HII] + k[790]*y[IDX_O2HII] + k[791]*y[IDX_OHII];
+    data[2250] = 0.0 + k[181]*y[IDX_NH3I] + k[542]*y[IDX_H2I] + k[770]*y[IDX_H2COI] +
+        k[772]*y[IDX_H2OI] + k[776]*y[IDX_NH2I] + k[802]*y[IDX_NHI];
+    data[2251] = 0.0 + k[19]*y[IDX_CII] + k[33]*y[IDX_CHII] + k[50]*y[IDX_CH4II] +
+        k[85]*y[IDX_HII] + k[110]*y[IDX_H2II] + k[145]*y[IDX_HeII] +
+        k[165]*y[IDX_NII] + k[177]*y[IDX_NHII] + k[181]*y[IDX_NH2II] +
+        k[193]*y[IDX_COII] + k[194]*y[IDX_H2COII] + k[195]*y[IDX_H2OII] +
+        k[196]*y[IDX_HCNII] + k[197]*y[IDX_N2II] + k[198]*y[IDX_O2II] +
+        k[213]*y[IDX_OII] + k[222]*y[IDX_OHII] + k[272] + k[1160];
+    data[2252] = 0.0 - k[189]*y[IDX_HCOI] - k[190]*y[IDX_MgI] - k[191]*y[IDX_NOI] -
+        k[192]*y[IDX_SiI] - k[343]*y[IDX_EM] - k[344]*y[IDX_EM] -
+        k[434]*y[IDX_CH2I] - k[828]*y[IDX_OI] - k[1283];
     data[2253] = 0.0 - k[191]*y[IDX_NH3II];
     data[2254] = 0.0 - k[828]*y[IDX_NH3II];
     data[2255] = 0.0 + k[213]*y[IDX_NH3I];
@@ -6914,30 +6642,27 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
     data[2258] = 0.0 + k[222]*y[IDX_NH3I] + k[791]*y[IDX_NH2I];
     data[2259] = 0.0 - k[192]*y[IDX_NH3II];
     data[2260] = 0.0 + k[1343] + k[1344] + k[1345] + k[1346];
-    data[2261] = 0.0 + k[388]*y[IDX_HNOII] - k[871]*y[IDX_NOI] -
-        k[872]*y[IDX_NOI];
+    data[2261] = 0.0 + k[388]*y[IDX_HNOII] - k[871]*y[IDX_NOI] - k[872]*y[IDX_NOI];
     data[2262] = 0.0 - k[20]*y[IDX_NOI];
-    data[2263] = 0.0 + k[467]*y[IDX_HNOII] + k[926]*y[IDX_HNOI] -
-        k[930]*y[IDX_NOI] - k[931]*y[IDX_NOI] - k[932]*y[IDX_NOI];
+    data[2263] = 0.0 + k[467]*y[IDX_HNOII] + k[926]*y[IDX_HNOI] - k[930]*y[IDX_NOI] -
+        k[931]*y[IDX_NOI] - k[932]*y[IDX_NOI];
     data[2264] = 0.0 - k[34]*y[IDX_NOI];
-    data[2265] = 0.0 + k[430]*y[IDX_HNOII] + k[883]*y[IDX_HNOI] +
-        k[885]*y[IDX_NO2I] - k[886]*y[IDX_NOI] - k[887]*y[IDX_NOI] -
-        k[888]*y[IDX_NOI];
+    data[2265] = 0.0 + k[430]*y[IDX_HNOII] + k[883]*y[IDX_HNOI] + k[885]*y[IDX_NO2I] -
+        k[886]*y[IDX_NOI] - k[887]*y[IDX_NOI] - k[888]*y[IDX_NOI];
     data[2266] = 0.0 - k[36]*y[IDX_NOI];
     data[2267] = 0.0 + k[906]*y[IDX_HNOI] - k[910]*y[IDX_NOI];
     data[2268] = 0.0 - k[48]*y[IDX_NOI];
     data[2269] = 0.0 + k[715]*y[IDX_NII];
-    data[2270] = 0.0 + k[482]*y[IDX_HNOII] + k[944]*y[IDX_HNOI] +
-        k[945]*y[IDX_NO2I] - k[946]*y[IDX_NOI] - k[947]*y[IDX_NOI] +
-        k[948]*y[IDX_O2I] + k[1058]*y[IDX_OI];
+    data[2270] = 0.0 + k[482]*y[IDX_HNOII] + k[944]*y[IDX_HNOI] + k[945]*y[IDX_NO2I] -
+        k[946]*y[IDX_NOI] - k[947]*y[IDX_NOI] + k[948]*y[IDX_O2I] +
+        k[1058]*y[IDX_OI];
     data[2271] = 0.0 - k[67]*y[IDX_NOI];
     data[2272] = 0.0 + k[486]*y[IDX_HNOII] + k[952]*y[IDX_NO2I];
     data[2273] = 0.0 - k[72]*y[IDX_NOI];
-    data[2274] = 0.0 + k[652]*y[IDX_HNOII] + k[719]*y[IDX_NII] +
-        k[1012]*y[IDX_NI];
+    data[2274] = 0.0 + k[652]*y[IDX_HNOII] + k[719]*y[IDX_NII] + k[1012]*y[IDX_NI];
     data[2275] = 0.0 + k[311]*y[IDX_H2NOII] + k[334]*y[IDX_HNOII];
-    data[2276] = 0.0 + k[981]*y[IDX_HNOI] + k[986]*y[IDX_NO2I] -
-        k[987]*y[IDX_NOI] - k[988]*y[IDX_NOI];
+    data[2276] = 0.0 + k[981]*y[IDX_HNOI] + k[986]*y[IDX_NO2I] - k[987]*y[IDX_NOI] -
+        k[988]*y[IDX_NOI];
     data[2277] = 0.0 - k[87]*y[IDX_NOI];
     data[2278] = 0.0 - k[112]*y[IDX_NOI] - k[524]*y[IDX_NOI];
     data[2279] = 0.0 + k[550]*y[IDX_HNOII];
@@ -6948,45 +6673,41 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
     data[2284] = 0.0 - k[596]*y[IDX_NOI];
     data[2285] = 0.0 + k[630]*y[IDX_HNOII];
     data[2286] = 0.0 - k[132]*y[IDX_NOI];
-    data[2287] = 0.0 + k[642]*y[IDX_HNOII] + k[999]*y[IDX_HNOI] -
-        k[1000]*y[IDX_NOI];
-    data[2288] = 0.0 + k[687]*y[IDX_HNOI] - k[694]*y[IDX_NOI] -
-        k[695]*y[IDX_NOI];
+    data[2287] = 0.0 + k[642]*y[IDX_HNOII] + k[999]*y[IDX_HNOI] - k[1000]*y[IDX_NOI];
+    data[2288] = 0.0 + k[687]*y[IDX_HNOI] - k[694]*y[IDX_NOI] - k[695]*y[IDX_NOI];
     data[2289] = 0.0 + k[649]*y[IDX_HNOII];
     data[2290] = 0.0 + k[264] + k[687]*y[IDX_HeII] + k[883]*y[IDX_CH2I] +
         k[906]*y[IDX_CH3I] + k[926]*y[IDX_CHI] + k[944]*y[IDX_CNI] +
         k[981]*y[IDX_HI] + k[999]*y[IDX_HCOI] + k[1017]*y[IDX_NI] +
         k[1069]*y[IDX_OI] + k[1097]*y[IDX_OHI] + k[1153];
-    data[2291] = 0.0 - k[204]*y[IDX_NOI] + k[334]*y[IDX_EM] +
-        k[388]*y[IDX_CI] + k[430]*y[IDX_CH2I] + k[467]*y[IDX_CHI] +
-        k[482]*y[IDX_CNI] + k[486]*y[IDX_COI] + k[550]*y[IDX_H2COI] +
-        k[568]*y[IDX_H2OI] + k[630]*y[IDX_HCNI] + k[642]*y[IDX_HCOI] +
-        k[649]*y[IDX_HNCI] + k[652]*y[IDX_CO2I] + k[732]*y[IDX_N2I] +
-        k[788]*y[IDX_NH2I] + k[800]*y[IDX_NHI] + k[856]*y[IDX_OHI];
+    data[2291] = 0.0 - k[204]*y[IDX_NOI] + k[334]*y[IDX_EM] + k[388]*y[IDX_CI] +
+        k[430]*y[IDX_CH2I] + k[467]*y[IDX_CHI] + k[482]*y[IDX_CNI] +
+        k[486]*y[IDX_COI] + k[550]*y[IDX_H2COI] + k[568]*y[IDX_H2OI] +
+        k[630]*y[IDX_HCNI] + k[642]*y[IDX_HCOI] + k[649]*y[IDX_HNCI] +
+        k[652]*y[IDX_CO2I] + k[732]*y[IDX_N2I] + k[788]*y[IDX_NH2I] +
+        k[800]*y[IDX_NHI] + k[856]*y[IDX_OHI];
     data[2292] = 0.0 + k[151]*y[IDX_NOII];
-    data[2293] = 0.0 + k[746]*y[IDX_SiOII] + k[1012]*y[IDX_CO2I] +
-        k[1017]*y[IDX_HNOI] + k[1020]*y[IDX_NO2I] + k[1020]*y[IDX_NO2I] -
-        k[1022]*y[IDX_NOI] + k[1023]*y[IDX_O2I] + k[1025]*y[IDX_OHI];
-    data[2294] = 0.0 - k[167]*y[IDX_NOI] + k[715]*y[IDX_CH3OHI] +
-        k[719]*y[IDX_CO2I] - k[727]*y[IDX_NOI] + k[729]*y[IDX_O2I];
+    data[2293] = 0.0 + k[746]*y[IDX_SiOII] + k[1012]*y[IDX_CO2I] + k[1017]*y[IDX_HNOI] +
+        k[1020]*y[IDX_NO2I] + k[1020]*y[IDX_NO2I] - k[1022]*y[IDX_NOI] +
+        k[1023]*y[IDX_O2I] + k[1025]*y[IDX_OHI];
+    data[2294] = 0.0 - k[167]*y[IDX_NOI] + k[715]*y[IDX_CH3OHI] + k[719]*y[IDX_CO2I] -
+        k[727]*y[IDX_NOI] + k[729]*y[IDX_O2I];
     data[2295] = 0.0 + k[732]*y[IDX_HNOII] + k[1071]*y[IDX_OI];
     data[2296] = 0.0 - k[172]*y[IDX_NOI];
-    data[2297] = 0.0 + k[800]*y[IDX_HNOII] + k[1041]*y[IDX_NO2I] -
-        k[1042]*y[IDX_NOI] - k[1043]*y[IDX_NOI] + k[1045]*y[IDX_O2I] +
-        k[1046]*y[IDX_OI];
+    data[2297] = 0.0 + k[800]*y[IDX_HNOII] + k[1041]*y[IDX_NO2I] - k[1042]*y[IDX_NOI] -
+        k[1043]*y[IDX_NOI] + k[1045]*y[IDX_O2I] + k[1046]*y[IDX_OI];
     data[2298] = 0.0 - k[178]*y[IDX_NOI] - k[764]*y[IDX_NOI];
-    data[2299] = 0.0 + k[788]*y[IDX_HNOII] - k[1029]*y[IDX_NOI] -
-        k[1030]*y[IDX_NOI];
+    data[2299] = 0.0 + k[788]*y[IDX_HNOII] - k[1029]*y[IDX_NOI] - k[1030]*y[IDX_NOI];
     data[2300] = 0.0 - k[182]*y[IDX_NOI];
     data[2301] = 0.0 - k[191]*y[IDX_NOI];
-    data[2302] = 0.0 - k[20]*y[IDX_CII] - k[34]*y[IDX_CHII] -
-        k[36]*y[IDX_CH2II] - k[48]*y[IDX_CH3II] - k[67]*y[IDX_CNII] -
-        k[72]*y[IDX_COII] - k[87]*y[IDX_HII] - k[112]*y[IDX_H2II] -
-        k[120]*y[IDX_H2OII] - k[132]*y[IDX_HCNII] - k[167]*y[IDX_NII] -
-        k[172]*y[IDX_N2II] - k[178]*y[IDX_NHII] - k[182]*y[IDX_NH2II] -
-        k[191]*y[IDX_NH3II] - k[203]*y[IDX_H2COII] - k[204]*y[IDX_HNOII] -
-        k[205]*y[IDX_O2II] - k[206]*y[IDX_SiOII] - k[223]*y[IDX_OHII] - k[277] -
-        k[278] - k[524]*y[IDX_H2II] - k[596]*y[IDX_H3II] - k[694]*y[IDX_HeII] -
+    data[2302] = 0.0 - k[20]*y[IDX_CII] - k[34]*y[IDX_CHII] - k[36]*y[IDX_CH2II] -
+        k[48]*y[IDX_CH3II] - k[67]*y[IDX_CNII] - k[72]*y[IDX_COII] -
+        k[87]*y[IDX_HII] - k[112]*y[IDX_H2II] - k[120]*y[IDX_H2OII] -
+        k[132]*y[IDX_HCNII] - k[167]*y[IDX_NII] - k[172]*y[IDX_N2II] -
+        k[178]*y[IDX_NHII] - k[182]*y[IDX_NH2II] - k[191]*y[IDX_NH3II] -
+        k[203]*y[IDX_H2COII] - k[204]*y[IDX_HNOII] - k[205]*y[IDX_O2II] -
+        k[206]*y[IDX_SiOII] - k[223]*y[IDX_OHII] - k[277] - k[278] -
+        k[524]*y[IDX_H2II] - k[596]*y[IDX_H3II] - k[694]*y[IDX_HeII] -
         k[695]*y[IDX_HeII] - k[727]*y[IDX_NII] - k[764]*y[IDX_NHII] -
         k[807]*y[IDX_O2HII] - k[846]*y[IDX_OHII] - k[871]*y[IDX_CI] -
         k[872]*y[IDX_CI] - k[886]*y[IDX_CH2I] - k[887]*y[IDX_CH2I] -
@@ -7003,18 +6724,16 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
     data[2304] = 0.0 + k[276] + k[885]*y[IDX_CH2I] + k[945]*y[IDX_CNI] +
         k[952]*y[IDX_COI] + k[986]*y[IDX_HI] + k[1020]*y[IDX_NI] +
         k[1020]*y[IDX_NI] + k[1041]*y[IDX_NHI] + k[1075]*y[IDX_OI] + k[1164];
-    data[2305] = 0.0 + k[1046]*y[IDX_NHI] + k[1058]*y[IDX_CNI] +
-        k[1069]*y[IDX_HNOI] + k[1071]*y[IDX_N2I] + k[1075]*y[IDX_NO2I] -
-        k[1076]*y[IDX_NOI] + k[1078]*y[IDX_OCNI];
-    data[2306] = 0.0 + k[729]*y[IDX_NII] + k[948]*y[IDX_CNI] +
-        k[1023]*y[IDX_NI] + k[1045]*y[IDX_NHI] - k[1052]*y[IDX_NOI] +
-        k[1054]*y[IDX_OCNI];
+    data[2305] = 0.0 + k[1046]*y[IDX_NHI] + k[1058]*y[IDX_CNI] + k[1069]*y[IDX_HNOI] +
+        k[1071]*y[IDX_N2I] + k[1075]*y[IDX_NO2I] - k[1076]*y[IDX_NOI] +
+        k[1078]*y[IDX_OCNI];
+    data[2306] = 0.0 + k[729]*y[IDX_NII] + k[948]*y[IDX_CNI] + k[1023]*y[IDX_NI] +
+        k[1045]*y[IDX_NHI] - k[1052]*y[IDX_NOI] + k[1054]*y[IDX_OCNI];
     data[2307] = 0.0 - k[205]*y[IDX_NOI];
     data[2308] = 0.0 - k[807]*y[IDX_NOI];
-    data[2309] = 0.0 - k[1053]*y[IDX_NOI] + k[1054]*y[IDX_O2I] +
-        k[1078]*y[IDX_OI];
-    data[2310] = 0.0 + k[856]*y[IDX_HNOII] + k[1025]*y[IDX_NI] +
-        k[1097]*y[IDX_HNOI] - k[1099]*y[IDX_NOI];
+    data[2309] = 0.0 - k[1053]*y[IDX_NOI] + k[1054]*y[IDX_O2I] + k[1078]*y[IDX_OI];
+    data[2310] = 0.0 + k[856]*y[IDX_HNOII] + k[1025]*y[IDX_NI] + k[1097]*y[IDX_HNOI] -
+        k[1099]*y[IDX_NOI];
     data[2311] = 0.0 - k[223]*y[IDX_NOI] - k[846]*y[IDX_NOI];
     data[2312] = 0.0 + k[229]*y[IDX_NOII] - k[1105]*y[IDX_NOI];
     data[2313] = 0.0 - k[206]*y[IDX_NOI] + k[746]*y[IDX_NI];
@@ -7029,8 +6748,7 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
     data[2322] = 0.0 + k[72]*y[IDX_NOI];
     data[2323] = 0.0 + k[750]*y[IDX_NHII];
     data[2324] = 0.0 - k[345]*y[IDX_NOII];
-    data[2325] = 0.0 + k[87]*y[IDX_NOI] + k[503]*y[IDX_HNOI] +
-        k[504]*y[IDX_NO2I];
+    data[2325] = 0.0 + k[87]*y[IDX_NOI] + k[503]*y[IDX_HNOI] + k[504]*y[IDX_NO2I];
     data[2326] = 0.0 + k[112]*y[IDX_NOI];
     data[2327] = 0.0 + k[722]*y[IDX_NII];
     data[2328] = 0.0 + k[203]*y[IDX_NOI];
@@ -7042,34 +6760,29 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
     data[2334] = 0.0 + k[503]*y[IDX_HII] + k[686]*y[IDX_HeII];
     data[2335] = 0.0 + k[204]*y[IDX_NOI];
     data[2336] = 0.0 - k[151]*y[IDX_NOII];
-    data[2337] = 0.0 + k[739]*y[IDX_H2OII] + k[742]*y[IDX_O2II] +
-        k[743]*y[IDX_OHII] + k[745]*y[IDX_SiOII];
-    data[2338] = 0.0 + k[167]*y[IDX_NOI] + k[714]*y[IDX_CH3OHI] +
-        k[720]*y[IDX_COI] + k[722]*y[IDX_H2COI] + k[728]*y[IDX_O2I];
+    data[2337] = 0.0 + k[739]*y[IDX_H2OII] + k[742]*y[IDX_O2II] + k[743]*y[IDX_OHII] +
+        k[745]*y[IDX_SiOII];
+    data[2338] = 0.0 + k[167]*y[IDX_NOI] + k[714]*y[IDX_CH3OHI] + k[720]*y[IDX_COI] +
+        k[722]*y[IDX_H2COI] + k[728]*y[IDX_O2I];
     data[2339] = 0.0 + k[817]*y[IDX_OII];
     data[2340] = 0.0 + k[172]*y[IDX_NOI] + k[825]*y[IDX_OI];
     data[2341] = 0.0 + k[803]*y[IDX_OII];
-    data[2342] = 0.0 + k[178]*y[IDX_NOI] + k[750]*y[IDX_CO2I] +
-        k[765]*y[IDX_O2I];
+    data[2342] = 0.0 + k[178]*y[IDX_NOI] + k[750]*y[IDX_CO2I] + k[765]*y[IDX_O2I];
     data[2343] = 0.0 + k[182]*y[IDX_NOI];
     data[2344] = 0.0 + k[191]*y[IDX_NOI];
-    data[2345] = 0.0 + k[20]*y[IDX_CII] + k[34]*y[IDX_CHII] +
-        k[36]*y[IDX_CH2II] + k[48]*y[IDX_CH3II] + k[67]*y[IDX_CNII] +
-        k[72]*y[IDX_COII] + k[87]*y[IDX_HII] + k[112]*y[IDX_H2II] +
-        k[120]*y[IDX_H2OII] + k[132]*y[IDX_HCNII] + k[167]*y[IDX_NII] +
-        k[172]*y[IDX_N2II] + k[178]*y[IDX_NHII] + k[182]*y[IDX_NH2II] +
-        k[191]*y[IDX_NH3II] + k[203]*y[IDX_H2COII] + k[204]*y[IDX_HNOII] +
-        k[205]*y[IDX_O2II] + k[206]*y[IDX_SiOII] + k[223]*y[IDX_OHII] + k[277] +
-        k[1165];
-    data[2346] = 0.0 - k[151]*y[IDX_MgI] - k[229]*y[IDX_SiI] -
-        k[345]*y[IDX_EM] - k[1277];
-    data[2347] = 0.0 + k[504]*y[IDX_HII] + k[595]*y[IDX_H3II] +
-        k[818]*y[IDX_OII];
+    data[2345] = 0.0 + k[20]*y[IDX_CII] + k[34]*y[IDX_CHII] + k[36]*y[IDX_CH2II] +
+        k[48]*y[IDX_CH3II] + k[67]*y[IDX_CNII] + k[72]*y[IDX_COII] +
+        k[87]*y[IDX_HII] + k[112]*y[IDX_H2II] + k[120]*y[IDX_H2OII] +
+        k[132]*y[IDX_HCNII] + k[167]*y[IDX_NII] + k[172]*y[IDX_N2II] +
+        k[178]*y[IDX_NHII] + k[182]*y[IDX_NH2II] + k[191]*y[IDX_NH3II] +
+        k[203]*y[IDX_H2COII] + k[204]*y[IDX_HNOII] + k[205]*y[IDX_O2II] +
+        k[206]*y[IDX_SiOII] + k[223]*y[IDX_OHII] + k[277] + k[1165];
+    data[2346] = 0.0 - k[151]*y[IDX_MgI] - k[229]*y[IDX_SiI] - k[345]*y[IDX_EM] - k[1277];
+    data[2347] = 0.0 + k[504]*y[IDX_HII] + k[595]*y[IDX_H3II] + k[818]*y[IDX_OII];
     data[2348] = 0.0 + k[825]*y[IDX_N2II];
-    data[2349] = 0.0 + k[803]*y[IDX_NHI] + k[811]*y[IDX_CNI] +
-        k[815]*y[IDX_HCNI] + k[817]*y[IDX_N2I] + k[818]*y[IDX_NO2I];
-    data[2350] = 0.0 + k[481]*y[IDX_CNII] + k[728]*y[IDX_NII] +
-        k[765]*y[IDX_NHII];
+    data[2349] = 0.0 + k[803]*y[IDX_NHI] + k[811]*y[IDX_CNI] + k[815]*y[IDX_HCNI] +
+        k[817]*y[IDX_N2I] + k[818]*y[IDX_NO2I];
+    data[2350] = 0.0 + k[481]*y[IDX_CNII] + k[728]*y[IDX_NII] + k[765]*y[IDX_NHII];
     data[2351] = 0.0 + k[205]*y[IDX_NOI] + k[742]*y[IDX_NI];
     data[2352] = 0.0 + k[223]*y[IDX_NOI] + k[743]*y[IDX_NI];
     data[2353] = 0.0 - k[229]*y[IDX_NOII];
@@ -7083,8 +6796,7 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
     data[2361] = 0.0 - k[504]*y[IDX_NO2I];
     data[2362] = 0.0 - k[595]*y[IDX_NO2I];
     data[2363] = 0.0 + k[1068]*y[IDX_OI];
-    data[2364] = 0.0 - k[1019]*y[IDX_NO2I] - k[1020]*y[IDX_NO2I] -
-        k[1021]*y[IDX_NO2I];
+    data[2364] = 0.0 - k[1019]*y[IDX_NO2I] - k[1020]*y[IDX_NO2I] - k[1021]*y[IDX_NO2I];
     data[2365] = 0.0 - k[1041]*y[IDX_NO2I];
     data[2366] = 0.0 + k[1052]*y[IDX_O2I] + k[1099]*y[IDX_OHI];
     data[2367] = 0.0 - k[276] - k[504]*y[IDX_HII] - k[595]*y[IDX_H3II] -
@@ -7097,85 +6809,76 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
     data[2370] = 0.0 + k[1052]*y[IDX_NOI] + k[1055]*y[IDX_OCNI];
     data[2371] = 0.0 + k[1055]*y[IDX_O2I];
     data[2372] = 0.0 + k[1099]*y[IDX_NOI];
-    data[2373] = 0.0 + k[391]*y[IDX_O2II] + k[393]*y[IDX_OHII] +
-        k[871]*y[IDX_NOI] + k[873]*y[IDX_O2I] + k[876]*y[IDX_OHI] -
-        k[1196]*y[IDX_OI];
+    data[2373] = 0.0 + k[391]*y[IDX_O2II] + k[393]*y[IDX_OHII] + k[871]*y[IDX_NOI] +
+        k[873]*y[IDX_O2I] + k[876]*y[IDX_OHI] - k[1196]*y[IDX_OI];
     data[2374] = 0.0 + k[376]*y[IDX_O2I] - k[1193]*y[IDX_OI];
-    data[2375] = 0.0 - k[0]*y[IDX_OI] + k[60]*y[IDX_OII] +
-        k[473]*y[IDX_O2II] + k[475]*y[IDX_OHII] + k[930]*y[IDX_NOI] +
-        k[934]*y[IDX_O2I] + k[936]*y[IDX_O2I] - k[939]*y[IDX_OI] -
-        k[940]*y[IDX_OI];
+    data[2375] = 0.0 - k[0]*y[IDX_OI] + k[60]*y[IDX_OII] + k[473]*y[IDX_O2II] +
+        k[475]*y[IDX_OHII] + k[930]*y[IDX_NOI] + k[934]*y[IDX_O2I] +
+        k[936]*y[IDX_O2I] - k[939]*y[IDX_OI] - k[940]*y[IDX_OI];
     data[2376] = 0.0 + k[412]*y[IDX_O2I] - k[414]*y[IDX_OI];
-    data[2377] = 0.0 + k[43]*y[IDX_OII] + k[435]*y[IDX_O2II] +
-        k[437]*y[IDX_OHII] + k[892]*y[IDX_O2I] - k[894]*y[IDX_OI] -
-        k[895]*y[IDX_OI] - k[896]*y[IDX_OI] - k[897]*y[IDX_OI] +
-        k[900]*y[IDX_OHI];
+    data[2377] = 0.0 + k[43]*y[IDX_OII] + k[435]*y[IDX_O2II] + k[437]*y[IDX_OHII] +
+        k[892]*y[IDX_O2I] - k[894]*y[IDX_OI] - k[895]*y[IDX_OI] -
+        k[896]*y[IDX_OI] - k[897]*y[IDX_OI] + k[900]*y[IDX_OHI];
     data[2378] = 0.0 - k[421]*y[IDX_OI];
-    data[2379] = 0.0 - k[915]*y[IDX_OI] - k[916]*y[IDX_OI] +
-        k[917]*y[IDX_OHI];
-    data[2380] = 0.0 + k[442]*y[IDX_O2I] - k[443]*y[IDX_OI] -
-        k[444]*y[IDX_OI];
+    data[2379] = 0.0 - k[915]*y[IDX_OI] - k[916]*y[IDX_OI] + k[917]*y[IDX_OHI];
+    data[2380] = 0.0 + k[442]*y[IDX_O2I] - k[443]*y[IDX_OI] - k[444]*y[IDX_OI];
     data[2381] = 0.0 + k[207]*y[IDX_OII] - k[1056]*y[IDX_OI];
     data[2382] = 0.0 - k[822]*y[IDX_OI];
-    data[2383] = 0.0 + k[836]*y[IDX_OHII] + k[949]*y[IDX_O2I] -
-        k[1057]*y[IDX_OI] - k[1058]*y[IDX_OI] + k[1090]*y[IDX_OHI];
+    data[2383] = 0.0 + k[836]*y[IDX_OHII] + k[949]*y[IDX_O2I] - k[1057]*y[IDX_OI] -
+        k[1058]*y[IDX_OI] + k[1090]*y[IDX_OHI];
     data[2384] = 0.0 - k[216]*y[IDX_OI];
     data[2385] = 0.0 + k[208]*y[IDX_OII] + k[253] + k[669]*y[IDX_HeII] +
         k[838]*y[IDX_OHII] + k[953]*y[IDX_O2I] + k[1133];
-    data[2386] = 0.0 - k[217]*y[IDX_OI] + k[304]*y[IDX_EM] +
-        k[851]*y[IDX_OHI] + k[1131];
+    data[2386] = 0.0 - k[217]*y[IDX_OI] + k[304]*y[IDX_EM] + k[851]*y[IDX_OHI] + k[1131];
     data[2387] = 0.0 + k[252] + k[496]*y[IDX_HII] + k[665]*y[IDX_HeII] +
         k[837]*y[IDX_OHII] - k[1059]*y[IDX_OI] + k[1132];
-    data[2388] = 0.0 + k[304]*y[IDX_COII] + k[306]*y[IDX_H2COII] +
-        k[312]*y[IDX_H2OII] + k[313]*y[IDX_H2OII] + k[323]*y[IDX_H3OII] +
-        k[332]*y[IDX_HCO2II] + k[345]*y[IDX_NOII] + k[346]*y[IDX_O2II] +
-        k[346]*y[IDX_O2II] + k[348]*y[IDX_OHII] + k[362]*y[IDX_SiOII] +
-        k[1221]*y[IDX_OII];
-    data[2389] = 0.0 + k[12]*y[IDX_O2I] + k[12]*y[IDX_O2I] +
-        k[13]*y[IDX_OHI] + k[131]*y[IDX_OII] + k[978]*y[IDX_HCOI] +
-        k[980]*y[IDX_HNOI] + k[987]*y[IDX_NOI] + k[989]*y[IDX_O2I] +
-        k[990]*y[IDX_O2HI] + k[993]*y[IDX_OCNI] + k[996]*y[IDX_OHI] -
-        k[1207]*y[IDX_OI];
+    data[2388] = 0.0 + k[304]*y[IDX_COII] + k[306]*y[IDX_H2COII] + k[312]*y[IDX_H2OII] +
+        k[313]*y[IDX_H2OII] + k[323]*y[IDX_H3OII] + k[332]*y[IDX_HCO2II] +
+        k[345]*y[IDX_NOII] + k[346]*y[IDX_O2II] + k[346]*y[IDX_O2II] +
+        k[348]*y[IDX_OHII] + k[362]*y[IDX_SiOII] + k[1221]*y[IDX_OII];
+    data[2389] = 0.0 + k[12]*y[IDX_O2I] + k[12]*y[IDX_O2I] + k[13]*y[IDX_OHI] +
+        k[131]*y[IDX_OII] + k[978]*y[IDX_HCOI] + k[980]*y[IDX_HNOI] +
+        k[987]*y[IDX_NOI] + k[989]*y[IDX_O2I] + k[990]*y[IDX_O2HI] +
+        k[993]*y[IDX_OCNI] + k[996]*y[IDX_OHI] - k[1207]*y[IDX_OI];
     data[2390] = 0.0 - k[89]*y[IDX_OI] + k[496]*y[IDX_CO2I];
     data[2391] = 0.0 + k[6]*y[IDX_O2I] + k[6]*y[IDX_O2I] + k[7]*y[IDX_OHI] -
         k[965]*y[IDX_OI];
     data[2392] = 0.0 - k[526]*y[IDX_OI];
     data[2393] = 0.0 - k[1060]*y[IDX_OI];
-    data[2394] = 0.0 + k[209]*y[IDX_OII] + k[672]*y[IDX_HeII] +
-        k[839]*y[IDX_OHII] - k[1061]*y[IDX_OI];
+    data[2394] = 0.0 + k[209]*y[IDX_OII] + k[672]*y[IDX_HeII] + k[839]*y[IDX_OHII] -
+        k[1061]*y[IDX_OI];
     data[2395] = 0.0 + k[306]*y[IDX_EM];
-    data[2396] = 0.0 + k[210]*y[IDX_OII] + k[756]*y[IDX_NHII] +
-        k[840]*y[IDX_OHII] - k[1062]*y[IDX_OI];
-    data[2397] = 0.0 + k[312]*y[IDX_EM] + k[313]*y[IDX_EM] -
-        k[823]*y[IDX_OI] + k[852]*y[IDX_OHI];
+    data[2396] = 0.0 + k[210]*y[IDX_OII] + k[756]*y[IDX_NHII] + k[840]*y[IDX_OHII] -
+        k[1062]*y[IDX_OI];
+    data[2397] = 0.0 + k[312]*y[IDX_EM] + k[313]*y[IDX_EM] - k[823]*y[IDX_OI] +
+        k[852]*y[IDX_OHI];
     data[2398] = 0.0 - k[598]*y[IDX_OI] - k[599]*y[IDX_OI];
     data[2399] = 0.0 + k[323]*y[IDX_EM];
-    data[2400] = 0.0 + k[841]*y[IDX_OHII] - k[1063]*y[IDX_OI] -
-        k[1064]*y[IDX_OI] - k[1065]*y[IDX_OI];
-    data[2401] = 0.0 + k[211]*y[IDX_OII] + k[682]*y[IDX_HeII] +
-        k[843]*y[IDX_OHII] + k[978]*y[IDX_HI] + k[1015]*y[IDX_NI] -
-        k[1066]*y[IDX_OI] - k[1067]*y[IDX_OI];
+    data[2400] = 0.0 + k[841]*y[IDX_OHII] - k[1063]*y[IDX_OI] - k[1064]*y[IDX_OI] -
+        k[1065]*y[IDX_OI];
+    data[2401] = 0.0 + k[211]*y[IDX_OII] + k[682]*y[IDX_HeII] + k[843]*y[IDX_OHII] +
+        k[978]*y[IDX_HI] + k[1015]*y[IDX_NI] - k[1066]*y[IDX_OI] -
+        k[1067]*y[IDX_OI];
     data[2402] = 0.0 + k[332]*y[IDX_EM] - k[824]*y[IDX_OI];
-    data[2403] = 0.0 + k[665]*y[IDX_CO2I] + k[669]*y[IDX_COI] +
-        k[672]*y[IDX_H2COI] + k[682]*y[IDX_HCOI] + k[695]*y[IDX_NOI] +
-        k[696]*y[IDX_O2I] + k[697]*y[IDX_OCNI] + k[710]*y[IDX_SiOI];
+    data[2403] = 0.0 + k[665]*y[IDX_CO2I] + k[669]*y[IDX_COI] + k[672]*y[IDX_H2COI] +
+        k[682]*y[IDX_HCOI] + k[695]*y[IDX_NOI] + k[696]*y[IDX_O2I] +
+        k[697]*y[IDX_OCNI] + k[710]*y[IDX_SiOI];
     data[2404] = 0.0 + k[844]*y[IDX_OHII];
-    data[2405] = 0.0 + k[980]*y[IDX_HI] - k[1068]*y[IDX_OI] -
-        k[1069]*y[IDX_OI] - k[1070]*y[IDX_OI];
-    data[2406] = 0.0 + k[742]*y[IDX_O2II] + k[1015]*y[IDX_HCOI] +
-        k[1019]*y[IDX_NO2I] + k[1019]*y[IDX_NO2I] + k[1022]*y[IDX_NOI] +
-        k[1023]*y[IDX_O2I] + k[1026]*y[IDX_OHI];
+    data[2405] = 0.0 + k[980]*y[IDX_HI] - k[1068]*y[IDX_OI] - k[1069]*y[IDX_OI] -
+        k[1070]*y[IDX_OI];
+    data[2406] = 0.0 + k[742]*y[IDX_O2II] + k[1015]*y[IDX_HCOI] + k[1019]*y[IDX_NO2I] +
+        k[1019]*y[IDX_NO2I] + k[1022]*y[IDX_NOI] + k[1023]*y[IDX_O2I] +
+        k[1026]*y[IDX_OHI];
     data[2407] = 0.0 + k[727]*y[IDX_NOI] + k[728]*y[IDX_O2I];
     data[2408] = 0.0 + k[845]*y[IDX_OHII] - k[1071]*y[IDX_OI];
     data[2409] = 0.0 - k[218]*y[IDX_OI] - k[825]*y[IDX_OI];
     data[2410] = 0.0 - k[826]*y[IDX_OI];
-    data[2411] = 0.0 + k[202]*y[IDX_OII] + k[804]*y[IDX_O2II] +
-        k[806]*y[IDX_OHII] + k[1042]*y[IDX_NOI] + k[1044]*y[IDX_O2I] -
-        k[1046]*y[IDX_OI] - k[1047]*y[IDX_OI] + k[1050]*y[IDX_OHI];
-    data[2412] = 0.0 + k[756]*y[IDX_H2OI] + k[764]*y[IDX_NOI] -
-        k[767]*y[IDX_OI];
-    data[2413] = 0.0 + k[212]*y[IDX_OII] + k[791]*y[IDX_OHII] +
-        k[1032]*y[IDX_OHI] - k[1072]*y[IDX_OI] - k[1073]*y[IDX_OI];
+    data[2411] = 0.0 + k[202]*y[IDX_OII] + k[804]*y[IDX_O2II] + k[806]*y[IDX_OHII] +
+        k[1042]*y[IDX_NOI] + k[1044]*y[IDX_O2I] - k[1046]*y[IDX_OI] -
+        k[1047]*y[IDX_OI] + k[1050]*y[IDX_OHI];
+    data[2412] = 0.0 + k[756]*y[IDX_H2OI] + k[764]*y[IDX_NOI] - k[767]*y[IDX_OI];
+    data[2413] = 0.0 + k[212]*y[IDX_OII] + k[791]*y[IDX_OHII] + k[1032]*y[IDX_OHI] -
+        k[1072]*y[IDX_OI] - k[1073]*y[IDX_OI];
     data[2414] = 0.0 + k[777]*y[IDX_O2I] - k[827]*y[IDX_OI];
     data[2415] = 0.0 + k[213]*y[IDX_OII] - k[1074]*y[IDX_OI];
     data[2416] = 0.0 - k[828]*y[IDX_OI];
@@ -7184,12 +6887,12 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
         k[930]*y[IDX_CHI] + k[987]*y[IDX_HI] + k[1022]*y[IDX_NI] +
         k[1042]*y[IDX_NHI] + k[1052]*y[IDX_O2I] - k[1076]*y[IDX_OI] + k[1166];
     data[2418] = 0.0 + k[345]*y[IDX_EM];
-    data[2419] = 0.0 + k[276] + k[1019]*y[IDX_NI] + k[1019]*y[IDX_NI] -
-        k[1075]*y[IDX_OI] + k[1164];
-    data[2420] = 0.0 - k[0]*y[IDX_CHI] - k[89]*y[IDX_HII] -
-        k[216]*y[IDX_CNII] - k[217]*y[IDX_COII] - k[218]*y[IDX_N2II] - k[239] -
-        k[282] - k[414]*y[IDX_CHII] - k[421]*y[IDX_CH2II] - k[443]*y[IDX_CH3II]
-        - k[444]*y[IDX_CH3II] - k[526]*y[IDX_H2II] - k[598]*y[IDX_H3II] -
+    data[2419] = 0.0 + k[276] + k[1019]*y[IDX_NI] + k[1019]*y[IDX_NI] - k[1075]*y[IDX_OI]
+        + k[1164];
+    data[2420] = 0.0 - k[0]*y[IDX_CHI] - k[89]*y[IDX_HII] - k[216]*y[IDX_CNII] -
+        k[217]*y[IDX_COII] - k[218]*y[IDX_N2II] - k[239] - k[282] -
+        k[414]*y[IDX_CHII] - k[421]*y[IDX_CH2II] - k[443]*y[IDX_CH3II] -
+        k[444]*y[IDX_CH3II] - k[526]*y[IDX_H2II] - k[598]*y[IDX_H3II] -
         k[599]*y[IDX_H3II] - k[767]*y[IDX_NHII] - k[822]*y[IDX_CH4II] -
         k[823]*y[IDX_H2OII] - k[824]*y[IDX_HCO2II] - k[825]*y[IDX_N2II] -
         k[826]*y[IDX_N2HII] - k[827]*y[IDX_NH2II] - k[828]*y[IDX_NH3II] -
@@ -7214,11 +6917,11 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
         k[1207]*y[IDX_HI] - k[1211]*y[IDX_OI] - k[1211]*y[IDX_OI] -
         k[1211]*y[IDX_OI] - k[1211]*y[IDX_OI] - k[1212]*y[IDX_SiII] -
         k[1213]*y[IDX_SiI] - k[1291];
-    data[2421] = 0.0 + k[43]*y[IDX_CH2I] + k[60]*y[IDX_CHI] +
-        k[131]*y[IDX_HI] + k[202]*y[IDX_NHI] + k[207]*y[IDX_CH4I] +
-        k[208]*y[IDX_COI] + k[209]*y[IDX_H2COI] + k[210]*y[IDX_H2OI] +
-        k[211]*y[IDX_HCOI] + k[212]*y[IDX_NH2I] + k[213]*y[IDX_NH3I] +
-        k[214]*y[IDX_O2I] + k[215]*y[IDX_OHI] + k[1221]*y[IDX_EM];
+    data[2421] = 0.0 + k[43]*y[IDX_CH2I] + k[60]*y[IDX_CHI] + k[131]*y[IDX_HI] +
+        k[202]*y[IDX_NHI] + k[207]*y[IDX_CH4I] + k[208]*y[IDX_COI] +
+        k[209]*y[IDX_H2COI] + k[210]*y[IDX_H2OI] + k[211]*y[IDX_HCOI] +
+        k[212]*y[IDX_NH2I] + k[213]*y[IDX_NH3I] + k[214]*y[IDX_O2I] +
+        k[215]*y[IDX_OHI] + k[1221]*y[IDX_EM];
     data[2422] = 0.0 + k[6]*y[IDX_H2I] + k[6]*y[IDX_H2I] + k[12]*y[IDX_HI] +
         k[12]*y[IDX_HI] + k[214]*y[IDX_OII] + k[280] + k[280] +
         k[376]*y[IDX_CII] + k[412]*y[IDX_CHII] + k[442]*y[IDX_CH3II] +
@@ -7227,29 +6930,27 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
         k[936]*y[IDX_CHI] + k[949]*y[IDX_CNI] + k[953]*y[IDX_COI] +
         k[989]*y[IDX_HI] + k[1023]*y[IDX_NI] + k[1044]*y[IDX_NHI] +
         k[1052]*y[IDX_NOI] + k[1106]*y[IDX_SiI] + k[1169] + k[1169];
-    data[2423] = 0.0 + k[346]*y[IDX_EM] + k[346]*y[IDX_EM] +
-        k[391]*y[IDX_CI] + k[435]*y[IDX_CH2I] + k[473]*y[IDX_CHI] +
-        k[742]*y[IDX_NI] + k[804]*y[IDX_NHI] + k[1167];
+    data[2423] = 0.0 + k[346]*y[IDX_EM] + k[346]*y[IDX_EM] + k[391]*y[IDX_CI] +
+        k[435]*y[IDX_CH2I] + k[473]*y[IDX_CHI] + k[742]*y[IDX_NI] +
+        k[804]*y[IDX_NHI] + k[1167];
     data[2424] = 0.0 + k[990]*y[IDX_HI] - k[1077]*y[IDX_OI] + k[1171];
     data[2425] = 0.0 - k[829]*y[IDX_OI];
-    data[2426] = 0.0 + k[283] + k[697]*y[IDX_HeII] + k[993]*y[IDX_HI] -
-        k[1078]*y[IDX_OI] - k[1079]*y[IDX_OI] + k[1172];
-    data[2427] = 0.0 + k[7]*y[IDX_H2I] + k[13]*y[IDX_HI] + k[215]*y[IDX_OII]
-        + k[284] + k[847]*y[IDX_OHII] + k[851]*y[IDX_COII] + k[852]*y[IDX_H2OII]
-        + k[876]*y[IDX_CI] + k[900]*y[IDX_CH2I] + k[917]*y[IDX_CH3I] +
+    data[2426] = 0.0 + k[283] + k[697]*y[IDX_HeII] + k[993]*y[IDX_HI] - k[1078]*y[IDX_OI]
+        - k[1079]*y[IDX_OI] + k[1172];
+    data[2427] = 0.0 + k[7]*y[IDX_H2I] + k[13]*y[IDX_HI] + k[215]*y[IDX_OII] + k[284] +
+        k[847]*y[IDX_OHII] + k[851]*y[IDX_COII] + k[852]*y[IDX_H2OII] +
+        k[876]*y[IDX_CI] + k[900]*y[IDX_CH2I] + k[917]*y[IDX_CH3I] +
         k[996]*y[IDX_HI] + k[1026]*y[IDX_NI] + k[1032]*y[IDX_NH2I] +
         k[1050]*y[IDX_NHI] - k[1080]*y[IDX_OI] + k[1090]*y[IDX_CNI] +
         k[1101]*y[IDX_OHI] + k[1101]*y[IDX_OHI] + k[1174];
-    data[2428] = 0.0 + k[348]*y[IDX_EM] + k[393]*y[IDX_CI] +
-        k[437]*y[IDX_CH2I] + k[475]*y[IDX_CHI] + k[791]*y[IDX_NH2I] +
-        k[806]*y[IDX_NHI] - k[830]*y[IDX_OI] + k[836]*y[IDX_CNI] +
-        k[837]*y[IDX_CO2I] + k[838]*y[IDX_COI] + k[839]*y[IDX_H2COI] +
-        k[840]*y[IDX_H2OI] + k[841]*y[IDX_HCNI] + k[843]*y[IDX_HCOI] +
-        k[844]*y[IDX_HNCI] + k[845]*y[IDX_N2I] + k[846]*y[IDX_NOI] +
-        k[847]*y[IDX_OHI] + k[848]*y[IDX_SiI] + k[849]*y[IDX_SiHI] +
-        k[850]*y[IDX_SiOI];
-    data[2429] = 0.0 + k[848]*y[IDX_OHII] + k[1106]*y[IDX_O2I] -
-        k[1213]*y[IDX_OI];
+    data[2428] = 0.0 + k[348]*y[IDX_EM] + k[393]*y[IDX_CI] + k[437]*y[IDX_CH2I] +
+        k[475]*y[IDX_CHI] + k[791]*y[IDX_NH2I] + k[806]*y[IDX_NHI] -
+        k[830]*y[IDX_OI] + k[836]*y[IDX_CNI] + k[837]*y[IDX_CO2I] +
+        k[838]*y[IDX_COI] + k[839]*y[IDX_H2COI] + k[840]*y[IDX_H2OI] +
+        k[841]*y[IDX_HCNI] + k[843]*y[IDX_HCOI] + k[844]*y[IDX_HNCI] +
+        k[845]*y[IDX_N2I] + k[846]*y[IDX_NOI] + k[847]*y[IDX_OHI] +
+        k[848]*y[IDX_SiI] + k[849]*y[IDX_SiHI] + k[850]*y[IDX_SiOI];
+    data[2429] = 0.0 + k[848]*y[IDX_OHII] + k[1106]*y[IDX_O2I] - k[1213]*y[IDX_OI];
     data[2430] = 0.0 - k[1212]*y[IDX_OI];
     data[2431] = 0.0 - k[1083]*y[IDX_OI] - k[1084]*y[IDX_OI];
     data[2432] = 0.0 - k[831]*y[IDX_OI];
@@ -7262,8 +6963,7 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
     data[2439] = 0.0 - k[1087]*y[IDX_OI];
     data[2440] = 0.0 - k[834]*y[IDX_OI];
     data[2441] = 0.0 - k[1088]*y[IDX_OI];
-    data[2442] = 0.0 + k[293] + k[710]*y[IDX_HeII] + k[850]*y[IDX_OHII] +
-        k[1190];
+    data[2442] = 0.0 + k[293] + k[710]*y[IDX_HeII] + k[850]*y[IDX_OHII] + k[1190];
     data[2443] = 0.0 + k[362]*y[IDX_EM] - k[835]*y[IDX_OI] + k[1189];
     data[2444] = 0.0 - k[1195]*y[IDX_OII];
     data[2445] = 0.0 + k[377]*y[IDX_O2I];
@@ -7285,9 +6985,8 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
     data[2461] = 0.0 - k[210]*y[IDX_OII];
     data[2462] = 0.0 - k[814]*y[IDX_OII] - k[815]*y[IDX_OII];
     data[2463] = 0.0 - k[211]*y[IDX_OII] - k[816]*y[IDX_OII];
-    data[2464] = 0.0 + k[666]*y[IDX_CO2I] + k[694]*y[IDX_NOI] +
-        k[696]*y[IDX_O2I] + k[698]*y[IDX_OCNI] + k[699]*y[IDX_OHI] +
-        k[711]*y[IDX_SiOI];
+    data[2464] = 0.0 + k[666]*y[IDX_CO2I] + k[694]*y[IDX_NOI] + k[696]*y[IDX_O2I] +
+        k[698]*y[IDX_OCNI] + k[699]*y[IDX_OHI] + k[711]*y[IDX_SiOI];
     data[2465] = 0.0 + k[729]*y[IDX_O2I];
     data[2466] = 0.0 - k[817]*y[IDX_OII];
     data[2467] = 0.0 + k[218]*y[IDX_OI];
@@ -7296,141 +6995,122 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
     data[2470] = 0.0 - k[213]*y[IDX_OII];
     data[2471] = 0.0 + k[694]*y[IDX_HeII];
     data[2472] = 0.0 - k[818]*y[IDX_OII];
-    data[2473] = 0.0 + k[89]*y[IDX_HII] + k[216]*y[IDX_CNII] +
-        k[217]*y[IDX_COII] + k[218]*y[IDX_N2II] + k[239] + k[282];
-    data[2474] = 0.0 - k[43]*y[IDX_CH2I] - k[60]*y[IDX_CHI] -
-        k[131]*y[IDX_HI] - k[202]*y[IDX_NHI] - k[207]*y[IDX_CH4I] -
-        k[208]*y[IDX_COI] - k[209]*y[IDX_H2COI] - k[210]*y[IDX_H2OI] -
-        k[211]*y[IDX_HCOI] - k[212]*y[IDX_NH2I] - k[213]*y[IDX_NH3I] -
-        k[214]*y[IDX_O2I] - k[215]*y[IDX_OHI] - k[472]*y[IDX_CHI] -
-        k[543]*y[IDX_H2I] - k[803]*y[IDX_NHI] - k[808]*y[IDX_CH3OHI] -
-        k[809]*y[IDX_CH3OHI] - k[810]*y[IDX_CH4I] - k[811]*y[IDX_CNI] -
-        k[812]*y[IDX_CO2I] - k[813]*y[IDX_H2COI] - k[814]*y[IDX_HCNI] -
-        k[815]*y[IDX_HCNI] - k[816]*y[IDX_HCOI] - k[817]*y[IDX_N2I] -
-        k[818]*y[IDX_NO2I] - k[819]*y[IDX_OHI] - k[1195]*y[IDX_CI] -
-        k[1221]*y[IDX_EM] - k[1269];
-    data[2475] = 0.0 - k[214]*y[IDX_OII] + k[377]*y[IDX_CII] +
-        k[413]*y[IDX_CHII] + k[696]*y[IDX_HeII] + k[729]*y[IDX_NII];
+    data[2473] = 0.0 + k[89]*y[IDX_HII] + k[216]*y[IDX_CNII] + k[217]*y[IDX_COII] +
+        k[218]*y[IDX_N2II] + k[239] + k[282];
+    data[2474] = 0.0 - k[43]*y[IDX_CH2I] - k[60]*y[IDX_CHI] - k[131]*y[IDX_HI] -
+        k[202]*y[IDX_NHI] - k[207]*y[IDX_CH4I] - k[208]*y[IDX_COI] -
+        k[209]*y[IDX_H2COI] - k[210]*y[IDX_H2OI] - k[211]*y[IDX_HCOI] -
+        k[212]*y[IDX_NH2I] - k[213]*y[IDX_NH3I] - k[214]*y[IDX_O2I] -
+        k[215]*y[IDX_OHI] - k[472]*y[IDX_CHI] - k[543]*y[IDX_H2I] -
+        k[803]*y[IDX_NHI] - k[808]*y[IDX_CH3OHI] - k[809]*y[IDX_CH3OHI] -
+        k[810]*y[IDX_CH4I] - k[811]*y[IDX_CNI] - k[812]*y[IDX_CO2I] -
+        k[813]*y[IDX_H2COI] - k[814]*y[IDX_HCNI] - k[815]*y[IDX_HCNI] -
+        k[816]*y[IDX_HCOI] - k[817]*y[IDX_N2I] - k[818]*y[IDX_NO2I] -
+        k[819]*y[IDX_OHI] - k[1195]*y[IDX_CI] - k[1221]*y[IDX_EM] - k[1269];
+    data[2475] = 0.0 - k[214]*y[IDX_OII] + k[377]*y[IDX_CII] + k[413]*y[IDX_CHII] +
+        k[696]*y[IDX_HeII] + k[729]*y[IDX_NII];
     data[2476] = 0.0 + k[1167];
     data[2477] = 0.0 + k[698]*y[IDX_HeII];
-    data[2478] = 0.0 - k[215]*y[IDX_OII] + k[699]*y[IDX_HeII] -
-        k[819]*y[IDX_OII];
+    data[2478] = 0.0 - k[215]*y[IDX_OII] + k[699]*y[IDX_HeII] - k[819]*y[IDX_OII];
     data[2479] = 0.0 + k[1173];
     data[2480] = 0.0 + k[711]*y[IDX_HeII];
     data[2481] = 0.0 + k[1355] + k[1356] + k[1357] + k[1358];
-    data[2482] = 0.0 + k[30]*y[IDX_O2II] + k[392]*y[IDX_O2HII] -
-        k[873]*y[IDX_O2I];
+    data[2482] = 0.0 + k[30]*y[IDX_O2II] + k[392]*y[IDX_O2HII] - k[873]*y[IDX_O2I];
     data[2483] = 0.0 - k[376]*y[IDX_O2I] - k[377]*y[IDX_O2I];
-    data[2484] = 0.0 + k[61]*y[IDX_O2II] + k[474]*y[IDX_O2HII] -
-        k[933]*y[IDX_O2I] - k[934]*y[IDX_O2I] - k[935]*y[IDX_O2I] -
-        k[936]*y[IDX_O2I] + k[938]*y[IDX_O2HI];
-    data[2485] = 0.0 - k[411]*y[IDX_O2I] - k[412]*y[IDX_O2I] -
-        k[413]*y[IDX_O2I];
-    data[2486] = 0.0 + k[44]*y[IDX_O2II] + k[436]*y[IDX_O2HII] -
-        k[889]*y[IDX_O2I] - k[890]*y[IDX_O2I] - k[891]*y[IDX_O2I] -
-        k[892]*y[IDX_O2I] - k[893]*y[IDX_O2I];
+    data[2484] = 0.0 + k[61]*y[IDX_O2II] + k[474]*y[IDX_O2HII] - k[933]*y[IDX_O2I] -
+        k[934]*y[IDX_O2I] - k[935]*y[IDX_O2I] - k[936]*y[IDX_O2I] +
+        k[938]*y[IDX_O2HI];
+    data[2485] = 0.0 - k[411]*y[IDX_O2I] - k[412]*y[IDX_O2I] - k[413]*y[IDX_O2I];
+    data[2486] = 0.0 + k[44]*y[IDX_O2II] + k[436]*y[IDX_O2HII] - k[889]*y[IDX_O2I] -
+        k[890]*y[IDX_O2I] - k[891]*y[IDX_O2I] - k[892]*y[IDX_O2I] -
+        k[893]*y[IDX_O2I];
     data[2487] = 0.0 - k[420]*y[IDX_O2I];
-    data[2488] = 0.0 - k[911]*y[IDX_O2I] - k[912]*y[IDX_O2I] -
-        k[913]*y[IDX_O2I] + k[914]*y[IDX_O2HI];
+    data[2488] = 0.0 - k[911]*y[IDX_O2I] - k[912]*y[IDX_O2I] - k[913]*y[IDX_O2I] +
+        k[914]*y[IDX_O2HI];
     data[2489] = 0.0 - k[442]*y[IDX_O2I];
     data[2490] = 0.0 + k[820]*y[IDX_O2II];
     data[2491] = 0.0 - k[921]*y[IDX_O2I];
     data[2492] = 0.0 - k[51]*y[IDX_O2I];
-    data[2493] = 0.0 + k[483]*y[IDX_O2HII] - k[948]*y[IDX_O2I] -
-        k[949]*y[IDX_O2I];
+    data[2493] = 0.0 + k[483]*y[IDX_O2HII] - k[948]*y[IDX_O2I] - k[949]*y[IDX_O2I];
     data[2494] = 0.0 - k[68]*y[IDX_O2I] - k[481]*y[IDX_O2I];
     data[2495] = 0.0 + k[488]*y[IDX_O2HII] - k[953]*y[IDX_O2I];
     data[2496] = 0.0 - k[73]*y[IDX_O2I];
-    data[2497] = 0.0 + k[668]*y[IDX_HeII] + k[821]*y[IDX_O2HII] +
-        k[1059]*y[IDX_OI];
+    data[2497] = 0.0 + k[668]*y[IDX_HeII] + k[821]*y[IDX_O2HII] + k[1059]*y[IDX_OI];
     data[2498] = 0.0 + k[347]*y[IDX_O2HII];
-    data[2499] = 0.0 - k[12]*y[IDX_O2I] - k[989]*y[IDX_O2I] +
-        k[991]*y[IDX_O2HI];
+    data[2499] = 0.0 - k[12]*y[IDX_O2I] - k[989]*y[IDX_O2I] + k[991]*y[IDX_O2HI];
     data[2500] = 0.0 - k[88]*y[IDX_O2I];
-    data[2501] = 0.0 - k[6]*y[IDX_O2I] + k[544]*y[IDX_O2HII] -
-        k[963]*y[IDX_O2I] - k[964]*y[IDX_O2I];
+    data[2501] = 0.0 - k[6]*y[IDX_O2I] + k[544]*y[IDX_O2HII] - k[963]*y[IDX_O2I] -
+        k[964]*y[IDX_O2I];
     data[2502] = 0.0 - k[113]*y[IDX_O2I] - k[525]*y[IDX_O2I];
-    data[2503] = 0.0 + k[116]*y[IDX_O2II] + k[551]*y[IDX_O2II] +
-        k[552]*y[IDX_O2HII];
+    data[2503] = 0.0 + k[116]*y[IDX_O2II] + k[551]*y[IDX_O2II] + k[552]*y[IDX_O2HII];
     data[2504] = 0.0 - k[549]*y[IDX_O2I];
     data[2505] = 0.0 + k[571]*y[IDX_O2HII];
     data[2506] = 0.0 - k[121]*y[IDX_O2I];
     data[2507] = 0.0 - k[597]*y[IDX_O2I];
     data[2508] = 0.0 + k[632]*y[IDX_O2HII];
     data[2509] = 0.0 - k[133]*y[IDX_O2I];
-    data[2510] = 0.0 + k[137]*y[IDX_O2II] + k[645]*y[IDX_O2HII] -
-        k[1001]*y[IDX_O2I] - k[1002]*y[IDX_O2I] + k[1003]*y[IDX_O2HI];
+    data[2510] = 0.0 + k[137]*y[IDX_O2II] + k[645]*y[IDX_O2HII] - k[1001]*y[IDX_O2I] -
+        k[1002]*y[IDX_O2I] + k[1003]*y[IDX_O2HI];
     data[2511] = 0.0 + k[824]*y[IDX_OI];
-    data[2512] = 0.0 - k[146]*y[IDX_O2I] + k[668]*y[IDX_CO2I] -
-        k[696]*y[IDX_O2I];
+    data[2512] = 0.0 - k[146]*y[IDX_O2I] + k[668]*y[IDX_CO2I] - k[696]*y[IDX_O2I];
     data[2513] = 0.0 + k[651]*y[IDX_O2HII];
     data[2514] = 0.0 + k[1070]*y[IDX_OI];
     data[2515] = 0.0 + k[152]*y[IDX_O2II];
-    data[2516] = 0.0 + k[1021]*y[IDX_NO2I] - k[1023]*y[IDX_O2I] +
-        k[1024]*y[IDX_O2HI];
-    data[2517] = 0.0 - k[168]*y[IDX_O2I] - k[728]*y[IDX_O2I] -
-        k[729]*y[IDX_O2I];
+    data[2516] = 0.0 + k[1021]*y[IDX_NO2I] - k[1023]*y[IDX_O2I] + k[1024]*y[IDX_O2HI];
+    data[2517] = 0.0 - k[168]*y[IDX_O2I] - k[728]*y[IDX_O2I] - k[729]*y[IDX_O2I];
     data[2518] = 0.0 + k[733]*y[IDX_O2HII];
     data[2519] = 0.0 - k[173]*y[IDX_O2I];
-    data[2520] = 0.0 + k[805]*y[IDX_O2HII] - k[1044]*y[IDX_O2I] -
-        k[1045]*y[IDX_O2I];
-    data[2521] = 0.0 - k[179]*y[IDX_O2I] - k[765]*y[IDX_O2I] -
-        k[766]*y[IDX_O2I];
+    data[2520] = 0.0 + k[805]*y[IDX_O2HII] - k[1044]*y[IDX_O2I] - k[1045]*y[IDX_O2I];
+    data[2521] = 0.0 - k[179]*y[IDX_O2I] - k[765]*y[IDX_O2I] - k[766]*y[IDX_O2I];
     data[2522] = 0.0 + k[187]*y[IDX_O2II] + k[790]*y[IDX_O2HII];
     data[2523] = 0.0 - k[777]*y[IDX_O2I] - k[778]*y[IDX_O2I];
     data[2524] = 0.0 + k[198]*y[IDX_O2II];
-    data[2525] = 0.0 + k[205]*y[IDX_O2II] + k[807]*y[IDX_O2HII] +
-        k[1051]*y[IDX_NOI] + k[1051]*y[IDX_NOI] - k[1052]*y[IDX_O2I] +
-        k[1076]*y[IDX_OI];
-    data[2526] = 0.0 + k[818]*y[IDX_OII] + k[1021]*y[IDX_NI] +
-        k[1075]*y[IDX_OI];
-    data[2527] = 0.0 + k[824]*y[IDX_HCO2II] + k[829]*y[IDX_O2HII] +
-        k[835]*y[IDX_SiOII] + k[1059]*y[IDX_CO2I] + k[1070]*y[IDX_HNOI] +
-        k[1075]*y[IDX_NO2I] + k[1076]*y[IDX_NOI] + k[1077]*y[IDX_O2HI] +
-        k[1079]*y[IDX_OCNI] + k[1080]*y[IDX_OHI] + k[1211]*y[IDX_OI] +
-        k[1211]*y[IDX_OI];
+    data[2525] = 0.0 + k[205]*y[IDX_O2II] + k[807]*y[IDX_O2HII] + k[1051]*y[IDX_NOI] +
+        k[1051]*y[IDX_NOI] - k[1052]*y[IDX_O2I] + k[1076]*y[IDX_OI];
+    data[2526] = 0.0 + k[818]*y[IDX_OII] + k[1021]*y[IDX_NI] + k[1075]*y[IDX_OI];
+    data[2527] = 0.0 + k[824]*y[IDX_HCO2II] + k[829]*y[IDX_O2HII] + k[835]*y[IDX_SiOII] +
+        k[1059]*y[IDX_CO2I] + k[1070]*y[IDX_HNOI] + k[1075]*y[IDX_NO2I] +
+        k[1076]*y[IDX_NOI] + k[1077]*y[IDX_O2HI] + k[1079]*y[IDX_OCNI] +
+        k[1080]*y[IDX_OHI] + k[1211]*y[IDX_OI] + k[1211]*y[IDX_OI];
     data[2528] = 0.0 - k[214]*y[IDX_O2I] + k[818]*y[IDX_NO2I];
-    data[2529] = 0.0 - k[6]*y[IDX_H2I] - k[12]*y[IDX_HI] -
-        k[51]*y[IDX_CH4II] - k[68]*y[IDX_CNII] - k[73]*y[IDX_COII] -
-        k[88]*y[IDX_HII] - k[113]*y[IDX_H2II] - k[121]*y[IDX_H2OII] -
-        k[133]*y[IDX_HCNII] - k[146]*y[IDX_HeII] - k[168]*y[IDX_NII] -
-        k[173]*y[IDX_N2II] - k[179]*y[IDX_NHII] - k[214]*y[IDX_OII] -
-        k[224]*y[IDX_OHII] - k[279] - k[280] - k[376]*y[IDX_CII] -
-        k[377]*y[IDX_CII] - k[411]*y[IDX_CHII] - k[412]*y[IDX_CHII] -
-        k[413]*y[IDX_CHII] - k[420]*y[IDX_CH2II] - k[442]*y[IDX_CH3II] -
-        k[481]*y[IDX_CNII] - k[525]*y[IDX_H2II] - k[549]*y[IDX_H2COII] -
-        k[597]*y[IDX_H3II] - k[696]*y[IDX_HeII] - k[728]*y[IDX_NII] -
-        k[729]*y[IDX_NII] - k[765]*y[IDX_NHII] - k[766]*y[IDX_NHII] -
-        k[777]*y[IDX_NH2II] - k[778]*y[IDX_NH2II] - k[862]*y[IDX_SiH2II] -
-        k[873]*y[IDX_CI] - k[889]*y[IDX_CH2I] - k[890]*y[IDX_CH2I] -
-        k[891]*y[IDX_CH2I] - k[892]*y[IDX_CH2I] - k[893]*y[IDX_CH2I] -
-        k[911]*y[IDX_CH3I] - k[912]*y[IDX_CH3I] - k[913]*y[IDX_CH3I] -
-        k[921]*y[IDX_CH4I] - k[933]*y[IDX_CHI] - k[934]*y[IDX_CHI] -
-        k[935]*y[IDX_CHI] - k[936]*y[IDX_CHI] - k[948]*y[IDX_CNI] -
-        k[949]*y[IDX_CNI] - k[953]*y[IDX_COI] - k[963]*y[IDX_H2I] -
-        k[964]*y[IDX_H2I] - k[989]*y[IDX_HI] - k[1001]*y[IDX_HCOI] -
-        k[1002]*y[IDX_HCOI] - k[1023]*y[IDX_NI] - k[1044]*y[IDX_NHI] -
-        k[1045]*y[IDX_NHI] - k[1052]*y[IDX_NOI] - k[1054]*y[IDX_OCNI] -
-        k[1055]*y[IDX_OCNI] - k[1106]*y[IDX_SiI] - k[1168] - k[1169] - k[1292];
-    data[2530] = 0.0 + k[30]*y[IDX_CI] + k[44]*y[IDX_CH2I] +
-        k[61]*y[IDX_CHI] + k[116]*y[IDX_H2COI] + k[137]*y[IDX_HCOI] +
-        k[152]*y[IDX_MgI] + k[187]*y[IDX_NH2I] + k[198]*y[IDX_NH3I] +
-        k[205]*y[IDX_NOI] + k[230]*y[IDX_SiI] + k[551]*y[IDX_H2COI] +
-        k[820]*y[IDX_CH3OHI];
-    data[2531] = 0.0 + k[281] + k[914]*y[IDX_CH3I] + k[938]*y[IDX_CHI] +
-        k[991]*y[IDX_HI] + k[1003]*y[IDX_HCOI] + k[1024]*y[IDX_NI] +
-        k[1077]*y[IDX_OI] + k[1100]*y[IDX_OHI] + k[1170];
-    data[2532] = 0.0 + k[347]*y[IDX_EM] + k[392]*y[IDX_CI] +
-        k[436]*y[IDX_CH2I] + k[474]*y[IDX_CHI] + k[483]*y[IDX_CNI] +
-        k[488]*y[IDX_COI] + k[544]*y[IDX_H2I] + k[552]*y[IDX_H2COI] +
-        k[571]*y[IDX_H2OI] + k[632]*y[IDX_HCNI] + k[645]*y[IDX_HCOI] +
-        k[651]*y[IDX_HNCI] + k[733]*y[IDX_N2I] + k[790]*y[IDX_NH2I] +
-        k[805]*y[IDX_NHI] + k[807]*y[IDX_NOI] + k[821]*y[IDX_CO2I] +
-        k[829]*y[IDX_OI] + k[858]*y[IDX_OHI];
-    data[2533] = 0.0 - k[1054]*y[IDX_O2I] - k[1055]*y[IDX_O2I] +
-        k[1079]*y[IDX_OI];
-    data[2534] = 0.0 + k[858]*y[IDX_O2HII] + k[1080]*y[IDX_OI] +
-        k[1100]*y[IDX_O2HI];
+    data[2529] = 0.0 - k[6]*y[IDX_H2I] - k[12]*y[IDX_HI] - k[51]*y[IDX_CH4II] -
+        k[68]*y[IDX_CNII] - k[73]*y[IDX_COII] - k[88]*y[IDX_HII] -
+        k[113]*y[IDX_H2II] - k[121]*y[IDX_H2OII] - k[133]*y[IDX_HCNII] -
+        k[146]*y[IDX_HeII] - k[168]*y[IDX_NII] - k[173]*y[IDX_N2II] -
+        k[179]*y[IDX_NHII] - k[214]*y[IDX_OII] - k[224]*y[IDX_OHII] - k[279] -
+        k[280] - k[376]*y[IDX_CII] - k[377]*y[IDX_CII] - k[411]*y[IDX_CHII] -
+        k[412]*y[IDX_CHII] - k[413]*y[IDX_CHII] - k[420]*y[IDX_CH2II] -
+        k[442]*y[IDX_CH3II] - k[481]*y[IDX_CNII] - k[525]*y[IDX_H2II] -
+        k[549]*y[IDX_H2COII] - k[597]*y[IDX_H3II] - k[696]*y[IDX_HeII] -
+        k[728]*y[IDX_NII] - k[729]*y[IDX_NII] - k[765]*y[IDX_NHII] -
+        k[766]*y[IDX_NHII] - k[777]*y[IDX_NH2II] - k[778]*y[IDX_NH2II] -
+        k[862]*y[IDX_SiH2II] - k[873]*y[IDX_CI] - k[889]*y[IDX_CH2I] -
+        k[890]*y[IDX_CH2I] - k[891]*y[IDX_CH2I] - k[892]*y[IDX_CH2I] -
+        k[893]*y[IDX_CH2I] - k[911]*y[IDX_CH3I] - k[912]*y[IDX_CH3I] -
+        k[913]*y[IDX_CH3I] - k[921]*y[IDX_CH4I] - k[933]*y[IDX_CHI] -
+        k[934]*y[IDX_CHI] - k[935]*y[IDX_CHI] - k[936]*y[IDX_CHI] -
+        k[948]*y[IDX_CNI] - k[949]*y[IDX_CNI] - k[953]*y[IDX_COI] -
+        k[963]*y[IDX_H2I] - k[964]*y[IDX_H2I] - k[989]*y[IDX_HI] -
+        k[1001]*y[IDX_HCOI] - k[1002]*y[IDX_HCOI] - k[1023]*y[IDX_NI] -
+        k[1044]*y[IDX_NHI] - k[1045]*y[IDX_NHI] - k[1052]*y[IDX_NOI] -
+        k[1054]*y[IDX_OCNI] - k[1055]*y[IDX_OCNI] - k[1106]*y[IDX_SiI] - k[1168]
+        - k[1169] - k[1292];
+    data[2530] = 0.0 + k[30]*y[IDX_CI] + k[44]*y[IDX_CH2I] + k[61]*y[IDX_CHI] +
+        k[116]*y[IDX_H2COI] + k[137]*y[IDX_HCOI] + k[152]*y[IDX_MgI] +
+        k[187]*y[IDX_NH2I] + k[198]*y[IDX_NH3I] + k[205]*y[IDX_NOI] +
+        k[230]*y[IDX_SiI] + k[551]*y[IDX_H2COI] + k[820]*y[IDX_CH3OHI];
+    data[2531] = 0.0 + k[281] + k[914]*y[IDX_CH3I] + k[938]*y[IDX_CHI] + k[991]*y[IDX_HI]
+        + k[1003]*y[IDX_HCOI] + k[1024]*y[IDX_NI] + k[1077]*y[IDX_OI] +
+        k[1100]*y[IDX_OHI] + k[1170];
+    data[2532] = 0.0 + k[347]*y[IDX_EM] + k[392]*y[IDX_CI] + k[436]*y[IDX_CH2I] +
+        k[474]*y[IDX_CHI] + k[483]*y[IDX_CNI] + k[488]*y[IDX_COI] +
+        k[544]*y[IDX_H2I] + k[552]*y[IDX_H2COI] + k[571]*y[IDX_H2OI] +
+        k[632]*y[IDX_HCNI] + k[645]*y[IDX_HCOI] + k[651]*y[IDX_HNCI] +
+        k[733]*y[IDX_N2I] + k[790]*y[IDX_NH2I] + k[805]*y[IDX_NHI] +
+        k[807]*y[IDX_NOI] + k[821]*y[IDX_CO2I] + k[829]*y[IDX_OI] +
+        k[858]*y[IDX_OHI];
+    data[2533] = 0.0 - k[1054]*y[IDX_O2I] - k[1055]*y[IDX_O2I] + k[1079]*y[IDX_OI];
+    data[2534] = 0.0 + k[858]*y[IDX_O2HII] + k[1080]*y[IDX_OI] + k[1100]*y[IDX_O2HI];
     data[2535] = 0.0 - k[224]*y[IDX_O2I];
     data[2536] = 0.0 + k[230]*y[IDX_O2II] - k[1106]*y[IDX_O2I];
     data[2537] = 0.0 - k[862]*y[IDX_O2I];
@@ -7461,20 +7141,19 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
     data[2562] = 0.0 - k[198]*y[IDX_O2II];
     data[2563] = 0.0 - k[205]*y[IDX_O2II];
     data[2564] = 0.0 + k[823]*y[IDX_H2OII] + k[830]*y[IDX_OHII];
-    data[2565] = 0.0 + k[214]*y[IDX_O2I] + k[812]*y[IDX_CO2I] +
-        k[819]*y[IDX_OHI];
-    data[2566] = 0.0 + k[51]*y[IDX_CH4II] + k[68]*y[IDX_CNII] +
-        k[73]*y[IDX_COII] + k[88]*y[IDX_HII] + k[113]*y[IDX_H2II] +
-        k[121]*y[IDX_H2OII] + k[133]*y[IDX_HCNII] + k[146]*y[IDX_HeII] +
-        k[168]*y[IDX_NII] + k[173]*y[IDX_N2II] + k[179]*y[IDX_NHII] +
-        k[214]*y[IDX_OII] + k[224]*y[IDX_OHII] + k[279] + k[1168];
-    data[2567] = 0.0 - k[30]*y[IDX_CI] - k[44]*y[IDX_CH2I] -
-        k[61]*y[IDX_CHI] - k[116]*y[IDX_H2COI] - k[137]*y[IDX_HCOI] -
-        k[152]*y[IDX_MgI] - k[187]*y[IDX_NH2I] - k[198]*y[IDX_NH3I] -
-        k[205]*y[IDX_NOI] - k[230]*y[IDX_SiI] - k[346]*y[IDX_EM] -
-        k[391]*y[IDX_CI] - k[435]*y[IDX_CH2I] - k[473]*y[IDX_CHI] -
-        k[551]*y[IDX_H2COI] - k[644]*y[IDX_HCOI] - k[742]*y[IDX_NI] -
-        k[804]*y[IDX_NHI] - k[820]*y[IDX_CH3OHI] - k[1167] - k[1270];
+    data[2565] = 0.0 + k[214]*y[IDX_O2I] + k[812]*y[IDX_CO2I] + k[819]*y[IDX_OHI];
+    data[2566] = 0.0 + k[51]*y[IDX_CH4II] + k[68]*y[IDX_CNII] + k[73]*y[IDX_COII] +
+        k[88]*y[IDX_HII] + k[113]*y[IDX_H2II] + k[121]*y[IDX_H2OII] +
+        k[133]*y[IDX_HCNII] + k[146]*y[IDX_HeII] + k[168]*y[IDX_NII] +
+        k[173]*y[IDX_N2II] + k[179]*y[IDX_NHII] + k[214]*y[IDX_OII] +
+        k[224]*y[IDX_OHII] + k[279] + k[1168];
+    data[2567] = 0.0 - k[30]*y[IDX_CI] - k[44]*y[IDX_CH2I] - k[61]*y[IDX_CHI] -
+        k[116]*y[IDX_H2COI] - k[137]*y[IDX_HCOI] - k[152]*y[IDX_MgI] -
+        k[187]*y[IDX_NH2I] - k[198]*y[IDX_NH3I] - k[205]*y[IDX_NOI] -
+        k[230]*y[IDX_SiI] - k[346]*y[IDX_EM] - k[391]*y[IDX_CI] -
+        k[435]*y[IDX_CH2I] - k[473]*y[IDX_CHI] - k[551]*y[IDX_H2COI] -
+        k[644]*y[IDX_HCOI] - k[742]*y[IDX_NI] - k[804]*y[IDX_NHI] -
+        k[820]*y[IDX_CH3OHI] - k[1167] - k[1270];
     data[2568] = 0.0 + k[819]*y[IDX_OII];
     data[2569] = 0.0 + k[224]*y[IDX_O2I] + k[830]*y[IDX_OI];
     data[2570] = 0.0 - k[230]*y[IDX_O2II];
@@ -7483,15 +7162,14 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
     data[2573] = 0.0 + k[913]*y[IDX_O2I] - k[914]*y[IDX_O2HI];
     data[2574] = 0.0 + k[921]*y[IDX_O2I];
     data[2575] = 0.0 - k[954]*y[IDX_O2HI];
-    data[2576] = 0.0 - k[990]*y[IDX_O2HI] - k[991]*y[IDX_O2HI] -
-        k[992]*y[IDX_O2HI];
+    data[2576] = 0.0 - k[990]*y[IDX_O2HI] - k[991]*y[IDX_O2HI] - k[992]*y[IDX_O2HI];
     data[2577] = 0.0 + k[963]*y[IDX_O2I];
     data[2578] = 0.0 + k[549]*y[IDX_O2I];
     data[2579] = 0.0 + k[1002]*y[IDX_O2I] - k[1003]*y[IDX_O2HI];
     data[2580] = 0.0 - k[1024]*y[IDX_O2HI];
     data[2581] = 0.0 - k[1077]*y[IDX_O2HI];
-    data[2582] = 0.0 + k[549]*y[IDX_H2COII] + k[913]*y[IDX_CH3I] +
-        k[921]*y[IDX_CH4I] + k[963]*y[IDX_H2I] + k[1002]*y[IDX_HCOI];
+    data[2582] = 0.0 + k[549]*y[IDX_H2COII] + k[913]*y[IDX_CH3I] + k[921]*y[IDX_CH4I] +
+        k[963]*y[IDX_H2I] + k[1002]*y[IDX_HCOI];
     data[2583] = 0.0 - k[281] - k[914]*y[IDX_CH3I] - k[937]*y[IDX_CHI] -
         k[938]*y[IDX_CHI] - k[954]*y[IDX_COI] - k[990]*y[IDX_HI] -
         k[991]*y[IDX_HI] - k[992]*y[IDX_HI] - k[1003]*y[IDX_HCOI] -
@@ -7519,152 +7197,129 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
     data[2603] = 0.0 - k[790]*y[IDX_O2HII];
     data[2604] = 0.0 - k[807]*y[IDX_O2HII];
     data[2605] = 0.0 - k[829]*y[IDX_O2HII];
-    data[2606] = 0.0 + k[525]*y[IDX_H2II] + k[597]*y[IDX_H3II] +
-        k[766]*y[IDX_NHII];
+    data[2606] = 0.0 + k[525]*y[IDX_H2II] + k[597]*y[IDX_H3II] + k[766]*y[IDX_NHII];
     data[2607] = 0.0 + k[644]*y[IDX_HCOI];
-    data[2608] = 0.0 - k[347]*y[IDX_EM] - k[392]*y[IDX_CI] -
-        k[436]*y[IDX_CH2I] - k[474]*y[IDX_CHI] - k[483]*y[IDX_CNI] -
-        k[488]*y[IDX_COI] - k[544]*y[IDX_H2I] - k[552]*y[IDX_H2COI] -
-        k[571]*y[IDX_H2OI] - k[632]*y[IDX_HCNI] - k[645]*y[IDX_HCOI] -
-        k[651]*y[IDX_HNCI] - k[733]*y[IDX_N2I] - k[790]*y[IDX_NH2I] -
-        k[805]*y[IDX_NHI] - k[807]*y[IDX_NOI] - k[821]*y[IDX_CO2I] -
-        k[829]*y[IDX_OI] - k[858]*y[IDX_OHI] - k[1297];
+    data[2608] = 0.0 - k[347]*y[IDX_EM] - k[392]*y[IDX_CI] - k[436]*y[IDX_CH2I] -
+        k[474]*y[IDX_CHI] - k[483]*y[IDX_CNI] - k[488]*y[IDX_COI] -
+        k[544]*y[IDX_H2I] - k[552]*y[IDX_H2COI] - k[571]*y[IDX_H2OI] -
+        k[632]*y[IDX_HCNI] - k[645]*y[IDX_HCOI] - k[651]*y[IDX_HNCI] -
+        k[733]*y[IDX_N2I] - k[790]*y[IDX_NH2I] - k[805]*y[IDX_NHI] -
+        k[807]*y[IDX_NOI] - k[821]*y[IDX_CO2I] - k[829]*y[IDX_OI] -
+        k[858]*y[IDX_OHI] - k[1297];
     data[2609] = 0.0 - k[858]*y[IDX_O2HII];
     data[2610] = 0.0 - k[874]*y[IDX_OCNI];
     data[2611] = 0.0 - k[378]*y[IDX_OCNI];
     data[2612] = 0.0 + k[932]*y[IDX_NOI];
-    data[2613] = 0.0 + k[945]*y[IDX_NO2I] + k[947]*y[IDX_NOI] +
-        k[949]*y[IDX_O2I] + k[1091]*y[IDX_OHI];
-    data[2614] = 0.0 - k[993]*y[IDX_OCNI] - k[994]*y[IDX_OCNI] -
-        k[995]*y[IDX_OCNI];
+    data[2613] = 0.0 + k[945]*y[IDX_NO2I] + k[947]*y[IDX_NOI] + k[949]*y[IDX_O2I] +
+        k[1091]*y[IDX_OHI];
+    data[2614] = 0.0 - k[993]*y[IDX_OCNI] - k[994]*y[IDX_OCNI] - k[995]*y[IDX_OCNI];
     data[2615] = 0.0 + k[1060]*y[IDX_OI];
     data[2616] = 0.0 + k[1065]*y[IDX_OI];
     data[2617] = 0.0 + k[1016]*y[IDX_NI];
     data[2618] = 0.0 - k[697]*y[IDX_OCNI] - k[698]*y[IDX_OCNI];
     data[2619] = 0.0 + k[1016]*y[IDX_HCOI];
-    data[2620] = 0.0 + k[932]*y[IDX_CHI] + k[947]*y[IDX_CNI] -
-        k[1053]*y[IDX_OCNI];
+    data[2620] = 0.0 + k[932]*y[IDX_CHI] + k[947]*y[IDX_CNI] - k[1053]*y[IDX_OCNI];
     data[2621] = 0.0 + k[945]*y[IDX_CNI];
-    data[2622] = 0.0 + k[1060]*y[IDX_H2CNI] + k[1065]*y[IDX_HCNI] -
-        k[1078]*y[IDX_OCNI] - k[1079]*y[IDX_OCNI];
-    data[2623] = 0.0 + k[949]*y[IDX_CNI] - k[1054]*y[IDX_OCNI] -
-        k[1055]*y[IDX_OCNI];
+    data[2622] = 0.0 + k[1060]*y[IDX_H2CNI] + k[1065]*y[IDX_HCNI] - k[1078]*y[IDX_OCNI] -
+        k[1079]*y[IDX_OCNI];
+    data[2623] = 0.0 + k[949]*y[IDX_CNI] - k[1054]*y[IDX_OCNI] - k[1055]*y[IDX_OCNI];
     data[2624] = 0.0 - k[283] - k[378]*y[IDX_CII] - k[697]*y[IDX_HeII] -
         k[698]*y[IDX_HeII] - k[874]*y[IDX_CI] - k[993]*y[IDX_HI] -
         k[994]*y[IDX_HI] - k[995]*y[IDX_HI] - k[1053]*y[IDX_NOI] -
         k[1054]*y[IDX_O2I] - k[1055]*y[IDX_O2I] - k[1078]*y[IDX_OI] -
         k[1079]*y[IDX_OI] - k[1172] - k[1225];
     data[2625] = 0.0 + k[1091]*y[IDX_CNI];
-    data[2626] = 0.0 + k[383]*y[IDX_H2OII] - k[875]*y[IDX_OHI] -
-        k[876]*y[IDX_OHI];
+    data[2626] = 0.0 + k[383]*y[IDX_H2OII] - k[875]*y[IDX_OHI] - k[876]*y[IDX_OHI];
     data[2627] = 0.0 - k[379]*y[IDX_OHI];
-    data[2628] = 0.0 + k[62]*y[IDX_OHII] + k[460]*y[IDX_H2OII] +
-        k[935]*y[IDX_O2I] + k[937]*y[IDX_O2HI] + k[940]*y[IDX_OI] -
-        k[941]*y[IDX_OHI];
+    data[2628] = 0.0 + k[62]*y[IDX_OHII] + k[460]*y[IDX_H2OII] + k[935]*y[IDX_O2I] +
+        k[937]*y[IDX_O2HI] + k[940]*y[IDX_OI] - k[941]*y[IDX_OHI];
     data[2629] = 0.0 + k[411]*y[IDX_O2I] - k[415]*y[IDX_OHI];
-    data[2630] = 0.0 + k[45]*y[IDX_OHII] + k[424]*y[IDX_H2OII] +
-        k[887]*y[IDX_NOI] + k[893]*y[IDX_O2I] + k[897]*y[IDX_OI] -
-        k[898]*y[IDX_OHI] - k[899]*y[IDX_OHI] - k[900]*y[IDX_OHI];
+    data[2630] = 0.0 + k[45]*y[IDX_OHII] + k[424]*y[IDX_H2OII] + k[887]*y[IDX_NOI] +
+        k[893]*y[IDX_O2I] + k[897]*y[IDX_OI] - k[898]*y[IDX_OHI] -
+        k[899]*y[IDX_OHI] - k[900]*y[IDX_OHI];
     data[2631] = 0.0 + k[420]*y[IDX_O2I];
-    data[2632] = 0.0 + k[904]*y[IDX_H2OI] + k[911]*y[IDX_O2I] -
-        k[917]*y[IDX_OHI] - k[918]*y[IDX_OHI] - k[919]*y[IDX_OHI];
+    data[2632] = 0.0 + k[904]*y[IDX_H2OI] + k[911]*y[IDX_O2I] - k[917]*y[IDX_OHI] -
+        k[918]*y[IDX_OHI] - k[919]*y[IDX_OHI];
     data[2633] = 0.0 - k[445]*y[IDX_OHI];
-    data[2634] = 0.0 + k[248] + k[657]*y[IDX_HeII] + k[809]*y[IDX_OII] +
-        k[1121];
-    data[2635] = 0.0 + k[810]*y[IDX_OII] - k[922]*y[IDX_OHI] +
-        k[1056]*y[IDX_OI];
+    data[2634] = 0.0 + k[248] + k[657]*y[IDX_HeII] + k[809]*y[IDX_OII] + k[1121];
+    data[2635] = 0.0 + k[810]*y[IDX_OII] - k[922]*y[IDX_OHI] + k[1056]*y[IDX_OI];
     data[2636] = 0.0 + k[822]*y[IDX_OI];
     data[2637] = 0.0 - k[1090]*y[IDX_OHI] - k[1091]*y[IDX_OHI];
     data[2638] = 0.0 - k[225]*y[IDX_OHI] + k[560]*y[IDX_H2OI];
-    data[2639] = 0.0 + k[553]*y[IDX_H2OII] + k[954]*y[IDX_O2HI] +
-        k[972]*y[IDX_HI] - k[1092]*y[IDX_OHI];
-    data[2640] = 0.0 - k[226]*y[IDX_OHI] + k[562]*y[IDX_H2OI] -
-        k[851]*y[IDX_OHI];
+    data[2639] = 0.0 + k[553]*y[IDX_H2OII] + k[954]*y[IDX_O2HI] + k[972]*y[IDX_HI] -
+        k[1092]*y[IDX_OHI];
+    data[2640] = 0.0 - k[226]*y[IDX_OHI] + k[562]*y[IDX_H2OI] - k[851]*y[IDX_OHI];
     data[2641] = 0.0 + k[971]*y[IDX_HI];
-    data[2642] = 0.0 + k[314]*y[IDX_H2OII] + k[317]*y[IDX_H3COII] +
-        k[324]*y[IDX_H3OII] + k[325]*y[IDX_H3OII] + k[333]*y[IDX_HCO2II] +
-        k[363]*y[IDX_SiOHII];
-    data[2643] = 0.0 + k[11]*y[IDX_H2OI] - k[13]*y[IDX_OHI] +
-        k[971]*y[IDX_CO2I] + k[972]*y[IDX_COI] + k[975]*y[IDX_H2OI] +
-        k[982]*y[IDX_HNOI] + k[986]*y[IDX_NO2I] + k[988]*y[IDX_NOI] +
-        k[989]*y[IDX_O2I] + k[992]*y[IDX_O2HI] + k[992]*y[IDX_O2HI] +
-        k[995]*y[IDX_OCNI] - k[996]*y[IDX_OHI] + k[1207]*y[IDX_OI] -
-        k[1208]*y[IDX_OHI];
+    data[2642] = 0.0 + k[314]*y[IDX_H2OII] + k[317]*y[IDX_H3COII] + k[324]*y[IDX_H3OII] +
+        k[325]*y[IDX_H3OII] + k[333]*y[IDX_HCO2II] + k[363]*y[IDX_SiOHII];
+    data[2643] = 0.0 + k[11]*y[IDX_H2OI] - k[13]*y[IDX_OHI] + k[971]*y[IDX_CO2I] +
+        k[972]*y[IDX_COI] + k[975]*y[IDX_H2OI] + k[982]*y[IDX_HNOI] +
+        k[986]*y[IDX_NO2I] + k[988]*y[IDX_NOI] + k[989]*y[IDX_O2I] +
+        k[992]*y[IDX_O2HI] + k[992]*y[IDX_O2HI] + k[995]*y[IDX_OCNI] -
+        k[996]*y[IDX_OHI] + k[1207]*y[IDX_OI] - k[1208]*y[IDX_OHI];
     data[2644] = 0.0 - k[90]*y[IDX_OHI] + k[504]*y[IDX_NO2I];
-    data[2645] = 0.0 + k[4]*y[IDX_H2OI] - k[7]*y[IDX_OHI] +
-        k[964]*y[IDX_O2I] + k[964]*y[IDX_O2I] + k[965]*y[IDX_OI] -
-        k[966]*y[IDX_OHI];
+    data[2645] = 0.0 + k[4]*y[IDX_H2OI] - k[7]*y[IDX_OHI] + k[964]*y[IDX_O2I] +
+        k[964]*y[IDX_O2I] + k[965]*y[IDX_OI] - k[966]*y[IDX_OHI];
     data[2646] = 0.0 - k[114]*y[IDX_OHI] - k[527]*y[IDX_OHI];
-    data[2647] = 0.0 + k[219]*y[IDX_OHII] + k[554]*y[IDX_H2OII] +
-        k[813]*y[IDX_OII] + k[1061]*y[IDX_OI] - k[1093]*y[IDX_OHI];
-    data[2648] = 0.0 + k[4]*y[IDX_H2I] + k[11]*y[IDX_HI] +
-        k[220]*y[IDX_OHII] + k[256] + k[555]*y[IDX_H2OII] + k[560]*y[IDX_CNII] +
-        k[562]*y[IDX_COII] + k[569]*y[IDX_N2II] + k[674]*y[IDX_HeII] +
-        k[757]*y[IDX_NHII] + k[772]*y[IDX_NH2II] + k[904]*y[IDX_CH3I] +
-        k[975]*y[IDX_HI] + k[1036]*y[IDX_NHI] + k[1062]*y[IDX_OI] +
-        k[1062]*y[IDX_OI] + k[1142];
-    data[2649] = 0.0 + k[314]*y[IDX_EM] + k[383]*y[IDX_CI] +
-        k[424]*y[IDX_CH2I] + k[460]*y[IDX_CHI] + k[553]*y[IDX_COI] +
-        k[554]*y[IDX_H2COI] + k[555]*y[IDX_H2OI] + k[556]*y[IDX_HCNI] +
-        k[558]*y[IDX_HCOI] + k[559]*y[IDX_HNCI] + k[781]*y[IDX_NH2I] -
-        k[852]*y[IDX_OHI];
+    data[2647] = 0.0 + k[219]*y[IDX_OHII] + k[554]*y[IDX_H2OII] + k[813]*y[IDX_OII] +
+        k[1061]*y[IDX_OI] - k[1093]*y[IDX_OHI];
+    data[2648] = 0.0 + k[4]*y[IDX_H2I] + k[11]*y[IDX_HI] + k[220]*y[IDX_OHII] + k[256] +
+        k[555]*y[IDX_H2OII] + k[560]*y[IDX_CNII] + k[562]*y[IDX_COII] +
+        k[569]*y[IDX_N2II] + k[674]*y[IDX_HeII] + k[757]*y[IDX_NHII] +
+        k[772]*y[IDX_NH2II] + k[904]*y[IDX_CH3I] + k[975]*y[IDX_HI] +
+        k[1036]*y[IDX_NHI] + k[1062]*y[IDX_OI] + k[1062]*y[IDX_OI] + k[1142];
+    data[2649] = 0.0 + k[314]*y[IDX_EM] + k[383]*y[IDX_CI] + k[424]*y[IDX_CH2I] +
+        k[460]*y[IDX_CHI] + k[553]*y[IDX_COI] + k[554]*y[IDX_H2COI] +
+        k[555]*y[IDX_H2OI] + k[556]*y[IDX_HCNI] + k[558]*y[IDX_HCOI] +
+        k[559]*y[IDX_HNCI] + k[781]*y[IDX_NH2I] - k[852]*y[IDX_OHI];
     data[2650] = 0.0 + k[595]*y[IDX_NO2I] - k[600]*y[IDX_OHI];
     data[2651] = 0.0 + k[317]*y[IDX_EM];
     data[2652] = 0.0 + k[324]*y[IDX_EM] + k[325]*y[IDX_EM];
-    data[2653] = 0.0 + k[556]*y[IDX_H2OII] + k[1063]*y[IDX_OI] -
-        k[1094]*y[IDX_OHI] - k[1095]*y[IDX_OHI];
+    data[2653] = 0.0 + k[556]*y[IDX_H2OII] + k[1063]*y[IDX_OI] - k[1094]*y[IDX_OHI] -
+        k[1095]*y[IDX_OHI];
     data[2654] = 0.0 - k[853]*y[IDX_OHI];
-    data[2655] = 0.0 + k[221]*y[IDX_OHII] + k[558]*y[IDX_H2OII] +
-        k[1001]*y[IDX_O2I] + k[1067]*y[IDX_OI] - k[1096]*y[IDX_OHI];
+    data[2655] = 0.0 + k[221]*y[IDX_OHII] + k[558]*y[IDX_H2OII] + k[1001]*y[IDX_O2I] +
+        k[1067]*y[IDX_OI] - k[1096]*y[IDX_OHI];
     data[2656] = 0.0 - k[854]*y[IDX_OHI] - k[855]*y[IDX_OHI];
     data[2657] = 0.0 + k[333]*y[IDX_EM];
-    data[2658] = 0.0 + k[657]*y[IDX_CH3OHI] + k[674]*y[IDX_H2OI] -
-        k[699]*y[IDX_OHI];
+    data[2658] = 0.0 + k[657]*y[IDX_CH3OHI] + k[674]*y[IDX_H2OI] - k[699]*y[IDX_OHI];
     data[2659] = 0.0 + k[559]*y[IDX_H2OII];
-    data[2660] = 0.0 + k[982]*y[IDX_HI] + k[1069]*y[IDX_OI] -
-        k[1097]*y[IDX_OHI];
+    data[2660] = 0.0 + k[982]*y[IDX_HI] + k[1069]*y[IDX_OI] - k[1097]*y[IDX_OHI];
     data[2661] = 0.0 - k[856]*y[IDX_OHI];
     data[2662] = 0.0 - k[1025]*y[IDX_OHI] - k[1026]*y[IDX_OHI];
     data[2663] = 0.0 - k[169]*y[IDX_OHI];
     data[2664] = 0.0 - k[227]*y[IDX_OHI] + k[569]*y[IDX_H2OI];
     data[2665] = 0.0 - k[857]*y[IDX_OHI];
-    data[2666] = 0.0 + k[1036]*y[IDX_H2OI] + k[1043]*y[IDX_NOI] +
-        k[1045]*y[IDX_O2I] + k[1047]*y[IDX_OI] - k[1048]*y[IDX_OHI] -
-        k[1049]*y[IDX_OHI] - k[1050]*y[IDX_OHI];
-    data[2667] = 0.0 + k[757]*y[IDX_H2OI] + k[765]*y[IDX_O2I] -
-        k[768]*y[IDX_OHI];
-    data[2668] = 0.0 + k[188]*y[IDX_OHII] + k[781]*y[IDX_H2OII] +
-        k[1030]*y[IDX_NOI] - k[1031]*y[IDX_OHI] - k[1032]*y[IDX_OHI] +
-        k[1073]*y[IDX_OI];
+    data[2666] = 0.0 + k[1036]*y[IDX_H2OI] + k[1043]*y[IDX_NOI] + k[1045]*y[IDX_O2I] +
+        k[1047]*y[IDX_OI] - k[1048]*y[IDX_OHI] - k[1049]*y[IDX_OHI] -
+        k[1050]*y[IDX_OHI];
+    data[2667] = 0.0 + k[757]*y[IDX_H2OI] + k[765]*y[IDX_O2I] - k[768]*y[IDX_OHI];
+    data[2668] = 0.0 + k[188]*y[IDX_OHII] + k[781]*y[IDX_H2OII] + k[1030]*y[IDX_NOI] -
+        k[1031]*y[IDX_OHI] - k[1032]*y[IDX_OHI] + k[1073]*y[IDX_OI];
     data[2669] = 0.0 + k[772]*y[IDX_H2OI] + k[778]*y[IDX_O2I];
-    data[2670] = 0.0 + k[222]*y[IDX_OHII] + k[1074]*y[IDX_OI] -
-        k[1098]*y[IDX_OHI];
-    data[2671] = 0.0 + k[223]*y[IDX_OHII] + k[887]*y[IDX_CH2I] +
-        k[988]*y[IDX_HI] + k[1030]*y[IDX_NH2I] + k[1043]*y[IDX_NHI] -
-        k[1099]*y[IDX_OHI];
-    data[2672] = 0.0 + k[504]*y[IDX_HII] + k[595]*y[IDX_H3II] +
-        k[986]*y[IDX_HI];
-    data[2673] = 0.0 + k[822]*y[IDX_CH4II] + k[897]*y[IDX_CH2I] +
-        k[940]*y[IDX_CHI] + k[965]*y[IDX_H2I] + k[1047]*y[IDX_NHI] +
-        k[1056]*y[IDX_CH4I] + k[1061]*y[IDX_H2COI] + k[1062]*y[IDX_H2OI] +
-        k[1062]*y[IDX_H2OI] + k[1063]*y[IDX_HCNI] + k[1067]*y[IDX_HCOI] +
-        k[1069]*y[IDX_HNOI] + k[1073]*y[IDX_NH2I] + k[1074]*y[IDX_NH3I] +
-        k[1077]*y[IDX_O2HI] - k[1080]*y[IDX_OHI] + k[1088]*y[IDX_SiH4I] +
-        k[1207]*y[IDX_HI];
-    data[2674] = 0.0 - k[215]*y[IDX_OHI] + k[809]*y[IDX_CH3OHI] +
-        k[810]*y[IDX_CH4I] + k[813]*y[IDX_H2COI] - k[819]*y[IDX_OHI];
-    data[2675] = 0.0 + k[224]*y[IDX_OHII] + k[411]*y[IDX_CHII] +
-        k[420]*y[IDX_CH2II] + k[765]*y[IDX_NHII] + k[778]*y[IDX_NH2II] +
-        k[862]*y[IDX_SiH2II] + k[893]*y[IDX_CH2I] + k[911]*y[IDX_CH3I] +
-        k[935]*y[IDX_CHI] + k[964]*y[IDX_H2I] + k[964]*y[IDX_H2I] +
-        k[989]*y[IDX_HI] + k[1001]*y[IDX_HCOI] + k[1045]*y[IDX_NHI];
-    data[2676] = 0.0 + k[937]*y[IDX_CHI] + k[954]*y[IDX_COI] +
-        k[992]*y[IDX_HI] + k[992]*y[IDX_HI] + k[1077]*y[IDX_OI] -
-        k[1100]*y[IDX_OHI] + k[1171];
+    data[2670] = 0.0 + k[222]*y[IDX_OHII] + k[1074]*y[IDX_OI] - k[1098]*y[IDX_OHI];
+    data[2671] = 0.0 + k[223]*y[IDX_OHII] + k[887]*y[IDX_CH2I] + k[988]*y[IDX_HI] +
+        k[1030]*y[IDX_NH2I] + k[1043]*y[IDX_NHI] - k[1099]*y[IDX_OHI];
+    data[2672] = 0.0 + k[504]*y[IDX_HII] + k[595]*y[IDX_H3II] + k[986]*y[IDX_HI];
+    data[2673] = 0.0 + k[822]*y[IDX_CH4II] + k[897]*y[IDX_CH2I] + k[940]*y[IDX_CHI] +
+        k[965]*y[IDX_H2I] + k[1047]*y[IDX_NHI] + k[1056]*y[IDX_CH4I] +
+        k[1061]*y[IDX_H2COI] + k[1062]*y[IDX_H2OI] + k[1062]*y[IDX_H2OI] +
+        k[1063]*y[IDX_HCNI] + k[1067]*y[IDX_HCOI] + k[1069]*y[IDX_HNOI] +
+        k[1073]*y[IDX_NH2I] + k[1074]*y[IDX_NH3I] + k[1077]*y[IDX_O2HI] -
+        k[1080]*y[IDX_OHI] + k[1088]*y[IDX_SiH4I] + k[1207]*y[IDX_HI];
+    data[2674] = 0.0 - k[215]*y[IDX_OHI] + k[809]*y[IDX_CH3OHI] + k[810]*y[IDX_CH4I] +
+        k[813]*y[IDX_H2COI] - k[819]*y[IDX_OHI];
+    data[2675] = 0.0 + k[224]*y[IDX_OHII] + k[411]*y[IDX_CHII] + k[420]*y[IDX_CH2II] +
+        k[765]*y[IDX_NHII] + k[778]*y[IDX_NH2II] + k[862]*y[IDX_SiH2II] +
+        k[893]*y[IDX_CH2I] + k[911]*y[IDX_CH3I] + k[935]*y[IDX_CHI] +
+        k[964]*y[IDX_H2I] + k[964]*y[IDX_H2I] + k[989]*y[IDX_HI] +
+        k[1001]*y[IDX_HCOI] + k[1045]*y[IDX_NHI];
+    data[2676] = 0.0 + k[937]*y[IDX_CHI] + k[954]*y[IDX_COI] + k[992]*y[IDX_HI] +
+        k[992]*y[IDX_HI] + k[1077]*y[IDX_OI] - k[1100]*y[IDX_OHI] + k[1171];
     data[2677] = 0.0 - k[858]*y[IDX_OHI];
     data[2678] = 0.0 + k[995]*y[IDX_HI];
-    data[2679] = 0.0 - k[7]*y[IDX_H2I] - k[13]*y[IDX_HI] - k[90]*y[IDX_HII]
-        - k[114]*y[IDX_H2II] - k[169]*y[IDX_NII] - k[215]*y[IDX_OII] -
+    data[2679] = 0.0 - k[7]*y[IDX_H2I] - k[13]*y[IDX_HI] - k[90]*y[IDX_HII] -
+        k[114]*y[IDX_H2II] - k[169]*y[IDX_NII] - k[215]*y[IDX_OII] -
         k[225]*y[IDX_CNII] - k[226]*y[IDX_COII] - k[227]*y[IDX_N2II] - k[284] -
         k[379]*y[IDX_CII] - k[415]*y[IDX_CHII] - k[445]*y[IDX_CH3II] -
         k[527]*y[IDX_H2II] - k[600]*y[IDX_H3II] - k[699]*y[IDX_HeII] -
@@ -7685,10 +7340,10 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
         k[1100]*y[IDX_O2HI] - k[1101]*y[IDX_OHI] - k[1101]*y[IDX_OHI] -
         k[1101]*y[IDX_OHI] - k[1101]*y[IDX_OHI] - k[1102]*y[IDX_SiI] - k[1174] -
         k[1175] - k[1208]*y[IDX_HI] - k[1254];
-    data[2680] = 0.0 + k[45]*y[IDX_CH2I] + k[62]*y[IDX_CHI] +
-        k[188]*y[IDX_NH2I] + k[219]*y[IDX_H2COI] + k[220]*y[IDX_H2OI] +
-        k[221]*y[IDX_HCOI] + k[222]*y[IDX_NH3I] + k[223]*y[IDX_NOI] +
-        k[224]*y[IDX_O2I] - k[847]*y[IDX_OHI];
+    data[2680] = 0.0 + k[45]*y[IDX_CH2I] + k[62]*y[IDX_CHI] + k[188]*y[IDX_NH2I] +
+        k[219]*y[IDX_H2COI] + k[220]*y[IDX_H2OI] + k[221]*y[IDX_HCOI] +
+        k[222]*y[IDX_NH3I] + k[223]*y[IDX_NOI] + k[224]*y[IDX_O2I] -
+        k[847]*y[IDX_OHI];
     data[2681] = 0.0 - k[1102]*y[IDX_OHI];
     data[2682] = 0.0 - k[859]*y[IDX_OHI];
     data[2683] = 0.0 + k[862]*y[IDX_O2I];
@@ -7709,13 +7364,12 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
     data[2698] = 0.0 + k[543]*y[IDX_OII] - k[545]*y[IDX_OHII];
     data[2699] = 0.0 + k[114]*y[IDX_OHI] + k[526]*y[IDX_OI];
     data[2700] = 0.0 - k[219]*y[IDX_OHII] - k[839]*y[IDX_OHII];
-    data[2701] = 0.0 - k[220]*y[IDX_OHII] + k[673]*y[IDX_HeII] -
-        k[840]*y[IDX_OHII];
+    data[2701] = 0.0 - k[220]*y[IDX_OHII] + k[673]*y[IDX_HeII] - k[840]*y[IDX_OHII];
     data[2702] = 0.0 + k[1140];
     data[2703] = 0.0 + k[599]*y[IDX_OI];
     data[2704] = 0.0 - k[841]*y[IDX_OHII];
-    data[2705] = 0.0 - k[221]*y[IDX_OHII] + k[816]*y[IDX_OII] -
-        k[842]*y[IDX_OHII] - k[843]*y[IDX_OHII];
+    data[2705] = 0.0 - k[221]*y[IDX_OHII] + k[816]*y[IDX_OII] - k[842]*y[IDX_OHII] -
+        k[843]*y[IDX_OHII];
     data[2706] = 0.0 + k[656]*y[IDX_CH3OHI] + k[673]*y[IDX_H2OI];
     data[2707] = 0.0 - k[844]*y[IDX_OHII];
     data[2708] = 0.0 - k[743]*y[IDX_OHII];
@@ -7728,28 +7382,26 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
     data[2715] = 0.0 - k[188]*y[IDX_OHII] - k[791]*y[IDX_OHII];
     data[2716] = 0.0 - k[222]*y[IDX_OHII];
     data[2717] = 0.0 - k[223]*y[IDX_OHII] - k[846]*y[IDX_OHII];
-    data[2718] = 0.0 + k[526]*y[IDX_H2II] + k[599]*y[IDX_H3II] +
-        k[767]*y[IDX_NHII] + k[826]*y[IDX_N2HII] + k[829]*y[IDX_O2HII] -
-        k[830]*y[IDX_OHII];
-    data[2719] = 0.0 + k[215]*y[IDX_OHI] + k[543]*y[IDX_H2I] +
-        k[816]*y[IDX_HCOI];
+    data[2718] = 0.0 + k[526]*y[IDX_H2II] + k[599]*y[IDX_H3II] + k[767]*y[IDX_NHII] +
+        k[826]*y[IDX_N2HII] + k[829]*y[IDX_O2HII] - k[830]*y[IDX_OHII];
+    data[2719] = 0.0 + k[215]*y[IDX_OHI] + k[543]*y[IDX_H2I] + k[816]*y[IDX_HCOI];
     data[2720] = 0.0 - k[224]*y[IDX_OHII];
     data[2721] = 0.0 + k[829]*y[IDX_OI];
-    data[2722] = 0.0 + k[90]*y[IDX_HII] + k[114]*y[IDX_H2II] +
-        k[169]*y[IDX_NII] + k[215]*y[IDX_OII] + k[225]*y[IDX_CNII] +
-        k[226]*y[IDX_COII] + k[227]*y[IDX_N2II] - k[847]*y[IDX_OHII] + k[1175];
-    data[2723] = 0.0 - k[45]*y[IDX_CH2I] - k[62]*y[IDX_CHI] -
-        k[188]*y[IDX_NH2I] - k[219]*y[IDX_H2COI] - k[220]*y[IDX_H2OI] -
-        k[221]*y[IDX_HCOI] - k[222]*y[IDX_NH3I] - k[223]*y[IDX_NOI] -
-        k[224]*y[IDX_O2I] - k[348]*y[IDX_EM] - k[393]*y[IDX_CI] -
-        k[437]*y[IDX_CH2I] - k[457]*y[IDX_CH4I] - k[475]*y[IDX_CHI] -
-        k[545]*y[IDX_H2I] - k[743]*y[IDX_NI] - k[791]*y[IDX_NH2I] -
-        k[806]*y[IDX_NHI] - k[830]*y[IDX_OI] - k[836]*y[IDX_CNI] -
-        k[837]*y[IDX_CO2I] - k[838]*y[IDX_COI] - k[839]*y[IDX_H2COI] -
-        k[840]*y[IDX_H2OI] - k[841]*y[IDX_HCNI] - k[842]*y[IDX_HCOI] -
-        k[843]*y[IDX_HCOI] - k[844]*y[IDX_HNCI] - k[845]*y[IDX_N2I] -
-        k[846]*y[IDX_NOI] - k[847]*y[IDX_OHI] - k[848]*y[IDX_SiI] -
-        k[849]*y[IDX_SiHI] - k[850]*y[IDX_SiOI] - k[1173] - k[1274];
+    data[2722] = 0.0 + k[90]*y[IDX_HII] + k[114]*y[IDX_H2II] + k[169]*y[IDX_NII] +
+        k[215]*y[IDX_OII] + k[225]*y[IDX_CNII] + k[226]*y[IDX_COII] +
+        k[227]*y[IDX_N2II] - k[847]*y[IDX_OHII] + k[1175];
+    data[2723] = 0.0 - k[45]*y[IDX_CH2I] - k[62]*y[IDX_CHI] - k[188]*y[IDX_NH2I] -
+        k[219]*y[IDX_H2COI] - k[220]*y[IDX_H2OI] - k[221]*y[IDX_HCOI] -
+        k[222]*y[IDX_NH3I] - k[223]*y[IDX_NOI] - k[224]*y[IDX_O2I] -
+        k[348]*y[IDX_EM] - k[393]*y[IDX_CI] - k[437]*y[IDX_CH2I] -
+        k[457]*y[IDX_CH4I] - k[475]*y[IDX_CHI] - k[545]*y[IDX_H2I] -
+        k[743]*y[IDX_NI] - k[791]*y[IDX_NH2I] - k[806]*y[IDX_NHI] -
+        k[830]*y[IDX_OI] - k[836]*y[IDX_CNI] - k[837]*y[IDX_CO2I] -
+        k[838]*y[IDX_COI] - k[839]*y[IDX_H2COI] - k[840]*y[IDX_H2OI] -
+        k[841]*y[IDX_HCNI] - k[842]*y[IDX_HCOI] - k[843]*y[IDX_HCOI] -
+        k[844]*y[IDX_HNCI] - k[845]*y[IDX_N2I] - k[846]*y[IDX_NOI] -
+        k[847]*y[IDX_OHI] - k[848]*y[IDX_SiI] - k[849]*y[IDX_SiHI] -
+        k[850]*y[IDX_SiOI] - k[1173] - k[1274];
     data[2724] = 0.0 - k[848]*y[IDX_OHII];
     data[2725] = 0.0 - k[849]*y[IDX_OHII];
     data[2726] = 0.0 - k[850]*y[IDX_OHII];
@@ -7758,9 +7410,9 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
     data[2729] = 0.0 - k[35]*y[IDX_SiI];
     data[2730] = 0.0 - k[1104]*y[IDX_SiI];
     data[2731] = 0.0 - k[1103]*y[IDX_SiI];
-    data[2732] = 0.0 + k[349]*y[IDX_SiCII] + k[352]*y[IDX_SiHII] +
-        k[353]*y[IDX_SiH2II] + k[354]*y[IDX_SiH2II] + k[362]*y[IDX_SiOII] +
-        k[363]*y[IDX_SiOHII] + k[1222]*y[IDX_SiII];
+    data[2732] = 0.0 + k[349]*y[IDX_SiCII] + k[352]*y[IDX_SiHII] + k[353]*y[IDX_SiH2II] +
+        k[354]*y[IDX_SiH2II] + k[362]*y[IDX_SiOII] + k[363]*y[IDX_SiOHII] +
+        k[1222]*y[IDX_SiII];
     data[2733] = 0.0 - k[91]*y[IDX_SiI];
     data[2734] = 0.0 - k[228]*y[IDX_SiI];
     data[2735] = 0.0 + k[573]*y[IDX_SiHII];
@@ -7768,8 +7420,7 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
     data[2737] = 0.0 - k[601]*y[IDX_SiI];
     data[2738] = 0.0 - k[610]*y[IDX_SiI];
     data[2739] = 0.0 - k[861]*y[IDX_SiI];
-    data[2740] = 0.0 - k[147]*y[IDX_SiI] + k[702]*y[IDX_SiCI] +
-        k[711]*y[IDX_SiOI];
+    data[2740] = 0.0 - k[147]*y[IDX_SiI] + k[702]*y[IDX_SiCI] + k[711]*y[IDX_SiOI];
     data[2741] = 0.0 + k[153]*y[IDX_SiII];
     data[2742] = 0.0 + k[745]*y[IDX_SiOII] + k[1027]*y[IDX_SiCI];
     data[2743] = 0.0 - k[192]*y[IDX_SiI];
@@ -7780,24 +7431,22 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
     data[2748] = 0.0 - k[230]*y[IDX_SiI];
     data[2749] = 0.0 - k[1102]*y[IDX_SiI];
     data[2750] = 0.0 - k[848]*y[IDX_SiI];
-    data[2751] = 0.0 - k[21]*y[IDX_CII] - k[35]*y[IDX_CHII] -
-        k[91]*y[IDX_HII] - k[122]*y[IDX_H2OII] - k[147]*y[IDX_HeII] -
-        k[192]*y[IDX_NH3II] - k[228]*y[IDX_H2COII] - k[229]*y[IDX_NOII] -
-        k[230]*y[IDX_O2II] - k[285] - k[601]*y[IDX_H3II] - k[610]*y[IDX_H3OII] -
-        k[848]*y[IDX_OHII] - k[861]*y[IDX_HCOII] - k[1102]*y[IDX_OHI] -
-        k[1103]*y[IDX_CO2I] - k[1104]*y[IDX_COI] - k[1105]*y[IDX_NOI] -
-        k[1106]*y[IDX_O2I] - k[1176] - k[1213]*y[IDX_OI] - k[1228];
+    data[2751] = 0.0 - k[21]*y[IDX_CII] - k[35]*y[IDX_CHII] - k[91]*y[IDX_HII] -
+        k[122]*y[IDX_H2OII] - k[147]*y[IDX_HeII] - k[192]*y[IDX_NH3II] -
+        k[228]*y[IDX_H2COII] - k[229]*y[IDX_NOII] - k[230]*y[IDX_O2II] - k[285]
+        - k[601]*y[IDX_H3II] - k[610]*y[IDX_H3OII] - k[848]*y[IDX_OHII] -
+        k[861]*y[IDX_HCOII] - k[1102]*y[IDX_OHI] - k[1103]*y[IDX_CO2I] -
+        k[1104]*y[IDX_COI] - k[1105]*y[IDX_NOI] - k[1106]*y[IDX_O2I] - k[1176] -
+        k[1213]*y[IDX_OI] - k[1228];
     data[2752] = 0.0 + k[153]*y[IDX_MgI] + k[1222]*y[IDX_EM];
     data[2753] = 0.0 + k[288] + k[702]*y[IDX_HeII] + k[1027]*y[IDX_NI] +
         k[1083]*y[IDX_OI] + k[1178];
     data[2754] = 0.0 + k[349]*y[IDX_EM];
     data[2755] = 0.0 + k[292] + k[1188];
-    data[2756] = 0.0 + k[352]*y[IDX_EM] + k[477]*y[IDX_CHI] +
-        k[573]*y[IDX_H2OI];
+    data[2756] = 0.0 + k[352]*y[IDX_EM] + k[477]*y[IDX_CHI] + k[573]*y[IDX_H2OI];
     data[2757] = 0.0 + k[353]*y[IDX_EM] + k[354]*y[IDX_EM];
     data[2758] = 0.0 + k[293] + k[711]*y[IDX_HeII] + k[1190];
-    data[2759] = 0.0 + k[362]*y[IDX_EM] + k[478]*y[IDX_CHI] +
-        k[745]*y[IDX_NI];
+    data[2759] = 0.0 + k[362]*y[IDX_EM] + k[478]*y[IDX_CHI] + k[745]*y[IDX_NI];
     data[2760] = 0.0 + k[363]*y[IDX_EM];
     data[2761] = 0.0 + k[395]*y[IDX_SiOII];
     data[2762] = 0.0 + k[21]*y[IDX_SiI] + k[382]*y[IDX_SiOI];
@@ -7813,9 +7462,8 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
     data[2772] = 0.0 + k[228]*y[IDX_SiI];
     data[2773] = 0.0 - k[572]*y[IDX_SiII];
     data[2774] = 0.0 + k[122]*y[IDX_SiI];
-    data[2775] = 0.0 + k[147]*y[IDX_SiI] + k[701]*y[IDX_SiCI] +
-        k[703]*y[IDX_SiH2I] + k[707]*y[IDX_SiH4I] + k[709]*y[IDX_SiHI] +
-        k[710]*y[IDX_SiOI];
+    data[2775] = 0.0 + k[147]*y[IDX_SiI] + k[701]*y[IDX_SiCI] + k[703]*y[IDX_SiH2I] +
+        k[707]*y[IDX_SiH4I] + k[709]*y[IDX_SiHI] + k[710]*y[IDX_SiOI];
     data[2776] = 0.0 - k[153]*y[IDX_SiII];
     data[2777] = 0.0 + k[744]*y[IDX_SiCII] + k[746]*y[IDX_SiOII];
     data[2778] = 0.0 + k[192]*y[IDX_SiI];
@@ -7823,14 +7471,13 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
     data[2780] = 0.0 + k[835]*y[IDX_SiOII] - k[1212]*y[IDX_SiII];
     data[2781] = 0.0 + k[230]*y[IDX_SiI];
     data[2782] = 0.0 - k[859]*y[IDX_SiII];
-    data[2783] = 0.0 + k[21]*y[IDX_CII] + k[35]*y[IDX_CHII] +
-        k[91]*y[IDX_HII] + k[122]*y[IDX_H2OII] + k[147]*y[IDX_HeII] +
-        k[192]*y[IDX_NH3II] + k[228]*y[IDX_H2COII] + k[229]*y[IDX_NOII] +
-        k[230]*y[IDX_O2II] + k[285] + k[1176];
-    data[2784] = 0.0 - k[153]*y[IDX_MgI] - k[476]*y[IDX_CHI] -
-        k[572]*y[IDX_H2OI] - k[859]*y[IDX_OHI] - k[860]*y[IDX_CH3OHI] -
-        k[1202]*y[IDX_H2I] - k[1209]*y[IDX_HI] - k[1212]*y[IDX_OI] -
-        k[1222]*y[IDX_EM] - k[1231];
+    data[2783] = 0.0 + k[21]*y[IDX_CII] + k[35]*y[IDX_CHII] + k[91]*y[IDX_HII] +
+        k[122]*y[IDX_H2OII] + k[147]*y[IDX_HeII] + k[192]*y[IDX_NH3II] +
+        k[228]*y[IDX_H2COII] + k[229]*y[IDX_NOII] + k[230]*y[IDX_O2II] + k[285]
+        + k[1176];
+    data[2784] = 0.0 - k[153]*y[IDX_MgI] - k[476]*y[IDX_CHI] - k[572]*y[IDX_H2OI] -
+        k[859]*y[IDX_OHI] - k[860]*y[IDX_CH3OHI] - k[1202]*y[IDX_H2I] -
+        k[1209]*y[IDX_HI] - k[1212]*y[IDX_OI] - k[1222]*y[IDX_EM] - k[1231];
     data[2785] = 0.0 + k[701]*y[IDX_HeII];
     data[2786] = 0.0 + k[744]*y[IDX_NI];
     data[2787] = 0.0 + k[508]*y[IDX_HII] + k[709]*y[IDX_HeII];
@@ -7838,8 +7485,8 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
     data[2789] = 0.0 + k[703]*y[IDX_HeII];
     data[2790] = 0.0 + k[707]*y[IDX_HeII];
     data[2791] = 0.0 + k[382]*y[IDX_CII] + k[710]*y[IDX_HeII];
-    data[2792] = 0.0 + k[395]*y[IDX_CI] + k[438]*y[IDX_CH2I] +
-        k[490]*y[IDX_COI] + k[746]*y[IDX_NI] + k[835]*y[IDX_OI] + k[1189];
+    data[2792] = 0.0 + k[395]*y[IDX_CI] + k[438]*y[IDX_CH2I] + k[490]*y[IDX_COI] +
+        k[746]*y[IDX_NI] + k[835]*y[IDX_OI] + k[1189];
     data[2793] = 0.0 + k[1371] + k[1372] + k[1373] + k[1374];
     data[2794] = 0.0 + k[877]*y[IDX_SiHI];
     data[2795] = 0.0 - k[24]*y[IDX_SiCI];
@@ -7847,17 +7494,15 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
     data[2797] = 0.0 - k[94]*y[IDX_SiCI];
     data[2798] = 0.0 - k[701]*y[IDX_SiCI] - k[702]*y[IDX_SiCI];
     data[2799] = 0.0 - k[1027]*y[IDX_SiCI];
-    data[2800] = 0.0 + k[1081]*y[IDX_SiC2I] - k[1083]*y[IDX_SiCI] -
-        k[1084]*y[IDX_SiCI];
-    data[2801] = 0.0 - k[24]*y[IDX_CII] - k[94]*y[IDX_HII] - k[288] -
-        k[701]*y[IDX_HeII] - k[702]*y[IDX_HeII] - k[1027]*y[IDX_NI] -
-        k[1083]*y[IDX_OI] - k[1084]*y[IDX_OI] - k[1178] - k[1239];
+    data[2800] = 0.0 + k[1081]*y[IDX_SiC2I] - k[1083]*y[IDX_SiCI] - k[1084]*y[IDX_SiCI];
+    data[2801] = 0.0 - k[24]*y[IDX_CII] - k[94]*y[IDX_HII] - k[288] - k[701]*y[IDX_HeII]
+        - k[702]*y[IDX_HeII] - k[1027]*y[IDX_NI] - k[1083]*y[IDX_OI] -
+        k[1084]*y[IDX_OI] - k[1178] - k[1239];
     data[2802] = 0.0 + k[286] + k[1081]*y[IDX_OI];
     data[2803] = 0.0 + k[350]*y[IDX_EM];
     data[2804] = 0.0 + k[877]*y[IDX_CI];
     data[2805] = 0.0 + k[394]*y[IDX_SiHII];
-    data[2806] = 0.0 + k[24]*y[IDX_SiCI] + k[380]*y[IDX_SiH2I] +
-        k[381]*y[IDX_SiHI];
+    data[2806] = 0.0 + k[24]*y[IDX_SiCI] + k[380]*y[IDX_SiH2I] + k[381]*y[IDX_SiHI];
     data[2807] = 0.0 + k[476]*y[IDX_SiII];
     data[2808] = 0.0 - k[349]*y[IDX_SiCII];
     data[2809] = 0.0 + k[94]*y[IDX_SiCI];
@@ -7865,8 +7510,7 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
     data[2811] = 0.0 - k[831]*y[IDX_SiCII];
     data[2812] = 0.0 + k[476]*y[IDX_CHI];
     data[2813] = 0.0 + k[24]*y[IDX_CII] + k[94]*y[IDX_HII];
-    data[2814] = 0.0 - k[349]*y[IDX_EM] - k[744]*y[IDX_NI] -
-        k[831]*y[IDX_OI] - k[1241];
+    data[2814] = 0.0 - k[349]*y[IDX_EM] - k[744]*y[IDX_NI] - k[831]*y[IDX_OI] - k[1241];
     data[2815] = 0.0 + k[381]*y[IDX_CII];
     data[2816] = 0.0 + k[394]*y[IDX_CI];
     data[2817] = 0.0 + k[380]*y[IDX_CII];
@@ -7875,8 +7519,8 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
     data[2820] = 0.0 + k[351]*y[IDX_SiC3II];
     data[2821] = 0.0 - k[92]*y[IDX_SiC2I];
     data[2822] = 0.0 - k[1081]*y[IDX_SiC2I] + k[1082]*y[IDX_SiC3I];
-    data[2823] = 0.0 - k[22]*y[IDX_CII] - k[92]*y[IDX_HII] - k[286] -
-        k[1081]*y[IDX_OI] - k[1240];
+    data[2823] = 0.0 - k[22]*y[IDX_CII] - k[92]*y[IDX_HII] - k[286] - k[1081]*y[IDX_OI] -
+        k[1240];
     data[2824] = 0.0 + k[287] + k[1082]*y[IDX_OI] + k[1177];
     data[2825] = 0.0 + k[351]*y[IDX_EM];
     data[2826] = 0.0 + k[22]*y[IDX_SiC2I];
@@ -7891,8 +7535,8 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
     data[2835] = 0.0 - k[93]*y[IDX_SiC3I];
     data[2836] = 0.0 - k[700]*y[IDX_SiC3I];
     data[2837] = 0.0 - k[1082]*y[IDX_SiC3I];
-    data[2838] = 0.0 - k[23]*y[IDX_CII] - k[93]*y[IDX_HII] - k[287] -
-        k[700]*y[IDX_HeII] - k[1082]*y[IDX_OI] - k[1177] - k[1243];
+    data[2838] = 0.0 - k[23]*y[IDX_CII] - k[93]*y[IDX_HII] - k[287] - k[700]*y[IDX_HeII]
+        - k[1082]*y[IDX_OI] - k[1177] - k[1243];
     data[2839] = 0.0 + k[23]*y[IDX_SiC3I];
     data[2840] = 0.0 - k[351]*y[IDX_SiC3II];
     data[2841] = 0.0 + k[93]*y[IDX_SiC3I];
@@ -7908,10 +7552,10 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
     data[2851] = 0.0 - k[709]*y[IDX_SiHI];
     data[2852] = 0.0 - k[1089]*y[IDX_SiHI];
     data[2853] = 0.0 - k[849]*y[IDX_SiHI];
-    data[2854] = 0.0 - k[98]*y[IDX_HII] - k[292] - k[381]*y[IDX_CII] -
-        k[508]*y[IDX_HII] - k[605]*y[IDX_H3II] - k[612]*y[IDX_H3OII] -
-        k[639]*y[IDX_HCOII] - k[709]*y[IDX_HeII] - k[849]*y[IDX_OHII] -
-        k[877]*y[IDX_CI] - k[1089]*y[IDX_OI] - k[1188] - k[1230];
+    data[2854] = 0.0 - k[98]*y[IDX_HII] - k[292] - k[381]*y[IDX_CII] - k[508]*y[IDX_HII]
+        - k[605]*y[IDX_H3II] - k[612]*y[IDX_H3OII] - k[639]*y[IDX_HCOII] -
+        k[709]*y[IDX_HeII] - k[849]*y[IDX_OHII] - k[877]*y[IDX_CI] -
+        k[1089]*y[IDX_OI] - k[1188] - k[1230];
     data[2855] = 0.0 + k[289] + k[1181];
     data[2856] = 0.0 + k[355]*y[IDX_EM];
     data[2857] = 0.0 + k[1184];
@@ -7927,17 +7571,16 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
     data[2867] = 0.0 + k[601]*y[IDX_SiI];
     data[2868] = 0.0 + k[610]*y[IDX_SiI];
     data[2869] = 0.0 + k[861]*y[IDX_SiI];
-    data[2870] = 0.0 + k[704]*y[IDX_SiH2I] + k[705]*y[IDX_SiH3I] +
-        k[708]*y[IDX_SiH4I];
+    data[2870] = 0.0 + k[704]*y[IDX_SiH2I] + k[705]*y[IDX_SiH3I] + k[708]*y[IDX_SiH4I];
     data[2871] = 0.0 - k[832]*y[IDX_SiHII];
     data[2872] = 0.0 + k[848]*y[IDX_SiI];
-    data[2873] = 0.0 + k[601]*y[IDX_H3II] + k[610]*y[IDX_H3OII] +
-        k[848]*y[IDX_OHII] + k[861]*y[IDX_HCOII];
+    data[2873] = 0.0 + k[601]*y[IDX_H3II] + k[610]*y[IDX_H3OII] + k[848]*y[IDX_OHII] +
+        k[861]*y[IDX_HCOII];
     data[2874] = 0.0 + k[1209]*y[IDX_HI];
     data[2875] = 0.0 + k[98]*y[IDX_HII];
-    data[2876] = 0.0 - k[352]*y[IDX_EM] - k[394]*y[IDX_CI] -
-        k[477]*y[IDX_CHI] - k[573]*y[IDX_H2OI] - k[619]*y[IDX_HI] -
-        k[832]*y[IDX_OI] - k[1179] - k[1203]*y[IDX_H2I] - k[1232];
+    data[2876] = 0.0 - k[352]*y[IDX_EM] - k[394]*y[IDX_CI] - k[477]*y[IDX_CHI] -
+        k[573]*y[IDX_H2OI] - k[619]*y[IDX_HI] - k[832]*y[IDX_OI] - k[1179] -
+        k[1203]*y[IDX_H2I] - k[1232];
     data[2877] = 0.0 + k[505]*y[IDX_HII] + k[704]*y[IDX_HeII];
     data[2878] = 0.0 + k[705]*y[IDX_HeII];
     data[2879] = 0.0 + k[708]*y[IDX_HeII];
@@ -7949,18 +7592,16 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
     data[2885] = 0.0 - k[637]*y[IDX_SiH2I];
     data[2886] = 0.0 - k[703]*y[IDX_SiH2I] - k[704]*y[IDX_SiH2I];
     data[2887] = 0.0 - k[1085]*y[IDX_SiH2I] - k[1086]*y[IDX_SiH2I];
-    data[2888] = 0.0 - k[25]*y[IDX_CII] - k[95]*y[IDX_HII] - k[289] -
-        k[380]*y[IDX_CII] - k[505]*y[IDX_HII] - k[602]*y[IDX_H3II] -
-        k[611]*y[IDX_H3OII] - k[637]*y[IDX_HCOII] - k[703]*y[IDX_HeII] -
-        k[704]*y[IDX_HeII] - k[1085]*y[IDX_OI] - k[1086]*y[IDX_OI] - k[1180] -
-        k[1181] - k[1233];
+    data[2888] = 0.0 - k[25]*y[IDX_CII] - k[95]*y[IDX_HII] - k[289] - k[380]*y[IDX_CII] -
+        k[505]*y[IDX_HII] - k[602]*y[IDX_H3II] - k[611]*y[IDX_H3OII] -
+        k[637]*y[IDX_HCOII] - k[703]*y[IDX_HeII] - k[704]*y[IDX_HeII] -
+        k[1085]*y[IDX_OI] - k[1086]*y[IDX_OI] - k[1180] - k[1181] - k[1233];
     data[2889] = 0.0 + k[290] + k[1182];
     data[2890] = 0.0 + k[356]*y[IDX_EM];
     data[2891] = 0.0 + k[291] + k[1185];
     data[2892] = 0.0 + k[358]*y[IDX_EM];
     data[2893] = 0.0 + k[25]*y[IDX_SiH2I];
-    data[2894] = 0.0 - k[353]*y[IDX_SiH2II] - k[354]*y[IDX_SiH2II] -
-        k[355]*y[IDX_SiH2II];
+    data[2894] = 0.0 - k[353]*y[IDX_SiH2II] - k[354]*y[IDX_SiH2II] - k[355]*y[IDX_SiH2II];
     data[2895] = 0.0 + k[95]*y[IDX_SiH2I] + k[506]*y[IDX_SiH3I];
     data[2896] = 0.0 + k[1202]*y[IDX_SiII];
     data[2897] = 0.0 + k[605]*y[IDX_SiHI];
@@ -7971,11 +7612,11 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
     data[2902] = 0.0 - k[862]*y[IDX_SiH2II];
     data[2903] = 0.0 + k[849]*y[IDX_SiHI];
     data[2904] = 0.0 + k[1202]*y[IDX_H2I];
-    data[2905] = 0.0 + k[605]*y[IDX_H3II] + k[612]*y[IDX_H3OII] +
-        k[639]*y[IDX_HCOII] + k[849]*y[IDX_OHII];
+    data[2905] = 0.0 + k[605]*y[IDX_H3II] + k[612]*y[IDX_H3OII] + k[639]*y[IDX_HCOII] +
+        k[849]*y[IDX_OHII];
     data[2906] = 0.0 + k[25]*y[IDX_CII] + k[95]*y[IDX_HII] + k[1180];
-    data[2907] = 0.0 - k[353]*y[IDX_EM] - k[354]*y[IDX_EM] -
-        k[355]*y[IDX_EM] - k[833]*y[IDX_OI] - k[862]*y[IDX_O2I] - k[1234];
+    data[2907] = 0.0 - k[353]*y[IDX_EM] - k[354]*y[IDX_EM] - k[355]*y[IDX_EM] -
+        k[833]*y[IDX_OI] - k[862]*y[IDX_O2I] - k[1234];
     data[2908] = 0.0 + k[506]*y[IDX_HII] + k[706]*y[IDX_HeII];
     data[2909] = 0.0 - k[26]*y[IDX_SiH3I];
     data[2910] = 0.0 + k[950]*y[IDX_SiH4I];
@@ -7986,13 +7627,11 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
     data[2915] = 0.0 - k[603]*y[IDX_SiH3I];
     data[2916] = 0.0 - k[705]*y[IDX_SiH3I] - k[706]*y[IDX_SiH3I];
     data[2917] = 0.0 - k[1087]*y[IDX_SiH3I] + k[1088]*y[IDX_SiH4I];
-    data[2918] = 0.0 - k[26]*y[IDX_CII] - k[96]*y[IDX_HII] - k[290] -
-        k[506]*y[IDX_HII] - k[603]*y[IDX_H3II] - k[705]*y[IDX_HeII] -
-        k[706]*y[IDX_HeII] - k[1087]*y[IDX_OI] - k[1182] - k[1183] - k[1184] -
-        k[1235];
+    data[2918] = 0.0 - k[26]*y[IDX_CII] - k[96]*y[IDX_HII] - k[290] - k[506]*y[IDX_HII] -
+        k[603]*y[IDX_H3II] - k[705]*y[IDX_HeII] - k[706]*y[IDX_HeII] -
+        k[1087]*y[IDX_OI] - k[1182] - k[1183] - k[1184] - k[1235];
     data[2919] = 0.0 + k[950]*y[IDX_CNI] + k[1088]*y[IDX_OI] + k[1186];
-    data[2920] = 0.0 + k[359]*y[IDX_EM] + k[489]*y[IDX_COI] +
-        k[574]*y[IDX_H2OI];
+    data[2920] = 0.0 + k[359]*y[IDX_EM] + k[489]*y[IDX_COI] + k[574]*y[IDX_H2OI];
     data[2921] = 0.0 + k[360]*y[IDX_EM];
     data[2922] = 0.0 + k[26]*y[IDX_SiH3I];
     data[2923] = 0.0 + k[446]*y[IDX_SiH4I];
@@ -8004,11 +7643,10 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
     data[2929] = 0.0 + k[637]*y[IDX_SiH2I];
     data[2930] = 0.0 - k[834]*y[IDX_SiH3II];
     data[2931] = 0.0 + k[1203]*y[IDX_H2I];
-    data[2932] = 0.0 + k[602]*y[IDX_H3II] + k[611]*y[IDX_H3OII] +
-        k[637]*y[IDX_HCOII];
+    data[2932] = 0.0 + k[602]*y[IDX_H3II] + k[611]*y[IDX_H3OII] + k[637]*y[IDX_HCOII];
     data[2933] = 0.0 + k[26]*y[IDX_CII] + k[96]*y[IDX_HII] + k[1183];
-    data[2934] = 0.0 - k[356]*y[IDX_EM] - k[357]*y[IDX_EM] -
-        k[834]*y[IDX_OI] - k[1204]*y[IDX_H2I] - k[1236];
+    data[2934] = 0.0 - k[356]*y[IDX_EM] - k[357]*y[IDX_EM] - k[834]*y[IDX_OI] -
+        k[1204]*y[IDX_H2I] - k[1236];
     data[2935] = 0.0 + k[446]*y[IDX_CH3II] + k[507]*y[IDX_HII];
     data[2936] = 0.0 + k[1363] + k[1364] + k[1365] + k[1366];
     data[2937] = 0.0 - k[446]*y[IDX_SiH4I];
@@ -8033,8 +7671,8 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
     data[2953] = 0.0 + k[603]*y[IDX_SiH3I];
     data[2954] = 0.0 + k[603]*y[IDX_H3II];
     data[2955] = 0.0 + k[97]*y[IDX_HII];
-    data[2956] = 0.0 - k[358]*y[IDX_EM] - k[359]*y[IDX_EM] -
-        k[489]*y[IDX_COI] - k[546]*y[IDX_H2I] - k[574]*y[IDX_H2OI] - k[1238];
+    data[2956] = 0.0 - k[358]*y[IDX_EM] - k[359]*y[IDX_EM] - k[489]*y[IDX_COI] -
+        k[546]*y[IDX_H2I] - k[574]*y[IDX_H2OI] - k[1238];
     data[2957] = 0.0 - k[360]*y[IDX_SiH5II] - k[361]*y[IDX_SiH5II];
     data[2958] = 0.0 + k[546]*y[IDX_SiH4II] + k[1204]*y[IDX_SiH3II];
     data[2959] = 0.0 - k[575]*y[IDX_SiH5II];
@@ -8043,8 +7681,7 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
     data[2962] = 0.0 + k[1204]*y[IDX_H2I];
     data[2963] = 0.0 + k[604]*y[IDX_H3II] + k[638]*y[IDX_HCOII];
     data[2964] = 0.0 + k[546]*y[IDX_H2I];
-    data[2965] = 0.0 - k[360]*y[IDX_EM] - k[361]*y[IDX_EM] -
-        k[575]*y[IDX_H2OI] - k[1248];
+    data[2965] = 0.0 - k[360]*y[IDX_EM] - k[361]*y[IDX_EM] - k[575]*y[IDX_H2OI] - k[1248];
     data[2966] = 0.0 + k[1379] + k[1380] + k[1381] + k[1382];
     data[2967] = 0.0 - k[382]*y[IDX_SiOI];
     data[2968] = 0.0 + k[1104]*y[IDX_SiI];
@@ -8059,23 +7696,20 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
     data[2977] = 0.0 - k[710]*y[IDX_SiOI] - k[711]*y[IDX_SiOI];
     data[2978] = 0.0 + k[154]*y[IDX_SiOII];
     data[2979] = 0.0 + k[206]*y[IDX_SiOII] + k[1105]*y[IDX_SiI];
-    data[2980] = 0.0 + k[1084]*y[IDX_SiCI] + k[1085]*y[IDX_SiH2I] +
-        k[1086]*y[IDX_SiH2I] + k[1089]*y[IDX_SiHI] + k[1213]*y[IDX_SiI];
+    data[2980] = 0.0 + k[1084]*y[IDX_SiCI] + k[1085]*y[IDX_SiH2I] + k[1086]*y[IDX_SiH2I]
+        + k[1089]*y[IDX_SiHI] + k[1213]*y[IDX_SiI];
     data[2981] = 0.0 + k[1106]*y[IDX_SiI];
     data[2982] = 0.0 + k[1102]*y[IDX_SiI];
     data[2983] = 0.0 - k[850]*y[IDX_SiOI];
-    data[2984] = 0.0 + k[1102]*y[IDX_OHI] + k[1103]*y[IDX_CO2I] +
-        k[1104]*y[IDX_COI] + k[1105]*y[IDX_NOI] + k[1106]*y[IDX_O2I] +
-        k[1213]*y[IDX_OI];
+    data[2984] = 0.0 + k[1102]*y[IDX_OHI] + k[1103]*y[IDX_CO2I] + k[1104]*y[IDX_COI] +
+        k[1105]*y[IDX_NOI] + k[1106]*y[IDX_O2I] + k[1213]*y[IDX_OI];
     data[2985] = 0.0 + k[1084]*y[IDX_OI];
     data[2986] = 0.0 + k[1089]*y[IDX_OI];
     data[2987] = 0.0 + k[1085]*y[IDX_OI] + k[1086]*y[IDX_OI];
-    data[2988] = 0.0 - k[99]*y[IDX_HII] - k[293] - k[382]*y[IDX_CII] -
-        k[606]*y[IDX_H3II] - k[613]*y[IDX_H3OII] - k[640]*y[IDX_HCOII] -
-        k[710]*y[IDX_HeII] - k[711]*y[IDX_HeII] - k[850]*y[IDX_OHII] - k[1190] -
-        k[1191] - k[1229];
-    data[2989] = 0.0 + k[138]*y[IDX_HCOI] + k[154]*y[IDX_MgI] +
-        k[206]*y[IDX_NOI];
+    data[2988] = 0.0 - k[99]*y[IDX_HII] - k[293] - k[382]*y[IDX_CII] - k[606]*y[IDX_H3II]
+        - k[613]*y[IDX_H3OII] - k[640]*y[IDX_HCOII] - k[710]*y[IDX_HeII] -
+        k[711]*y[IDX_HeII] - k[850]*y[IDX_OHII] - k[1190] - k[1191] - k[1229];
+    data[2989] = 0.0 + k[138]*y[IDX_HCOI] + k[154]*y[IDX_MgI] + k[206]*y[IDX_NOI];
     data[2990] = 0.0 + k[364]*y[IDX_EM];
     data[2991] = 0.0 - k[395]*y[IDX_SiOII];
     data[2992] = 0.0 - k[478]*y[IDX_SiOII];
@@ -8088,18 +7722,18 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
     data[2999] = 0.0 - k[154]*y[IDX_SiOII];
     data[3000] = 0.0 - k[745]*y[IDX_SiOII] - k[746]*y[IDX_SiOII];
     data[3001] = 0.0 - k[206]*y[IDX_SiOII];
-    data[3002] = 0.0 + k[831]*y[IDX_SiCII] + k[832]*y[IDX_SiHII] -
-        k[835]*y[IDX_SiOII] + k[1212]*y[IDX_SiII];
+    data[3002] = 0.0 + k[831]*y[IDX_SiCII] + k[832]*y[IDX_SiHII] - k[835]*y[IDX_SiOII] +
+        k[1212]*y[IDX_SiII];
     data[3003] = 0.0 + k[859]*y[IDX_SiII];
     data[3004] = 0.0 + k[859]*y[IDX_OHI] + k[1212]*y[IDX_OI];
     data[3005] = 0.0 + k[831]*y[IDX_OI];
     data[3006] = 0.0 + k[832]*y[IDX_OI];
     data[3007] = 0.0 + k[99]*y[IDX_HII] + k[1191];
-    data[3008] = 0.0 - k[138]*y[IDX_HCOI] - k[154]*y[IDX_MgI] -
-        k[206]*y[IDX_NOI] - k[362]*y[IDX_EM] - k[395]*y[IDX_CI] -
-        k[438]*y[IDX_CH2I] - k[478]*y[IDX_CHI] - k[490]*y[IDX_COI] -
-        k[547]*y[IDX_H2I] - k[745]*y[IDX_NI] - k[746]*y[IDX_NI] -
-        k[835]*y[IDX_OI] - k[1189] - k[1245];
+    data[3008] = 0.0 - k[138]*y[IDX_HCOI] - k[154]*y[IDX_MgI] - k[206]*y[IDX_NOI] -
+        k[362]*y[IDX_EM] - k[395]*y[IDX_CI] - k[438]*y[IDX_CH2I] -
+        k[478]*y[IDX_CHI] - k[490]*y[IDX_COI] - k[547]*y[IDX_H2I] -
+        k[745]*y[IDX_NI] - k[746]*y[IDX_NI] - k[835]*y[IDX_OI] - k[1189] -
+        k[1245];
     data[3009] = 0.0 + k[860]*y[IDX_SiII];
     data[3010] = 0.0 - k[363]*y[IDX_SiOHII] - k[364]*y[IDX_SiOHII];
     data[3011] = 0.0 + k[499]*y[IDX_H2SiOI];
@@ -8116,8 +7750,8 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
     data[3022] = 0.0 + k[572]*y[IDX_H2OI] + k[860]*y[IDX_CH3OHI];
     data[3023] = 0.0 + k[833]*y[IDX_OI] + k[862]*y[IDX_O2I];
     data[3024] = 0.0 + k[834]*y[IDX_OI];
-    data[3025] = 0.0 + k[606]*y[IDX_H3II] + k[613]*y[IDX_H3OII] +
-        k[640]*y[IDX_HCOII] + k[850]*y[IDX_OHII];
+    data[3025] = 0.0 + k[606]*y[IDX_H3II] + k[613]*y[IDX_H3OII] + k[640]*y[IDX_HCOII] +
+        k[850]*y[IDX_OHII];
     data[3026] = 0.0 + k[547]*y[IDX_H2I];
     data[3027] = 0.0 - k[363]*y[IDX_EM] - k[364]*y[IDX_EM] - k[1246];
     

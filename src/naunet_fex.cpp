@@ -3,18 +3,18 @@
 #include <nvector/nvector_serial.h>
 #include <sunmatrix/sunmatrix_sparse.h>  // access to sparse SUNMatrix
 /* */
-/*  */
-#include "naunet_ode.h"
-/*  */
 #include "naunet_constants.h"
 #include "naunet_macros.h"
+#include "naunet_ode.h"
 #include "naunet_physics.h"
 
-#define IJth(A, i, j)            SM_ELEMENT_D(A, i, j)
-#define NVEC_CUDA_CONTENT(x)     ((N_VectorContent_Cuda)(x->content))
-#define NVEC_CUDA_STREAM(x)      (NVEC_CUDA_CONTENT(x)->stream_exec_policy->stream())
-#define NVEC_CUDA_BLOCKSIZE(x)   (NVEC_CUDA_CONTENT(x)->stream_exec_policy->blockSize())
-#define NVEC_CUDA_GRIDSIZE(x, n) (NVEC_CUDA_CONTENT(x)->stream_exec_policy->gridSize(n))
+#define IJth(A, i, j) SM_ELEMENT_D(A, i, j)
+#define NVEC_CUDA_CONTENT(x) ((N_VectorContent_Cuda)(x->content))
+#define NVEC_CUDA_STREAM(x) (NVEC_CUDA_CONTENT(x)->stream_exec_policy->stream())
+#define NVEC_CUDA_BLOCKSIZE(x) \
+    (NVEC_CUDA_CONTENT(x)->stream_exec_policy->blockSize())
+#define NVEC_CUDA_GRIDSIZE(x, n) \
+    (NVEC_CUDA_CONTENT(x)->stream_exec_policy->gridSize(n))
 
 /* */
 
@@ -71,7 +71,7 @@ int Fex(realtype t, N_Vector u, N_Vector udot, void *user_data) {
 #if NHEATPROCS
     realtype kh[NHEATPROCS] = {0.0};
     EvalHeatingRates(kh, y, u_data);
-#endif 
+#endif
 
 #if NCOOLPROCS
     realtype kc[NCOOLPROCS] = {0.0};

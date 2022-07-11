@@ -1,5 +1,7 @@
 #ifndef __NAUNET_CONSTANTS_H__
 #define __NAUNET_CONSTANTS_H__
+
+// 
 // clang-format off
 
 extern const double pi;
