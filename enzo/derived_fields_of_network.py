@@ -1266,6 +1266,15 @@ def element_E_ndensity(field, data):
     arr = (0.0 + 1*data['Electron_ndensity'])
     return arr
 
+@derived_field(name='surface_element_E_ndensity', sampling_type='cell')
+def surface_element_E_ndensity(field, data):
+    if 'enzo' not in data.ds.dataset_type:
+        return
+    if data.ds.parameters['MultiSpecies'] < 4:
+        return
+    arr = (0.0)
+    return arr
+
 @derived_field(name='element_H_ndensity', sampling_type='cell')
 def element_H_ndensity(field, data):
     if 'enzo' not in data.ds.dataset_type:
@@ -1309,8 +1318,32 @@ def element_H_ndensity(field, data):
           1*data['SiOHII_ndensity'])
     return arr
 
+@derived_field(name='surface_element_H_ndensity', sampling_type='cell')
+def surface_element_H_ndensity(field, data):
+    if 'enzo' not in data.ds.dataset_type:
+        return
+    if data.ds.parameters['MultiSpecies'] < 4:
+        return
+    arr = (0.0 + 4*data['GCH3OHI_ndensity'] + 4*data['GCH4I_ndensity']
+          + 2*data['GH2CNI_ndensity'] + 2*data['GH2COI_ndensity'] +
+          2*data['GH2OI_ndensity'] + 2*data['GH2SiOI_ndensity'] +
+          1*data['GHCNI_ndensity'] + 1*data['GHNCI_ndensity'] +
+          1*data['GHNCOI_ndensity'] + 1*data['GHNOI_ndensity'] +
+          3*data['GNH3I_ndensity'] + 1*data['GO2HI_ndensity'] +
+          4*data['GSiH4I_ndensity'])
+    return arr
+
 @derived_field(name='element_D_ndensity', sampling_type='cell')
 def element_D_ndensity(field, data):
+    if 'enzo' not in data.ds.dataset_type:
+        return
+    if data.ds.parameters['MultiSpecies'] < 4:
+        return
+    arr = (0.0)
+    return arr
+
+@derived_field(name='surface_element_D_ndensity', sampling_type='cell')
+def surface_element_D_ndensity(field, data):
     if 'enzo' not in data.ds.dataset_type:
         return
     if data.ds.parameters['MultiSpecies'] < 4:
@@ -1326,6 +1359,15 @@ def element_HE_ndensity(field, data):
         return
     arr = (0.0 + 1*data['HeI_ndensity'] + 1*data['HeII_ndensity'] +
           1*data['HeHII_ndensity'])
+    return arr
+
+@derived_field(name='surface_element_HE_ndensity', sampling_type='cell')
+def surface_element_HE_ndensity(field, data):
+    if 'enzo' not in data.ds.dataset_type:
+        return
+    if data.ds.parameters['MultiSpecies'] < 4:
+        return
+    arr = (0.0)
     return arr
 
 @derived_field(name='element_C_ndensity', sampling_type='cell')
@@ -1360,6 +1402,20 @@ def element_C_ndensity(field, data):
           3*data['SiC3I_ndensity'] + 3*data['SiC3II_ndensity'])
     return arr
 
+@derived_field(name='surface_element_C_ndensity', sampling_type='cell')
+def surface_element_C_ndensity(field, data):
+    if 'enzo' not in data.ds.dataset_type:
+        return
+    if data.ds.parameters['MultiSpecies'] < 4:
+        return
+    arr = (0.0 + 1*data['GCH3OHI_ndensity'] + 1*data['GCH4I_ndensity']
+          + 1*data['GCOI_ndensity'] + 1*data['GCO2I_ndensity'] +
+          1*data['GH2CNI_ndensity'] + 1*data['GH2COI_ndensity'] +
+          1*data['GHCNI_ndensity'] + 1*data['GHNCI_ndensity'] +
+          1*data['GHNCOI_ndensity'] + 1*data['GSiCI_ndensity'] +
+          2*data['GSiC2I_ndensity'] + 3*data['GSiC3I_ndensity'])
+    return arr
+
 @derived_field(name='element_N_ndensity', sampling_type='cell')
 def element_N_ndensity(field, data):
     if 'enzo' not in data.ds.dataset_type:
@@ -1384,6 +1440,19 @@ def element_N_ndensity(field, data):
           1*data['NH3II_ndensity'] + 1*data['NOI_ndensity'] +
           1*data['NOII_ndensity'] + 1*data['NO2I_ndensity'] +
           1*data['OCNI_ndensity'])
+    return arr
+
+@derived_field(name='surface_element_N_ndensity', sampling_type='cell')
+def surface_element_N_ndensity(field, data):
+    if 'enzo' not in data.ds.dataset_type:
+        return
+    if data.ds.parameters['MultiSpecies'] < 4:
+        return
+    arr = (0.0 + 1*data['GH2CNI_ndensity'] + 1*data['GHCNI_ndensity'] +
+          1*data['GHNCI_ndensity'] + 1*data['GHNCOI_ndensity'] +
+          1*data['GHNOI_ndensity'] + 2*data['GN2I_ndensity'] +
+          1*data['GNH3I_ndensity'] + 1*data['GNOI_ndensity'] +
+          1*data['GNO2I_ndensity'])
     return arr
 
 @derived_field(name='element_O_ndensity', sampling_type='cell')
@@ -1418,6 +1487,21 @@ def element_O_ndensity(field, data):
           1*data['SiOHII_ndensity'])
     return arr
 
+@derived_field(name='surface_element_O_ndensity', sampling_type='cell')
+def surface_element_O_ndensity(field, data):
+    if 'enzo' not in data.ds.dataset_type:
+        return
+    if data.ds.parameters['MultiSpecies'] < 4:
+        return
+    arr = (0.0 + 1*data['GCH3OHI_ndensity'] + 1*data['GCOI_ndensity'] +
+          2*data['GCO2I_ndensity'] + 1*data['GH2COI_ndensity'] +
+          1*data['GH2OI_ndensity'] + 1*data['GH2SiOI_ndensity'] +
+          1*data['GHNCOI_ndensity'] + 1*data['GHNOI_ndensity'] +
+          1*data['GNOI_ndensity'] + 2*data['GNO2I_ndensity'] +
+          2*data['GO2I_ndensity'] + 2*data['GO2HI_ndensity'] +
+          1*data['GSiOI_ndensity'])
+    return arr
+
 @derived_field(name='element_MG_ndensity', sampling_type='cell')
 def element_MG_ndensity(field, data):
     if 'enzo' not in data.ds.dataset_type:
@@ -1426,6 +1510,15 @@ def element_MG_ndensity(field, data):
         return
     arr = (0.0 + 1*data['GMgI_ndensity'] + 1*data['MgI_ndensity'] +
           1*data['MgII_ndensity'])
+    return arr
+
+@derived_field(name='surface_element_MG_ndensity', sampling_type='cell')
+def surface_element_MG_ndensity(field, data):
+    if 'enzo' not in data.ds.dataset_type:
+        return
+    if data.ds.parameters['MultiSpecies'] < 4:
+        return
+    arr = (0.0 + 1*data['GMgI_ndensity'])
     return arr
 
 @derived_field(name='element_SI_ndensity', sampling_type='cell')
@@ -1450,6 +1543,17 @@ def element_SI_ndensity(field, data):
           1*data['SiOHII_ndensity'])
     return arr
 
+@derived_field(name='surface_element_SI_ndensity', sampling_type='cell')
+def surface_element_SI_ndensity(field, data):
+    if 'enzo' not in data.ds.dataset_type:
+        return
+    if data.ds.parameters['MultiSpecies'] < 4:
+        return
+    arr = (0.0 + 1*data['GH2SiOI_ndensity'] + 1*data['GSiCI_ndensity']
+          + 1*data['GSiC2I_ndensity'] + 1*data['GSiC3I_ndensity'] +
+          1*data['GSiH4I_ndensity'] + 1*data['GSiOI_ndensity'])
+    return arr
+
 @derived_field(name='element_S_ndensity', sampling_type='cell')
 def element_S_ndensity(field, data):
     if 'enzo' not in data.ds.dataset_type:
@@ -1459,8 +1563,26 @@ def element_S_ndensity(field, data):
     arr = (0.0)
     return arr
 
+@derived_field(name='surface_element_S_ndensity', sampling_type='cell')
+def surface_element_S_ndensity(field, data):
+    if 'enzo' not in data.ds.dataset_type:
+        return
+    if data.ds.parameters['MultiSpecies'] < 4:
+        return
+    arr = (0.0)
+    return arr
+
 @derived_field(name='element_CL_ndensity', sampling_type='cell')
 def element_CL_ndensity(field, data):
+    if 'enzo' not in data.ds.dataset_type:
+        return
+    if data.ds.parameters['MultiSpecies'] < 4:
+        return
+    arr = (0.0)
+    return arr
+
+@derived_field(name='surface_element_CL_ndensity', sampling_type='cell')
+def surface_element_CL_ndensity(field, data):
     if 'enzo' not in data.ds.dataset_type:
         return
     if data.ds.parameters['MultiSpecies'] < 4:

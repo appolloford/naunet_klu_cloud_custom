@@ -260,7 +260,8 @@ int grid::ReturnHydroRKPointers(float **Prim, bool ReturnMassFractions)
       Prim[nfield++] = BaryonField[SiOINum];
       Prim[nfield++] = BaryonField[SiOIINum];
       Prim[nfield++] = BaryonField[SiOHIINum];
-      }
+      
+    }
 #endif
 
   } // ENDIF MultiSpecies

@@ -1166,4 +1166,3 @@
            $(ASSEMBLE_SUITESPARSE_LIBS) \
            $(ASSEMBLE_FFTW_LIBS)
 
-

@@ -25,6 +25,7 @@ int FindField(int f, int farray[], int n);
 
 #ifdef USE_NAUNET
 
+
 int grid::IdentifyNaunetSpeciesFields(int &GCH3OHINum, int &GCH4INum, int
                                       &GCOINum, int &GCO2INum, int &GH2CNINum,
                                       int &GH2COINum, int &GH2OINum, int
@@ -437,7 +438,7 @@ int grid::IdentifyNaunetSpeciesFields(int *specnum)
         SiOIDensity,
         SiOIIDensity,
         SiOHIIDensity
-};
+    };
 
     for (int sidx = 0; sidx < NSPECIES; sidx ++) {
         specnum[sidx] = FindField(NauentFields[sidx], FieldType, NumberOfBaryonFields);

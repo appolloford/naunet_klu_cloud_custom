@@ -525,7 +525,8 @@ printf("Plasma beta=%"GSYM"\n", CloudDensity*CloudSoundSpeed*CloudSoundSpeed/(In
       DataLabel[count++] = (char*) SiOIName;
       DataLabel[count++] = (char*) SiOIIName;
       DataLabel[count++] = (char*) SiOHIIName;
-      }
+      
+    }
 #endif
   }  // if Multispecies                                                                                                   
   //  DataLabel[count++] = MetalName;

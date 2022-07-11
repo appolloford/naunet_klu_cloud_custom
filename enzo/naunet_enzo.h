@@ -4,10 +4,12 @@
 #include "naunet.h"
 #include "naunet_data.h"
 
+// the MultiSpecies option of ENZO
 #define NAUNET_SPECIES 4
-// number of equations to be solved
-#define NAUNET_NSPECIES 118
-#define NAUNET_NEQUATIONS 114
+// the number of species in ENZO, including the fields which are not present
+// in the naunet header, not including electron as it is not renormed with 
+// others
+#define ENZO_NSPECIES 118
 
 
 #define A_GCH3OHI 32.0

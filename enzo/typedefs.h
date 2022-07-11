@@ -11,7 +11,7 @@
 /  PURPOSE:
 /
 ************************************************************************/
-
+// clang-format off
 #include "CloudyCoolingData.h"
 #include "CoolData.h"
 #include "RateData.h"
@@ -274,7 +274,7 @@ const field_type
     SiOIIDensity = 195,
     SiOHIIDensity = 196,
     FieldUndefined = 197;
-    #else
+#else
     FieldUndefined = 104;
 #endif
 
