@@ -372,10 +372,10 @@ int Naunet::SetReferenceAbund(realtype *ref, int opt) {
 #endif
 
 int Naunet::Solve(realtype *ab, realtype dt, NaunetData *data) {
+    /* */
+
     int cvflag;
     realtype t0 = 0.0;
-
-    /* */
 
     for (int i = 0; i < NEQUATIONS; i++) {
         ab_init_[i] = ab[i];
@@ -450,33 +450,33 @@ int Naunet::Solve(realtype *ab, realtype dt, NaunetData *data) {
         /* */
         fprintf(errfp_, "    data.G0 = %13.7e;\n", data->G0);
         /* */
-        fprintf(errfp_, "    data.uvcreff = %13.7e;\n", data->uvcreff);
+        fprintf(errfp_, "    data.gdens = %13.7e;\n", data->gdens);
         /* */
         fprintf(errfp_, "    data.rG = %13.7e;\n", data->rG);
-        /* */
-        fprintf(errfp_, "    data.gdens = %13.7e;\n", data->gdens);
         /* */
         fprintf(errfp_, "    data.sites = %13.7e;\n", data->sites);
         /* */
         fprintf(errfp_, "    data.fr = %13.7e;\n", data->fr);
         /* */
-        fprintf(errfp_, "    data.opt_thd = %13.7e;\n", data->opt_thd);
-        /* */
         fprintf(errfp_, "    data.opt_crd = %13.7e;\n", data->opt_crd);
-        /* */
-        fprintf(errfp_, "    data.opt_h2d = %13.7e;\n", data->opt_h2d);
         /* */
         fprintf(errfp_, "    data.opt_uvd = %13.7e;\n", data->opt_uvd);
         /* */
-        fprintf(errfp_, "    data.eb_h2d = %13.7e;\n", data->eb_h2d);
+        fprintf(errfp_, "    data.opt_h2d = %13.7e;\n", data->opt_h2d);
         /* */
         fprintf(errfp_, "    data.eb_crd = %13.7e;\n", data->eb_crd);
         /* */
         fprintf(errfp_, "    data.eb_uvd = %13.7e;\n", data->eb_uvd);
         /* */
+        fprintf(errfp_, "    data.eb_h2d = %13.7e;\n", data->eb_h2d);
+        /* */
         fprintf(errfp_, "    data.crdeseff = %13.7e;\n", data->crdeseff);
         /* */
+        fprintf(errfp_, "    data.uvcreff = %13.7e;\n", data->uvcreff);
+        /* */
         fprintf(errfp_, "    data.h2deseff = %13.7e;\n", data->h2deseff);
+        /* */
+        fprintf(errfp_, "    data.opt_thd = %13.7e;\n", data->opt_thd);
         /* */
         fprintf(errfp_, "    data.ksp = %13.7e;\n", data->ksp);
         /*  */

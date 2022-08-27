@@ -30,7 +30,12 @@ extern const double echarge;
 // Boltzmann constant (erg/K)
 extern const double kerg;
 
+// reduced Planck constant
+extern const double hbar;
+
 extern const double zism           ;
+extern const double habing         ;
+extern const double crphot         ;
 extern const double nmono          ;
 extern const double eb_GCH3OHI     ;
 extern const double eb_GCH4I       ;

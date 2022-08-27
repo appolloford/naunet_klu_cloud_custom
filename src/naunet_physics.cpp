@@ -11,90 +11,90 @@
 
 // clang-format off
 double GetElementAbund(double *y, int elemidx) {
-    if (elemidx == IDX_ELEM_C) {
-        return 1.0*y[IDX_GCH3OHI] + 1.0*y[IDX_GCH4I] + 1.0*y[IDX_GCOI] + 1.0*y[IDX_GCO2I] + 
-               1.0*y[IDX_GH2CNI] + 1.0*y[IDX_GH2COI] + 1.0*y[IDX_GHCNI] + 1.0*y[IDX_GHNCI] + 
-               1.0*y[IDX_GHNCOI] + 1.0*y[IDX_GSiCI] + 2.0*y[IDX_GSiC2I] + 3.0*y[IDX_GSiC3I] + 
-               1.0*y[IDX_CI] + 1.0*y[IDX_CII] + 1.0*y[IDX_CHI] + 1.0*y[IDX_CHII] + 
-               1.0*y[IDX_CH2I] + 1.0*y[IDX_CH2II] + 1.0*y[IDX_CH3I] + 1.0*y[IDX_CH3II] + 
-               1.0*y[IDX_CH3OHI] + 1.0*y[IDX_CH4I] + 1.0*y[IDX_CH4II] + 1.0*y[IDX_CNI] + 
-               1.0*y[IDX_CNII] + 1.0*y[IDX_COI] + 1.0*y[IDX_COII] + 1.0*y[IDX_CO2I] + 
-               1.0*y[IDX_H2CNI] + 1.0*y[IDX_H2COI] + 1.0*y[IDX_H2COII] + 1.0*y[IDX_H3COII] + 
-               1.0*y[IDX_HCNI] + 1.0*y[IDX_HCNII] + 1.0*y[IDX_HCNHII] + 1.0*y[IDX_HCOI] + 
-               1.0*y[IDX_HCOII] + 1.0*y[IDX_HCO2II] + 1.0*y[IDX_HNCI] + 1.0*y[IDX_HNCOI] + 
-               1.0*y[IDX_HOCII] + 1.0*y[IDX_OCNI] + 1.0*y[IDX_SiCI] + 1.0*y[IDX_SiCII] + 
-               2.0*y[IDX_SiC2I] + 2.0*y[IDX_SiC2II] + 3.0*y[IDX_SiC3I] + 3.0*y[IDX_SiC3II] + 0.0;
-    }
-    if (elemidx == IDX_ELEM_H) {
-        return 4.0*y[IDX_GCH3OHI] + 4.0*y[IDX_GCH4I] + 2.0*y[IDX_GH2CNI] + 2.0*y[IDX_GH2COI] + 
-               2.0*y[IDX_GH2OI] + 2.0*y[IDX_GH2SiOI] + 1.0*y[IDX_GHCNI] + 1.0*y[IDX_GHNCI] + 
-               1.0*y[IDX_GHNCOI] + 1.0*y[IDX_GHNOI] + 3.0*y[IDX_GNH3I] + 1.0*y[IDX_GO2HI] + 
-               4.0*y[IDX_GSiH4I] + 1.0*y[IDX_CHI] + 1.0*y[IDX_CHII] + 2.0*y[IDX_CH2I] + 
-               2.0*y[IDX_CH2II] + 3.0*y[IDX_CH3I] + 3.0*y[IDX_CH3II] + 4.0*y[IDX_CH3OHI] + 
-               4.0*y[IDX_CH4I] + 4.0*y[IDX_CH4II] + 1.0*y[IDX_HI] + 1.0*y[IDX_HII] + 
-               2.0*y[IDX_H2I] + 2.0*y[IDX_H2II] + 2.0*y[IDX_H2CNI] + 2.0*y[IDX_H2COI] + 
-               2.0*y[IDX_H2COII] + 2.0*y[IDX_H2NOII] + 2.0*y[IDX_H2OI] + 2.0*y[IDX_H2OII] + 
-               2.0*y[IDX_H2SiOI] + 3.0*y[IDX_H3II] + 3.0*y[IDX_H3COII] + 3.0*y[IDX_H3OII] + 
-               1.0*y[IDX_HCNI] + 1.0*y[IDX_HCNII] + 2.0*y[IDX_HCNHII] + 1.0*y[IDX_HCOI] + 
-               1.0*y[IDX_HCOII] + 1.0*y[IDX_HCO2II] + 1.0*y[IDX_HeHII] + 1.0*y[IDX_HNCI] + 
-               1.0*y[IDX_HNCOI] + 1.0*y[IDX_HNOI] + 1.0*y[IDX_HNOII] + 1.0*y[IDX_HOCII] + 
-               1.0*y[IDX_N2HII] + 1.0*y[IDX_NHI] + 1.0*y[IDX_NHII] + 2.0*y[IDX_NH2I] + 
-               2.0*y[IDX_NH2II] + 3.0*y[IDX_NH3I] + 3.0*y[IDX_NH3II] + 1.0*y[IDX_O2HI] + 
-               1.0*y[IDX_O2HII] + 1.0*y[IDX_OHI] + 1.0*y[IDX_OHII] + 1.0*y[IDX_SiHI] + 
-               1.0*y[IDX_SiHII] + 2.0*y[IDX_SiH2I] + 2.0*y[IDX_SiH2II] + 3.0*y[IDX_SiH3I] + 
-               3.0*y[IDX_SiH3II] + 4.0*y[IDX_SiH4I] + 4.0*y[IDX_SiH4II] + 5.0*y[IDX_SiH5II] + 
-               1.0*y[IDX_SiOHII] + 0.0;
-    }
-    if (elemidx == IDX_ELEM_HE) {
-        return 1.0*y[IDX_HeI] + 1.0*y[IDX_HeII] + 1.0*y[IDX_HeHII] + 0.0;
-    }
     if (elemidx == IDX_ELEM_MG) {
         return 1.0*y[IDX_GMgI] + 1.0*y[IDX_MgI] + 1.0*y[IDX_MgII] + 0.0;
     }
+    if (elemidx == IDX_ELEM_SI) {
+        return 1.0*y[IDX_GSiOI] + 1.0*y[IDX_GSiCI] + 1.0*y[IDX_GSiC2I] + 1.0*y[IDX_GSiC3I] + 
+               1.0*y[IDX_GH2SiOI] + 1.0*y[IDX_SiC3II] + 1.0*y[IDX_H2SiOI] + 1.0*y[IDX_SiC2II] + 
+               1.0*y[IDX_GSiH4I] + 1.0*y[IDX_SiC2I] + 1.0*y[IDX_SiC3I] + 1.0*y[IDX_SiH5II] + 
+               1.0*y[IDX_SiH4II] + 1.0*y[IDX_SiCII] + 1.0*y[IDX_SiCI] + 1.0*y[IDX_SiH3II] + 
+               1.0*y[IDX_SiH2II] + 1.0*y[IDX_SiH2I] + 1.0*y[IDX_SiOHII] + 1.0*y[IDX_SiHII] + 
+               1.0*y[IDX_SiH4I] + 1.0*y[IDX_SiHI] + 1.0*y[IDX_SiH3I] + 1.0*y[IDX_SiOII] + 
+               1.0*y[IDX_SiOI] + 1.0*y[IDX_SiII] + 1.0*y[IDX_SiI] + 0.0;
+    }
+    if (elemidx == IDX_ELEM_HE) {
+        return 1.0*y[IDX_HeHII] + 1.0*y[IDX_HeII] + 1.0*y[IDX_HeI] + 0.0;
+    }
     if (elemidx == IDX_ELEM_N) {
-        return 1.0*y[IDX_GH2CNI] + 1.0*y[IDX_GHCNI] + 1.0*y[IDX_GHNCI] + 1.0*y[IDX_GHNCOI] + 
-               1.0*y[IDX_GHNOI] + 2.0*y[IDX_GN2I] + 1.0*y[IDX_GNH3I] + 1.0*y[IDX_GNOI] + 
-               1.0*y[IDX_GNO2I] + 1.0*y[IDX_CNI] + 1.0*y[IDX_CNII] + 1.0*y[IDX_H2CNI] + 
-               1.0*y[IDX_H2NOII] + 1.0*y[IDX_HCNI] + 1.0*y[IDX_HCNII] + 1.0*y[IDX_HCNHII] + 
-               1.0*y[IDX_HNCI] + 1.0*y[IDX_HNCOI] + 1.0*y[IDX_HNOI] + 1.0*y[IDX_HNOII] + 
-               1.0*y[IDX_NI] + 1.0*y[IDX_NII] + 2.0*y[IDX_N2I] + 2.0*y[IDX_N2II] + 
-               2.0*y[IDX_N2HII] + 1.0*y[IDX_NHI] + 1.0*y[IDX_NHII] + 1.0*y[IDX_NH2I] + 
-               1.0*y[IDX_NH2II] + 1.0*y[IDX_NH3I] + 1.0*y[IDX_NH3II] + 1.0*y[IDX_NOI] + 
-               1.0*y[IDX_NOII] + 1.0*y[IDX_NO2I] + 1.0*y[IDX_OCNI] + 0.0;
+        return 1.0*y[IDX_GH2CNI] + 1.0*y[IDX_GHNCI] + 1.0*y[IDX_GNO2I] + 1.0*y[IDX_GHNCOI] + 
+               1.0*y[IDX_GNOI] + 1.0*y[IDX_GHNOI] + 2.0*y[IDX_GN2I] + 1.0*y[IDX_GHCNI] + 
+               1.0*y[IDX_GNH3I] + 1.0*y[IDX_H2CNI] + 1.0*y[IDX_H2NOII] + 1.0*y[IDX_HNCOI] + 
+               1.0*y[IDX_NO2I] + 1.0*y[IDX_OCNI] + 1.0*y[IDX_HNOI] + 1.0*y[IDX_CNII] + 
+               1.0*y[IDX_HCNHII] + 2.0*y[IDX_N2HII] + 1.0*y[IDX_HNCI] + 1.0*y[IDX_HNOII] + 
+               2.0*y[IDX_N2II] + 1.0*y[IDX_NH3I] + 1.0*y[IDX_NII] + 1.0*y[IDX_HCNII] + 
+               1.0*y[IDX_NH2II] + 1.0*y[IDX_NHII] + 1.0*y[IDX_NH2I] + 1.0*y[IDX_NH3II] + 
+               1.0*y[IDX_NOII] + 2.0*y[IDX_N2I] + 1.0*y[IDX_HCNI] + 1.0*y[IDX_NHI] + 
+               1.0*y[IDX_CNI] + 1.0*y[IDX_NOI] + 1.0*y[IDX_NI] + 0.0;
+    }
+    if (elemidx == IDX_ELEM_C) {
+        return 1.0*y[IDX_GH2CNI] + 1.0*y[IDX_GHNCI] + 1.0*y[IDX_GCOI] + 1.0*y[IDX_GHNCOI] + 
+               1.0*y[IDX_GSiCI] + 2.0*y[IDX_GSiC2I] + 3.0*y[IDX_GSiC3I] + 1.0*y[IDX_GCH3OHI] + 
+               1.0*y[IDX_GCO2I] + 1.0*y[IDX_GH2COI] + 1.0*y[IDX_GHCNI] + 3.0*y[IDX_SiC3II] + 
+               1.0*y[IDX_H2CNI] + 1.0*y[IDX_GCH4I] + 1.0*y[IDX_HNCOI] + 1.0*y[IDX_HOCII] + 
+               2.0*y[IDX_SiC2II] + 2.0*y[IDX_SiC2I] + 3.0*y[IDX_SiC3I] + 1.0*y[IDX_SiCII] + 
+               1.0*y[IDX_SiCI] + 1.0*y[IDX_OCNI] + 1.0*y[IDX_HCO2II] + 1.0*y[IDX_CH3OHI] + 
+               1.0*y[IDX_CH4II] + 1.0*y[IDX_CNII] + 1.0*y[IDX_HCNHII] + 1.0*y[IDX_HNCI] + 
+               1.0*y[IDX_H3COII] + 1.0*y[IDX_CH4I] + 1.0*y[IDX_COII] + 1.0*y[IDX_CH3I] + 
+               1.0*y[IDX_CO2I] + 1.0*y[IDX_HCNII] + 1.0*y[IDX_CH3II] + 1.0*y[IDX_CH2II] + 
+               1.0*y[IDX_CII] + 1.0*y[IDX_HCNI] + 1.0*y[IDX_CHII] + 1.0*y[IDX_CH2I] + 
+               1.0*y[IDX_H2COII] + 1.0*y[IDX_CNI] + 1.0*y[IDX_H2COI] + 1.0*y[IDX_HCOI] + 
+               1.0*y[IDX_CHI] + 1.0*y[IDX_CI] + 1.0*y[IDX_HCOII] + 1.0*y[IDX_COI] + 0.0;
     }
     if (elemidx == IDX_ELEM_O) {
-        return 1.0*y[IDX_GCH3OHI] + 1.0*y[IDX_GCOI] + 2.0*y[IDX_GCO2I] + 1.0*y[IDX_GH2COI] + 
-               1.0*y[IDX_GH2OI] + 1.0*y[IDX_GH2SiOI] + 1.0*y[IDX_GHNCOI] + 1.0*y[IDX_GHNOI] + 
-               1.0*y[IDX_GNOI] + 2.0*y[IDX_GNO2I] + 2.0*y[IDX_GO2I] + 2.0*y[IDX_GO2HI] + 
-               1.0*y[IDX_GSiOI] + 1.0*y[IDX_CH3OHI] + 1.0*y[IDX_COI] + 1.0*y[IDX_COII] + 
-               2.0*y[IDX_CO2I] + 1.0*y[IDX_H2COI] + 1.0*y[IDX_H2COII] + 1.0*y[IDX_H2NOII] + 
-               1.0*y[IDX_H2OI] + 1.0*y[IDX_H2OII] + 1.0*y[IDX_H2SiOI] + 1.0*y[IDX_H3COII] + 
-               1.0*y[IDX_H3OII] + 1.0*y[IDX_HCOI] + 1.0*y[IDX_HCOII] + 2.0*y[IDX_HCO2II] + 
-               1.0*y[IDX_HNCOI] + 1.0*y[IDX_HNOI] + 1.0*y[IDX_HNOII] + 1.0*y[IDX_HOCII] + 
-               1.0*y[IDX_NOI] + 1.0*y[IDX_NOII] + 2.0*y[IDX_NO2I] + 1.0*y[IDX_OI] + 
-               1.0*y[IDX_OII] + 2.0*y[IDX_O2I] + 2.0*y[IDX_O2II] + 2.0*y[IDX_O2HI] + 
-               2.0*y[IDX_O2HII] + 1.0*y[IDX_OCNI] + 1.0*y[IDX_OHI] + 1.0*y[IDX_OHII] + 
-               1.0*y[IDX_SiOI] + 1.0*y[IDX_SiOII] + 1.0*y[IDX_SiOHII] + 0.0;
+        return 2.0*y[IDX_GNO2I] + 1.0*y[IDX_GSiOI] + 1.0*y[IDX_GCOI] + 1.0*y[IDX_GHNCOI] + 
+               1.0*y[IDX_GNOI] + 2.0*y[IDX_GO2I] + 2.0*y[IDX_GO2HI] + 1.0*y[IDX_GCH3OHI] + 
+               2.0*y[IDX_GCO2I] + 1.0*y[IDX_GH2SiOI] + 1.0*y[IDX_GHNOI] + 1.0*y[IDX_GH2COI] + 
+               1.0*y[IDX_GH2OI] + 1.0*y[IDX_H2NOII] + 1.0*y[IDX_H2SiOI] + 1.0*y[IDX_HNCOI] + 
+               1.0*y[IDX_HOCII] + 2.0*y[IDX_O2HI] + 2.0*y[IDX_NO2I] + 1.0*y[IDX_OCNI] + 
+               1.0*y[IDX_SiOHII] + 1.0*y[IDX_SiOII] + 2.0*y[IDX_HCO2II] + 1.0*y[IDX_HNOI] + 
+               1.0*y[IDX_CH3OHI] + 1.0*y[IDX_SiOI] + 2.0*y[IDX_O2HII] + 1.0*y[IDX_HNOII] + 
+               1.0*y[IDX_H3COII] + 1.0*y[IDX_COII] + 2.0*y[IDX_CO2I] + 1.0*y[IDX_OII] + 
+               2.0*y[IDX_O2II] + 1.0*y[IDX_H2OII] + 1.0*y[IDX_NOII] + 1.0*y[IDX_H3OII] + 
+               1.0*y[IDX_H2COII] + 1.0*y[IDX_OHII] + 1.0*y[IDX_H2COI] + 1.0*y[IDX_HCOI] + 
+               1.0*y[IDX_NOI] + 1.0*y[IDX_OHI] + 2.0*y[IDX_O2I] + 1.0*y[IDX_HCOII] + 
+               1.0*y[IDX_H2OI] + 1.0*y[IDX_OI] + 1.0*y[IDX_COI] + 0.0;
     }
-    if (elemidx == IDX_ELEM_SI) {
-        return 1.0*y[IDX_GH2SiOI] + 1.0*y[IDX_GSiCI] + 1.0*y[IDX_GSiC2I] + 1.0*y[IDX_GSiC3I] + 
-               1.0*y[IDX_GSiH4I] + 1.0*y[IDX_GSiOI] + 1.0*y[IDX_H2SiOI] + 1.0*y[IDX_SiI] + 
-               1.0*y[IDX_SiII] + 1.0*y[IDX_SiCI] + 1.0*y[IDX_SiCII] + 1.0*y[IDX_SiC2I] + 
-               1.0*y[IDX_SiC2II] + 1.0*y[IDX_SiC3I] + 1.0*y[IDX_SiC3II] + 1.0*y[IDX_SiHI] + 
-               1.0*y[IDX_SiHII] + 1.0*y[IDX_SiH2I] + 1.0*y[IDX_SiH2II] + 1.0*y[IDX_SiH3I] + 
-               1.0*y[IDX_SiH3II] + 1.0*y[IDX_SiH4I] + 1.0*y[IDX_SiH4II] + 1.0*y[IDX_SiH5II] + 
-               1.0*y[IDX_SiOI] + 1.0*y[IDX_SiOII] + 1.0*y[IDX_SiOHII] + 0.0;
+    if (elemidx == IDX_ELEM_H) {
+        return 2.0*y[IDX_GH2CNI] + 1.0*y[IDX_GHNCI] + 1.0*y[IDX_GHNCOI] + 1.0*y[IDX_GO2HI] + 
+               4.0*y[IDX_GCH3OHI] + 2.0*y[IDX_GH2SiOI] + 1.0*y[IDX_GHNOI] + 2.0*y[IDX_GH2COI] + 
+               1.0*y[IDX_GHCNI] + 2.0*y[IDX_GH2OI] + 3.0*y[IDX_GNH3I] + 2.0*y[IDX_H2CNI] + 
+               4.0*y[IDX_GCH4I] + 2.0*y[IDX_H2NOII] + 2.0*y[IDX_H2SiOI] + 1.0*y[IDX_HeHII] + 
+               1.0*y[IDX_HNCOI] + 1.0*y[IDX_HOCII] + 4.0*y[IDX_GSiH4I] + 5.0*y[IDX_SiH5II] + 
+               4.0*y[IDX_SiH4II] + 1.0*y[IDX_O2HI] + 3.0*y[IDX_SiH3II] + 2.0*y[IDX_SiH2II] + 
+               2.0*y[IDX_SiH2I] + 1.0*y[IDX_SiOHII] + 1.0*y[IDX_SiHII] + 4.0*y[IDX_SiH4I] + 
+               1.0*y[IDX_SiHI] + 3.0*y[IDX_SiH3I] + 1.0*y[IDX_HCO2II] + 1.0*y[IDX_HNOI] + 
+               4.0*y[IDX_CH3OHI] + 4.0*y[IDX_CH4II] + 2.0*y[IDX_HCNHII] + 1.0*y[IDX_N2HII] + 
+               1.0*y[IDX_O2HII] + 1.0*y[IDX_HNCI] + 1.0*y[IDX_HNOII] + 3.0*y[IDX_H3COII] + 
+               4.0*y[IDX_CH4I] + 2.0*y[IDX_H2II] + 3.0*y[IDX_NH3I] + 3.0*y[IDX_CH3I] + 
+               1.0*y[IDX_HCNII] + 2.0*y[IDX_NH2II] + 1.0*y[IDX_NHII] + 3.0*y[IDX_CH3II] + 
+               2.0*y[IDX_NH2I] + 2.0*y[IDX_CH2II] + 2.0*y[IDX_H2OII] + 3.0*y[IDX_NH3II] + 
+               3.0*y[IDX_H3OII] + 1.0*y[IDX_HCNI] + 1.0*y[IDX_CHII] + 2.0*y[IDX_CH2I] + 
+               2.0*y[IDX_H2COII] + 1.0*y[IDX_NHI] + 1.0*y[IDX_OHII] + 2.0*y[IDX_H2COI] + 
+               1.0*y[IDX_HCOI] + 1.0*y[IDX_CHI] + 3.0*y[IDX_H3II] + 1.0*y[IDX_OHI] + 
+               1.0*y[IDX_HII] + 1.0*y[IDX_HCOII] + 2.0*y[IDX_H2OI] + 2.0*y[IDX_H2I] + 
+               1.0*y[IDX_HI] + 0.0;
     }
     
 }
 
 double GetMantleDens(double *y) {
-    return y[IDX_GCH3OHI] + y[IDX_GCH4I] + y[IDX_GCOI] + y[IDX_GCO2I] +
-        y[IDX_GH2CNI] + y[IDX_GH2COI] + y[IDX_GH2OI] + y[IDX_GH2SiOI] +
-        y[IDX_GHCNI] + y[IDX_GHNCI] + y[IDX_GHNCOI] + y[IDX_GHNOI] + y[IDX_GMgI]
-        + y[IDX_GN2I] + y[IDX_GNH3I] + y[IDX_GNOI] + y[IDX_GNO2I] + y[IDX_GO2I]
-        + y[IDX_GO2HI] + y[IDX_GSiCI] + y[IDX_GSiC2I] + y[IDX_GSiC3I] +
-        y[IDX_GSiH4I] + y[IDX_GSiOI] + 0.0;
+    return y[IDX_GH2CNI] + y[IDX_GHNCI] + y[IDX_GNO2I] + y[IDX_GSiOI] + y[IDX_GCOI]
+        + y[IDX_GHNCOI] + y[IDX_GMgI] + y[IDX_GNOI] + y[IDX_GO2I] + y[IDX_GO2HI]
+        + y[IDX_GSiCI] + y[IDX_GSiC2I] + y[IDX_GSiC3I] + y[IDX_GCH3OHI] +
+        y[IDX_GCO2I] + y[IDX_GH2SiOI] + y[IDX_GHNOI] + y[IDX_GN2I] +
+        y[IDX_GH2COI] + y[IDX_GHCNI] + y[IDX_GH2OI] + y[IDX_GNH3I] +
+        y[IDX_GCH4I] + y[IDX_GSiH4I] + 0.0;
 }
 
 double GetHNuclei(double *y) {
@@ -107,63 +107,63 @@ double GetHNuclei(double *y) {
 
 double GetMu(double *y) {
     // TODO: exclude electron, grain?
-    double mass = 32.0*y[IDX_GCH3OHI] + 16.0*y[IDX_GCH4I] + 28.0*y[IDX_GCOI] + 44.0*y[IDX_GCO2I] + 
-                  28.0*y[IDX_GH2CNI] + 30.0*y[IDX_GH2COI] + 18.0*y[IDX_GH2OI] + 46.0*y[IDX_GH2SiOI] + 
-                  27.0*y[IDX_GHCNI] + 27.0*y[IDX_GHNCI] + 43.0*y[IDX_GHNCOI] + 31.0*y[IDX_GHNOI] + 
-                  24.0*y[IDX_GMgI] + 28.0*y[IDX_GN2I] + 17.0*y[IDX_GNH3I] + 30.0*y[IDX_GNOI] + 
-                  46.0*y[IDX_GNO2I] + 32.0*y[IDX_GO2I] + 33.0*y[IDX_GO2HI] + 40.0*y[IDX_GSiCI] + 
-                  52.0*y[IDX_GSiC2I] + 64.0*y[IDX_GSiC3I] + 32.0*y[IDX_GSiH4I] + 44.0*y[IDX_GSiOI] + 
-                  12.0*y[IDX_CI] + 12.0*y[IDX_CII] + 13.0*y[IDX_CHI] + 13.0*y[IDX_CHII] + 
-                  14.0*y[IDX_CH2I] + 14.0*y[IDX_CH2II] + 15.0*y[IDX_CH3I] + 15.0*y[IDX_CH3II] + 
-                  32.0*y[IDX_CH3OHI] + 16.0*y[IDX_CH4I] + 16.0*y[IDX_CH4II] + 26.0*y[IDX_CNI] + 
-                  26.0*y[IDX_CNII] + 28.0*y[IDX_COI] + 28.0*y[IDX_COII] + 44.0*y[IDX_CO2I] + 
-                  0.0*y[IDX_EM] + 1.0*y[IDX_HI] + 1.0*y[IDX_HII] + 2.0*y[IDX_H2I] + 
-                  2.0*y[IDX_H2II] + 28.0*y[IDX_H2CNI] + 30.0*y[IDX_H2COI] + 30.0*y[IDX_H2COII] + 
-                  32.0*y[IDX_H2NOII] + 18.0*y[IDX_H2OI] + 18.0*y[IDX_H2OII] + 46.0*y[IDX_H2SiOI] + 
-                  3.0*y[IDX_H3II] + 31.0*y[IDX_H3COII] + 19.0*y[IDX_H3OII] + 27.0*y[IDX_HCNI] + 
-                  27.0*y[IDX_HCNII] + 28.0*y[IDX_HCNHII] + 29.0*y[IDX_HCOI] + 29.0*y[IDX_HCOII] + 
-                  45.0*y[IDX_HCO2II] + 4.0*y[IDX_HeI] + 4.0*y[IDX_HeII] + 5.0*y[IDX_HeHII] + 
-                  27.0*y[IDX_HNCI] + 43.0*y[IDX_HNCOI] + 31.0*y[IDX_HNOI] + 31.0*y[IDX_HNOII] + 
-                  29.0*y[IDX_HOCII] + 24.0*y[IDX_MgI] + 24.0*y[IDX_MgII] + 14.0*y[IDX_NI] + 
-                  14.0*y[IDX_NII] + 28.0*y[IDX_N2I] + 28.0*y[IDX_N2II] + 29.0*y[IDX_N2HII] + 
-                  15.0*y[IDX_NHI] + 15.0*y[IDX_NHII] + 16.0*y[IDX_NH2I] + 16.0*y[IDX_NH2II] + 
-                  17.0*y[IDX_NH3I] + 17.0*y[IDX_NH3II] + 30.0*y[IDX_NOI] + 30.0*y[IDX_NOII] + 
-                  46.0*y[IDX_NO2I] + 16.0*y[IDX_OI] + 16.0*y[IDX_OII] + 32.0*y[IDX_O2I] + 
-                  32.0*y[IDX_O2II] + 33.0*y[IDX_O2HI] + 33.0*y[IDX_O2HII] + 42.0*y[IDX_OCNI] + 
-                  17.0*y[IDX_OHI] + 17.0*y[IDX_OHII] + 28.0*y[IDX_SiI] + 28.0*y[IDX_SiII] + 
-                  40.0*y[IDX_SiCI] + 40.0*y[IDX_SiCII] + 52.0*y[IDX_SiC2I] + 52.0*y[IDX_SiC2II] + 
-                  64.0*y[IDX_SiC3I] + 64.0*y[IDX_SiC3II] + 29.0*y[IDX_SiHI] + 29.0*y[IDX_SiHII] + 
-                  30.0*y[IDX_SiH2I] + 30.0*y[IDX_SiH2II] + 31.0*y[IDX_SiH3I] + 31.0*y[IDX_SiH3II] + 
-                  32.0*y[IDX_SiH4I] + 32.0*y[IDX_SiH4II] + 33.0*y[IDX_SiH5II] + 44.0*y[IDX_SiOI] + 
-                  44.0*y[IDX_SiOII] + 45.0*y[IDX_SiOHII] + 0.0;
-    double num = y[IDX_GCH3OHI] + y[IDX_GCH4I] + y[IDX_GCOI] + y[IDX_GCO2I] +
-                 y[IDX_GH2CNI] + y[IDX_GH2COI] + y[IDX_GH2OI] + y[IDX_GH2SiOI] +
-                 y[IDX_GHCNI] + y[IDX_GHNCI] + y[IDX_GHNCOI] + y[IDX_GHNOI] +
-                 y[IDX_GMgI] + y[IDX_GN2I] + y[IDX_GNH3I] + y[IDX_GNOI] +
-                 y[IDX_GNO2I] + y[IDX_GO2I] + y[IDX_GO2HI] + y[IDX_GSiCI] +
-                 y[IDX_GSiC2I] + y[IDX_GSiC3I] + y[IDX_GSiH4I] + y[IDX_GSiOI] +
-                 y[IDX_CI] + y[IDX_CII] + y[IDX_CHI] + y[IDX_CHII] + y[IDX_CH2I]
-                 + y[IDX_CH2II] + y[IDX_CH3I] + y[IDX_CH3II] + y[IDX_CH3OHI] +
-                 y[IDX_CH4I] + y[IDX_CH4II] + y[IDX_CNI] + y[IDX_CNII] +
-                 y[IDX_COI] + y[IDX_COII] + y[IDX_CO2I] + y[IDX_EM] + y[IDX_HI]
-                 + y[IDX_HII] + y[IDX_H2I] + y[IDX_H2II] + y[IDX_H2CNI] +
-                 y[IDX_H2COI] + y[IDX_H2COII] + y[IDX_H2NOII] + y[IDX_H2OI] +
-                 y[IDX_H2OII] + y[IDX_H2SiOI] + y[IDX_H3II] + y[IDX_H3COII] +
-                 y[IDX_H3OII] + y[IDX_HCNI] + y[IDX_HCNII] + y[IDX_HCNHII] +
-                 y[IDX_HCOI] + y[IDX_HCOII] + y[IDX_HCO2II] + y[IDX_HeI] +
-                 y[IDX_HeII] + y[IDX_HeHII] + y[IDX_HNCI] + y[IDX_HNCOI] +
-                 y[IDX_HNOI] + y[IDX_HNOII] + y[IDX_HOCII] + y[IDX_MgI] +
-                 y[IDX_MgII] + y[IDX_NI] + y[IDX_NII] + y[IDX_N2I] + y[IDX_N2II]
-                 + y[IDX_N2HII] + y[IDX_NHI] + y[IDX_NHII] + y[IDX_NH2I] +
-                 y[IDX_NH2II] + y[IDX_NH3I] + y[IDX_NH3II] + y[IDX_NOI] +
-                 y[IDX_NOII] + y[IDX_NO2I] + y[IDX_OI] + y[IDX_OII] + y[IDX_O2I]
-                 + y[IDX_O2II] + y[IDX_O2HI] + y[IDX_O2HII] + y[IDX_OCNI] +
-                 y[IDX_OHI] + y[IDX_OHII] + y[IDX_SiI] + y[IDX_SiII] +
-                 y[IDX_SiCI] + y[IDX_SiCII] + y[IDX_SiC2I] + y[IDX_SiC2II] +
-                 y[IDX_SiC3I] + y[IDX_SiC3II] + y[IDX_SiHI] + y[IDX_SiHII] +
-                 y[IDX_SiH2I] + y[IDX_SiH2II] + y[IDX_SiH3I] + y[IDX_SiH3II] +
-                 y[IDX_SiH4I] + y[IDX_SiH4II] + y[IDX_SiH5II] + y[IDX_SiOI] +
-                 y[IDX_SiOII] + y[IDX_SiOHII] + 0.0;
+    double mass = 28.0*y[IDX_GH2CNI] + 27.0*y[IDX_GHNCI] + 46.0*y[IDX_GNO2I] + 44.0*y[IDX_GSiOI] + 
+                  28.0*y[IDX_GCOI] + 43.0*y[IDX_GHNCOI] + 24.0*y[IDX_GMgI] + 30.0*y[IDX_GNOI] + 
+                  32.0*y[IDX_GO2I] + 33.0*y[IDX_GO2HI] + 40.0*y[IDX_GSiCI] + 52.0*y[IDX_GSiC2I] + 
+                  64.0*y[IDX_GSiC3I] + 32.0*y[IDX_GCH3OHI] + 44.0*y[IDX_GCO2I] + 46.0*y[IDX_GH2SiOI] + 
+                  31.0*y[IDX_GHNOI] + 28.0*y[IDX_GN2I] + 30.0*y[IDX_GH2COI] + 27.0*y[IDX_GHCNI] + 
+                  18.0*y[IDX_GH2OI] + 17.0*y[IDX_GNH3I] + 64.0*y[IDX_SiC3II] + 28.0*y[IDX_H2CNI] + 
+                  16.0*y[IDX_GCH4I] + 32.0*y[IDX_H2NOII] + 46.0*y[IDX_H2SiOI] + 5.0*y[IDX_HeHII] + 
+                  43.0*y[IDX_HNCOI] + 29.0*y[IDX_HOCII] + 52.0*y[IDX_SiC2II] + 32.0*y[IDX_GSiH4I] + 
+                  52.0*y[IDX_SiC2I] + 64.0*y[IDX_SiC3I] + 33.0*y[IDX_SiH5II] + 32.0*y[IDX_SiH4II] + 
+                  40.0*y[IDX_SiCII] + 33.0*y[IDX_O2HI] + 40.0*y[IDX_SiCI] + 46.0*y[IDX_NO2I] + 
+                  31.0*y[IDX_SiH3II] + 30.0*y[IDX_SiH2II] + 42.0*y[IDX_OCNI] + 30.0*y[IDX_SiH2I] + 
+                  45.0*y[IDX_SiOHII] + 29.0*y[IDX_SiHII] + 32.0*y[IDX_SiH4I] + 29.0*y[IDX_SiHI] + 
+                  31.0*y[IDX_SiH3I] + 44.0*y[IDX_SiOII] + 45.0*y[IDX_HCO2II] + 31.0*y[IDX_HNOI] + 
+                  32.0*y[IDX_CH3OHI] + 24.0*y[IDX_MgI] + 24.0*y[IDX_MgII] + 16.0*y[IDX_CH4II] + 
+                  44.0*y[IDX_SiOI] + 26.0*y[IDX_CNII] + 28.0*y[IDX_HCNHII] + 29.0*y[IDX_N2HII] + 
+                  33.0*y[IDX_O2HII] + 28.0*y[IDX_SiII] + 28.0*y[IDX_SiI] + 27.0*y[IDX_HNCI] + 
+                  31.0*y[IDX_HNOII] + 28.0*y[IDX_N2II] + 31.0*y[IDX_H3COII] + 16.0*y[IDX_CH4I] + 
+                  28.0*y[IDX_COII] + 2.0*y[IDX_H2II] + 17.0*y[IDX_NH3I] + 15.0*y[IDX_CH3I] + 
+                  44.0*y[IDX_CO2I] + 14.0*y[IDX_NII] + 16.0*y[IDX_OII] + 27.0*y[IDX_HCNII] + 
+                  16.0*y[IDX_NH2II] + 15.0*y[IDX_NHII] + 32.0*y[IDX_O2II] + 15.0*y[IDX_CH3II] + 
+                  16.0*y[IDX_NH2I] + 14.0*y[IDX_CH2II] + 18.0*y[IDX_H2OII] + 17.0*y[IDX_NH3II] + 
+                  30.0*y[IDX_NOII] + 19.0*y[IDX_H3OII] + 28.0*y[IDX_N2I] + 12.0*y[IDX_CII] + 
+                  27.0*y[IDX_HCNI] + 13.0*y[IDX_CHII] + 14.0*y[IDX_CH2I] + 30.0*y[IDX_H2COII] + 
+                  15.0*y[IDX_NHI] + 17.0*y[IDX_OHII] + 26.0*y[IDX_CNI] + 30.0*y[IDX_H2COI] + 
+                  29.0*y[IDX_HCOI] + 4.0*y[IDX_HeII] + 13.0*y[IDX_CHI] + 3.0*y[IDX_H3II] + 
+                  4.0*y[IDX_HeI] + 30.0*y[IDX_NOI] + 14.0*y[IDX_NI] + 17.0*y[IDX_OHI] + 
+                  32.0*y[IDX_O2I] + 12.0*y[IDX_CI] + 1.0*y[IDX_HII] + 29.0*y[IDX_HCOII] + 
+                  18.0*y[IDX_H2OI] + 16.0*y[IDX_OI] + 0.0*y[IDX_EM] + 28.0*y[IDX_COI] + 
+                  2.0*y[IDX_H2I] + 1.0*y[IDX_HI] + 0.0;
+    double num = y[IDX_GH2CNI] + y[IDX_GHNCI] + y[IDX_GNO2I] + y[IDX_GSiOI] +
+                 y[IDX_GCOI] + y[IDX_GHNCOI] + y[IDX_GMgI] + y[IDX_GNOI] +
+                 y[IDX_GO2I] + y[IDX_GO2HI] + y[IDX_GSiCI] + y[IDX_GSiC2I] +
+                 y[IDX_GSiC3I] + y[IDX_GCH3OHI] + y[IDX_GCO2I] + y[IDX_GH2SiOI]
+                 + y[IDX_GHNOI] + y[IDX_GN2I] + y[IDX_GH2COI] + y[IDX_GHCNI] +
+                 y[IDX_GH2OI] + y[IDX_GNH3I] + y[IDX_SiC3II] + y[IDX_H2CNI] +
+                 y[IDX_GCH4I] + y[IDX_H2NOII] + y[IDX_H2SiOI] + y[IDX_HeHII] +
+                 y[IDX_HNCOI] + y[IDX_HOCII] + y[IDX_SiC2II] + y[IDX_GSiH4I] +
+                 y[IDX_SiC2I] + y[IDX_SiC3I] + y[IDX_SiH5II] + y[IDX_SiH4II] +
+                 y[IDX_SiCII] + y[IDX_O2HI] + y[IDX_SiCI] + y[IDX_NO2I] +
+                 y[IDX_SiH3II] + y[IDX_SiH2II] + y[IDX_OCNI] + y[IDX_SiH2I] +
+                 y[IDX_SiOHII] + y[IDX_SiHII] + y[IDX_SiH4I] + y[IDX_SiHI] +
+                 y[IDX_SiH3I] + y[IDX_SiOII] + y[IDX_HCO2II] + y[IDX_HNOI] +
+                 y[IDX_CH3OHI] + y[IDX_MgI] + y[IDX_MgII] + y[IDX_CH4II] +
+                 y[IDX_SiOI] + y[IDX_CNII] + y[IDX_HCNHII] + y[IDX_N2HII] +
+                 y[IDX_O2HII] + y[IDX_SiII] + y[IDX_SiI] + y[IDX_HNCI] +
+                 y[IDX_HNOII] + y[IDX_N2II] + y[IDX_H3COII] + y[IDX_CH4I] +
+                 y[IDX_COII] + y[IDX_H2II] + y[IDX_NH3I] + y[IDX_CH3I] +
+                 y[IDX_CO2I] + y[IDX_NII] + y[IDX_OII] + y[IDX_HCNII] +
+                 y[IDX_NH2II] + y[IDX_NHII] + y[IDX_O2II] + y[IDX_CH3II] +
+                 y[IDX_NH2I] + y[IDX_CH2II] + y[IDX_H2OII] + y[IDX_NH3II] +
+                 y[IDX_NOII] + y[IDX_H3OII] + y[IDX_N2I] + y[IDX_CII] +
+                 y[IDX_HCNI] + y[IDX_CHII] + y[IDX_CH2I] + y[IDX_H2COII] +
+                 y[IDX_NHI] + y[IDX_OHII] + y[IDX_CNI] + y[IDX_H2COI] +
+                 y[IDX_HCOI] + y[IDX_HeII] + y[IDX_CHI] + y[IDX_H3II] +
+                 y[IDX_HeI] + y[IDX_NOI] + y[IDX_NI] + y[IDX_OHI] + y[IDX_O2I] +
+                 y[IDX_CI] + y[IDX_HII] + y[IDX_HCOII] + y[IDX_H2OI] + y[IDX_OI]
+                 + y[IDX_EM] + y[IDX_COI] + y[IDX_H2I] + y[IDX_HI] + 0.0;
 
     return mass / num;
 }
