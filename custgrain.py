@@ -2,26 +2,14 @@ from __future__ import annotations
 # from enum import IntEnum
 from naunet.network import define_reaction, define_grain
 from naunet.reactions.reaction import Reaction
-# from naunet.reactions.uclchemreaction import UCLCHEMReaction
 from naunet.component import VariableType as vt
 from naunet.grains.rr07grain import RR07XGrain
 from naunet.species import Species
 
 
-# @define_reaction(name="uclcust")
-# class CUSTOMReaction(UCLCHEMReaction):
-#     """
-#     The reaction format of UCLCHEM Makerates output.
-#     """
-# 
-#     def __init__(self, react_string) -> None:
-#         super().__init__(react_string=react_string)
 
-
-@define_grain()
+@define_grain("rr07custom")
 class CUSTOMGrain(RR07XGrain):
-
-    model = "rr07custom"
 
     def __init__(self, species: list[Species] = None, group: int = 0) -> None:
         super().__init__(species, group)
