@@ -35,28 +35,20 @@ int EvalRates(realtype *k, realtype *y, NaunetData *u_data) {
     realtype opt_thd = u_data->opt_thd;
     realtype ksp = u_data->ksp;
     
-    double h2col = 0.5*1.59e21*Av;
-    double cocol = 1e-5 * h2col;
-    double lambdabar = GetCharactWavelength(h2col, cocol);
-    double H2shielding = GetShieldingFactor(IDX_H2I, h2col, h2col, Tgas, 1);
-    double H2formation = 1.0e-17 * sqrt(Tgas) * nH;
-    double H2dissociation = 5.1e-11 * G0 * GetGrainScattering(Av, 1000.0) * H2shielding;
-    double mant = GetMantleDens(y);
-    double mantabund = mant / nH;
-    double gxsec = (pi*rG*rG) * gdens;
-    double garea = 4.0 * gxsec;
-    double unisites = sites * (4*pi*rG*rG);
-    double densites = garea * sites;
+    realtype h2col = 0.5*1.59e21*Av;
+    realtype cocol = 1e-5 * h2col;
+    realtype lambdabar = GetCharactWavelength(h2col, cocol);
+    realtype H2shielding = GetShieldingFactor(IDX_H2I, h2col, h2col, Tgas, 1);
+    realtype H2formation = 1.0e-17 * sqrt(Tgas) * nH;
+    realtype H2dissociation = 5.1e-11 * G0 * GetGrainScattering(Av, 1000.0) * H2shielding;
+    realtype mant = GetMantleDens(y);
+    realtype mantabund = mant / nH;
+    realtype gxsec = (pi*rG*rG) * gdens;
+    realtype garea = 4.0 * gxsec;
+    realtype unisites = sites * (4*pi*rG*rG);
+    realtype densites = garea * sites;
     
     // clang-format on
-
-    // Some variable definitions from krome
-    realtype Te      = Tgas * 8.617343e-5;            // Tgas in eV (eV)
-    realtype lnTe    = log(Te);                       // ln of Te (#)
-    realtype T32     = Tgas * 0.0033333333333333335;  // Tgas/(300 K) (#)
-    realtype invT    = 1.0 / Tgas;                    // inverse of T (1/K)
-    realtype invTe   = 1.0 / Te;                      // inverse of T (1/eV)
-    realtype sqrTgas = sqrt(Tgas);  // Tgas rootsquare (K**0.5)
 
     // reaaction rate (k) of each reaction
     // clang-format off
@@ -3922,50 +3914,9 @@ int EvalRates(realtype *k, realtype *y, NaunetData *u_data) {
 // clang-format off
 int EvalHeatingRates(realtype *kh, realtype *y, NaunetData *u_data) {
 
-    realtype nH = u_data->nH;
-    realtype Tgas = u_data->Tgas;
-    realtype zeta = u_data->zeta;
-    realtype Av = u_data->Av;
-    realtype omega = u_data->omega;
-    realtype G0 = u_data->G0;
-    realtype gdens = u_data->gdens;
-    realtype rG = u_data->rG;
-    realtype sites = u_data->sites;
-    realtype fr = u_data->fr;
-    realtype opt_crd = u_data->opt_crd;
-    realtype opt_uvd = u_data->opt_uvd;
-    realtype opt_h2d = u_data->opt_h2d;
-    realtype eb_crd = u_data->eb_crd;
-    realtype eb_uvd = u_data->eb_uvd;
-    realtype eb_h2d = u_data->eb_h2d;
-    realtype crdeseff = u_data->crdeseff;
-    realtype uvcreff = u_data->uvcreff;
-    realtype h2deseff = u_data->h2deseff;
-    realtype opt_thd = u_data->opt_thd;
-    realtype ksp = u_data->ksp;
     
-    double h2col = 0.5*1.59e21*Av;
-    double cocol = 1e-5 * h2col;
-    double lambdabar = GetCharactWavelength(h2col, cocol);
-    double H2shielding = GetShieldingFactor(IDX_H2I, h2col, h2col, Tgas, 1);
-    double H2formation = 1.0e-17 * sqrt(Tgas) * nH;
-    double H2dissociation = 5.1e-11 * G0 * GetGrainScattering(Av, 1000.0) * H2shielding;
-    double mant = GetMantleDens(y);
-    double mantabund = mant / nH;
-    double gxsec = (pi*rG*rG) * gdens;
-    double garea = 4.0 * gxsec;
-    double unisites = sites * (4*pi*rG*rG);
-    double densites = garea * sites;
     
     // clang-format on
-
-    // Some variable definitions from krome
-    realtype Te      = Tgas * 8.617343e-5;            // Tgas in eV (eV)
-    realtype lnTe    = log(Te);                       // ln of Te (#)
-    realtype T32     = Tgas * 0.0033333333333333335;  // Tgas/(300 K) (#)
-    realtype invT    = 1.0 / Tgas;                    // inverse of T (1/K)
-    realtype invTe   = 1.0 / Te;                      // inverse of T (1/eV)
-    realtype sqrTgas = sqrt(Tgas);  // Tgas rootsquare (K**0.5)
 
     // reaaction rate (k) of each reaction
     // clang-format off
@@ -3978,50 +3929,9 @@ int EvalHeatingRates(realtype *kh, realtype *y, NaunetData *u_data) {
 // clang-format off
 int EvalCoolingRates(realtype *kc, realtype *y, NaunetData *u_data) {
 
-    realtype nH = u_data->nH;
-    realtype Tgas = u_data->Tgas;
-    realtype zeta = u_data->zeta;
-    realtype Av = u_data->Av;
-    realtype omega = u_data->omega;
-    realtype G0 = u_data->G0;
-    realtype gdens = u_data->gdens;
-    realtype rG = u_data->rG;
-    realtype sites = u_data->sites;
-    realtype fr = u_data->fr;
-    realtype opt_crd = u_data->opt_crd;
-    realtype opt_uvd = u_data->opt_uvd;
-    realtype opt_h2d = u_data->opt_h2d;
-    realtype eb_crd = u_data->eb_crd;
-    realtype eb_uvd = u_data->eb_uvd;
-    realtype eb_h2d = u_data->eb_h2d;
-    realtype crdeseff = u_data->crdeseff;
-    realtype uvcreff = u_data->uvcreff;
-    realtype h2deseff = u_data->h2deseff;
-    realtype opt_thd = u_data->opt_thd;
-    realtype ksp = u_data->ksp;
     
-    double h2col = 0.5*1.59e21*Av;
-    double cocol = 1e-5 * h2col;
-    double lambdabar = GetCharactWavelength(h2col, cocol);
-    double H2shielding = GetShieldingFactor(IDX_H2I, h2col, h2col, Tgas, 1);
-    double H2formation = 1.0e-17 * sqrt(Tgas) * nH;
-    double H2dissociation = 5.1e-11 * G0 * GetGrainScattering(Av, 1000.0) * H2shielding;
-    double mant = GetMantleDens(y);
-    double mantabund = mant / nH;
-    double gxsec = (pi*rG*rG) * gdens;
-    double garea = 4.0 * gxsec;
-    double unisites = sites * (4*pi*rG*rG);
-    double densites = garea * sites;
     
     // clang-format on
-
-    // Some variable definitions from krome
-    realtype Te      = Tgas * 8.617343e-5;            // Tgas in eV (eV)
-    realtype lnTe    = log(Te);                       // ln of Te (#)
-    realtype T32     = Tgas * 0.0033333333333333335;  // Tgas/(300 K) (#)
-    realtype invT    = 1.0 / Tgas;                    // inverse of T (1/K)
-    realtype invTe   = 1.0 / Te;                      // inverse of T (1/eV)
-    realtype sqrTgas = sqrt(Tgas);  // Tgas rootsquare (K**0.5)
 
     // reaaction rate (k) of each reaction
     // clang-format off

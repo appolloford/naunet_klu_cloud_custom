@@ -437,6 +437,8 @@ int Naunet::Solve(realtype *ab, realtype dt, NaunetData *data) {
                 cvflag);
         fprintf(errfp_, "Initial condition: \n");
 
+        // clang-format off
+        /* */
         /* */
         fprintf(errfp_, "    data.nH = %13.7e;\n", data->nH);
         /* */
@@ -480,6 +482,7 @@ int Naunet::Solve(realtype *ab, realtype dt, NaunetData *data) {
         /* */
         fprintf(errfp_, "    data.ksp = %13.7e;\n", data->ksp);
         /*  */
+        // clang-format on
 
         fprintf(errfp_, "\n");
 

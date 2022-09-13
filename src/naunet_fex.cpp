@@ -46,18 +46,12 @@ int Fex(realtype t, N_Vector u, N_Vector udot, void *user_data) {
     realtype opt_thd = u_data->opt_thd;
     realtype ksp = u_data->ksp;
     
-    double h2col = 0.5*1.59e21*Av;
-    double cocol = 1e-5 * h2col;
-    double lambdabar = GetCharactWavelength(h2col, cocol);
-    double H2shielding = GetShieldingFactor(IDX_H2I, h2col, h2col, Tgas, 1);
-    double H2formation = 1.0e-17 * sqrt(Tgas) * nH;
-    double H2dissociation = 5.1e-11 * G0 * GetGrainScattering(Av, 1000.0) * H2shielding;
-    double mant = GetMantleDens(y);
-    double mantabund = mant / nH;
-    double gxsec = (pi*rG*rG) * gdens;
-    double garea = 4.0 * gxsec;
-    double unisites = sites * (4*pi*rG*rG);
-    double densites = garea * sites;
+    realtype h2col = 0.5*1.59e21*Av;
+    realtype cocol = 1e-5 * h2col;
+    realtype lambdabar = GetCharactWavelength(h2col, cocol);
+    realtype H2shielding = GetShieldingFactor(IDX_H2I, h2col, h2col, Tgas, 1);
+    realtype H2formation = 1.0e-17 * sqrt(Tgas) * nH;
+    realtype H2dissociation = 5.1e-11 * G0 * GetGrainScattering(Av, 1000.0) * H2shielding;
     
 #if (NHEATPROCS || NCOOLPROCS)
     if (mu < 0) mu = GetMu(y);

@@ -33,34 +33,35 @@ extern const double kerg;
 // reduced Planck constant
 extern const double hbar;
 
-extern const double zism           ;
-extern const double habing         ;
-extern const double crphot         ;
-extern const double nmono          ;
-extern const double eb_GCH3OHI     ;
-extern const double eb_GCH4I       ;
-extern const double eb_GCOI        ;
-extern const double eb_GCO2I       ;
-extern const double eb_GH2CNI      ;
-extern const double eb_GH2COI      ;
-extern const double eb_GH2OI       ;
-extern const double eb_GH2SiOI     ;
-extern const double eb_GHCNI       ;
-extern const double eb_GHNCI       ;
-extern const double eb_GHNCOI      ;
-extern const double eb_GHNOI       ;
-extern const double eb_GMgI        ;
-extern const double eb_GN2I        ;
-extern const double eb_GNH3I       ;
-extern const double eb_GNOI        ;
-extern const double eb_GNO2I       ;
-extern const double eb_GO2I        ;
-extern const double eb_GO2HI       ;
-extern const double eb_GSiCI       ;
-extern const double eb_GSiC2I      ;
-extern const double eb_GSiC3I      ;
-extern const double eb_GSiH4I      ;
-extern const double eb_GSiOI       ;
+extern const double zism;
+extern const double habing;
+extern const double crphot;
+extern const double nmono;
+
+extern const double eb_GH2CNI;
+extern const double eb_GHNCI;
+extern const double eb_GNO2I;
+extern const double eb_GSiOI;
+extern const double eb_GCOI;
+extern const double eb_GHNCOI;
+extern const double eb_GMgI;
+extern const double eb_GNOI;
+extern const double eb_GO2I;
+extern const double eb_GO2HI;
+extern const double eb_GSiCI;
+extern const double eb_GSiC2I;
+extern const double eb_GSiC3I;
+extern const double eb_GCH3OHI;
+extern const double eb_GCO2I;
+extern const double eb_GH2SiOI;
+extern const double eb_GHNOI;
+extern const double eb_GN2I;
+extern const double eb_GH2COI;
+extern const double eb_GHCNI;
+extern const double eb_GH2OI;
+extern const double eb_GNH3I;
+extern const double eb_GCH4I;
+extern const double eb_GSiH4I;
 
 
 // van Dishoeck & Black (1988)
