@@ -3553,7 +3553,7 @@ int EvalRates(realtype *k, realtype *y, NaunetData *u_data) {
         : 0.0) : 0.0; }
         
     if (Tgas<10000.0) { k[1309] = mantabund > 1e-30 ? (opt_uvd *
-        (G0*habing*exp(-Av*3.02) + crphot * (zeta/zism)) * 0.1 * nmono * 4.0 *
+        (G0*habing*exp(-Av*3.02) + crphot * (zeta/zism)) * 0.001 * nmono * 4.0 *
         gxsec) : 0.0; }
         
     if (Tgas<10000.0) { k[1310] = mantabund > 1e-30 ? ((opt_thd *
@@ -3568,7 +3568,7 @@ int EvalRates(realtype *k, realtype *y, NaunetData *u_data) {
         : 0.0) : 0.0; }
         
     if (Tgas<10000.0) { k[1313] = mantabund > 1e-30 ? (opt_uvd *
-        (G0*habing*exp(-Av*3.02) + crphot * (zeta/zism)) * 0.1 * nmono * 4.0 *
+        (G0*habing*exp(-Av*3.02) + crphot * (zeta/zism)) * 0.001 * nmono * 4.0 *
         gxsec) : 0.0; }
         
     if (Tgas<10000.0) { k[1314] = mantabund > 1e-30 ? ((opt_thd *
@@ -3583,8 +3583,8 @@ int EvalRates(realtype *k, realtype *y, NaunetData *u_data) {
         : 0.0) : 0.0; }
         
     if (Tgas<10000.0) { k[1317] = mantabund > 1e-30 ? (opt_uvd *
-        (G0*habing*exp(-Av*3.02) + crphot * (zeta/zism)) * 0.1 * nmono * 4.0 *
-        gxsec) : 0.0; }
+        (G0*habing*exp(-Av*3.02) + crphot * (zeta/zism)) * 0.0013 * nmono * 4.0
+        * gxsec) : 0.0; }
         
     if (Tgas<10000.0) { k[1318] = mantabund > 1e-30 ? ((opt_thd *
         sqrt(2.0*sites*kerg*eb_GH2OI/(pi*pi*amu*18.0)) * 2.0 * densites *
@@ -3598,7 +3598,7 @@ int EvalRates(realtype *k, realtype *y, NaunetData *u_data) {
         : 0.0) : 0.0; }
         
     if (Tgas<10000.0) { k[1321] = mantabund > 1e-30 ? (opt_uvd *
-        (G0*habing*exp(-Av*3.02) + crphot * (zeta/zism)) * 0.1 * nmono * 4.0 *
+        (G0*habing*exp(-Av*3.02) + crphot * (zeta/zism)) * 0.001 * nmono * 4.0 *
         gxsec) : 0.0; }
         
     if (Tgas<10000.0) { k[1322] = mantabund > 1e-30 ? ((opt_thd *
@@ -3613,7 +3613,7 @@ int EvalRates(realtype *k, realtype *y, NaunetData *u_data) {
         : 0.0) : 0.0; }
         
     if (Tgas<10000.0) { k[1325] = mantabund > 1e-30 ? (opt_uvd *
-        (G0*habing*exp(-Av*3.02) + crphot * (zeta/zism)) * 0.1 * nmono * 4.0 *
+        (G0*habing*exp(-Av*3.02) + crphot * (zeta/zism)) * 0.001 * nmono * 4.0 *
         gxsec) : 0.0; }
         
     if (Tgas<10000.0) { k[1326] = mantabund > 1e-30 ? ((opt_thd *
@@ -3628,7 +3628,7 @@ int EvalRates(realtype *k, realtype *y, NaunetData *u_data) {
         : 0.0) : 0.0; }
         
     if (Tgas<10000.0) { k[1329] = mantabund > 1e-30 ? (opt_uvd *
-        (G0*habing*exp(-Av*3.02) + crphot * (zeta/zism)) * 0.1 * nmono * 4.0 *
+        (G0*habing*exp(-Av*3.02) + crphot * (zeta/zism)) * 0.001 * nmono * 4.0 *
         gxsec) : 0.0; }
         
     if (Tgas<10000.0) { k[1330] = mantabund > 1e-30 ? ((opt_thd *
@@ -3643,8 +3643,8 @@ int EvalRates(realtype *k, realtype *y, NaunetData *u_data) {
         : 0.0) : 0.0; }
         
     if (Tgas<10000.0) { k[1333] = mantabund > 1e-30 ? (opt_uvd *
-        (G0*habing*exp(-Av*3.02) + crphot * (zeta/zism)) * 0.1 * nmono * 4.0 *
-        gxsec) : 0.0; }
+        (G0*habing*exp(-Av*3.02) + crphot * (zeta/zism)) * 0.0027 * nmono * 4.0
+        * gxsec) : 0.0; }
         
     if (Tgas<10000.0) { k[1334] = mantabund > 1e-30 ? ((opt_thd *
         sqrt(2.0*sites*kerg*eb_GCOI/(pi*pi*amu*28.0)) * 2.0 * densites *
@@ -3658,8 +3658,8 @@ int EvalRates(realtype *k, realtype *y, NaunetData *u_data) {
         : 0.0) : 0.0; }
         
     if (Tgas<10000.0) { k[1337] = mantabund > 1e-30 ? (opt_uvd *
-        (G0*habing*exp(-Av*3.02) + crphot * (zeta/zism)) * 0.1 * nmono * 4.0 *
-        gxsec) : 0.0; }
+        (G0*habing*exp(-Av*3.02) + crphot * (zeta/zism)) * 0.00018 * nmono * 4.0
+        * gxsec) : 0.0; }
         
     if (Tgas<10000.0) { k[1338] = mantabund > 1e-30 ? ((opt_thd *
         sqrt(2.0*sites*kerg*eb_GN2I/(pi*pi*amu*28.0)) * 2.0 * densites *
@@ -3673,7 +3673,7 @@ int EvalRates(realtype *k, realtype *y, NaunetData *u_data) {
         : 0.0) : 0.0; }
         
     if (Tgas<10000.0) { k[1341] = mantabund > 1e-30 ? (opt_uvd *
-        (G0*habing*exp(-Av*3.02) + crphot * (zeta/zism)) * 0.1 * nmono * 4.0 *
+        (G0*habing*exp(-Av*3.02) + crphot * (zeta/zism)) * 0.001 * nmono * 4.0 *
         gxsec) : 0.0; }
         
     if (Tgas<10000.0) { k[1342] = mantabund > 1e-30 ? ((opt_thd *
@@ -3688,7 +3688,7 @@ int EvalRates(realtype *k, realtype *y, NaunetData *u_data) {
         : 0.0) : 0.0; }
         
     if (Tgas<10000.0) { k[1345] = mantabund > 1e-30 ? (opt_uvd *
-        (G0*habing*exp(-Av*3.02) + crphot * (zeta/zism)) * 0.1 * nmono * 4.0 *
+        (G0*habing*exp(-Av*3.02) + crphot * (zeta/zism)) * 0.001 * nmono * 4.0 *
         gxsec) : 0.0; }
         
     if (Tgas<10000.0) { k[1346] = mantabund > 1e-30 ? ((opt_thd *
@@ -3703,7 +3703,7 @@ int EvalRates(realtype *k, realtype *y, NaunetData *u_data) {
         : 0.0) : 0.0; }
         
     if (Tgas<10000.0) { k[1349] = mantabund > 1e-30 ? (opt_uvd *
-        (G0*habing*exp(-Av*3.02) + crphot * (zeta/zism)) * 0.1 * nmono * 4.0 *
+        (G0*habing*exp(-Av*3.02) + crphot * (zeta/zism)) * 0.001 * nmono * 4.0 *
         gxsec) : 0.0; }
         
     if (Tgas<10000.0) { k[1350] = mantabund > 1e-30 ? ((opt_thd *
@@ -3718,7 +3718,7 @@ int EvalRates(realtype *k, realtype *y, NaunetData *u_data) {
         : 0.0) : 0.0; }
         
     if (Tgas<10000.0) { k[1353] = mantabund > 1e-30 ? (opt_uvd *
-        (G0*habing*exp(-Av*3.02) + crphot * (zeta/zism)) * 0.1 * nmono * 4.0 *
+        (G0*habing*exp(-Av*3.02) + crphot * (zeta/zism)) * 0.001 * nmono * 4.0 *
         gxsec) : 0.0; }
         
     if (Tgas<10000.0) { k[1354] = mantabund > 1e-30 ? ((opt_thd *
@@ -3733,7 +3733,7 @@ int EvalRates(realtype *k, realtype *y, NaunetData *u_data) {
         : 0.0) : 0.0; }
         
     if (Tgas<10000.0) { k[1357] = mantabund > 1e-30 ? (opt_uvd *
-        (G0*habing*exp(-Av*3.02) + crphot * (zeta/zism)) * 0.1 * nmono * 4.0 *
+        (G0*habing*exp(-Av*3.02) + crphot * (zeta/zism)) * 0.001 * nmono * 4.0 *
         gxsec) : 0.0; }
         
     if (Tgas<10000.0) { k[1358] = mantabund > 1e-30 ? ((opt_thd *
@@ -3748,8 +3748,8 @@ int EvalRates(realtype *k, realtype *y, NaunetData *u_data) {
         : 0.0) : 0.0; }
         
     if (Tgas<10000.0) { k[1361] = mantabund > 1e-30 ? (opt_uvd *
-        (G0*habing*exp(-Av*3.02) + crphot * (zeta/zism)) * 0.1 * nmono * 4.0 *
-        gxsec) : 0.0; }
+        (G0*habing*exp(-Av*3.02) + crphot * (zeta/zism)) * 0.0021 * nmono * 4.0
+        * gxsec) : 0.0; }
         
     if (Tgas<10000.0) { k[1362] = mantabund > 1e-30 ? ((opt_thd *
         sqrt(2.0*sites*kerg*eb_GCH3OHI/(pi*pi*amu*32.0)) * 2.0 * densites *
@@ -3763,7 +3763,7 @@ int EvalRates(realtype *k, realtype *y, NaunetData *u_data) {
         : 0.0) : 0.0; }
         
     if (Tgas<10000.0) { k[1365] = mantabund > 1e-30 ? (opt_uvd *
-        (G0*habing*exp(-Av*3.02) + crphot * (zeta/zism)) * 0.1 * nmono * 4.0 *
+        (G0*habing*exp(-Av*3.02) + crphot * (zeta/zism)) * 0.001 * nmono * 4.0 *
         gxsec) : 0.0; }
         
     if (Tgas<10000.0) { k[1366] = mantabund > 1e-30 ? ((opt_thd *
@@ -3778,7 +3778,7 @@ int EvalRates(realtype *k, realtype *y, NaunetData *u_data) {
         : 0.0) : 0.0; }
         
     if (Tgas<10000.0) { k[1369] = mantabund > 1e-30 ? (opt_uvd *
-        (G0*habing*exp(-Av*3.02) + crphot * (zeta/zism)) * 0.1 * nmono * 4.0 *
+        (G0*habing*exp(-Av*3.02) + crphot * (zeta/zism)) * 0.001 * nmono * 4.0 *
         gxsec) : 0.0; }
         
     if (Tgas<10000.0) { k[1370] = mantabund > 1e-30 ? ((opt_thd *
@@ -3793,7 +3793,7 @@ int EvalRates(realtype *k, realtype *y, NaunetData *u_data) {
         : 0.0) : 0.0; }
         
     if (Tgas<10000.0) { k[1373] = mantabund > 1e-30 ? (opt_uvd *
-        (G0*habing*exp(-Av*3.02) + crphot * (zeta/zism)) * 0.1 * nmono * 4.0 *
+        (G0*habing*exp(-Av*3.02) + crphot * (zeta/zism)) * 0.001 * nmono * 4.0 *
         gxsec) : 0.0; }
         
     if (Tgas<10000.0) { k[1374] = mantabund > 1e-30 ? ((opt_thd *
@@ -3808,7 +3808,7 @@ int EvalRates(realtype *k, realtype *y, NaunetData *u_data) {
         : 0.0) : 0.0; }
         
     if (Tgas<10000.0) { k[1377] = mantabund > 1e-30 ? (opt_uvd *
-        (G0*habing*exp(-Av*3.02) + crphot * (zeta/zism)) * 0.1 * nmono * 4.0 *
+        (G0*habing*exp(-Av*3.02) + crphot * (zeta/zism)) * 0.001 * nmono * 4.0 *
         gxsec) : 0.0; }
         
     if (Tgas<10000.0) { k[1378] = mantabund > 1e-30 ? ((opt_thd *
@@ -3823,7 +3823,7 @@ int EvalRates(realtype *k, realtype *y, NaunetData *u_data) {
         : 0.0) : 0.0; }
         
     if (Tgas<10000.0) { k[1381] = mantabund > 1e-30 ? (opt_uvd *
-        (G0*habing*exp(-Av*3.02) + crphot * (zeta/zism)) * 0.1 * nmono * 4.0 *
+        (G0*habing*exp(-Av*3.02) + crphot * (zeta/zism)) * 0.001 * nmono * 4.0 *
         gxsec) : 0.0; }
         
     if (Tgas<10000.0) { k[1382] = mantabund > 1e-30 ? ((opt_thd *
@@ -3838,8 +3838,8 @@ int EvalRates(realtype *k, realtype *y, NaunetData *u_data) {
         : 0.0) : 0.0; }
         
     if (Tgas<10000.0) { k[1385] = mantabund > 1e-30 ? (opt_uvd *
-        (G0*habing*exp(-Av*3.02) + crphot * (zeta/zism)) * 0.1 * nmono * 4.0 *
-        gxsec) : 0.0; }
+        (G0*habing*exp(-Av*3.02) + crphot * (zeta/zism)) * 0.0023 * nmono * 4.0
+        * gxsec) : 0.0; }
         
     if (Tgas<10000.0) { k[1386] = mantabund > 1e-30 ? ((opt_thd *
         sqrt(2.0*sites*kerg*eb_GCO2I/(pi*pi*amu*44.0)) * 2.0 * densites *
@@ -3853,7 +3853,7 @@ int EvalRates(realtype *k, realtype *y, NaunetData *u_data) {
         : 0.0) : 0.0; }
         
     if (Tgas<10000.0) { k[1389] = mantabund > 1e-30 ? (opt_uvd *
-        (G0*habing*exp(-Av*3.02) + crphot * (zeta/zism)) * 0.1 * nmono * 4.0 *
+        (G0*habing*exp(-Av*3.02) + crphot * (zeta/zism)) * 0.001 * nmono * 4.0 *
         gxsec) : 0.0; }
         
     if (Tgas<10000.0) { k[1390] = mantabund > 1e-30 ? ((opt_thd *
@@ -3868,7 +3868,7 @@ int EvalRates(realtype *k, realtype *y, NaunetData *u_data) {
         : 0.0) : 0.0; }
         
     if (Tgas<10000.0) { k[1393] = mantabund > 1e-30 ? (opt_uvd *
-        (G0*habing*exp(-Av*3.02) + crphot * (zeta/zism)) * 0.1 * nmono * 4.0 *
+        (G0*habing*exp(-Av*3.02) + crphot * (zeta/zism)) * 0.001 * nmono * 4.0 *
         gxsec) : 0.0; }
         
     if (Tgas<10000.0) { k[1394] = mantabund > 1e-30 ? ((opt_thd *
@@ -3883,7 +3883,7 @@ int EvalRates(realtype *k, realtype *y, NaunetData *u_data) {
         : 0.0) : 0.0; }
         
     if (Tgas<10000.0) { k[1397] = mantabund > 1e-30 ? (opt_uvd *
-        (G0*habing*exp(-Av*3.02) + crphot * (zeta/zism)) * 0.1 * nmono * 4.0 *
+        (G0*habing*exp(-Av*3.02) + crphot * (zeta/zism)) * 0.001 * nmono * 4.0 *
         gxsec) : 0.0; }
         
     if (Tgas<10000.0) { k[1398] = mantabund > 1e-30 ? ((opt_thd *
@@ -3898,7 +3898,7 @@ int EvalRates(realtype *k, realtype *y, NaunetData *u_data) {
         : 0.0) : 0.0; }
         
     if (Tgas<10000.0) { k[1401] = mantabund > 1e-30 ? (opt_uvd *
-        (G0*habing*exp(-Av*3.02) + crphot * (zeta/zism)) * 0.1 * nmono * 4.0 *
+        (G0*habing*exp(-Av*3.02) + crphot * (zeta/zism)) * 0.001 * nmono * 4.0 *
         gxsec) : 0.0; }
         
     if (Tgas<10000.0) { k[1402] = mantabund > 1e-30 ? ((opt_thd *

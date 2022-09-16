@@ -513,7 +513,10 @@ py::array_t<realtype> Naunet::PyWrapSolve(py::array_t<realtype> arr,
     py::buffer_info info = arr.request();
     realtype *ab         = static_cast<realtype *>(info.ptr);
 
-    Solve(ab, dt, data);
+    int flag             = Solve(ab, dt, data);
+    if (flag == NAUNET_FAIL) {
+        throw std::runtime_error("Something unrecoverable occurred");
+    }
 
     return py::array_t<realtype>(info.shape, ab);
 }

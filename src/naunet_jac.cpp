@@ -50,6 +50,7 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
     realtype h2deseff = u_data->h2deseff;
     realtype opt_thd = u_data->opt_thd;
     realtype ksp = u_data->ksp;
+    
         
 #if (NHEATPROCS || NCOOLPROCS)
     if (mu < 0) mu = GetMu(y);

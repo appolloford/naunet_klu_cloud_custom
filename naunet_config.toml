@@ -74,11 +74,11 @@ model = "rr07custom"
 "#H2S2" = 3100.0
 
 [chemistry.photon_yield]
-GH2O = 0.0013
-GN2 = 0.00018
-GCO = 0.0027
-GCH3OH = 0.0021
-GCO2 = 0.0023
+"#H2O" = 0.0013
+"#N2" = 0.00018
+"#CO" = 0.0027
+"#CH3OH" = 0.0021
+"#CO2" = 0.0023
 
 [chemistry.shielding]
 CO = "VB88Table"
