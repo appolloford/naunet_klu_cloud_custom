@@ -1,12 +1,25 @@
 from __future__ import annotations
 # from enum import IntEnum
 from naunet.network import define_reaction, define_grain
-from naunet.reactions.reaction import Reaction
+from naunet.reactions import Reaction, UCLCHEMReaction
 from naunet.component import VariableType as vt
 from naunet.grains.rr07grain import RR07XGrain
 from naunet.species import Species
 
 
+@define_reaction("uclcustom")
+class CUSTOMReaction(UCLCHEMReaction):
+
+    def __init__(self, react_string: str) -> None:
+        super().__init__(react_string=react_string)
+
+    
+    def _parse_string(self, react_string) -> None:
+
+        super()._parse_string(react_string)
+        if self.reaction_type != self.ReactionType.UCLCHEM_FR:
+            self.temp_min = -1.0
+            self.temp_max = -1.0
 
 @define_grain("rr07custom")
 class CUSTOMGrain(RR07XGrain):
