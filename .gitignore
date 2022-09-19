@@ -10,3 +10,6 @@ python/
 # deprecated
 enzo_*/
 
+# benchmark
+benchmark*
+
