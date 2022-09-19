@@ -172,13 +172,16 @@ int Naunet::HandleError(int cvflag, realtype *ab, realtype dt, realtype t0) {
             return NAUNET_FAIL;
         }
 
-        for (int step = 0; step < nsubsteps; step++) {
-            realtype tout = pow(
-                10.0, log10(dt) * (realtype)(step + 1) / (realtype)nsubsteps);
+        realtype logdt = log10(dt);
+        for (int step = 1; step < nsubsteps + 1; step++) {
+            realtype expo = logdt - (realtype)level;
+            expo += (realtype)level * (realtype)step / (realtype)nsubsteps;
+            realtype tout = pow(10.0, expo);
+
             // printf("tout: %13.7e, step: %d, level: %d\n", tout, step, level);
             // realtype tcur = 0.0;
             // cvflag = CVodeGetCurrentTime(cv_mem_, &tcur);
-            cvflag = CVode(cv_mem_, tout, cv_y_, &t0, CV_NORMAL);
+            cvflag        = CVode(cv_mem_, tout, cv_y_, &t0, CV_NORMAL);
             if (cvflag < 0) {
                 fprintf(errfp_,
                         "CVode failed in Naunet! Flag = %d in the %dth substep "
@@ -508,6 +511,31 @@ int Naunet::Solve(realtype *ab, realtype dt, NaunetData *data) {
 };
 
 #ifdef PYMODULE
+#ifdef IDX_ELEM_H
+py::array_t<realtype> Naunet::PyWrapRenorm(py::array_t<realtype> arr) {
+    py::buffer_info info = arr.request();
+    realtype *ab         = static_cast<realtype *>(info.ptr);
+
+    int flag             = Renorm(ab);
+    if (flag == NAUNET_FAIL) {
+        throw std::runtime_error("Fail to renormalization");
+    }
+
+    return py::array_t<realtype>(info.shape, ab);
+}
+py::array_t<realtype> Naunet::PyWrapSetReferenceAbund(py::array_t<realtype> arr,
+                                                      int opt) {
+    py::buffer_info info = arr.request();
+    realtype *ab         = static_cast<realtype *>(info.ptr);
+
+    int flag             = SetReferenceAbund(ab, opt);
+    if (flag == NAUNET_FAIL) {
+        throw std::runtime_error("Fail to set reference abundance");
+    }
+
+    return py::array_t<realtype>(info.shape, ab);
+}
+#endif
 py::array_t<realtype> Naunet::PyWrapSolve(py::array_t<realtype> arr,
                                           realtype dt, NaunetData *data) {
     py::buffer_info info = arr.request();
