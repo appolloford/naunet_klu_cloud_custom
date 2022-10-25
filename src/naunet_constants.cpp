@@ -1,7 +1,6 @@
 // 
 // clang-format off
 #include "naunet_constants.h"
-
 const double pi              = 3.1415926;
 
 // atomic mass unit (g)
@@ -62,20 +61,16 @@ const double eb_GCH4I = 1090.0;
 const double eb_GSiH4I = 4500.0;
 
 
-
 // Table of CO self-shielding factor
 // H2 column density
-const
-double COShieldingTableX[6] = 
+const double COShieldingTableX[6] = 
 {18.0, 19.0, 20.0, 21.0, 22.0, 23.0};
 
 // CO column density
-const
-double COShieldingTableY[7] = 
+const double COShieldingTableY[7] = 
 {12.0, 13.0, 14.0, 15.0, 16.0, 17.0, 18.0};
 
-const
-double COShieldingTable[6][7] = 
+const double COShieldingTable[6][7] = 
 {{ 0.000e+00, -1.408e-02, -1.099e-01, -4.400e-01, -1.154e+00, -1.888e+00, -2.760e+00},
  {-8.539e-02, -1.015e-01, -2.104e-01, -5.608e-01, -1.272e+00, -1.973e+00, -2.818e+00},
  {-1.451e-01, -1.612e-01, -2.708e-01, -6.273e-01, -1.355e+00, -2.057e+00, -2.902e+00},

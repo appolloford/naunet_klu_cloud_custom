@@ -3905,7 +3905,6 @@ int EvalRates(realtype *k, realtype *y, NaunetData *u_data) {
         sqrt(2.0*sites*kerg*eb_GSiC3I/(pi*pi*amu*64.0)) * 2.0 * densites *
         exp(-eb_GSiC3I/Tgas) + ksp * gxsec / mant)) : 0.0; }
         
-    
         // clang-format on
 
     return NAUNET_SUCCESS;

@@ -3,7 +3,6 @@
 
 // 
 // clang-format off
-
 extern const double pi;
 
 // atomic mass unit (g)
@@ -64,6 +63,7 @@ extern const double eb_GCH4I;
 extern const double eb_GSiH4I;
 
 
+
 // van Dishoeck & Black (1988)
 // H2 column density
 extern const double COShieldingTableX[6];
@@ -73,7 +73,6 @@ extern const double COShieldingTableY[7];
 extern const double COShieldingTable[6][7];
 // Second derivative of CO shielding factor
 // extern double COShieldingTableD2[6][7];
-
 
 
 #endif

@@ -57,6 +57,12 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
     realtype H2shielding = GetShieldingFactor(IDX_H2I, h2col, h2col, Tgas, 1);
     realtype H2formation = 1.0e-17 * sqrt(Tgas) * nH;
     realtype H2dissociation = 5.1e-11 * G0 * GetGrainScattering(Av, 1000.0) * H2shielding;
+    realtype mant = GetMantleDens(y);
+    realtype mantabund = mant / nH;
+    realtype gxsec = (pi*rG*rG) * gdens;
+    realtype garea = 4.0 * gxsec;
+    realtype unisites = sites * (4*pi*rG*rG);
+    realtype densites = garea * sites;
         
 #if (NHEATPROCS || NCOOLPROCS)
     if (mu < 0) mu = GetMu(y);
