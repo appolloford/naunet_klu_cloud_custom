@@ -9,6 +9,7 @@
 #include "naunet_physics.h"
 #include "naunet_utilities.h"
 
+/*  */
 // clang-format off
 double GetElementAbund(double *y, int elemidx) {
     if (elemidx == IDX_ELEM_MG) {
@@ -181,7 +182,9 @@ double GetNumDens(double *y) {
 }
 // clang-format on
 
+/*  */
 // clang-format off
+
 double GetShieldingFactor(int specidx, double h2coldens, double spcoldens,
                           double tgas, int method) {
     // clang-format on
@@ -206,6 +209,7 @@ double GetShieldingFactor(int specidx, double h2coldens, double spcoldens,
 }
 
 // clang-format off
+
 double GetH2shielding(double coldens, int method) {
     // clang-format on
     double shielding = -1.0;

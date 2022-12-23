@@ -65,7 +65,7 @@ class CUSTOMGrain(RR07XGrain):
         sym_phot = f"{radfield}*{habing}*exp(-{av}*3.02) + {crphot} * ({crrate}/{zism})"
 
         spec = reac.reactants[0]
-        rate = f"{opt_uvd} * ({sym_phot}) * {spec.photon_yield()} * {nmono} * 4.0 * {gxsec}"
+        rate = f"{opt_uvd} * ({sym_phot}) * {spec.photon_yield or 1e-3} * {nmono} * 4.0 * {gxsec}"
         rate = f"mantabund > 1e-30 ? ({rate}) : 0.0"
 
         return rate
