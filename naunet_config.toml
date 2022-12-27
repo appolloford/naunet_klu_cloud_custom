@@ -7,28 +7,17 @@ description = "example"
 loads = ["custgrain.py"]
 
 [chemistry]
+[chemistry.species]
 elements = ["E", "H", "D", "HE", "C", "N", "O", "MG", "SI", "S", "CL"]
 pseudo_elements = ["CR", "CRP", "PHOTON", "CRPHOT"]
-species = ["H", "H+", "H2", "H2+", "H3+", "HE", "HE+", "HEH+", "C", "C+", "CH", "CH+", "CH2", "CH2+", "N", "N+", "CH3", "CH3+", "NH", "NH+", "#CH4", "CH4", "CH4+", "NH2", "NH2+", "O", "O+", "#NH3", "NH3", "NH3+", "OH", "OH+", "#H2O", "H2O", "H2O+", "H3O+", "MG", "MG+", "#MG", "CN", "CN+", "#HCN", "#HNC", "HCN", "HCN+", "HNC", "#CO", "#N2", "CO", "CO+", "H2CN", "HCNH+", "N2", "N2+", "#H2CN", "SI", "SI+", "HCO", "HCO+", "HOC+", "N2H+", "SIH", "SIH+", "#NO", "#H2CO", "H2CO", "H2CO+", "NO", "NO+", "SIH2", "SIH2+", "H3CO+", "HNO", "HNO+", "#HNO", "SIH3", "SIH3+", "#O2", "#CH3OH", "CH3OH", "H2NO+", "O2", "O2+", "#SIH4", "SIH4", "SIH4+", "O2H", "O2H+", "#O2H", "SIH5+", "SIC", "SIC+", "#SIC", "OCN", "#HNCO", "HNCO", "#CO2", "CO2", "#SIO", "SIO", "SIO+", "HCO2+", "SIOH+", "#NO2", "NO2", "#H2SIO", "H2SIO", "SIC2", "SIC2+", "#SIC2", "#SIC3", "SIC3+", "SIC3", "E-"]
+allowed_species = ["H", "H+", "H2", "H2+", "H3+", "HE", "HE+", "HEH+", "C", "C+", "CH", "CH+", "CH2", "CH2+", "N", "N+", "CH3", "CH3+", "NH", "NH+", "#CH4", "CH4", "CH4+", "NH2", "NH2+", "O", "O+", "#NH3", "NH3", "NH3+", "OH", "OH+", "#H2O", "H2O", "H2O+", "H3O+", "MG", "MG+", "#MG", "CN", "CN+", "#HCN", "#HNC", "HCN", "HCN+", "HNC", "#CO", "#N2", "CO", "CO+", "H2CN", "HCNH+", "N2", "N2+", "#H2CN", "SI", "SI+", "HCO", "HCO+", "HOC+", "N2H+", "SIH", "SIH+", "#NO", "#H2CO", "H2CO", "H2CO+", "NO", "NO+", "SIH2", "SIH2+", "H3CO+", "HNO", "HNO+", "#HNO", "SIH3", "SIH3+", "#O2", "#CH3OH", "CH3OH", "H2NO+", "O2", "O2+", "#SIH4", "SIH4", "SIH4+", "O2H", "O2H+", "#O2H", "SIH5+", "SIC", "SIC+", "#SIC", "OCN", "#HNCO", "HNCO", "#CO2", "CO2", "#SIO", "SIO", "SIO+", "HCO2+", "SIOH+", "#NO2", "NO2", "#H2SIO", "H2SIO", "SIC2", "SIC2+", "#SIC2", "#SIC3", "SIC3+", "SIC3", "E-"]
 extra_species = []
-network = ["reactions.ucl"]
-format = ["uclchem"]
-heating = []
-cooling = []
 
-[chemistry.ode_modifier]
-[chemistry.ode_modifier.H2]
-factors = ["H2formation", "-H2dissociation"]
-reactants = [["H"], ["H2"]]
+[chemistry.species.symbol]
+surface = "#"
+bulk = "@"
 
-[chemistry.ode_modifier.H]
-factors = ["-2.0 * H2formation", "2.0 * H2dissociation"]
-reactants = [["H"], ["H2"]]
-
-[chemistry.grain]
-model = "rr07custom"
-
-[chemistry.binding_energy]
+[chemistry.species.binding_energy]
 "#CH4" = 1090.0
 "#NH3" = 3130.0
 "#H2O" = 5770.0
@@ -81,17 +70,42 @@ model = "rr07custom"
 "#SO2" = 5330.0
 "#H2S2" = 3100.0
 
-[chemistry.photon_yield]
+[chemistry.species.photon_yield]
 "#H2O" = 0.0013
 "#N2" = 0.00018
 "#CO" = 0.0027
 "#CH3OH" = 0.0021
 "#CO2" = 0.0023
 
+[chemistry.grain]
+symbol = "GRAIN"
+model = "rr07custom"
+
+[chemistry.network]
+files = ["reactions.ucl"]
+formats = ["uclchem"]
+
+[chemistry.thermal]
+heating = []
+cooling = []
+
 [chemistry.shielding]
 CO = "VB88Table"
 
 [chemistry.rate_modifier]
+1359 = "0.0"
+1360 = "0.0"
+1361 = "0.0"
+1362 = "0.0"
+
+[chemistry.ode_modifier]
+[chemistry.ode_modifier.H2]
+factors = ["H2formation", "-H2dissociation"]
+reactants = [["H"], ["H2"]]
+
+[chemistry.ode_modifier.H]
+factors = ["-2.0 * H2formation", "2.0 * H2dissociation"]
+reactants = [["H"], ["H2"]]
 
 [ODEsolver]
 solver = "cvode"
