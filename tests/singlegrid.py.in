@@ -1,6 +1,6 @@
 import os
 import sys
-sys.path.append(os.getenv('CHEMISTRY_MODULE_PATH'))
+sys.path.append(os.getenv('PYNAUNET_PATH'))
 
 import numpy as np
 from tomlkit.toml_file import TOMLFile
@@ -11,12 +11,19 @@ config_path = os.getenv('NAUNET_CONFIG_PATH')
 config = TOMLFile(os.path.join(config_path, "naunet_config.toml"))
 content = config.read()
 chemistry = content["chemistry"]
-species = chemistry["species"]
+heating = chemistry["heating"]
+cooling = chemistry["cooling"]
+has_thermal = True if heating or cooling else False
+summary = content["summary"]
+species = summary["list_of_species"]
+nspec = len(species)
 
 naunet_solver = Naunet()
 naunet_data = NaunetData()
 
 spy = 86400.0 * 365.0
+
+
 nH = 2e4
 zeta = 1.3e-17
 Tgas = 15.0
@@ -31,6 +38,9 @@ opt_thd = 1.0
 opt_crd = 1.0
 opt_uvd = 1.0
 opt_h2d = 1.0
+eb_crd = 1.21e3;
+eb_h2d = 1.21e3;
+eb_uvd = 1.00e4;
 crdeseff = 1.0e5
 h2deseff = 1.0e-2
 uvcreff = 1.0e-3
@@ -49,41 +59,54 @@ naunet_data.opt_thd = opt_thd
 naunet_data.opt_crd = opt_crd
 naunet_data.opt_uvd = opt_uvd
 naunet_data.opt_h2d = opt_h2d
+naunet_data.eb_crd = eb_crd;
+naunet_data.eb_h2d = eb_h2d;
+naunet_data.eb_uvd = eb_uvd;
 naunet_data.crdeseff = crdeseff
 naunet_data.h2deseff = h2deseff
 naunet_data.uvcreff = uvcreff
+
 
 naunet_solver.Init()
 if @USE_CUDA@:
     naunet_solver.Reset(1)
 
-y = np.ones(len(species)) * 1e-40
-# Only works if the species list in naunet_config.toml has been updated
-# Otherwise check the macros in naunet_macros.h
+
+y = np.ones(len(species)+has_thermal) * 1e-40
 y[species.index("H2")] = 0.5 * nH
 y[species.index("H")] = 5.0e-5 * nH
-y[species.index("He")] = 9.75e-2 * nH
+y[species.index("HE")] = 9.75e-2 * nH
 y[species.index("N")] = 7.5e-5 * nH
 y[species.index("O")] = 1.8e-4 * nH
 y[species.index("CO")] = 1.4e-4 * nH
 y[species.index("S")] = 8.0e-8 * nH
-y[species.index("Si")] = 8.0e-9 * nH
-y[species.index("Na")] = 2.0e-9 * nH
-y[species.index("Mg")] = 7.0e-9 * nH
-y[species.index("Cl")] = 4.0e-9 * nH
+y[species.index("SI")] = 8.0e-9 * nH
+y[species.index("MG")] = 7.0e-9 * nH
+y[species.index("CL")] = 4.0e-9 * nH
 
-times = np.logspace(3, 7, 51)
-timesteps = times[0]
-timesteps = np.append(timesteps, times[1:] - times[:-1])
+
+
+times = np.logspace(2, 7, 51)
+times = np.append(0.0, times)
+timesteps = times[1:] - times[:-1]
+
 
 with open("evolution_pymodule.dat", "w") as evoldat:
+
+    curtime = 0.0
+    fmty = [f"{yi:13.7e}" for yi in y]
+    evoldat.write(" ".join([f"{curtime:13.7e}", *fmty]))
+    evoldat.write("\n")
 
     for ti, dtyr in enumerate(timesteps):
         dt = dtyr * spy
         y = naunet_solver.Solve(y, dt, naunet_data)
+        
+        
 
+        curtime += dtyr
         fmty = [f"{yi:13.7e}" for yi in y]
-        evoldat.write(" ".join([f"{times[ti+1]:13.7e}", *fmty]))
+        evoldat.write(" ".join([f"{curtime:13.7e}", *fmty]))
         evoldat.write("\n")
 
 naunet_solver.Finalize();

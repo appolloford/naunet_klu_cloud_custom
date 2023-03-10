@@ -1,4 +1,8 @@
+// 
 #include <stdio.h>
+
+#include <stdexcept>
+#include <vector>
 
 #include "naunet.h"
 #include "naunet_data.h"
@@ -7,8 +11,10 @@
 #include "naunet_timer.h"
 
 int main() {
-    double spy     = 86400.0 * 365.0;
+    double spy = 86400.0 * 365.0;
 
+    NaunetData data;
+    //
     double nH       = 2e4;
     double zeta     = 1.3e-17;
     double Tgas     = 15.0;
@@ -23,14 +29,13 @@ int main() {
     double opt_crd  = 1.0;
     double opt_uvd  = 1.0;
     double opt_h2d  = 1.0;
-    double eb_h2d   = 1.21e3;
     double eb_crd   = 1.21e3;
-    double eb_uvd   = 1.0e4;
+    double eb_h2d   = 1.21e3;
+    double eb_uvd   = 1.00e4;
     double crdeseff = 1.0e5;
     double h2deseff = 1.0e-2;
     double uvcreff  = 1.0e-3;
 
-    NaunetData data;
     data.nH       = nH;
     data.zeta     = zeta;
     data.Tgas     = Tgas;
@@ -45,20 +50,27 @@ int main() {
     data.opt_crd  = opt_crd;
     data.opt_uvd  = opt_uvd;
     data.opt_h2d  = opt_h2d;
-    data.eb_h2d   = eb_h2d;
     data.eb_crd   = eb_crd;
+    data.eb_h2d   = eb_h2d;
     data.eb_uvd   = eb_uvd;
     data.crdeseff = crdeseff;
     data.h2deseff = h2deseff;
     data.uvcreff  = uvcreff;
 
+
     Naunet naunet;
-    naunet.Init();
+    if (naunet.Init() == NAUNET_FAIL) {
+        printf("Initialize Fail\n");
+        return 1;
+    }
 
 #ifdef USE_CUDA
-    naunet.Reset(1);
+    if (naunet.Reset(1) == NAUNET_FAIL) {
+        throw std::runtime_error("Fail to reset the number of systems");
+    }
 #endif
 
+    //
     double y[NEQUATIONS] = {0.0};
     // for (int i = 0; i < NEQUATIONS; i++)
     // {
@@ -75,60 +87,76 @@ int main() {
     y[IDX_MgI]           = 7.0e-9 * nH;
     y[IDX_ClI]           = 4.0e-9 * nH;
 
-    FILE *fbin           = fopen("evolution_singlegrid.bin", "w");
-    FILE *ftxt           = fopen("evolution_singlegrid.txt", "w");
-    FILE *ttxt           = fopen("time_singlegrid.txt", "w");
+
+    FILE *fbin = fopen("evolution_singlegrid.bin", "w");
+    FILE *ftxt = fopen("evolution_singlegrid.txt", "w");
+    FILE *ttxt = fopen("time_singlegrid.txt", "w");
 #ifdef NAUNET_DEBUG
     printf("Initialization is done. Start to evolve.\n");
-    FILE *rtxt = fopen("reactionrates.txt", "w");
+    FILE *rtxt               = fopen("reactionrates.txt", "w");
     double rates[NREACTIONS] = {0.0};
 #endif
 
-    double logtstart = 3.0, logtend = 7.0;
-    double dtyr = 0.0, time = 0.0;
-    for (double logtime = logtstart; logtime < logtend; logtime += 0.1) {
+    //
+    std::vector<double> timesteps;
+    double logtstart = 3.0, logtend = 7.0, logtstep = 0.1;
+    double time = 0.0;
+    for (double logtime = logtstart; logtime < logtend + 0.1 * logtstep;
+         logtime += logtstep) {
+        double dtyr = pow(10.0, logtime) - time;
+        timesteps.push_back(dtyr);
+        time += dtyr;
+    }
+    //
+
+    double dtyr = 0.0, curtime = 0.0;
+
+    // write the initial abundances
+    fwrite(&curtime, sizeof(double), 1, fbin);
+    fwrite(y, sizeof(double), NEQUATIONS, fbin);
+
+    fprintf(ftxt, "%13.7e ", curtime);
+    for (int j = 0; j < NEQUATIONS; j++) {
+        fprintf(ftxt, "%13.7e ", y[j]);
+    }
+    fprintf(ftxt, "\n");
+
+    for (auto step = timesteps.begin(); step != timesteps.end(); step++) {
 #ifdef NAUNET_DEBUG
         EvalRates(rates, y, &data);
-        for (int j = 0; j < NREACTIONS; j++)
-        {
+        for (int j = 0; j < NREACTIONS; j++) {
             fprintf(rtxt, "%13.7e ", rates[j]);
         }
         fprintf(rtxt, "\n");
 #endif
 
-        dtyr = pow(10.0, logtime) - time;
+        //
+        //
 
-        fwrite(&time, sizeof(double), 1, fbin);
-        fwrite(y, sizeof(double), NEQUATIONS, fbin);
-
-        fprintf(ftxt, "%13.7e ", time);
-        for (int j = 0; j < NEQUATIONS; j++) {
-            fprintf(ftxt, "%13.7e ", y[j]);
-        }
-        fprintf(ftxt, "\n");
+        dtyr = *step;
 
         Timer timer;
         timer.start();
         naunet.Solve(y, dtyr * spy, &data);
         timer.stop();
 
-        time += dtyr;
+        curtime += dtyr;
+
+        // write the abundances after each step
+        fwrite(&curtime, sizeof(double), 1, fbin);
+        fwrite(y, sizeof(double), NEQUATIONS, fbin);
+
+        fprintf(ftxt, "%13.7e ", curtime);
+        for (int j = 0; j < NEQUATIONS; j++) {
+            fprintf(ftxt, "%13.7e ", y[j]);
+        }
+        fprintf(ftxt, "\n");
 
         // float duration = (float)timer.elapsed() / 1e6;
         double duration = timer.elapsed();
         fprintf(ttxt, "%8.5e \n", duration);
-        printf("Time = %13.7e yr, elapsed: %8.5e sec\n", time, duration);
+        printf("Time = %13.7e yr, elapsed: %8.5e sec\n", curtime, duration);
     }
-
-    // save the final results
-    fwrite(&time, sizeof(double), 1, fbin);
-    fwrite(y, sizeof(double), NEQUATIONS, fbin);
-
-    fprintf(ftxt, "%13.7e ", time);
-    for (int j = 0; j < NEQUATIONS; j++) {
-        fprintf(ftxt, "%13.7e ", y[j]);
-    }
-    fprintf(ftxt, "\n");
 
     fclose(fbin);
     fclose(ftxt);
@@ -137,7 +165,10 @@ int main() {
     fclose(rtxt);
 #endif
 
-    naunet.Finalize();
+    if (naunet.Finalize() == NAUNET_FAIL) {
+        printf("Finalize Fail\n");
+        return 1;
+    }
 
     return 0;
 }

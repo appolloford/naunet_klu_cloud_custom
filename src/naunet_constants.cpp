@@ -1,6 +1,6 @@
+// 
 // clang-format off
 #include "naunet_constants.h"
-
 const double pi              = 3.1415926;
 
 // atomic mass unit (g)
@@ -27,78 +27,74 @@ const double echarge         = 4.80320425e-10;
 // Boltzmann constant (erg/K)
 const double kerg            = 1.380658e-16;
 
-const double zism            = 1.3e-17;
-const double nmono           = 2.0;
-const double eb_GC2I         = 10000.0;
-const double eb_GC2HI        = 3000.0;
-const double eb_GC2H2I       = 2587.0;
-const double eb_GC2H3I       = 2800.0;
-const double eb_GC2H4I       = 2500.0;
-const double eb_GC2H5I       = 3100.0;
-const double eb_GC2H5OHI     = 5400.0;
-const double eb_GC3H2I       = 5900.0;
-const double eb_GC4HI        = 3737.0;
-const double eb_GC4NI        = 4000.0;
-const double eb_GCH2COI      = 2800.0;
-const double eb_GCH3CCHI     = 3000.0;
-const double eb_GCH3CNI      = 4680.0;
-const double eb_GCH3CNHI     = 3740.0;
-const double eb_GCH3OHI      = 5000.0;
-const double eb_GCH4I        = 960.0;
-const double eb_GCOI         = 1300.0;
-const double eb_GCO2I        = 2600.0;
-const double eb_GCSI         = 3200.0;
-const double eb_GH2CNI       = 2400.0;
-const double eb_GH2COI       = 4500.0;
-const double eb_GH2CSI       = 4400.0;
-const double eb_GH2OI        = 5600.0;
-const double eb_GH2SI        = 2700.0;
-const double eb_GH2S2I       = 3100.0;
-const double eb_GH2SiOI      = 4400.0;
-const double eb_GHC3NI       = 4580.0;
-const double eb_GHClI        = 5172.0;
-const double eb_GHCNI        = 3700.0;
-const double eb_GHCOOCH3I    = 4210.0;
-const double eb_GHNCI        = 3800.0;
-const double eb_GHNCOI       = 4400.0;
-const double eb_GHNOI        = 3000.0;
-const double eb_GMgI         = 5300.0;
-const double eb_GN2I         = 1100.0;
-const double eb_GNCCNI       = 3000.0;
-const double eb_GNH3I        = 5500.0;
-const double eb_GNOI         = 1600.0;
-const double eb_GNO2I        = 2400.0;
-const double eb_GNSI         = 1900.0;
-const double eb_GO2I         = 1200.0;
-const double eb_GO2HI        = 5000.0;
-const double eb_GOCSI        = 2400.0;
-const double eb_GSiCI        = 3500.0;
-const double eb_GSiC2I       = 4300.0;
-const double eb_GSiC3I       = 5100.0;
-const double eb_GSiH4I       = 13000.0;
-const double eb_GSiOI        = 3500.0;
-const double eb_GSiSI        = 3800.0;
-const double eb_GSOI         = 2800.0;
-const double eb_GSO2I        = 3400.0;
+// reduced Planck constant
+const double hbar            = 1.054571726e-27;
 
+const double zism = 1.3e-17;
 
-
-
+const double eb_GC2H3I = 2800.0;
+const double eb_GC2H4I = 2500.0;
+const double eb_GC2H5I = 3100.0;
+const double eb_GC3H2I = 5900.0;
+const double eb_GC4HI = 3737.0;
+const double eb_GCH2COI = 2800.0;
+const double eb_GCH3CNI = 4680.0;
+const double eb_GCSI = 3200.0;
+const double eb_GH2CNI = 2400.0;
+const double eb_GHNCI = 3800.0;
+const double eb_GNO2I = 2400.0;
+const double eb_GSiOI = 3500.0;
+const double eb_GC2HI = 3000.0;
+const double eb_GC2H2I = 2587.0;
+const double eb_GC4NI = 4000.0;
+const double eb_GCOI = 1300.0;
+const double eb_GHC3NI = 4580.0;
+const double eb_GHNCOI = 4400.0;
+const double eb_GMgI = 5300.0;
+const double eb_GNCCNI = 3000.0;
+const double eb_GNOI = 1600.0;
+const double eb_GO2I = 1200.0;
+const double eb_GO2HI = 5000.0;
+const double eb_GSiCI = 3500.0;
+const double eb_GSiC2I = 4300.0;
+const double eb_GSiC3I = 5100.0;
+const double eb_GC2H5OHI = 5400.0;
+const double eb_GCH3CCHI = 3000.0;
+const double eb_GCO2I = 2600.0;
+const double eb_GHCOOCH3I = 4210.0;
+const double eb_GC2I = 10000.0;
+const double eb_GH2SiOI = 4400.0;
+const double eb_GHNOI = 3000.0;
+const double eb_GN2I = 1100.0;
+const double eb_GNSI = 1900.0;
+const double eb_GOCSI = 2400.0;
+const double eb_GSiSI = 3800.0;
+const double eb_GSOI = 2800.0;
+const double eb_GSO2I = 3400.0;
+const double eb_GCH3CNHI = 3740.0;
+const double eb_GCH3OHI = 5000.0;
+const double eb_GH2COI = 4500.0;
+const double eb_GH2S2I = 3100.0;
+const double eb_GHClI = 5172.0;
+const double eb_GHCNI = 3700.0;
+const double eb_GH2CSI = 4400.0;
+const double eb_GH2OI = 5600.0;
+const double eb_GH2SI = 2700.0;
+const double eb_GNH3I = 5500.0;
+const double eb_GCH4I = 960.0;
+const double eb_GSiH4I = 13000.0;
 
 
 // Table of CO self-shielding factor
 // H2 column density
-const
-double COShieldingTableX[6] = 
+const double COShieldingTableX[6] = 
 {18.0, 19.0, 20.0, 21.0, 22.0, 23.0};
 
 // CO column density
-const
-double COShieldingTableY[7] = 
+const double COShieldingTableY[7] = 
 {12.0, 13.0, 14.0, 15.0, 16.0, 17.0, 18.0};
 
-const
-double COShieldingTable[6][7] = 
+const double COShieldingTable[6][7] = 
 {{ 0.000e+00, -1.408e-02, -1.099e-01, -4.400e-01, -1.154e+00, -1.888e+00, -2.760e+00},
  {-8.539e-02, -1.015e-01, -2.104e-01, -5.608e-01, -1.272e+00, -1.973e+00, -2.818e+00},
  {-1.451e-01, -1.612e-01, -2.708e-01, -6.273e-01, -1.355e+00, -2.057e+00, -2.902e+00},

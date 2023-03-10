@@ -4,7 +4,12 @@ __pycache__/
 # build
 build/
 lib/
+lib64/
 python/
 
 # deprecated
 enzo_*/
+
+# benchmark
+benchmark*
+
