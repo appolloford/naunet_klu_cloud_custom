@@ -49,8 +49,8 @@ int grid::UpdateElectronDensity(void)
   int GH2CNINum, GHNCINum, GNO2INum, GSiOINum, GCOINum, GHNCOINum, GMgINum,
       GNOINum, GO2INum, GO2HINum, GSiCINum, GSiC2INum, GSiC3INum, GCH3OHINum,
       GCO2INum, GH2SiOINum, GHNOINum, GN2INum, GH2COINum, GHCNINum, GH2OINum,
-      GNH3INum, SiC3IINum, H2CNINum, GCH4INum, H2NOIINum, H2SiOINum, HeHIINum,
-      HNCOINum, HOCIINum, SiC2IINum, GSiH4INum, SiC2INum, SiC3INum, SiH5IINum,
+      GNH3INum, SiC3IINum, H2CNINum, GCH4INum, H2NOIINum, H2SiOINum, HNCOINum,
+      HOCIINum, HeHIINum, SiC2IINum, GSiH4INum, SiC2INum, SiC3INum, SiH5IINum,
       SiH4IINum, SiCIINum, O2HINum, SiCINum, NO2INum, SiH3IINum, SiH2IINum,
       OCNINum, SiH2INum, SiOHIINum, SiHIINum, SiH4INum, SiHINum, SiH3INum,
       SiOIINum, HCO2IINum, HNOINum, CH3OHINum, MgINum, MgIINum, CH4IINum,
@@ -69,8 +69,8 @@ int grid::UpdateElectronDensity(void)
                                     GSiC3INum, GCH3OHINum, GCO2INum, GH2SiOINum,
                                     GHNOINum, GN2INum, GH2COINum, GHCNINum,
                                     GH2OINum, GNH3INum, SiC3IINum, H2CNINum,
-                                    GCH4INum, H2NOIINum, H2SiOINum, HeHIINum,
-                                    HNCOINum, HOCIINum, SiC2IINum, GSiH4INum,
+                                    GCH4INum, H2NOIINum, H2SiOINum, HNCOINum,
+                                    HOCIINum, HeHIINum, SiC2IINum, GSiH4INum,
                                     SiC2INum, SiC3INum, SiH5IINum, SiH4IINum,
                                     SiCIINum, O2HINum, SiCINum, NO2INum,
                                     SiH3IINum, SiH2IINum, OCNINum, SiH2INum,
@@ -115,8 +115,8 @@ int grid::UpdateElectronDensity(void)
     for (i = 0; i < size; i++) {
       BaryonField[DeNum][i] += 1.0 * BaryonField[SiC3IINum][i] / 64.0;
       BaryonField[DeNum][i] += 1.0 * BaryonField[H2NOIINum][i] / 32.0;
-      BaryonField[DeNum][i] += 1.0 * BaryonField[HeHIINum][i] / 5.0;
       BaryonField[DeNum][i] += 1.0 * BaryonField[HOCIINum][i] / 29.0;
+      BaryonField[DeNum][i] += 1.0 * BaryonField[HeHIINum][i] / 5.0;
       BaryonField[DeNum][i] += 1.0 * BaryonField[SiC2IINum][i] / 52.0;
       BaryonField[DeNum][i] += 1.0 * BaryonField[SiH5IINum][i] / 33.0;
       BaryonField[DeNum][i] += 1.0 * BaryonField[SiH4IINum][i] / 32.0;

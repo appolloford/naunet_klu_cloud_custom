@@ -58,8 +58,8 @@ int grid::NaunetWrapper()
   int GH2CNINum, GHNCINum, GNO2INum, GSiOINum, GCOINum, GHNCOINum, GMgINum,
       GNOINum, GO2INum, GO2HINum, GSiCINum, GSiC2INum, GSiC3INum, GCH3OHINum,
       GCO2INum, GH2SiOINum, GHNOINum, GN2INum, GH2COINum, GHCNINum, GH2OINum,
-      GNH3INum, SiC3IINum, H2CNINum, GCH4INum, H2NOIINum, H2SiOINum, HeHIINum,
-      HNCOINum, HOCIINum, SiC2IINum, GSiH4INum, SiC2INum, SiC3INum, SiH5IINum,
+      GNH3INum, SiC3IINum, H2CNINum, GCH4INum, H2NOIINum, H2SiOINum, HNCOINum,
+      HOCIINum, HeHIINum, SiC2IINum, GSiH4INum, SiC2INum, SiC3INum, SiH5IINum,
       SiH4IINum, SiCIINum, O2HINum, SiCINum, NO2INum, SiH3IINum, SiH2IINum,
       OCNINum, SiH2INum, SiOHIINum, SiHIINum, SiH4INum, SiHINum, SiH3INum,
       SiOIINum, HCO2IINum, HNOINum, CH3OHINum, MgINum, MgIINum, CH4IINum,
@@ -109,7 +109,7 @@ int grid::NaunetWrapper()
     GNOINum = GO2INum = GO2HINum = GSiCINum = GSiC2INum = GSiC3INum = GCH3OHINum
     = GCO2INum = GH2SiOINum = GHNOINum = GN2INum = GH2COINum = GHCNINum =
     GH2OINum = GNH3INum = SiC3IINum = H2CNINum = GCH4INum = H2NOIINum =
-    H2SiOINum = HeHIINum = HNCOINum = HOCIINum = SiC2IINum = GSiH4INum =
+    H2SiOINum = HNCOINum = HOCIINum = HeHIINum = SiC2IINum = GSiH4INum =
     SiC2INum = SiC3INum = SiH5IINum = SiH4IINum = SiCIINum = O2HINum = SiCINum =
     NO2INum = SiH3IINum = SiH2IINum = OCNINum = SiH2INum = SiOHIINum = SiHIINum
     = SiH4INum = SiHINum = SiH3INum = SiOIINum = HCO2IINum = HNOINum = CH3OHINum
@@ -130,8 +130,8 @@ int grid::NaunetWrapper()
                                     GSiC3INum, GCH3OHINum, GCO2INum, GH2SiOINum,
                                     GHNOINum, GN2INum, GH2COINum, GHCNINum,
                                     GH2OINum, GNH3INum, SiC3IINum, H2CNINum,
-                                    GCH4INum, H2NOIINum, H2SiOINum, HeHIINum,
-                                    HNCOINum, HOCIINum, SiC2IINum, GSiH4INum,
+                                    GCH4INum, H2NOIINum, H2SiOINum, HNCOINum,
+                                    HOCIINum, HeHIINum, SiC2IINum, GSiH4INum,
                                     SiC2INum, SiC3INum, SiH5IINum, SiH4IINum,
                                     SiCIINum, O2HINum, SiCINum, NO2INum,
                                     SiH3IINum, SiH2IINum, OCNINum, SiH2INum,
@@ -234,9 +234,9 @@ int grid::NaunetWrapper()
         y[IDX_GCH4I] = max(BaryonField[GCH4INum][igrid], 1e-40) * NumberDensityUnits / 16.0;
         y[IDX_H2NOII] = max(BaryonField[H2NOIINum][igrid], 1e-40) * NumberDensityUnits / 32.0;
         y[IDX_H2SiOI] = max(BaryonField[H2SiOINum][igrid], 1e-40) * NumberDensityUnits / 46.0;
-        y[IDX_HeHII] = max(BaryonField[HeHIINum][igrid], 1e-40) * NumberDensityUnits / 5.0;
         y[IDX_HNCOI] = max(BaryonField[HNCOINum][igrid], 1e-40) * NumberDensityUnits / 43.0;
         y[IDX_HOCII] = max(BaryonField[HOCIINum][igrid], 1e-40) * NumberDensityUnits / 29.0;
+        y[IDX_HeHII] = max(BaryonField[HeHIINum][igrid], 1e-40) * NumberDensityUnits / 5.0;
         y[IDX_SiC2II] = max(BaryonField[SiC2IINum][igrid], 1e-40) * NumberDensityUnits / 52.0;
         y[IDX_GSiH4I] = max(BaryonField[GSiH4INum][igrid], 1e-40) * NumberDensityUnits / 32.0;
         y[IDX_SiC2I] = max(BaryonField[SiC2INum][igrid], 1e-40) * NumberDensityUnits / 52.0;
@@ -317,7 +317,7 @@ int grid::NaunetWrapper()
         y[IDX_HCOII] = max(BaryonField[HCOIINum][igrid], 1e-40) * NumberDensityUnits / 29.0;
         y[IDX_H2OI] = max(BaryonField[H2OINum][igrid], 1e-40) * NumberDensityUnits / 18.0;
         y[IDX_OI] = max(BaryonField[OINum][igrid], 1e-40) * NumberDensityUnits / 16.0;
-        y[IDX_EM] = max(BaryonField[DeNum][igrid], 1e-40) * NumberDensityUnits / 1.0;
+        y[IDX_eM] = max(BaryonField[DeNum][igrid], 1e-40) * NumberDensityUnits / 1.0;
         y[IDX_COI] = max(BaryonField[COINum][igrid], 1e-40) * NumberDensityUnits / 28.0;
         y[IDX_H2I] = max(BaryonField[H2INum][igrid], 1e-40) * NumberDensityUnits / 2.0;
         y[IDX_HI] = max(BaryonField[HINum][igrid], 1e-40) * NumberDensityUnits / 1.0;
@@ -354,9 +354,9 @@ int grid::NaunetWrapper()
         BaryonField[GCH4INum][igrid] = max(y[IDX_GCH4I] * 16.0 / NumberDensityUnits, 1e-40);
         BaryonField[H2NOIINum][igrid] = max(y[IDX_H2NOII] * 32.0 / NumberDensityUnits, 1e-40);
         BaryonField[H2SiOINum][igrid] = max(y[IDX_H2SiOI] * 46.0 / NumberDensityUnits, 1e-40);
-        BaryonField[HeHIINum][igrid] = max(y[IDX_HeHII] * 5.0 / NumberDensityUnits, 1e-40);
         BaryonField[HNCOINum][igrid] = max(y[IDX_HNCOI] * 43.0 / NumberDensityUnits, 1e-40);
         BaryonField[HOCIINum][igrid] = max(y[IDX_HOCII] * 29.0 / NumberDensityUnits, 1e-40);
+        BaryonField[HeHIINum][igrid] = max(y[IDX_HeHII] * 5.0 / NumberDensityUnits, 1e-40);
         BaryonField[SiC2IINum][igrid] = max(y[IDX_SiC2II] * 52.0 / NumberDensityUnits, 1e-40);
         BaryonField[GSiH4INum][igrid] = max(y[IDX_GSiH4I] * 32.0 / NumberDensityUnits, 1e-40);
         BaryonField[SiC2INum][igrid] = max(y[IDX_SiC2I] * 52.0 / NumberDensityUnits, 1e-40);
@@ -437,7 +437,7 @@ int grid::NaunetWrapper()
         BaryonField[HCOIINum][igrid] = max(y[IDX_HCOII] * 29.0 / NumberDensityUnits, 1e-40);
         BaryonField[H2OINum][igrid] = max(y[IDX_H2OI] * 18.0 / NumberDensityUnits, 1e-40);
         BaryonField[OINum][igrid] = max(y[IDX_OI] * 16.0 / NumberDensityUnits, 1e-40);
-        BaryonField[DeNum][igrid] = max(y[IDX_EM] * 1.0 / NumberDensityUnits, 1e-40);
+        BaryonField[DeNum][igrid] = max(y[IDX_eM] * 1.0 / NumberDensityUnits, 1e-40);
         BaryonField[COINum][igrid] = max(y[IDX_COI] * 28.0 / NumberDensityUnits, 1e-40);
         BaryonField[H2INum][igrid] = max(y[IDX_H2I] * 2.0 / NumberDensityUnits, 1e-40);
         BaryonField[HINum][igrid] = max(y[IDX_HI] * 1.0 / NumberDensityUnits, 1e-40);

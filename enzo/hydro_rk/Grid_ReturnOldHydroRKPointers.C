@@ -45,8 +45,8 @@ int grid::ReturnOldHydroRKPointers(float **Prim, bool ReturnMassFractions)
   int GH2CNINum, GHNCINum, GNO2INum, GSiOINum, GCOINum, GHNCOINum, GMgINum,
       GNOINum, GO2INum, GO2HINum, GSiCINum, GSiC2INum, GSiC3INum, GCH3OHINum,
       GCO2INum, GH2SiOINum, GHNOINum, GN2INum, GH2COINum, GHCNINum, GH2OINum,
-      GNH3INum, SiC3IINum, H2CNINum, GCH4INum, H2NOIINum, H2SiOINum, HeHIINum,
-      HNCOINum, HOCIINum, SiC2IINum, GSiH4INum, SiC2INum, SiC3INum, SiH5IINum,
+      GNH3INum, SiC3IINum, H2CNINum, GCH4INum, H2NOIINum, H2SiOINum, HNCOINum,
+      HOCIINum, HeHIINum, SiC2IINum, GSiH4INum, SiC2INum, SiC3INum, SiH5IINum,
       SiH4IINum, SiCIINum, O2HINum, SiCINum, NO2INum, SiH3IINum, SiH2IINum,
       OCNINum, SiH2INum, SiOHIINum, SiHIINum, SiH4INum, SiHINum, SiH3INum,
       SiOIINum, HCO2IINum, HNOINum, CH3OHINum, MgINum, MgIINum, CH4IINum,
@@ -104,8 +104,8 @@ int grid::ReturnOldHydroRKPointers(float **Prim, bool ReturnMassFractions)
                                     GSiC3INum, GCH3OHINum, GCO2INum, GH2SiOINum,
                                     GHNOINum, GN2INum, GH2COINum, GHCNINum,
                                     GH2OINum, GNH3INum, SiC3IINum, H2CNINum,
-                                    GCH4INum, H2NOIINum, H2SiOINum, HeHIINum,
-                                    HNCOINum, HOCIINum, SiC2IINum, GSiH4INum,
+                                    GCH4INum, H2NOIINum, H2SiOINum, HNCOINum,
+                                    HOCIINum, HeHIINum, SiC2IINum, GSiH4INum,
                                     SiC2INum, SiC3INum, SiH5IINum, SiH4IINum,
                                     SiCIINum, O2HINum, SiCINum, NO2INum,
                                     SiH3IINum, SiH2IINum, OCNINum, SiH2INum,
@@ -177,9 +177,9 @@ int grid::ReturnOldHydroRKPointers(float **Prim, bool ReturnMassFractions)
       Prim[nfield++] = OldBaryonField[GCH4INum];
       Prim[nfield++] = OldBaryonField[H2NOIINum];
       Prim[nfield++] = OldBaryonField[H2SiOINum];
-      Prim[nfield++] = OldBaryonField[HeHIINum];
       Prim[nfield++] = OldBaryonField[HNCOINum];
       Prim[nfield++] = OldBaryonField[HOCIINum];
+      Prim[nfield++] = OldBaryonField[HeHIINum];
       Prim[nfield++] = OldBaryonField[SiC2IINum];
       Prim[nfield++] = OldBaryonField[GSiH4INum];
       Prim[nfield++] = OldBaryonField[SiC2INum];

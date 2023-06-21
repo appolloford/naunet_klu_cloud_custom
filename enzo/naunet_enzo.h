@@ -39,9 +39,9 @@
 #define A_GCH4I 16.0
 #define A_H2NOII 32.0
 #define A_H2SiOI 46.0
-#define A_HeHII 5.0
 #define A_HNCOI 43.0
 #define A_HOCII 29.0
+#define A_HeHII 5.0
 #define A_SiC2II 52.0
 #define A_GSiH4I 32.0
 #define A_SiC2I 52.0
@@ -122,7 +122,7 @@
 #define A_HCOII 29.0
 #define A_H2OI 18.0
 #define A_OI 16.0
-#define A_EM 1.0
+#define A_eM 1.0
 #define A_COI 28.0
 #define A_H2I 2.0
 #define A_HI 1.0
@@ -156,9 +156,9 @@ const float A_Table[NSPECIES] = {
     A_GCH4I,
     A_H2NOII,
     A_H2SiOI,
-    A_HeHII,
     A_HNCOI,
     A_HOCII,
+    A_HeHII,
     A_SiC2II,
     A_GSiH4I,
     A_SiC2I,
@@ -239,7 +239,7 @@ const float A_Table[NSPECIES] = {
     A_HCOII,
     A_H2OI,
     A_OI,
-    A_EM,
+    A_eM,
     A_COI,
     A_H2I,
     A_HI

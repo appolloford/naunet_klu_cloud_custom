@@ -36,8 +36,8 @@ int grid::IdentifyNaunetSpeciesFields(int &GH2CNINum, int &GHNCINum, int
                                       int &GH2COINum, int &GHCNINum, int
                                       &GH2OINum, int &GNH3INum, int &SiC3IINum,
                                       int &H2CNINum, int &GCH4INum, int
-                                      &H2NOIINum, int &H2SiOINum, int &HeHIINum,
-                                      int &HNCOINum, int &HOCIINum, int
+                                      &H2NOIINum, int &H2SiOINum, int &HNCOINum,
+                                      int &HOCIINum, int &HeHIINum, int
                                       &SiC2IINum, int &GSiH4INum, int &SiC2INum,
                                       int &SiC3INum, int &SiH5IINum, int
                                       &SiH4IINum, int &SiCIINum, int &O2HINum,
@@ -74,7 +74,7 @@ int grid::IdentifyNaunetSpeciesFields(int &GH2CNINum, int &GHNCINum, int
     GNOINum = GO2INum = GO2HINum = GSiCINum = GSiC2INum = GSiC3INum = GCH3OHINum
     = GCO2INum = GH2SiOINum = GHNOINum = GN2INum = GH2COINum = GHCNINum =
     GH2OINum = GNH3INum = SiC3IINum = H2CNINum = GCH4INum = H2NOIINum =
-    H2SiOINum = HeHIINum = HNCOINum = HOCIINum = SiC2IINum = GSiH4INum =
+    H2SiOINum = HNCOINum = HOCIINum = HeHIINum = SiC2IINum = GSiH4INum =
     SiC2INum = SiC3INum = SiH5IINum = SiH4IINum = SiCIINum = O2HINum = SiCINum =
     NO2INum = SiH3IINum = SiH2IINum = OCNINum = SiH2INum = SiOHIINum = SiHIINum
     = SiH4INum = SiHINum = SiH3INum = SiOIINum = HCO2IINum = HNOINum = CH3OHINum
@@ -116,9 +116,9 @@ int grid::IdentifyNaunetSpeciesFields(int &GH2CNINum, int &GHNCINum, int
     GCH4INum = FindField(GCH4IDensity, FieldType, NumberOfBaryonFields);
     H2NOIINum = FindField(H2NOIIDensity, FieldType, NumberOfBaryonFields);
     H2SiOINum = FindField(H2SiOIDensity, FieldType, NumberOfBaryonFields);
-    HeHIINum = FindField(HeHIIDensity, FieldType, NumberOfBaryonFields);
     HNCOINum = FindField(HNCOIDensity, FieldType, NumberOfBaryonFields);
     HOCIINum = FindField(HOCIIDensity, FieldType, NumberOfBaryonFields);
+    HeHIINum = FindField(HeHIIDensity, FieldType, NumberOfBaryonFields);
     SiC2IINum = FindField(SiC2IIDensity, FieldType, NumberOfBaryonFields);
     GSiH4INum = FindField(GSiH4IDensity, FieldType, NumberOfBaryonFields);
     SiC2INum = FindField(SiC2IDensity, FieldType, NumberOfBaryonFields);
@@ -231,9 +231,9 @@ int grid::IdentifyNaunetSpeciesFields(int &GH2CNINum, int &GHNCINum, int
     if (GCH4INum < 0) ENZO_VFAIL("GCH4INum=%" ISYM "\n", GCH4INum);
     if (H2NOIINum < 0) ENZO_VFAIL("H2NOIINum=%" ISYM "\n", H2NOIINum);
     if (H2SiOINum < 0) ENZO_VFAIL("H2SiOINum=%" ISYM "\n", H2SiOINum);
-    if (HeHIINum < 0) ENZO_VFAIL("HeHIINum=%" ISYM "\n", HeHIINum);
     if (HNCOINum < 0) ENZO_VFAIL("HNCOINum=%" ISYM "\n", HNCOINum);
     if (HOCIINum < 0) ENZO_VFAIL("HOCIINum=%" ISYM "\n", HOCIINum);
+    if (HeHIINum < 0) ENZO_VFAIL("HeHIINum=%" ISYM "\n", HeHIINum);
     if (SiC2IINum < 0) ENZO_VFAIL("SiC2IINum=%" ISYM "\n", SiC2IINum);
     if (GSiH4INum < 0) ENZO_VFAIL("GSiH4INum=%" ISYM "\n", GSiH4INum);
     if (SiC2INum < 0) ENZO_VFAIL("SiC2INum=%" ISYM "\n", SiC2INum);
@@ -352,9 +352,9 @@ int grid::IdentifyNaunetSpeciesFields(int *specnum)
         GCH4IDensity,
         H2NOIIDensity,
         H2SiOIDensity,
-        HeHIIDensity,
         HNCOIDensity,
         HOCIIDensity,
+        HeHIIDensity,
         SiC2IIDensity,
         GSiH4IDensity,
         SiC2IDensity,

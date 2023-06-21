@@ -104,8 +104,8 @@ int grid::CollapseMHD3DInitializeGrid(int n_sphere,
   int GH2CNINum, GHNCINum, GNO2INum, GSiOINum, GCOINum, GHNCOINum, GMgINum,
       GNOINum, GO2INum, GO2HINum, GSiCINum, GSiC2INum, GSiC3INum, GCH3OHINum,
       GCO2INum, GH2SiOINum, GHNOINum, GN2INum, GH2COINum, GHCNINum, GH2OINum,
-      GNH3INum, SiC3IINum, H2CNINum, GCH4INum, H2NOIINum, H2SiOINum, HeHIINum,
-      HNCOINum, HOCIINum, SiC2IINum, GSiH4INum, SiC2INum, SiC3INum, SiH5IINum,
+      GNH3INum, SiC3IINum, H2CNINum, GCH4INum, H2NOIINum, H2SiOINum, HNCOINum,
+      HOCIINum, HeHIINum, SiC2IINum, GSiH4INum, SiC2INum, SiC3INum, SiH5IINum,
       SiH4IINum, SiCIINum, O2HINum, SiCINum, NO2INum, SiH3IINum, SiH2IINum,
       OCNINum, SiH2INum, SiOHIINum, SiHIINum, SiH4INum, SiHINum, SiH3INum,
       SiOIINum, HCO2IINum, HNOINum, CH3OHINum, MgINum, MgIINum, CH4IINum,
@@ -164,9 +164,9 @@ int grid::CollapseMHD3DInitializeGrid(int n_sphere,
       FieldType[GCH4INum     = NumberOfBaryonFields++] = GCH4IDensity;
       FieldType[H2NOIINum    = NumberOfBaryonFields++] = H2NOIIDensity;
       FieldType[H2SiOINum    = NumberOfBaryonFields++] = H2SiOIDensity;
-      FieldType[HeHIINum     = NumberOfBaryonFields++] = HeHIIDensity;
       FieldType[HNCOINum     = NumberOfBaryonFields++] = HNCOIDensity;
       FieldType[HOCIINum     = NumberOfBaryonFields++] = HOCIIDensity;
+      FieldType[HeHIINum     = NumberOfBaryonFields++] = HeHIIDensity;
       FieldType[SiC2IINum    = NumberOfBaryonFields++] = SiC2IIDensity;
       FieldType[GSiH4INum    = NumberOfBaryonFields++] = GSiH4IDensity;
       FieldType[SiC2INum     = NumberOfBaryonFields++] = SiC2IDensity;

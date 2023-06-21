@@ -1836,7 +1836,7 @@ int TransferSubgridActiveParticles(grid* Subgrids[], int NumberOfSubgrids,
                                 &GH2COINum, int &GHCNINum, int &GH2OINum, int
                                 &GNH3INum, int &SiC3IINum, int &H2CNINum, int
                                 &GCH4INum, int &H2NOIINum, int &H2SiOINum, int
-                                &HeHIINum, int &HNCOINum, int &HOCIINum, int
+                                &HNCOINum, int &HOCIINum, int &HeHIINum, int
                                 &SiC2IINum, int &GSiH4INum, int &SiC2INum, int
                                 &SiC3INum, int &SiH5IINum, int &SiH4IINum, int
                                 &SiCIINum, int &O2HINum, int &SiCINum, int
