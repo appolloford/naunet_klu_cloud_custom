@@ -114,8 +114,8 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
     rowptrs[25] = 106;
     rowptrs[26] = 112;
     rowptrs[27] = 118;
-    rowptrs[28] = 127;
-    rowptrs[29] = 133;
+    rowptrs[28] = 124;
+    rowptrs[29] = 132;
     rowptrs[30] = 141;
     rowptrs[31] = 148;
     rowptrs[32] = 160;
@@ -214,7 +214,7 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
     colvals[8] = 68;
     colvals[9] = 111;
     colvals[10] = 5;
-    colvals[11] = 28;
+    colvals[11] = 27;
     colvals[12] = 42;
     colvals[13] = 6;
     colvals[14] = 53;
@@ -258,7 +258,7 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
     colvals[52] = 65;
     colvals[53] = 86;
     colvals[54] = 18;
-    colvals[55] = 29;
+    colvals[55] = 28;
     colvals[56] = 91;
     colvals[57] = 95;
     colvals[58] = 96;
@@ -321,29 +321,29 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
     colvals[115] = 97;
     colvals[116] = 106;
     colvals[117] = 109;
-    colvals[118] = 27;
-    colvals[119] = 69;
-    colvals[120] = 96;
-    colvals[121] = 97;
-    colvals[122] = 100;
+    colvals[118] = 5;
+    colvals[119] = 27;
+    colvals[120] = 90;
+    colvals[121] = 101;
+    colvals[122] = 105;
     colvals[123] = 106;
-    colvals[124] = 110;
-    colvals[125] = 112;
-    colvals[126] = 113;
-    colvals[127] = 5;
-    colvals[128] = 28;
-    colvals[129] = 90;
-    colvals[130] = 101;
-    colvals[131] = 105;
-    colvals[132] = 106;
-    colvals[133] = 29;
-    colvals[134] = 68;
-    colvals[135] = 87;
-    colvals[136] = 99;
-    colvals[137] = 108;
+    colvals[124] = 28;
+    colvals[125] = 68;
+    colvals[126] = 87;
+    colvals[127] = 99;
+    colvals[128] = 108;
+    colvals[129] = 110;
+    colvals[130] = 111;
+    colvals[131] = 112;
+    colvals[132] = 29;
+    colvals[133] = 69;
+    colvals[134] = 96;
+    colvals[135] = 97;
+    colvals[136] = 100;
+    colvals[137] = 106;
     colvals[138] = 110;
-    colvals[139] = 111;
-    colvals[140] = 112;
+    colvals[139] = 112;
+    colvals[140] = 113;
     colvals[141] = 30;
     colvals[142] = 32;
     colvals[143] = 33;
@@ -924,7 +924,7 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
     colvals[718] = 110;
     colvals[719] = 111;
     colvals[720] = 1;
-    colvals[721] = 28;
+    colvals[721] = 27;
     colvals[722] = 58;
     colvals[723] = 59;
     colvals[724] = 60;
@@ -1109,7 +1109,7 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
     colvals[903] = 111;
     colvals[904] = 112;
     colvals[905] = 113;
-    colvals[906] = 27;
+    colvals[906] = 29;
     colvals[907] = 67;
     colvals[908] = 69;
     colvals[909] = 70;
@@ -1346,7 +1346,7 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
     colvals[1140] = 111;
     colvals[1141] = 112;
     colvals[1142] = 113;
-    colvals[1143] = 28;
+    colvals[1143] = 27;
     colvals[1144] = 57;
     colvals[1145] = 59;
     colvals[1146] = 60;
@@ -2006,7 +2006,7 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
     colvals[1800] = 109;
     colvals[1801] = 110;
     colvals[1802] = 23;
-    colvals[1803] = 28;
+    colvals[1803] = 27;
     colvals[1804] = 37;
     colvals[1805] = 39;
     colvals[1806] = 42;
@@ -2343,7 +2343,7 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
     colvals[2137] = 110;
     colvals[2138] = 112;
     colvals[2139] = 113;
-    colvals[2140] = 27;
+    colvals[2140] = 29;
     colvals[2141] = 39;
     colvals[2142] = 43;
     colvals[2143] = 46;
@@ -2380,7 +2380,7 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
     colvals[2174] = 111;
     colvals[2175] = 112;
     colvals[2176] = 26;
-    colvals[2177] = 27;
+    colvals[2177] = 29;
     colvals[2178] = 33;
     colvals[2179] = 38;
     colvals[2180] = 42;
@@ -2644,7 +2644,7 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
     colvals[2438] = 112;
     colvals[2439] = 113;
     colvals[2440] = 22;
-    colvals[2441] = 28;
+    colvals[2441] = 27;
     colvals[2442] = 30;
     colvals[2443] = 32;
     colvals[2444] = 33;
@@ -2704,7 +2704,7 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
     colvals[2498] = 112;
     colvals[2499] = 113;
     colvals[2500] = 26;
-    colvals[2501] = 28;
+    colvals[2501] = 27;
     colvals[2502] = 32;
     colvals[2503] = 33;
     colvals[2504] = 38;
@@ -2750,7 +2750,7 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
     colvals[2544] = 110;
     colvals[2545] = 112;
     colvals[2546] = 113;
-    colvals[2547] = 29;
+    colvals[2547] = 28;
     colvals[2548] = 35;
     colvals[2549] = 43;
     colvals[2550] = 46;
@@ -2938,7 +2938,7 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
     colvals[2732] = 113;
     colvals[2733] = 22;
     colvals[2734] = 25;
-    colvals[2735] = 27;
+    colvals[2735] = 28;
     colvals[2736] = 29;
     colvals[2737] = 30;
     colvals[2738] = 34;
@@ -3010,8 +3010,8 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
     colvals[2804] = 112;
     colvals[2805] = 113;
     colvals[2806] = 4;
-    colvals[2807] = 28;
-    colvals[2808] = 29;
+    colvals[2807] = 27;
+    colvals[2808] = 28;
     colvals[2809] = 32;
     colvals[2810] = 33;
     colvals[2811] = 35;
@@ -3078,7 +3078,7 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
     colvals[2872] = 23;
     colvals[2873] = 25;
     colvals[2874] = 26;
-    colvals[2875] = 27;
+    colvals[2875] = 28;
     colvals[2876] = 29;
     colvals[2877] = 34;
     colvals[2878] = 35;
@@ -3150,7 +3150,7 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
     colvals[2944] = 23;
     colvals[2945] = 25;
     colvals[2946] = 26;
-    colvals[2947] = 27;
+    colvals[2947] = 28;
     colvals[2948] = 29;
     colvals[2949] = 32;
     colvals[2950] = 33;
@@ -3317,7 +3317,7 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
     data[81] = 0.0 + k[1283];
     data[82] = 0.0 + k[1265];
     data[83] = 0.0 + k[1290];
-    data[84] = 0.0 - k[351]*y[IDX_EM] - k[1244];
+    data[84] = 0.0 - k[351]*y[IDX_eM] - k[1244];
     data[85] = 0.0 + k[23]*y[IDX_CII] + k[93]*y[IDX_HII];
     data[86] = 0.0 + k[23]*y[IDX_SiC3I];
     data[87] = 0.0 + k[93]*y[IDX_SiC3I];
@@ -3340,7 +3340,7 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
     data[103] = 0.0 + k[1256];
     data[104] = 0.0 + k[1253];
     data[105] = 0.0 + k[1250];
-    data[106] = 0.0 - k[310]*y[IDX_EM] - k[311]*y[IDX_EM] - k[1296];
+    data[106] = 0.0 - k[310]*y[IDX_eM] - k[311]*y[IDX_eM] - k[1296];
     data[107] = 0.0 + k[590]*y[IDX_H3II];
     data[108] = 0.0 + k[777]*y[IDX_O2I];
     data[109] = 0.0 + k[590]*y[IDX_HNOI];
@@ -3353,30 +3353,30 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
     data[115] = 0.0 - k[675]*y[IDX_H2SiOI];
     data[116] = 0.0 - k[499]*y[IDX_H2SiOI];
     data[117] = 0.0 + k[1087]*y[IDX_SiH3I];
-    data[118] = 0.0 - k[336]*y[IDX_EM] - k[537]*y[IDX_H2I] - k[618]*y[IDX_HI];
-    data[119] = 0.0 + k[520]*y[IDX_HeI];
-    data[120] = 0.0 + k[681]*y[IDX_HeII];
-    data[121] = 0.0 + k[681]*y[IDX_HCOI];
-    data[122] = 0.0 + k[520]*y[IDX_H2II] + k[1198]*y[IDX_HII];
-    data[123] = 0.0 + k[1198]*y[IDX_HeI];
-    data[124] = 0.0 - k[336]*y[IDX_HeHII];
-    data[125] = 0.0 - k[537]*y[IDX_HeHII];
-    data[126] = 0.0 - k[618]*y[IDX_HeHII];
-    data[127] = 0.0 + k[1375] + k[1376] + k[1377] + k[1378];
-    data[128] = 0.0 - k[263] - k[502]*y[IDX_HII] - k[1004]*y[IDX_CI] - k[1152] - k[1224];
-    data[129] = 0.0 + k[888]*y[IDX_NOI];
-    data[130] = 0.0 + k[888]*y[IDX_CH2I];
-    data[131] = 0.0 - k[1004]*y[IDX_HNCOI];
-    data[132] = 0.0 - k[502]*y[IDX_HNCOI];
-    data[133] = 0.0 - k[5]*y[IDX_H2I] - k[335]*y[IDX_EM] - k[1226];
-    data[134] = 0.0 + k[533]*y[IDX_H2I];
-    data[135] = 0.0 + k[371]*y[IDX_H2OI];
-    data[136] = 0.0 + k[584]*y[IDX_COI];
-    data[137] = 0.0 + k[371]*y[IDX_CII];
-    data[138] = 0.0 - k[335]*y[IDX_HOCII];
-    data[139] = 0.0 + k[584]*y[IDX_H3II];
-    data[140] = 0.0 - k[5]*y[IDX_HOCII] + k[533]*y[IDX_COII];
-    data[141] = 0.0 - k[350]*y[IDX_EM] - k[1242];
+    data[118] = 0.0 + k[1375] + k[1376] + k[1377] + k[1378];
+    data[119] = 0.0 - k[263] - k[502]*y[IDX_HII] - k[1004]*y[IDX_CI] - k[1152] - k[1224];
+    data[120] = 0.0 + k[888]*y[IDX_NOI];
+    data[121] = 0.0 + k[888]*y[IDX_CH2I];
+    data[122] = 0.0 - k[1004]*y[IDX_HNCOI];
+    data[123] = 0.0 - k[502]*y[IDX_HNCOI];
+    data[124] = 0.0 - k[5]*y[IDX_H2I] - k[335]*y[IDX_eM] - k[1226];
+    data[125] = 0.0 + k[533]*y[IDX_H2I];
+    data[126] = 0.0 + k[371]*y[IDX_H2OI];
+    data[127] = 0.0 + k[584]*y[IDX_COI];
+    data[128] = 0.0 + k[371]*y[IDX_CII];
+    data[129] = 0.0 - k[335]*y[IDX_HOCII];
+    data[130] = 0.0 + k[584]*y[IDX_H3II];
+    data[131] = 0.0 - k[5]*y[IDX_HOCII] + k[533]*y[IDX_COII];
+    data[132] = 0.0 - k[336]*y[IDX_eM] - k[537]*y[IDX_H2I] - k[618]*y[IDX_HI];
+    data[133] = 0.0 + k[520]*y[IDX_HeI];
+    data[134] = 0.0 + k[681]*y[IDX_HeII];
+    data[135] = 0.0 + k[681]*y[IDX_HCOI];
+    data[136] = 0.0 + k[520]*y[IDX_H2II] + k[1198]*y[IDX_HII];
+    data[137] = 0.0 + k[1198]*y[IDX_HeI];
+    data[138] = 0.0 - k[336]*y[IDX_HeHII];
+    data[139] = 0.0 - k[537]*y[IDX_HeHII];
+    data[140] = 0.0 - k[618]*y[IDX_HeHII];
+    data[141] = 0.0 - k[350]*y[IDX_eM] - k[1242];
     data[142] = 0.0 + k[22]*y[IDX_CII] + k[92]*y[IDX_HII];
     data[143] = 0.0 + k[700]*y[IDX_HeII];
     data[144] = 0.0 + k[22]*y[IDX_SiC2I];
@@ -3396,7 +3396,7 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
     data[158] = 0.0 + k[1231];
     data[159] = 0.0 + k[1228];
     data[160] = 0.0 + k[1395] + k[1396] + k[1397] + k[1398];
-    data[161] = 0.0 + k[351]*y[IDX_EM];
+    data[161] = 0.0 + k[351]*y[IDX_eM];
     data[162] = 0.0 - k[22]*y[IDX_CII] - k[92]*y[IDX_HII] - k[286] - k[1081]*y[IDX_OI] -
         k[1240];
     data[163] = 0.0 + k[287] + k[1082]*y[IDX_OI] + k[1177];
@@ -3411,7 +3411,7 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
     data[171] = 0.0 - k[700]*y[IDX_SiC3I];
     data[172] = 0.0 - k[93]*y[IDX_SiC3I];
     data[173] = 0.0 - k[1082]*y[IDX_SiC3I];
-    data[174] = 0.0 - k[360]*y[IDX_EM] - k[361]*y[IDX_EM] - k[575]*y[IDX_H2OI] - k[1248];
+    data[174] = 0.0 - k[360]*y[IDX_eM] - k[361]*y[IDX_eM] - k[575]*y[IDX_H2OI] - k[1248];
     data[175] = 0.0 + k[546]*y[IDX_H2I];
     data[176] = 0.0 + k[1204]*y[IDX_H2I];
     data[177] = 0.0 + k[604]*y[IDX_H3II] + k[638]*y[IDX_HCOII];
@@ -3420,7 +3420,7 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
     data[180] = 0.0 - k[575]*y[IDX_SiH5II];
     data[181] = 0.0 - k[360]*y[IDX_SiH5II] - k[361]*y[IDX_SiH5II];
     data[182] = 0.0 + k[546]*y[IDX_SiH4II] + k[1204]*y[IDX_SiH3II];
-    data[183] = 0.0 - k[358]*y[IDX_EM] - k[359]*y[IDX_EM] - k[489]*y[IDX_COI] -
+    data[183] = 0.0 - k[358]*y[IDX_eM] - k[359]*y[IDX_eM] - k[489]*y[IDX_COI] -
         k[546]*y[IDX_H2I] - k[574]*y[IDX_H2OI] - k[1238];
     data[184] = 0.0 + k[97]*y[IDX_HII];
     data[185] = 0.0 + k[603]*y[IDX_H3II];
@@ -3430,7 +3430,7 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
     data[189] = 0.0 - k[358]*y[IDX_SiH4II] - k[359]*y[IDX_SiH4II];
     data[190] = 0.0 - k[489]*y[IDX_SiH4II];
     data[191] = 0.0 - k[546]*y[IDX_SiH4II];
-    data[192] = 0.0 - k[349]*y[IDX_EM] - k[744]*y[IDX_NI] - k[831]*y[IDX_OI] - k[1241];
+    data[192] = 0.0 - k[349]*y[IDX_eM] - k[744]*y[IDX_NI] - k[831]*y[IDX_OI] - k[1241];
     data[193] = 0.0 + k[24]*y[IDX_CII] + k[94]*y[IDX_HII];
     data[194] = 0.0 + k[380]*y[IDX_CII];
     data[195] = 0.0 + k[394]*y[IDX_CI];
@@ -3463,7 +3463,7 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
     data[217] = 0.0 + k[963]*y[IDX_O2I];
     data[218] = 0.0 - k[990]*y[IDX_O2HI] - k[991]*y[IDX_O2HI] - k[992]*y[IDX_O2HI];
     data[219] = 0.0 + k[1371] + k[1372] + k[1373] + k[1374];
-    data[220] = 0.0 + k[350]*y[IDX_EM];
+    data[220] = 0.0 + k[350]*y[IDX_eM];
     data[221] = 0.0 + k[286] + k[1081]*y[IDX_OI];
     data[222] = 0.0 - k[24]*y[IDX_CII] - k[94]*y[IDX_HII] - k[288] - k[701]*y[IDX_HeII]
         - k[702]*y[IDX_HeII] - k[1027]*y[IDX_NI] - k[1083]*y[IDX_OI] -
@@ -3498,7 +3498,7 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
     data[246] = 0.0 + k[1068]*y[IDX_HNOI] - k[1075]*y[IDX_NO2I];
     data[247] = 0.0 - k[952]*y[IDX_NO2I];
     data[248] = 0.0 - k[986]*y[IDX_NO2I];
-    data[249] = 0.0 - k[356]*y[IDX_EM] - k[357]*y[IDX_EM] - k[834]*y[IDX_OI] -
+    data[249] = 0.0 - k[356]*y[IDX_eM] - k[357]*y[IDX_eM] - k[834]*y[IDX_OI] -
         k[1204]*y[IDX_H2I] - k[1236];
     data[250] = 0.0 + k[602]*y[IDX_H3II] + k[611]*y[IDX_H3OII] + k[637]*y[IDX_HCOII];
     data[251] = 0.0 + k[1203]*y[IDX_H2I];
@@ -3513,7 +3513,7 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
     data[260] = 0.0 - k[834]*y[IDX_SiH3II];
     data[261] = 0.0 - k[356]*y[IDX_SiH3II] - k[357]*y[IDX_SiH3II];
     data[262] = 0.0 + k[1203]*y[IDX_SiHII] - k[1204]*y[IDX_SiH3II];
-    data[263] = 0.0 - k[353]*y[IDX_EM] - k[354]*y[IDX_EM] - k[355]*y[IDX_EM] -
+    data[263] = 0.0 - k[353]*y[IDX_eM] - k[354]*y[IDX_eM] - k[355]*y[IDX_eM] -
         k[833]*y[IDX_OI] - k[862]*y[IDX_O2I] - k[1234];
     data[264] = 0.0 + k[25]*y[IDX_CII] + k[95]*y[IDX_HII] + k[1180];
     data[265] = 0.0 + k[605]*y[IDX_H3II] + k[612]*y[IDX_H3OII] + k[639]*y[IDX_HCOII] +
@@ -3553,8 +3553,8 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
     data[293] = 0.0 + k[1060]*y[IDX_H2CNI] + k[1065]*y[IDX_HCNI] - k[1078]*y[IDX_OCNI] -
         k[1079]*y[IDX_OCNI];
     data[294] = 0.0 - k[993]*y[IDX_OCNI] - k[994]*y[IDX_OCNI] - k[995]*y[IDX_OCNI];
-    data[295] = 0.0 + k[358]*y[IDX_EM];
-    data[296] = 0.0 + k[356]*y[IDX_EM];
+    data[295] = 0.0 + k[358]*y[IDX_eM];
+    data[296] = 0.0 + k[356]*y[IDX_eM];
     data[297] = 0.0 - k[25]*y[IDX_CII] - k[95]*y[IDX_HII] - k[289] - k[380]*y[IDX_CII] -
         k[505]*y[IDX_HII] - k[602]*y[IDX_H3II] - k[611]*y[IDX_H3OII] -
         k[637]*y[IDX_HCOII] - k[703]*y[IDX_HeII] - k[704]*y[IDX_HeII] -
@@ -3572,7 +3572,7 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
     data[308] = 0.0 + k[499]*y[IDX_HII] + k[675]*y[IDX_HeII];
     data[309] = 0.0 + k[834]*y[IDX_OI];
     data[310] = 0.0 + k[833]*y[IDX_OI] + k[862]*y[IDX_O2I];
-    data[311] = 0.0 - k[363]*y[IDX_EM] - k[364]*y[IDX_EM] - k[1246];
+    data[311] = 0.0 - k[363]*y[IDX_eM] - k[364]*y[IDX_eM] - k[1246];
     data[312] = 0.0 + k[547]*y[IDX_H2I];
     data[313] = 0.0 + k[860]*y[IDX_SiII];
     data[314] = 0.0 + k[606]*y[IDX_H3II] + k[613]*y[IDX_H3OII] + k[640]*y[IDX_HCOII] +
@@ -3590,7 +3590,7 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
     data[325] = 0.0 - k[363]*y[IDX_SiOHII] - k[364]*y[IDX_SiOHII];
     data[326] = 0.0 + k[547]*y[IDX_SiOII];
     data[327] = 0.0 + k[505]*y[IDX_HII] + k[704]*y[IDX_HeII];
-    data[328] = 0.0 - k[352]*y[IDX_EM] - k[394]*y[IDX_CI] - k[477]*y[IDX_CHI] -
+    data[328] = 0.0 - k[352]*y[IDX_eM] - k[394]*y[IDX_CI] - k[477]*y[IDX_CHI] -
         k[573]*y[IDX_H2OI] - k[619]*y[IDX_HI] - k[832]*y[IDX_OI] - k[1179] -
         k[1203]*y[IDX_H2I] - k[1232];
     data[329] = 0.0 + k[708]*y[IDX_HeII];
@@ -3613,7 +3613,7 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
     data[345] = 0.0 - k[1203]*y[IDX_SiHII];
     data[346] = 0.0 - k[619]*y[IDX_SiHII] + k[1209]*y[IDX_SiII];
     data[347] = 0.0 + k[1363] + k[1364] + k[1365] + k[1366];
-    data[348] = 0.0 + k[361]*y[IDX_EM] + k[575]*y[IDX_H2OI];
+    data[348] = 0.0 + k[361]*y[IDX_eM] + k[575]*y[IDX_H2OI];
     data[349] = 0.0 - k[97]*y[IDX_HII] - k[291] - k[446]*y[IDX_CH3II] -
         k[507]*y[IDX_HII] - k[604]*y[IDX_H3II] - k[638]*y[IDX_HCOII] -
         k[707]*y[IDX_HeII] - k[708]*y[IDX_HeII] - k[950]*y[IDX_CNI] -
@@ -3627,8 +3627,8 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
     data[356] = 0.0 + k[575]*y[IDX_SiH5II];
     data[357] = 0.0 - k[1088]*y[IDX_SiH4I];
     data[358] = 0.0 + k[361]*y[IDX_SiH5II];
-    data[359] = 0.0 + k[357]*y[IDX_EM];
-    data[360] = 0.0 + k[355]*y[IDX_EM];
+    data[359] = 0.0 + k[357]*y[IDX_eM];
+    data[360] = 0.0 + k[355]*y[IDX_eM];
     data[361] = 0.0 + k[289] + k[1181];
     data[362] = 0.0 + k[1187];
     data[363] = 0.0 - k[98]*y[IDX_HII] - k[292] - k[381]*y[IDX_CII] - k[508]*y[IDX_HII]
@@ -3646,8 +3646,8 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
     data[372] = 0.0 - k[639]*y[IDX_SiHI];
     data[373] = 0.0 - k[1089]*y[IDX_SiHI];
     data[374] = 0.0 + k[355]*y[IDX_SiH2II] + k[357]*y[IDX_SiH3II];
-    data[375] = 0.0 + k[360]*y[IDX_EM];
-    data[376] = 0.0 + k[359]*y[IDX_EM] + k[489]*y[IDX_COI] + k[574]*y[IDX_H2OI];
+    data[375] = 0.0 + k[360]*y[IDX_eM];
+    data[376] = 0.0 + k[359]*y[IDX_eM] + k[489]*y[IDX_COI] + k[574]*y[IDX_H2OI];
     data[377] = 0.0 + k[950]*y[IDX_CNI] + k[1088]*y[IDX_OI] + k[1186];
     data[378] = 0.0 - k[26]*y[IDX_CII] - k[96]*y[IDX_HII] - k[290] - k[506]*y[IDX_HII] -
         k[603]*y[IDX_H3II] - k[705]*y[IDX_HeII] - k[706]*y[IDX_HeII] -
@@ -3664,7 +3664,7 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
     data[388] = 0.0 + k[831]*y[IDX_OI];
     data[389] = 0.0 + k[832]*y[IDX_OI];
     data[390] = 0.0 - k[138]*y[IDX_HCOI] - k[154]*y[IDX_MgI] - k[206]*y[IDX_NOI] -
-        k[362]*y[IDX_EM] - k[395]*y[IDX_CI] - k[438]*y[IDX_CH2I] -
+        k[362]*y[IDX_eM] - k[395]*y[IDX_CI] - k[438]*y[IDX_CH2I] -
         k[478]*y[IDX_CHI] - k[490]*y[IDX_COI] - k[547]*y[IDX_H2I] -
         k[745]*y[IDX_NI] - k[746]*y[IDX_NI] - k[835]*y[IDX_OI] - k[1189] -
         k[1245];
@@ -3684,7 +3684,7 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
     data[403] = 0.0 - k[362]*y[IDX_SiOII];
     data[404] = 0.0 - k[490]*y[IDX_SiOII];
     data[405] = 0.0 - k[547]*y[IDX_SiOII];
-    data[406] = 0.0 - k[331]*y[IDX_EM] - k[332]*y[IDX_EM] - k[333]*y[IDX_EM] -
+    data[406] = 0.0 - k[331]*y[IDX_eM] - k[332]*y[IDX_eM] - k[333]*y[IDX_eM] -
         k[387]*y[IDX_CI] - k[485]*y[IDX_COI] - k[567]*y[IDX_H2OI] -
         k[824]*y[IDX_OI] - k[1287];
     data[407] = 0.0 + k[447]*y[IDX_CO2I];
@@ -3707,7 +3707,7 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
     data[422] = 0.0 - k[331]*y[IDX_HCO2II] - k[332]*y[IDX_HCO2II] - k[333]*y[IDX_HCO2II];
     data[423] = 0.0 - k[485]*y[IDX_HCO2II];
     data[424] = 0.0 + k[1351] + k[1352] + k[1353] + k[1354];
-    data[425] = 0.0 + k[310]*y[IDX_EM];
+    data[425] = 0.0 + k[310]*y[IDX_eM];
     data[426] = 0.0 + k[909]*y[IDX_CH3I] + k[1041]*y[IDX_NHI];
     data[427] = 0.0 - k[264] - k[503]*y[IDX_HII] - k[590]*y[IDX_H3II] -
         k[686]*y[IDX_HeII] - k[687]*y[IDX_HeII] - k[883]*y[IDX_CH2I] -
@@ -3764,7 +3764,7 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
         k[152]*y[IDX_O2II] - k[153]*y[IDX_SiII] - k[154]*y[IDX_SiOII] -
         k[163]*y[IDX_NII] - k[190]*y[IDX_NH3II] - k[266] - k[591]*y[IDX_H3II] -
         k[1154] - k[1300];
-    data[462] = 0.0 + k[1219]*y[IDX_EM];
+    data[462] = 0.0 + k[1219]*y[IDX_eM];
     data[463] = 0.0 - k[153]*y[IDX_MgI];
     data[464] = 0.0 - k[150]*y[IDX_MgI];
     data[465] = 0.0 - k[163]*y[IDX_MgI];
@@ -3787,7 +3787,7 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
         k[152]*y[IDX_O2II] + k[153]*y[IDX_SiII] + k[154]*y[IDX_SiOII] +
         k[163]*y[IDX_NII] + k[190]*y[IDX_NH3II] + k[266] + k[591]*y[IDX_H3II] +
         k[1154];
-    data[480] = 0.0 - k[1219]*y[IDX_EM] - k[1299];
+    data[480] = 0.0 - k[1219]*y[IDX_eM] - k[1299];
     data[481] = 0.0 + k[153]*y[IDX_MgI];
     data[482] = 0.0 + k[150]*y[IDX_MgI];
     data[483] = 0.0 + k[163]*y[IDX_MgI];
@@ -3804,7 +3804,7 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
     data[494] = 0.0 + k[149]*y[IDX_MgI];
     data[495] = 0.0 - k[1219]*y[IDX_MgII];
     data[496] = 0.0 - k[49]*y[IDX_H2COI] - k[50]*y[IDX_NH3I] - k[51]*y[IDX_O2I] -
-        k[301]*y[IDX_EM] - k[302]*y[IDX_EM] - k[447]*y[IDX_CO2I] -
+        k[301]*y[IDX_eM] - k[302]*y[IDX_eM] - k[447]*y[IDX_CO2I] -
         k[448]*y[IDX_COI] - k[449]*y[IDX_H2COI] - k[450]*y[IDX_H2OI] -
         k[617]*y[IDX_HI] - k[822]*y[IDX_OI] - k[1122] - k[1123] - k[1288];
     data[497] = 0.0 + k[52]*y[IDX_COII] + k[77]*y[IDX_HII] + k[101]*y[IDX_H2II] +
@@ -3832,7 +3832,7 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
     data[518] = 0.0 + k[257] + k[1143] + k[1144];
     data[519] = 0.0 + k[1084]*y[IDX_OI];
     data[520] = 0.0 + k[1085]*y[IDX_OI] + k[1086]*y[IDX_OI];
-    data[521] = 0.0 + k[364]*y[IDX_EM];
+    data[521] = 0.0 + k[364]*y[IDX_eM];
     data[522] = 0.0 + k[1089]*y[IDX_OI];
     data[523] = 0.0 + k[138]*y[IDX_HCOI] + k[154]*y[IDX_MgI] + k[206]*y[IDX_NOI];
     data[524] = 0.0 + k[154]*y[IDX_SiOII];
@@ -3862,7 +3862,7 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
         k[63]*y[IDX_COI] - k[64]*y[IDX_H2COI] - k[65]*y[IDX_HCNI] -
         k[66]*y[IDX_HCOI] - k[67]*y[IDX_NOI] - k[68]*y[IDX_O2I] -
         k[126]*y[IDX_HI] - k[183]*y[IDX_NH2I] - k[199]*y[IDX_NHI] -
-        k[216]*y[IDX_OI] - k[225]*y[IDX_OHI] - k[303]*y[IDX_EM] -
+        k[216]*y[IDX_OI] - k[225]*y[IDX_OHI] - k[303]*y[IDX_eM] -
         k[479]*y[IDX_H2COI] - k[480]*y[IDX_HCOI] - k[481]*y[IDX_O2I] -
         k[531]*y[IDX_H2I] - k[560]*y[IDX_H2OI] - k[561]*y[IDX_H2OI] -
         k[737]*y[IDX_NI] - k[1276];
@@ -3892,7 +3892,7 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
     data[567] = 0.0 - k[63]*y[IDX_CNII];
     data[568] = 0.0 - k[531]*y[IDX_CNII];
     data[569] = 0.0 - k[126]*y[IDX_CNII];
-    data[570] = 0.0 - k[327]*y[IDX_EM] - k[328]*y[IDX_EM] - k[329]*y[IDX_EM] -
+    data[570] = 0.0 - k[327]*y[IDX_eM] - k[328]*y[IDX_eM] - k[329]*y[IDX_eM] -
         k[427]*y[IDX_CH2I] - k[428]*y[IDX_CH2I] - k[464]*y[IDX_CHI] -
         k[465]*y[IDX_CHI] - k[633]*y[IDX_H2COI] - k[634]*y[IDX_H2COI] -
         k[785]*y[IDX_NH2I] - k[786]*y[IDX_NH2I] - k[1301];
@@ -3933,7 +3933,7 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
     data[596] = 0.0 + k[629]*y[IDX_HCNI] + k[648]*y[IDX_HNCI];
     data[597] = 0.0 - k[327]*y[IDX_HCNHII] - k[328]*y[IDX_HCNHII] - k[329]*y[IDX_HCNHII];
     data[598] = 0.0 + k[535]*y[IDX_HCNII];
-    data[599] = 0.0 - k[338]*y[IDX_EM] - k[339]*y[IDX_EM] - k[389]*y[IDX_CI] -
+    data[599] = 0.0 - k[338]*y[IDX_eM] - k[339]*y[IDX_eM] - k[389]*y[IDX_CI] -
         k[431]*y[IDX_CH2I] - k[469]*y[IDX_CHI] - k[487]*y[IDX_COI] -
         k[570]*y[IDX_H2OI] - k[631]*y[IDX_HCNI] - k[643]*y[IDX_HCOI] -
         k[650]*y[IDX_HNCI] - k[734]*y[IDX_CO2I] - k[735]*y[IDX_H2COI] -
@@ -3969,7 +3969,7 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
     data[626] = 0.0 - k[338]*y[IDX_N2HII] - k[339]*y[IDX_N2HII];
     data[627] = 0.0 - k[487]*y[IDX_N2HII];
     data[628] = 0.0 + k[539]*y[IDX_N2II];
-    data[629] = 0.0 - k[347]*y[IDX_EM] - k[392]*y[IDX_CI] - k[436]*y[IDX_CH2I] -
+    data[629] = 0.0 - k[347]*y[IDX_eM] - k[392]*y[IDX_CI] - k[436]*y[IDX_CH2I] -
         k[474]*y[IDX_CHI] - k[483]*y[IDX_CNI] - k[488]*y[IDX_COI] -
         k[544]*y[IDX_H2I] - k[552]*y[IDX_H2COI] - k[571]*y[IDX_H2OI] -
         k[632]*y[IDX_HCNI] - k[645]*y[IDX_HCOI] - k[651]*y[IDX_HNCI] -
@@ -4013,7 +4013,7 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
     data[663] = 0.0 + k[382]*y[IDX_CII] + k[710]*y[IDX_HeII];
     data[664] = 0.0 - k[153]*y[IDX_MgI] - k[476]*y[IDX_CHI] - k[572]*y[IDX_H2OI] -
         k[859]*y[IDX_OHI] - k[860]*y[IDX_CH3OHI] - k[1202]*y[IDX_H2I] -
-        k[1209]*y[IDX_HI] - k[1212]*y[IDX_OI] - k[1222]*y[IDX_EM] - k[1231];
+        k[1209]*y[IDX_HI] - k[1212]*y[IDX_OI] - k[1222]*y[IDX_eM] - k[1231];
     data[665] = 0.0 + k[21]*y[IDX_CII] + k[35]*y[IDX_CHII] + k[91]*y[IDX_HII] +
         k[122]*y[IDX_H2OII] + k[147]*y[IDX_HeII] + k[192]*y[IDX_NH3II] +
         k[228]*y[IDX_H2COII] + k[229]*y[IDX_NOII] + k[230]*y[IDX_O2II] + k[285]
@@ -4039,17 +4039,17 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
     data[683] = 0.0 + k[490]*y[IDX_SiOII];
     data[684] = 0.0 - k[1202]*y[IDX_SiII];
     data[685] = 0.0 + k[619]*y[IDX_SiHII] - k[1209]*y[IDX_SiII];
-    data[686] = 0.0 + k[349]*y[IDX_EM];
+    data[686] = 0.0 + k[349]*y[IDX_eM];
     data[687] = 0.0 + k[288] + k[702]*y[IDX_HeII] + k[1027]*y[IDX_NI] +
         k[1083]*y[IDX_OI] + k[1178];
-    data[688] = 0.0 + k[353]*y[IDX_EM] + k[354]*y[IDX_EM];
-    data[689] = 0.0 + k[363]*y[IDX_EM];
-    data[690] = 0.0 + k[352]*y[IDX_EM] + k[477]*y[IDX_CHI] + k[573]*y[IDX_H2OI];
+    data[688] = 0.0 + k[353]*y[IDX_eM] + k[354]*y[IDX_eM];
+    data[689] = 0.0 + k[363]*y[IDX_eM];
+    data[690] = 0.0 + k[352]*y[IDX_eM] + k[477]*y[IDX_CHI] + k[573]*y[IDX_H2OI];
     data[691] = 0.0 + k[292] + k[1188];
-    data[692] = 0.0 + k[362]*y[IDX_EM] + k[478]*y[IDX_CHI] + k[745]*y[IDX_NI];
+    data[692] = 0.0 + k[362]*y[IDX_eM] + k[478]*y[IDX_CHI] + k[745]*y[IDX_NI];
     data[693] = 0.0 + k[153]*y[IDX_SiII];
     data[694] = 0.0 + k[293] + k[711]*y[IDX_HeII] + k[1190];
-    data[695] = 0.0 + k[153]*y[IDX_MgI] + k[1222]*y[IDX_EM];
+    data[695] = 0.0 + k[153]*y[IDX_MgI] + k[1222]*y[IDX_eM];
     data[696] = 0.0 - k[21]*y[IDX_CII] - k[35]*y[IDX_CHII] - k[91]*y[IDX_HII] -
         k[122]*y[IDX_H2OII] - k[147]*y[IDX_HeII] - k[192]*y[IDX_NH3II] -
         k[228]*y[IDX_H2COII] - k[229]*y[IDX_NOII] - k[230]*y[IDX_O2II] - k[285]
@@ -4084,7 +4084,7 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
     data[719] = 0.0 - k[1104]*y[IDX_SiI];
     data[720] = 0.0 + k[1327] + k[1328] + k[1329] + k[1330];
     data[721] = 0.0 + k[1004]*y[IDX_CI];
-    data[722] = 0.0 + k[329]*y[IDX_EM] + k[428]*y[IDX_CH2I] + k[465]*y[IDX_CHI] +
+    data[722] = 0.0 + k[329]*y[IDX_eM] + k[428]*y[IDX_CH2I] + k[465]*y[IDX_CHI] +
         k[634]*y[IDX_H2COI] + k[786]*y[IDX_NH2I];
     data[723] = 0.0 - k[650]*y[IDX_HNCI];
     data[724] = 0.0 - k[651]*y[IDX_HNCI];
@@ -4119,7 +4119,7 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
     data[747] = 0.0 - k[979]*y[IDX_HNCI];
     data[748] = 0.0 + k[807]*y[IDX_NOI];
     data[749] = 0.0 - k[649]*y[IDX_HNOII];
-    data[750] = 0.0 - k[204]*y[IDX_NOI] - k[334]*y[IDX_EM] - k[388]*y[IDX_CI] -
+    data[750] = 0.0 - k[204]*y[IDX_NOI] - k[334]*y[IDX_eM] - k[388]*y[IDX_CI] -
         k[430]*y[IDX_CH2I] - k[467]*y[IDX_CHI] - k[482]*y[IDX_CNI] -
         k[486]*y[IDX_COI] - k[550]*y[IDX_H2COI] - k[568]*y[IDX_H2OI] -
         k[630]*y[IDX_HCNI] - k[642]*y[IDX_HCOI] - k[649]*y[IDX_HNCI] -
@@ -4161,7 +4161,7 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
         k[171]*y[IDX_HCOI] - k[172]*y[IDX_NOI] - k[173]*y[IDX_O2I] -
         k[174]*y[IDX_NI] - k[186]*y[IDX_NH2I] - k[197]*y[IDX_NH3I] -
         k[201]*y[IDX_NHI] - k[218]*y[IDX_OI] - k[227]*y[IDX_OHI] -
-        k[337]*y[IDX_EM] - k[455]*y[IDX_CH4I] - k[456]*y[IDX_CH4I] -
+        k[337]*y[IDX_eM] - k[455]*y[IDX_CH4I] - k[456]*y[IDX_CH4I] -
         k[539]*y[IDX_H2I] - k[569]*y[IDX_H2OI] - k[730]*y[IDX_H2COI] -
         k[731]*y[IDX_HCOI] - k[825]*y[IDX_OI] - k[1271];
     data[781] = 0.0 - k[455]*y[IDX_N2II] - k[456]*y[IDX_N2II];
@@ -4198,8 +4198,8 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
     data[809] = 0.0 + k[552]*y[IDX_H2COI];
     data[810] = 0.0 - k[647]*y[IDX_H3COII];
     data[811] = 0.0 + k[550]*y[IDX_H2COI];
-    data[812] = 0.0 - k[317]*y[IDX_EM] - k[318]*y[IDX_EM] - k[319]*y[IDX_EM] -
-        k[320]*y[IDX_EM] - k[321]*y[IDX_EM] - k[461]*y[IDX_CHI] -
+    data[812] = 0.0 - k[317]*y[IDX_eM] - k[318]*y[IDX_eM] - k[319]*y[IDX_eM] -
+        k[320]*y[IDX_eM] - k[321]*y[IDX_eM] - k[461]*y[IDX_CHI] -
         k[564]*y[IDX_H2OI] - k[628]*y[IDX_HCNI] - k[647]*y[IDX_HNCI] -
         k[782]*y[IDX_NH2I] - k[1249];
     data[813] = 0.0 + k[452]*y[IDX_H2COII];
@@ -4293,7 +4293,7 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
         k[72]*y[IDX_NOI] - k[73]*y[IDX_O2I] - k[123]*y[IDX_H2OI] -
         k[127]*y[IDX_HI] - k[134]*y[IDX_HCNI] - k[184]*y[IDX_NH2I] -
         k[193]*y[IDX_NH3I] - k[200]*y[IDX_NHI] - k[217]*y[IDX_OI] -
-        k[226]*y[IDX_OHI] - k[304]*y[IDX_EM] - k[422]*y[IDX_CH2I] -
+        k[226]*y[IDX_OHI] - k[304]*y[IDX_eM] - k[422]*y[IDX_CH2I] -
         k[451]*y[IDX_CH4I] - k[458]*y[IDX_CHI] - k[484]*y[IDX_H2COI] -
         k[532]*y[IDX_H2I] - k[533]*y[IDX_H2I] - k[562]*y[IDX_H2OI] -
         k[779]*y[IDX_NH2I] - k[792]*y[IDX_NH3I] - k[795]*y[IDX_NHI] -
@@ -4337,7 +4337,7 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
         k[106]*y[IDX_H2OI] - k[107]*y[IDX_HCNI] - k[108]*y[IDX_HCOI] -
         k[109]*y[IDX_NH2I] - k[110]*y[IDX_NH3I] - k[111]*y[IDX_NHI] -
         k[112]*y[IDX_NOI] - k[113]*y[IDX_O2I] - k[114]*y[IDX_OHI] -
-        k[128]*y[IDX_HI] - k[305]*y[IDX_EM] - k[509]*y[IDX_CI] -
+        k[128]*y[IDX_HI] - k[305]*y[IDX_eM] - k[509]*y[IDX_CI] -
         k[510]*y[IDX_CH2I] - k[511]*y[IDX_CH4I] - k[512]*y[IDX_CHI] -
         k[513]*y[IDX_CNI] - k[514]*y[IDX_CO2I] - k[515]*y[IDX_COI] -
         k[516]*y[IDX_H2I] - k[517]*y[IDX_H2COI] - k[518]*y[IDX_H2OI] -
@@ -4420,7 +4420,7 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
     data[971] = 0.0 + k[248] + k[656]*y[IDX_HeII] + k[714]*y[IDX_NII] +
         k[860]*y[IDX_SiII] + k[1121];
     data[972] = 0.0 + k[47]*y[IDX_CH3II];
-    data[973] = 0.0 + k[302]*y[IDX_EM] + k[447]*y[IDX_CO2I] + k[448]*y[IDX_COI] +
+    data[973] = 0.0 + k[302]*y[IDX_eM] + k[447]*y[IDX_CO2I] + k[448]*y[IDX_COI] +
         k[449]*y[IDX_H2COI] + k[450]*y[IDX_H2OI];
     data[974] = 0.0 + k[860]*y[IDX_CH3OHI];
     data[975] = 0.0 + k[451]*y[IDX_COII] + k[452]*y[IDX_H2COII] + k[453]*y[IDX_H2OII] +
@@ -4445,7 +4445,7 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
     data[980] = 0.0 + k[714]*y[IDX_CH3OHI];
     data[981] = 0.0 + k[454]*y[IDX_CH4I];
     data[982] = 0.0 + k[46]*y[IDX_HCOI] + k[47]*y[IDX_MgI] + k[48]*y[IDX_NOI] +
-        k[1215]*y[IDX_EM];
+        k[1215]*y[IDX_eM];
     data[983] = 0.0 - k[907]*y[IDX_CH3I] + k[1028]*y[IDX_CH4I];
     data[984] = 0.0 + k[417]*y[IDX_H2COI];
     data[985] = 0.0 + k[453]*y[IDX_CH4I];
@@ -4479,7 +4479,7 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
     data[1008] = 0.0 + k[952]*y[IDX_COI];
     data[1009] = 0.0 + k[1053]*y[IDX_NOI] + k[1054]*y[IDX_O2I];
     data[1010] = 0.0 + k[490]*y[IDX_COI];
-    data[1011] = 0.0 + k[331]*y[IDX_EM] + k[387]*y[IDX_CI] + k[485]*y[IDX_COI] +
+    data[1011] = 0.0 + k[331]*y[IDX_eM] + k[387]*y[IDX_CI] + k[485]*y[IDX_COI] +
         k[567]*y[IDX_H2OI];
     data[1012] = 0.0 + k[951]*y[IDX_COI];
     data[1013] = 0.0 - k[447]*y[IDX_CO2I];
@@ -4546,7 +4546,7 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
         k[721]*y[IDX_H2COI] - k[722]*y[IDX_H2COI] - k[723]*y[IDX_HCOI] -
         k[724]*y[IDX_NH3I] - k[725]*y[IDX_NH3I] - k[726]*y[IDX_NHI] -
         k[727]*y[IDX_NOI] - k[728]*y[IDX_O2I] - k[729]*y[IDX_O2I] -
-        k[1210]*y[IDX_NI] - k[1220]*y[IDX_EM] - k[1268];
+        k[1210]*y[IDX_NI] - k[1220]*y[IDX_eM] - k[1268];
     data[1051] = 0.0 - k[164]*y[IDX_NII] + k[689]*y[IDX_HeII];
     data[1052] = 0.0 + k[688]*y[IDX_HeII];
     data[1053] = 0.0 - k[161]*y[IDX_NII] + k[677]*y[IDX_HeII];
@@ -4586,7 +4586,7 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
         k[810]*y[IDX_CH4I] - k[811]*y[IDX_CNI] - k[812]*y[IDX_CO2I] -
         k[813]*y[IDX_H2COI] - k[814]*y[IDX_HCNI] - k[815]*y[IDX_HCNI] -
         k[816]*y[IDX_HCOI] - k[817]*y[IDX_N2I] - k[818]*y[IDX_NO2I] -
-        k[819]*y[IDX_OHI] - k[1195]*y[IDX_CI] - k[1221]*y[IDX_EM] - k[1269];
+        k[819]*y[IDX_OHI] - k[1195]*y[IDX_CI] - k[1221]*y[IDX_eM] - k[1269];
     data[1081] = 0.0 + k[1167];
     data[1082] = 0.0 - k[212]*y[IDX_OII];
     data[1083] = 0.0 - k[817]*y[IDX_OII];
@@ -4628,7 +4628,7 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
     data[1115] = 0.0 - k[620]*y[IDX_HCNII];
     data[1116] = 0.0 + k[161]*y[IDX_HCNI] + k[717]*y[IDX_CH4I];
     data[1117] = 0.0 - k[124]*y[IDX_H2OI] - k[129]*y[IDX_HI] - k[132]*y[IDX_NOI] -
-        k[133]*y[IDX_O2I] - k[196]*y[IDX_NH3I] - k[326]*y[IDX_EM] -
+        k[133]*y[IDX_O2I] - k[196]*y[IDX_NH3I] - k[326]*y[IDX_eM] -
         k[385]*y[IDX_CI] - k[426]*y[IDX_CH2I] - k[454]*y[IDX_CH4I] -
         k[463]*y[IDX_CHI] - k[535]*y[IDX_H2I] - k[565]*y[IDX_H2OI] -
         k[620]*y[IDX_CO2I] - k[621]*y[IDX_COI] - k[622]*y[IDX_H2COI] -
@@ -4677,8 +4677,8 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
     data[1154] = 0.0 + k[212]*y[IDX_NH2I];
     data[1155] = 0.0 + k[798]*y[IDX_NHI];
     data[1156] = 0.0 - k[42]*y[IDX_CH2I] - k[59]*y[IDX_CHI] - k[180]*y[IDX_HCOI] -
-        k[181]*y[IDX_NH3I] - k[182]*y[IDX_NOI] - k[341]*y[IDX_EM] -
-        k[342]*y[IDX_EM] - k[433]*y[IDX_CH2I] - k[471]*y[IDX_CHI] -
+        k[181]*y[IDX_NH3I] - k[182]*y[IDX_NOI] - k[341]*y[IDX_eM] -
+        k[342]*y[IDX_eM] - k[433]*y[IDX_CH2I] - k[471]*y[IDX_CHI] -
         k[542]*y[IDX_H2I] - k[741]*y[IDX_NI] - k[769]*y[IDX_H2COI] -
         k[770]*y[IDX_H2COI] - k[771]*y[IDX_H2OI] - k[772]*y[IDX_H2OI] -
         k[773]*y[IDX_HCNI] - k[774]*y[IDX_HCOI] - k[775]*y[IDX_HNCI] -
@@ -4722,7 +4722,7 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
     data[1186] = 0.0 + k[166]*y[IDX_NHI] + k[538]*y[IDX_H2I] + k[723]*y[IDX_HCOI];
     data[1187] = 0.0 + k[202]*y[IDX_NHI];
     data[1188] = 0.0 - k[175]*y[IDX_H2COI] - k[176]*y[IDX_H2OI] - k[177]*y[IDX_NH3I] -
-        k[178]*y[IDX_NOI] - k[179]*y[IDX_O2I] - k[340]*y[IDX_EM] -
+        k[178]*y[IDX_NOI] - k[179]*y[IDX_O2I] - k[340]*y[IDX_eM] -
         k[390]*y[IDX_CI] - k[432]*y[IDX_CH2I] - k[470]*y[IDX_CHI] -
         k[540]*y[IDX_H2I] - k[541]*y[IDX_H2I] - k[740]*y[IDX_NI] -
         k[747]*y[IDX_CNI] - k[748]*y[IDX_CO2I] - k[749]*y[IDX_CO2I] -
@@ -4774,7 +4774,7 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
     data[1224] = 0.0 - k[30]*y[IDX_CI] - k[44]*y[IDX_CH2I] - k[61]*y[IDX_CHI] -
         k[116]*y[IDX_H2COI] - k[137]*y[IDX_HCOI] - k[152]*y[IDX_MgI] -
         k[187]*y[IDX_NH2I] - k[198]*y[IDX_NH3I] - k[205]*y[IDX_NOI] -
-        k[230]*y[IDX_SiI] - k[346]*y[IDX_EM] - k[391]*y[IDX_CI] -
+        k[230]*y[IDX_SiI] - k[346]*y[IDX_eM] - k[391]*y[IDX_CI] -
         k[435]*y[IDX_CH2I] - k[473]*y[IDX_CHI] - k[551]*y[IDX_H2COI] -
         k[644]*y[IDX_HCOI] - k[742]*y[IDX_NI] - k[804]*y[IDX_NHI] -
         k[820]*y[IDX_CH3OHI] - k[1167] - k[1270];
@@ -4820,11 +4820,11 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
     data[1257] = 0.0 + k[433]*y[IDX_CH2I];
     data[1258] = 0.0 + k[432]*y[IDX_CH2I];
     data[1259] = 0.0 - k[46]*y[IDX_HCOI] - k[47]*y[IDX_MgI] - k[48]*y[IDX_NOI] -
-        k[298]*y[IDX_EM] - k[299]*y[IDX_EM] - k[300]*y[IDX_EM] -
+        k[298]*y[IDX_eM] - k[299]*y[IDX_eM] - k[300]*y[IDX_eM] -
         k[439]*y[IDX_CH3OHI] - k[440]*y[IDX_H2COI] - k[441]*y[IDX_HCOI] -
         k[442]*y[IDX_O2I] - k[443]*y[IDX_OI] - k[444]*y[IDX_OI] -
         k[445]*y[IDX_OHI] - k[446]*y[IDX_SiH4I] - k[616]*y[IDX_HI] -
-        k[794]*y[IDX_NHI] - k[1114] - k[1115] - k[1215]*y[IDX_EM] - k[1285];
+        k[794]*y[IDX_NHI] - k[1114] - k[1115] - k[1215]*y[IDX_eM] - k[1285];
     data[1260] = 0.0 + k[419]*y[IDX_HCOI] + k[530]*y[IDX_H2I];
     data[1261] = 0.0 + k[424]*y[IDX_CH2I];
     data[1262] = 0.0 + k[434]*y[IDX_CH2I];
@@ -4893,7 +4893,7 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
         k[1030]*y[IDX_NOI] - k[1031]*y[IDX_OHI] - k[1032]*y[IDX_OHI] -
         k[1072]*y[IDX_OI] - k[1073]*y[IDX_OI] - k[1157] - k[1158] - k[1289];
     data[1303] = 0.0 - k[185]*y[IDX_NH2I] - k[781]*y[IDX_NH2I];
-    data[1304] = 0.0 + k[343]*y[IDX_EM] + k[434]*y[IDX_CH2I];
+    data[1304] = 0.0 + k[343]*y[IDX_eM] + k[434]*y[IDX_CH2I];
     data[1305] = 0.0 - k[783]*y[IDX_NH2I];
     data[1306] = 0.0 - k[373]*y[IDX_NH2I];
     data[1307] = 0.0 + k[1095]*y[IDX_OHI];
@@ -4941,8 +4941,8 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
     data[1346] = 0.0 + k[470]*y[IDX_CHI];
     data[1347] = 0.0 + k[44]*y[IDX_CH2I];
     data[1348] = 0.0 + k[616]*y[IDX_HI] + k[1115];
-    data[1349] = 0.0 - k[36]*y[IDX_NOI] - k[295]*y[IDX_EM] - k[296]*y[IDX_EM] -
-        k[297]*y[IDX_EM] - k[416]*y[IDX_CO2I] - k[417]*y[IDX_H2COI] -
+    data[1349] = 0.0 - k[36]*y[IDX_NOI] - k[295]*y[IDX_eM] - k[296]*y[IDX_eM] -
+        k[297]*y[IDX_eM] - k[416]*y[IDX_CO2I] - k[417]*y[IDX_H2COI] -
         k[418]*y[IDX_H2OI] - k[419]*y[IDX_HCOI] - k[420]*y[IDX_O2I] -
         k[421]*y[IDX_OI] - k[530]*y[IDX_H2I] - k[615]*y[IDX_HI] -
         k[736]*y[IDX_NI] - k[1109] - k[1110] - k[1111] - k[1278];
@@ -4996,8 +4996,8 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
     data[1388] = 0.0 - k[40]*y[IDX_CH2I] - k[56]*y[IDX_CHI] - k[117]*y[IDX_H2COI] -
         k[118]*y[IDX_HCOI] - k[119]*y[IDX_MgI] - k[120]*y[IDX_NOI] -
         k[121]*y[IDX_O2I] - k[122]*y[IDX_SiI] - k[185]*y[IDX_NH2I] -
-        k[195]*y[IDX_NH3I] - k[312]*y[IDX_EM] - k[313]*y[IDX_EM] -
-        k[314]*y[IDX_EM] - k[383]*y[IDX_CI] - k[424]*y[IDX_CH2I] -
+        k[195]*y[IDX_NH3I] - k[312]*y[IDX_eM] - k[313]*y[IDX_eM] -
+        k[314]*y[IDX_eM] - k[383]*y[IDX_CI] - k[424]*y[IDX_CH2I] -
         k[453]*y[IDX_CH4I] - k[460]*y[IDX_CHI] - k[534]*y[IDX_H2I] -
         k[553]*y[IDX_COI] - k[554]*y[IDX_H2COI] - k[555]*y[IDX_H2OI] -
         k[556]*y[IDX_HCNI] - k[557]*y[IDX_HCOI] - k[558]*y[IDX_HCOI] -
@@ -5064,7 +5064,7 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
         k[789]*y[IDX_N2HII] + k[790]*y[IDX_O2HII] + k[791]*y[IDX_OHII];
     data[1429] = 0.0 + k[195]*y[IDX_NH3I] + k[781]*y[IDX_NH2I];
     data[1430] = 0.0 - k[189]*y[IDX_HCOI] - k[190]*y[IDX_MgI] - k[191]*y[IDX_NOI] -
-        k[192]*y[IDX_SiI] - k[343]*y[IDX_EM] - k[344]*y[IDX_EM] -
+        k[192]*y[IDX_SiI] - k[343]*y[IDX_eM] - k[344]*y[IDX_eM] -
         k[434]*y[IDX_CH2I] - k[828]*y[IDX_OI] - k[1283];
     data[1431] = 0.0 + k[783]*y[IDX_NH2I];
     data[1432] = 0.0 + k[19]*y[IDX_NH3I];
@@ -5108,7 +5108,7 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
     data[1468] = 0.0 + k[36]*y[IDX_NOI];
     data[1469] = 0.0 + k[120]*y[IDX_NOI] + k[739]*y[IDX_NI];
     data[1470] = 0.0 + k[191]*y[IDX_NOI];
-    data[1471] = 0.0 - k[151]*y[IDX_MgI] - k[229]*y[IDX_SiI] - k[345]*y[IDX_EM] - k[1277];
+    data[1471] = 0.0 - k[151]*y[IDX_MgI] - k[229]*y[IDX_SiI] - k[345]*y[IDX_eM] - k[1277];
     data[1472] = 0.0 + k[817]*y[IDX_OII];
     data[1473] = 0.0 + k[20]*y[IDX_NOI];
     data[1474] = 0.0 + k[815]*y[IDX_OII];
@@ -5156,8 +5156,8 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
     data[1509] = 0.0 - k[783]*y[IDX_H3OII];
     data[1510] = 0.0 + k[453]*y[IDX_CH4I] + k[534]*y[IDX_H2I] + k[555]*y[IDX_H2OI] +
         k[557]*y[IDX_HCOI] + k[797]*y[IDX_NHI] + k[852]*y[IDX_OHI];
-    data[1511] = 0.0 - k[322]*y[IDX_EM] - k[323]*y[IDX_EM] - k[324]*y[IDX_EM] -
-        k[325]*y[IDX_EM] - k[384]*y[IDX_CI] - k[425]*y[IDX_CH2I] -
+    data[1511] = 0.0 - k[322]*y[IDX_eM] - k[323]*y[IDX_eM] - k[324]*y[IDX_eM] -
+        k[325]*y[IDX_eM] - k[384]*y[IDX_CI] - k[425]*y[IDX_CH2I] -
         k[462]*y[IDX_CHI] - k[607]*y[IDX_H2COI] - k[608]*y[IDX_HCNI] -
         k[609]*y[IDX_HNCI] - k[610]*y[IDX_SiI] - k[611]*y[IDX_SiH2I] -
         k[612]*y[IDX_SiHI] - k[613]*y[IDX_SiOI] - k[783]*y[IDX_NH2I] - k[1286];
@@ -5188,7 +5188,7 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
     data[1529] = 0.0 + k[1019]*y[IDX_NI] + k[1021]*y[IDX_NI];
     data[1530] = 0.0 + k[1053]*y[IDX_NOI];
     data[1531] = 0.0 + k[150]*y[IDX_N2II];
-    data[1532] = 0.0 + k[338]*y[IDX_EM] + k[389]*y[IDX_CI] + k[431]*y[IDX_CH2I] +
+    data[1532] = 0.0 + k[338]*y[IDX_eM] + k[389]*y[IDX_CI] + k[431]*y[IDX_CH2I] +
         k[469]*y[IDX_CHI] + k[487]*y[IDX_COI] + k[570]*y[IDX_H2OI] +
         k[631]*y[IDX_HCNI] + k[643]*y[IDX_HCOI] + k[650]*y[IDX_HNCI] +
         k[734]*y[IDX_CO2I] + k[735]*y[IDX_H2COI] + k[789]*y[IDX_NH2I] +
@@ -5273,7 +5273,7 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
         k[379]*y[IDX_OHI] - k[380]*y[IDX_SiH2I] - k[381]*y[IDX_SiHI] -
         k[382]*y[IDX_SiOI] - k[528]*y[IDX_H2I] - k[1192]*y[IDX_NI] -
         k[1193]*y[IDX_OI] - k[1199]*y[IDX_H2I] - k[1205]*y[IDX_HI] -
-        k[1214]*y[IDX_EM] - k[1264];
+        k[1214]*y[IDX_eM] - k[1264];
     data[1585] = 0.0 + k[678]*y[IDX_HeII];
     data[1586] = 0.0 + k[241] + k[614]*y[IDX_HI];
     data[1587] = 0.0 - k[14]*y[IDX_CII] + k[653]*y[IDX_HeII];
@@ -5303,7 +5303,7 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
     data[1608] = 0.0 + k[950]*y[IDX_CNI];
     data[1609] = 0.0 + k[944]*y[IDX_CNI];
     data[1610] = 0.0 - k[65]*y[IDX_HCNI] + k[479]*y[IDX_H2COI];
-    data[1611] = 0.0 + k[328]*y[IDX_EM] + k[427]*y[IDX_CH2I] + k[464]*y[IDX_CHI] +
+    data[1611] = 0.0 + k[328]*y[IDX_eM] + k[427]*y[IDX_CH2I] + k[464]*y[IDX_CHI] +
         k[633]*y[IDX_H2COI] + k[785]*y[IDX_NH2I];
     data[1612] = 0.0 - k[631]*y[IDX_HCNI];
     data[1613] = 0.0 - k[632]*y[IDX_HCNI];
@@ -5399,7 +5399,7 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
         k[1205]*y[IDX_HI];
     data[1683] = 0.0 - k[405]*y[IDX_CHII] + k[679]*y[IDX_HeII];
     data[1684] = 0.0 - k[31]*y[IDX_HCOI] - k[32]*y[IDX_MgI] - k[33]*y[IDX_NH3I] -
-        k[34]*y[IDX_NOI] - k[35]*y[IDX_SiI] - k[241] - k[294]*y[IDX_EM] -
+        k[34]*y[IDX_NOI] - k[35]*y[IDX_SiI] - k[241] - k[294]*y[IDX_eM] -
         k[396]*y[IDX_CH3OHI] - k[397]*y[IDX_CH3OHI] - k[398]*y[IDX_CO2I] -
         k[399]*y[IDX_H2COI] - k[400]*y[IDX_H2COI] - k[401]*y[IDX_H2COI] -
         k[402]*y[IDX_H2OI] - k[403]*y[IDX_H2OI] - k[404]*y[IDX_H2OI] -
@@ -5443,14 +5443,14 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
     data[1708] = 0.0 - k[438]*y[IDX_CH2I];
     data[1709] = 0.0 - k[883]*y[IDX_CH2I] + k[926]*y[IDX_CHI];
     data[1710] = 0.0 + k[397]*y[IDX_CHII];
-    data[1711] = 0.0 + k[301]*y[IDX_EM];
+    data[1711] = 0.0 + k[301]*y[IDX_eM];
     data[1712] = 0.0 - k[37]*y[IDX_CH2I];
     data[1713] = 0.0 - k[427]*y[IDX_CH2I] - k[428]*y[IDX_CH2I];
     data[1714] = 0.0 - k[431]*y[IDX_CH2I];
     data[1715] = 0.0 - k[436]*y[IDX_CH2I];
     data[1716] = 0.0 - k[430]*y[IDX_CH2I];
     data[1717] = 0.0 - k[41]*y[IDX_CH2I];
-    data[1718] = 0.0 + k[317]*y[IDX_EM];
+    data[1718] = 0.0 + k[317]*y[IDX_eM];
     data[1719] = 0.0 + k[249] + k[457]*y[IDX_OHII] - k[879]*y[IDX_CH2I] + k[1124];
     data[1720] = 0.0 - k[38]*y[IDX_CH2I] - k[422]*y[IDX_CH2I];
     data[1721] = 0.0 - k[100]*y[IDX_CH2I] - k[510]*y[IDX_CH2I];
@@ -5463,7 +5463,7 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
     data[1726] = 0.0 - k[42]*y[IDX_CH2I] - k[433]*y[IDX_CH2I];
     data[1727] = 0.0 - k[432]*y[IDX_CH2I];
     data[1728] = 0.0 - k[44]*y[IDX_CH2I] - k[435]*y[IDX_CH2I];
-    data[1729] = 0.0 + k[298]*y[IDX_EM];
+    data[1729] = 0.0 + k[298]*y[IDX_eM];
     data[1730] = 0.0 + k[36]*y[IDX_NOI];
     data[1731] = 0.0 - k[40]*y[IDX_CH2I] - k[424]*y[IDX_CH2I];
     data[1732] = 0.0 - k[434]*y[IDX_CH2I];
@@ -5494,7 +5494,7 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
         k[898]*y[IDX_OHI] - k[899]*y[IDX_OHI] - k[900]*y[IDX_OHI] -
         k[956]*y[IDX_H2I] - k[967]*y[IDX_HI] - k[1005]*y[IDX_NI] -
         k[1006]*y[IDX_NI] - k[1007]*y[IDX_NI] - k[1112] - k[1113] - k[1256];
-    data[1738] = 0.0 - k[39]*y[IDX_CH2I] + k[306]*y[IDX_EM] - k[423]*y[IDX_CH2I];
+    data[1738] = 0.0 - k[39]*y[IDX_CH2I] + k[306]*y[IDX_eM] - k[423]*y[IDX_CH2I];
     data[1739] = 0.0 - k[45]*y[IDX_CH2I] - k[437]*y[IDX_CH2I] + k[457]*y[IDX_CH4I];
     data[1740] = 0.0 - k[880]*y[IDX_CH2I] + k[902]*y[IDX_CH3I];
     data[1741] = 0.0 + k[401]*y[IDX_CHII] + k[722]*y[IDX_NII] - k[881]*y[IDX_CH2I] +
@@ -5551,12 +5551,12 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
     data[1785] = 0.0 - k[39]*y[IDX_H2COII] - k[423]*y[IDX_H2COII] + k[435]*y[IDX_O2II];
     data[1786] = 0.0 - k[39]*y[IDX_CH2I] - k[55]*y[IDX_CHI] - k[136]*y[IDX_HCOI] -
         k[148]*y[IDX_MgI] - k[194]*y[IDX_NH3I] - k[203]*y[IDX_NOI] -
-        k[228]*y[IDX_SiI] - k[306]*y[IDX_EM] - k[307]*y[IDX_EM] -
-        k[308]*y[IDX_EM] - k[309]*y[IDX_EM] - k[423]*y[IDX_CH2I] -
+        k[228]*y[IDX_SiI] - k[306]*y[IDX_eM] - k[307]*y[IDX_eM] -
+        k[308]*y[IDX_eM] - k[309]*y[IDX_eM] - k[423]*y[IDX_CH2I] -
         k[452]*y[IDX_CH4I] - k[459]*y[IDX_CHI] - k[548]*y[IDX_H2COI] -
         k[549]*y[IDX_O2I] - k[563]*y[IDX_H2OI] - k[627]*y[IDX_HCNI] -
         k[641]*y[IDX_HCOI] - k[646]*y[IDX_HNCI] - k[780]*y[IDX_NH2I] -
-        k[796]*y[IDX_NHI] - k[1217]*y[IDX_EM] - k[1284];
+        k[796]*y[IDX_NHI] - k[1217]*y[IDX_eM] - k[1284];
     data[1787] = 0.0 - k[796]*y[IDX_H2COII];
     data[1788] = 0.0 + k[219]*y[IDX_H2COI] + k[843]*y[IDX_HCOI];
     data[1789] = 0.0 + k[16]*y[IDX_CII] + k[49]*y[IDX_CH4II] + k[64]*y[IDX_CNII] +
@@ -5589,7 +5589,7 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
         k[1070]*y[IDX_OI];
     data[1808] = 0.0 + k[712]*y[IDX_NII] + k[713]*y[IDX_NII];
     data[1809] = 0.0 - k[199]*y[IDX_NHI] + k[561]*y[IDX_H2OI];
-    data[1810] = 0.0 + k[339]*y[IDX_EM] - k[801]*y[IDX_NHI];
+    data[1810] = 0.0 + k[339]*y[IDX_eM] - k[801]*y[IDX_NHI];
     data[1811] = 0.0 - k[805]*y[IDX_NHI];
     data[1812] = 0.0 + k[775]*y[IDX_NH2II];
     data[1813] = 0.0 - k[800]*y[IDX_NHI];
@@ -5604,7 +5604,7 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
         k[721]*y[IDX_H2COI] + k[725]*y[IDX_NH3I] - k[726]*y[IDX_NHI];
     data[1821] = 0.0 - k[202]*y[IDX_NHI] - k[803]*y[IDX_NHI];
     data[1822] = 0.0 - k[798]*y[IDX_NHI];
-    data[1823] = 0.0 + k[342]*y[IDX_EM] + k[433]*y[IDX_CH2I] + k[471]*y[IDX_CHI] +
+    data[1823] = 0.0 + k[342]*y[IDX_eM] + k[433]*y[IDX_CH2I] + k[471]*y[IDX_CHI] +
         k[769]*y[IDX_H2COI] + k[771]*y[IDX_H2OI] + k[773]*y[IDX_HCNI] +
         k[774]*y[IDX_HCOI] + k[775]*y[IDX_HNCI] + k[776]*y[IDX_NH2I] -
         k[802]*y[IDX_NHI];
@@ -5616,7 +5616,7 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
         k[868]*y[IDX_CI] + k[907]*y[IDX_CH3I] + k[983]*y[IDX_HI] +
         k[1031]*y[IDX_OHI] + k[1073]*y[IDX_OI] + k[1158];
     data[1828] = 0.0 - k[797]*y[IDX_NHI];
-    data[1829] = 0.0 + k[344]*y[IDX_EM];
+    data[1829] = 0.0 + k[344]*y[IDX_eM];
     data[1830] = 0.0 + k[884]*y[IDX_CH2I];
     data[1831] = 0.0 - k[375]*y[IDX_NHI];
     data[1832] = 0.0 + k[773]*y[IDX_NH2II] + k[1064]*y[IDX_OI];
@@ -5696,7 +5696,7 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
     data[1880] = 0.0 - k[45]*y[IDX_CH2I] - k[62]*y[IDX_CHI] - k[188]*y[IDX_NH2I] -
         k[219]*y[IDX_H2COI] - k[220]*y[IDX_H2OI] - k[221]*y[IDX_HCOI] -
         k[222]*y[IDX_NH3I] - k[223]*y[IDX_NOI] - k[224]*y[IDX_O2I] -
-        k[348]*y[IDX_EM] - k[393]*y[IDX_CI] - k[437]*y[IDX_CH2I] -
+        k[348]*y[IDX_eM] - k[393]*y[IDX_CI] - k[437]*y[IDX_CH2I] -
         k[457]*y[IDX_CH4I] - k[475]*y[IDX_CHI] - k[545]*y[IDX_H2I] -
         k[743]*y[IDX_NI] - k[791]*y[IDX_NH2I] - k[806]*y[IDX_NHI] -
         k[830]*y[IDX_OI] - k[836]*y[IDX_CNI] - k[837]*y[IDX_CO2I] -
@@ -5738,7 +5738,7 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
         k[66]*y[IDX_HCOI] + k[67]*y[IDX_NOI] + k[68]*y[IDX_O2I] +
         k[126]*y[IDX_HI] + k[183]*y[IDX_NH2I] + k[199]*y[IDX_NHI] +
         k[216]*y[IDX_OI] + k[225]*y[IDX_OHI];
-    data[1905] = 0.0 + k[327]*y[IDX_EM];
+    data[1905] = 0.0 + k[327]*y[IDX_eM];
     data[1906] = 0.0 - k[483]*y[IDX_CNI];
     data[1907] = 0.0 + k[262] + k[626]*y[IDX_HCNII] + k[1151];
     data[1908] = 0.0 - k[482]*y[IDX_CNI];
@@ -5750,7 +5750,7 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
     data[1914] = 0.0 + k[620]*y[IDX_HCNII];
     data[1915] = 0.0 - k[157]*y[IDX_CNI];
     data[1916] = 0.0 - k[811]*y[IDX_CNI];
-    data[1917] = 0.0 + k[326]*y[IDX_EM] + k[385]*y[IDX_CI] + k[426]*y[IDX_CH2I] +
+    data[1917] = 0.0 + k[326]*y[IDX_eM] + k[385]*y[IDX_CI] + k[426]*y[IDX_CH2I] +
         k[463]*y[IDX_CHI] + k[565]*y[IDX_H2OI] + k[620]*y[IDX_CO2I] +
         k[621]*y[IDX_COI] + k[622]*y[IDX_H2COI] + k[623]*y[IDX_HCNI] +
         k[624]*y[IDX_HCOI] + k[626]*y[IDX_HNCI] + k[784]*y[IDX_NH2I] +
@@ -5814,7 +5814,7 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
     data[1956] = 0.0 + k[647]*y[IDX_H3COII];
     data[1957] = 0.0 - k[550]*y[IDX_H2COI];
     data[1958] = 0.0 - k[170]*y[IDX_H2COI] - k[730]*y[IDX_H2COI];
-    data[1959] = 0.0 + k[320]*y[IDX_EM] + k[461]*y[IDX_CHI] + k[564]*y[IDX_H2OI] +
+    data[1959] = 0.0 + k[320]*y[IDX_eM] + k[461]*y[IDX_CHI] + k[564]*y[IDX_H2OI] +
         k[628]*y[IDX_HCNI] + k[647]*y[IDX_HNCI] + k[782]*y[IDX_NH2I];
     data[1960] = 0.0 - k[70]*y[IDX_H2COI] - k[484]*y[IDX_H2COI];
     data[1961] = 0.0 - k[105]*y[IDX_H2COI] - k[517]*y[IDX_H2COI];
@@ -5841,7 +5841,7 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
         k[898]*y[IDX_OHI];
     data[1979] = 0.0 + k[39]*y[IDX_CH2I] + k[55]*y[IDX_CHI] + k[136]*y[IDX_HCOI] +
         k[148]*y[IDX_MgI] + k[194]*y[IDX_NH3I] + k[203]*y[IDX_NOI] +
-        k[228]*y[IDX_SiI] - k[548]*y[IDX_H2COI] + k[1217]*y[IDX_EM];
+        k[228]*y[IDX_SiI] - k[548]*y[IDX_H2COI] + k[1217]*y[IDX_eM];
     data[1980] = 0.0 - k[219]*y[IDX_H2COI] - k[839]*y[IDX_H2COI];
     data[1981] = 0.0 - k[942]*y[IDX_H2COI];
     data[1982] = 0.0 - k[16]*y[IDX_CII] - k[49]*y[IDX_CH4II] - k[64]*y[IDX_CNII] -
@@ -5890,7 +5890,7 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
     data[2004] = 0.0 + k[646]*y[IDX_H2COII];
     data[2005] = 0.0 - k[642]*y[IDX_HCOI];
     data[2006] = 0.0 - k[171]*y[IDX_HCOI] - k[731]*y[IDX_HCOI];
-    data[2007] = 0.0 + k[321]*y[IDX_EM];
+    data[2007] = 0.0 + k[321]*y[IDX_eM];
     data[2008] = 0.0 - k[71]*y[IDX_HCOI] + k[484]*y[IDX_H2COI];
     data[2009] = 0.0 - k[108]*y[IDX_HCOI] - k[519]*y[IDX_HCOI];
     data[2010] = 0.0 + k[903]*y[IDX_H2COI] - k[905]*y[IDX_HCOI] + k[912]*y[IDX_O2I];
@@ -5911,7 +5911,7 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
     data[2025] = 0.0 - k[31]*y[IDX_HCOI] - k[406]*y[IDX_HCOI] + k[413]*y[IDX_O2I];
     data[2026] = 0.0 + k[423]*y[IDX_H2COII] + k[881]*y[IDX_H2COI] - k[882]*y[IDX_HCOI] +
         k[893]*y[IDX_O2I] + k[896]*y[IDX_OI];
-    data[2027] = 0.0 - k[136]*y[IDX_HCOI] + k[309]*y[IDX_EM] + k[423]*y[IDX_CH2I] +
+    data[2027] = 0.0 - k[136]*y[IDX_HCOI] + k[309]*y[IDX_eM] + k[423]*y[IDX_CH2I] +
         k[459]*y[IDX_CHI] + k[548]*y[IDX_H2COI] + k[563]*y[IDX_H2OI] +
         k[627]*y[IDX_HCNI] - k[641]*y[IDX_HCOI] + k[646]*y[IDX_HNCI] +
         k[780]*y[IDX_NH2I];
@@ -6016,7 +6016,7 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
         k[701]*y[IDX_SiCI] - k[702]*y[IDX_SiCI] - k[703]*y[IDX_SiH2I] -
         k[704]*y[IDX_SiH2I] - k[705]*y[IDX_SiH3I] - k[706]*y[IDX_SiH3I] -
         k[707]*y[IDX_SiH4I] - k[708]*y[IDX_SiH4I] - k[709]*y[IDX_SiHI] -
-        k[710]*y[IDX_SiOI] - k[711]*y[IDX_SiOI] - k[1218]*y[IDX_EM];
+        k[710]*y[IDX_SiOI] - k[711]*y[IDX_SiOI] - k[1218]*y[IDX_eM];
     data[2072] = 0.0 - k[141]*y[IDX_HeII] - k[662]*y[IDX_HeII];
     data[2073] = 0.0 + k[237] + k[265];
     data[2074] = 0.0 - k[694]*y[IDX_HeII] - k[695]*y[IDX_HeII];
@@ -6042,7 +6042,7 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
     data[2094] = 0.0 + k[35]*y[IDX_CHII];
     data[2095] = 0.0 - k[467]*y[IDX_CHI];
     data[2096] = 0.0 - k[58]*y[IDX_CHI];
-    data[2097] = 0.0 + k[318]*y[IDX_EM] - k[461]*y[IDX_CHI];
+    data[2097] = 0.0 + k[318]*y[IDX_eM] - k[461]*y[IDX_CHI];
     data[2098] = 0.0 + k[1127];
     data[2099] = 0.0 - k[54]*y[IDX_CHI] + k[422]*y[IDX_CH2I] - k[458]*y[IDX_CHI];
     data[2100] = 0.0 - k[102]*y[IDX_CHI] - k[512]*y[IDX_CHI];
@@ -6055,9 +6055,9 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
     data[2107] = 0.0 - k[59]*y[IDX_CHI] - k[471]*y[IDX_CHI];
     data[2108] = 0.0 - k[470]*y[IDX_CHI];
     data[2109] = 0.0 - k[61]*y[IDX_CHI] - k[473]*y[IDX_CHI];
-    data[2110] = 0.0 + k[299]*y[IDX_EM] + k[300]*y[IDX_EM];
+    data[2110] = 0.0 + k[299]*y[IDX_eM] + k[300]*y[IDX_eM];
     data[2111] = 0.0 + k[868]*y[IDX_CI];
-    data[2112] = 0.0 + k[297]*y[IDX_EM] + k[1111];
+    data[2112] = 0.0 + k[297]*y[IDX_eM] + k[1111];
     data[2113] = 0.0 - k[56]*y[IDX_CHI] - k[460]*y[IDX_CHI];
     data[2114] = 0.0 - k[462]*y[IDX_CHI];
     data[2115] = 0.0 - k[927]*y[IDX_CHI];
@@ -6144,7 +6144,7 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
     data[2163] = 0.0 - k[585]*y[IDX_H3II];
     data[2164] = 0.0 + k[519]*y[IDX_H2II] - k[588]*y[IDX_H3II];
     data[2165] = 0.0 - k[580]*y[IDX_H3II];
-    data[2166] = 0.0 - k[315]*y[IDX_EM] - k[316]*y[IDX_EM] - k[576]*y[IDX_CI] -
+    data[2166] = 0.0 - k[315]*y[IDX_eM] - k[316]*y[IDX_eM] - k[576]*y[IDX_CI] -
         k[577]*y[IDX_CH2I] - k[578]*y[IDX_CH3I] - k[579]*y[IDX_CH3OHI] -
         k[580]*y[IDX_CHI] - k[581]*y[IDX_CNI] - k[582]*y[IDX_CO2I] -
         k[583]*y[IDX_COI] - k[584]*y[IDX_COI] - k[585]*y[IDX_H2COI] -
@@ -6167,7 +6167,7 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
     data[2175] = 0.0 + k[516]*y[IDX_H2II] + k[537]*y[IDX_HeHII] + k[540]*y[IDX_NHII] +
         k[544]*y[IDX_O2HII];
     data[2176] = 0.0 + k[675]*y[IDX_HeII];
-    data[2177] = 0.0 + k[336]*y[IDX_EM] + k[537]*y[IDX_H2I] + k[618]*y[IDX_HI];
+    data[2177] = 0.0 + k[336]*y[IDX_eM] + k[537]*y[IDX_H2I] + k[618]*y[IDX_HI];
     data[2178] = 0.0 + k[700]*y[IDX_HeII];
     data[2179] = 0.0 + k[701]*y[IDX_HeII] + k[702]*y[IDX_HeII];
     data[2180] = 0.0 + k[697]*y[IDX_HeII] + k[698]*y[IDX_HeII];
@@ -6220,7 +6220,7 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
         k[702]*y[IDX_SiCI] + k[703]*y[IDX_SiH2I] + k[704]*y[IDX_SiH2I] +
         k[705]*y[IDX_SiH3I] + k[706]*y[IDX_SiH3I] + k[707]*y[IDX_SiH4I] +
         k[708]*y[IDX_SiH4I] + k[709]*y[IDX_SiHI] + k[710]*y[IDX_SiOI] +
-        k[711]*y[IDX_SiOI] + k[1218]*y[IDX_EM];
+        k[711]*y[IDX_SiOI] + k[1218]*y[IDX_eM];
     data[2204] = 0.0 + k[141]*y[IDX_HeII] + k[662]*y[IDX_HeII];
     data[2205] = 0.0 - k[237] - k[265] - k[520]*y[IDX_H2II] - k[1198]*y[IDX_HII];
     data[2206] = 0.0 + k[694]*y[IDX_HeII] + k[695]*y[IDX_HeII];
@@ -6234,7 +6234,7 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
     data[2214] = 0.0 + k[115]*y[IDX_HeII] + k[536]*y[IDX_HeII] + k[537]*y[IDX_HeHII];
     data[2215] = 0.0 + k[130]*y[IDX_HeII] + k[618]*y[IDX_HeHII];
     data[2216] = 0.0 + k[1343] + k[1344] + k[1345] + k[1346];
-    data[2217] = 0.0 + k[311]*y[IDX_EM];
+    data[2217] = 0.0 + k[311]*y[IDX_eM];
     data[2218] = 0.0 + k[276] + k[885]*y[IDX_CH2I] + k[945]*y[IDX_CNI] +
         k[952]*y[IDX_COI] + k[986]*y[IDX_HI] + k[1020]*y[IDX_NI] +
         k[1020]*y[IDX_NI] + k[1041]*y[IDX_NHI] + k[1075]*y[IDX_OI] + k[1164];
@@ -6250,7 +6250,7 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
     data[2225] = 0.0 - k[807]*y[IDX_NOI];
     data[2226] = 0.0 + k[229]*y[IDX_NOII] - k[1105]*y[IDX_NOI];
     data[2227] = 0.0 + k[649]*y[IDX_HNOII];
-    data[2228] = 0.0 - k[204]*y[IDX_NOI] + k[334]*y[IDX_EM] + k[388]*y[IDX_CI] +
+    data[2228] = 0.0 - k[204]*y[IDX_NOI] + k[334]*y[IDX_eM] + k[388]*y[IDX_CI] +
         k[430]*y[IDX_CH2I] + k[467]*y[IDX_CHI] + k[482]*y[IDX_CNI] +
         k[486]*y[IDX_COI] + k[550]*y[IDX_H2COI] + k[568]*y[IDX_H2OI] +
         k[630]*y[IDX_HCNI] + k[642]*y[IDX_HCOI] + k[649]*y[IDX_HNCI] +
@@ -6337,11 +6337,11 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
     data[2275] = 0.0 - k[745]*y[IDX_NI] - k[746]*y[IDX_NI];
     data[2276] = 0.0 - k[1017]*y[IDX_NI];
     data[2277] = 0.0 + k[163]*y[IDX_NII];
-    data[2278] = 0.0 + k[303]*y[IDX_EM] - k[737]*y[IDX_NI];
-    data[2279] = 0.0 + k[339]*y[IDX_EM];
+    data[2278] = 0.0 + k[303]*y[IDX_eM] - k[737]*y[IDX_NI];
+    data[2279] = 0.0 + k[339]*y[IDX_eM];
     data[2280] = 0.0 + k[1105]*y[IDX_NOI];
     data[2281] = 0.0 + k[684]*y[IDX_HeII] + k[760]*y[IDX_NHII];
-    data[2282] = 0.0 - k[174]*y[IDX_NI] + k[337]*y[IDX_EM] + k[337]*y[IDX_EM] +
+    data[2282] = 0.0 - k[174]*y[IDX_NI] + k[337]*y[IDX_eM] + k[337]*y[IDX_eM] +
         k[825]*y[IDX_OI];
     data[2283] = 0.0 + k[156]*y[IDX_NII] + k[716]*y[IDX_NII];
     data[2284] = 0.0 + k[795]*y[IDX_NHI];
@@ -6355,10 +6355,10 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
         k[163]*y[IDX_MgI] + k[164]*y[IDX_NH2I] + k[165]*y[IDX_NH3I] +
         k[166]*y[IDX_NHI] + k[167]*y[IDX_NOI] + k[168]*y[IDX_O2I] +
         k[169]*y[IDX_OHI] + k[716]*y[IDX_CH4I] - k[1210]*y[IDX_NI] +
-        k[1220]*y[IDX_EM];
+        k[1220]*y[IDX_eM];
     data[2290] = 0.0 + k[814]*y[IDX_HCNI] + k[817]*y[IDX_N2I];
-    data[2291] = 0.0 + k[341]*y[IDX_EM] - k[741]*y[IDX_NI] + k[802]*y[IDX_NHI];
-    data[2292] = 0.0 + k[340]*y[IDX_EM] + k[390]*y[IDX_CI] + k[432]*y[IDX_CH2I] +
+    data[2291] = 0.0 + k[341]*y[IDX_eM] - k[741]*y[IDX_NI] + k[802]*y[IDX_NHI];
+    data[2292] = 0.0 + k[340]*y[IDX_eM] + k[390]*y[IDX_CI] + k[432]*y[IDX_CH2I] +
         k[470]*y[IDX_CHI] + k[540]*y[IDX_H2I] - k[740]*y[IDX_NI] +
         k[747]*y[IDX_CNI] + k[748]*y[IDX_CO2I] + k[751]*y[IDX_COI] +
         k[752]*y[IDX_H2COI] + k[754]*y[IDX_H2OI] + k[758]*y[IDX_HCNI] +
@@ -6369,7 +6369,7 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
     data[2294] = 0.0 + k[164]*y[IDX_NII] + k[762]*y[IDX_NHII];
     data[2295] = 0.0 - k[736]*y[IDX_NI];
     data[2296] = 0.0 - k[738]*y[IDX_NI] - k[739]*y[IDX_NI] + k[797]*y[IDX_NHI];
-    data[2297] = 0.0 + k[345]*y[IDX_EM];
+    data[2297] = 0.0 + k[345]*y[IDX_eM];
     data[2298] = 0.0 + k[267] + k[267] + k[688]*y[IDX_HeII] + k[761]*y[IDX_NHII] +
         k[817]*y[IDX_OII] + k[865]*y[IDX_CI] + k[927]*y[IDX_CHI] +
         k[1071]*y[IDX_OI] + k[1155] + k[1155];
@@ -6434,9 +6434,9 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
     data[2323] = 0.0 + k[504]*y[IDX_HII] + k[595]*y[IDX_H3II] + k[986]*y[IDX_HI];
     data[2324] = 0.0 + k[862]*y[IDX_O2I];
     data[2325] = 0.0 + k[995]*y[IDX_HI];
-    data[2326] = 0.0 + k[363]*y[IDX_EM];
+    data[2326] = 0.0 + k[363]*y[IDX_eM];
     data[2327] = 0.0 + k[1088]*y[IDX_OI];
-    data[2328] = 0.0 + k[333]*y[IDX_EM];
+    data[2328] = 0.0 + k[333]*y[IDX_eM];
     data[2329] = 0.0 + k[982]*y[IDX_HI] + k[1069]*y[IDX_OI] - k[1097]*y[IDX_OHI];
     data[2330] = 0.0 + k[248] + k[657]*y[IDX_HeII] + k[809]*y[IDX_OII] + k[1121];
     data[2331] = 0.0 + k[822]*y[IDX_OI];
@@ -6448,7 +6448,7 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
     data[2337] = 0.0 + k[559]*y[IDX_H2OII];
     data[2338] = 0.0 - k[856]*y[IDX_OHI];
     data[2339] = 0.0 - k[227]*y[IDX_OHI] + k[569]*y[IDX_H2OI];
-    data[2340] = 0.0 + k[317]*y[IDX_EM];
+    data[2340] = 0.0 + k[317]*y[IDX_eM];
     data[2341] = 0.0 + k[810]*y[IDX_OII] - k[922]*y[IDX_OHI] + k[1056]*y[IDX_OI];
     data[2342] = 0.0 - k[226]*y[IDX_OHI] + k[562]*y[IDX_H2OI] - k[851]*y[IDX_OHI];
     data[2343] = 0.0 - k[114]*y[IDX_OHI] - k[527]*y[IDX_OHI];
@@ -6466,11 +6466,11 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
     data[2353] = 0.0 + k[188]*y[IDX_OHII] + k[781]*y[IDX_H2OII] + k[1030]*y[IDX_NOI] -
         k[1031]*y[IDX_OHI] - k[1032]*y[IDX_OHI] + k[1073]*y[IDX_OI];
     data[2354] = 0.0 + k[420]*y[IDX_O2I];
-    data[2355] = 0.0 + k[314]*y[IDX_EM] + k[383]*y[IDX_CI] + k[424]*y[IDX_CH2I] +
+    data[2355] = 0.0 + k[314]*y[IDX_eM] + k[383]*y[IDX_CI] + k[424]*y[IDX_CH2I] +
         k[460]*y[IDX_CHI] + k[553]*y[IDX_COI] + k[554]*y[IDX_H2COI] +
         k[555]*y[IDX_H2OI] + k[556]*y[IDX_HCNI] + k[558]*y[IDX_HCOI] +
         k[559]*y[IDX_HNCI] + k[781]*y[IDX_NH2I] - k[852]*y[IDX_OHI];
-    data[2356] = 0.0 + k[324]*y[IDX_EM] + k[325]*y[IDX_EM];
+    data[2356] = 0.0 + k[324]*y[IDX_eM] + k[325]*y[IDX_eM];
     data[2357] = 0.0 - k[379]*y[IDX_OHI];
     data[2358] = 0.0 + k[556]*y[IDX_H2OII] + k[1063]*y[IDX_OI] - k[1094]*y[IDX_OHI] -
         k[1095]*y[IDX_OHI];
@@ -6563,7 +6563,7 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
     data[2391] = 0.0 + k[152]*y[IDX_O2II];
     data[2392] = 0.0 - k[51]*y[IDX_O2I];
     data[2393] = 0.0 - k[68]*y[IDX_O2I] - k[481]*y[IDX_O2I];
-    data[2394] = 0.0 + k[347]*y[IDX_EM] + k[392]*y[IDX_CI] + k[436]*y[IDX_CH2I] +
+    data[2394] = 0.0 + k[347]*y[IDX_eM] + k[392]*y[IDX_CI] + k[436]*y[IDX_CH2I] +
         k[474]*y[IDX_CHI] + k[483]*y[IDX_CNI] + k[488]*y[IDX_COI] +
         k[544]*y[IDX_H2I] + k[552]*y[IDX_H2COI] + k[571]*y[IDX_H2OI] +
         k[632]*y[IDX_HCNI] + k[645]*y[IDX_HCOI] + k[651]*y[IDX_HNCI] +
@@ -6650,12 +6650,12 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
     data[2438] = 0.0 - k[6]*y[IDX_O2I] + k[544]*y[IDX_O2HII] - k[963]*y[IDX_O2I] -
         k[964]*y[IDX_O2I];
     data[2439] = 0.0 - k[12]*y[IDX_O2I] - k[989]*y[IDX_O2I] + k[991]*y[IDX_O2HI];
-    data[2440] = 0.0 + k[351]*y[IDX_EM];
+    data[2440] = 0.0 + k[351]*y[IDX_eM];
     data[2441] = 0.0 - k[1004]*y[IDX_CI];
-    data[2442] = 0.0 + k[350]*y[IDX_EM];
+    data[2442] = 0.0 + k[350]*y[IDX_eM];
     data[2443] = 0.0 + k[22]*y[IDX_CII] + k[286];
     data[2444] = 0.0 + k[23]*y[IDX_CII] + k[287] + k[700]*y[IDX_HeII] + k[1177];
-    data[2445] = 0.0 + k[349]*y[IDX_EM] + k[831]*y[IDX_OI];
+    data[2445] = 0.0 + k[349]*y[IDX_eM] + k[831]*y[IDX_OI];
     data[2446] = 0.0 + k[24]*y[IDX_CII] + k[288] + k[701]*y[IDX_HeII] + k[1084]*y[IDX_OI]
         + k[1178];
     data[2447] = 0.0 - k[874]*y[IDX_CI];
@@ -6666,14 +6666,14 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
     data[2452] = 0.0 - k[395]*y[IDX_CI];
     data[2453] = 0.0 - k[387]*y[IDX_CI];
     data[2454] = 0.0 + k[18]*y[IDX_CII];
-    data[2455] = 0.0 - k[27]*y[IDX_CI] + k[303]*y[IDX_EM] + k[737]*y[IDX_NI];
+    data[2455] = 0.0 - k[27]*y[IDX_CI] + k[303]*y[IDX_eM] + k[737]*y[IDX_NI];
     data[2456] = 0.0 - k[389]*y[IDX_CI];
     data[2457] = 0.0 - k[392]*y[IDX_CI];
     data[2458] = 0.0 + k[21]*y[IDX_CII] + k[1104]*y[IDX_COI];
     data[2459] = 0.0 + k[407]*y[IDX_CHII] + k[685]*y[IDX_HeII];
     data[2460] = 0.0 - k[388]*y[IDX_CI];
     data[2461] = 0.0 - k[29]*y[IDX_CI];
-    data[2462] = 0.0 - k[28]*y[IDX_CI] + k[304]*y[IDX_EM] + k[458]*y[IDX_CHI];
+    data[2462] = 0.0 - k[28]*y[IDX_CI] + k[304]*y[IDX_eM] + k[458]*y[IDX_CHI];
     data[2463] = 0.0 - k[509]*y[IDX_CI];
     data[2464] = 0.0 + k[19]*y[IDX_CII];
     data[2465] = 0.0 + k[667]*y[IDX_HeII];
@@ -6683,7 +6683,7 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
     data[2469] = 0.0 - k[390]*y[IDX_CI];
     data[2470] = 0.0 - k[30]*y[IDX_CI] - k[391]*y[IDX_CI];
     data[2471] = 0.0 - k[866]*y[IDX_CI] - k[867]*y[IDX_CI] - k[868]*y[IDX_CI];
-    data[2472] = 0.0 + k[295]*y[IDX_EM] + k[296]*y[IDX_EM];
+    data[2472] = 0.0 + k[295]*y[IDX_eM] + k[296]*y[IDX_eM];
     data[2473] = 0.0 - k[383]*y[IDX_CI];
     data[2474] = 0.0 - k[384]*y[IDX_CI];
     data[2475] = 0.0 - k[865]*y[IDX_CI];
@@ -6691,9 +6691,9 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
         k[17]*y[IDX_HCOI] + k[18]*y[IDX_MgI] + k[19]*y[IDX_NH3I] +
         k[20]*y[IDX_NOI] + k[21]*y[IDX_SiI] + k[22]*y[IDX_SiC2I] +
         k[23]*y[IDX_SiC3I] + k[24]*y[IDX_SiCI] + k[25]*y[IDX_SiH2I] +
-        k[26]*y[IDX_SiH3I] + k[1214]*y[IDX_EM];
+        k[26]*y[IDX_SiH3I] + k[1214]*y[IDX_eM];
     data[2477] = 0.0 + k[405]*y[IDX_CHII];
-    data[2478] = 0.0 + k[294]*y[IDX_EM] + k[400]*y[IDX_H2COI] + k[403]*y[IDX_H2OI] +
+    data[2478] = 0.0 + k[294]*y[IDX_eM] + k[400]*y[IDX_H2COI] + k[403]*y[IDX_H2OI] +
         k[405]*y[IDX_HCNI] + k[407]*y[IDX_HNCI] + k[1108];
     data[2479] = 0.0 + k[14]*y[IDX_CII] - k[863]*y[IDX_CI];
     data[2480] = 0.0 - k[869]*y[IDX_CI] - k[870]*y[IDX_CI];
@@ -6797,7 +6797,7 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
         k[501]*y[IDX_HCOI] - k[502]*y[IDX_HNCOI] - k[503]*y[IDX_HNOI] -
         k[504]*y[IDX_NO2I] - k[505]*y[IDX_SiH2I] - k[506]*y[IDX_SiH3I] -
         k[507]*y[IDX_SiH4I] - k[508]*y[IDX_SiHI] - k[1197]*y[IDX_HI] -
-        k[1198]*y[IDX_HeI] - k[1216]*y[IDX_EM];
+        k[1198]*y[IDX_HeI] - k[1216]*y[IDX_eM];
     data[2542] = 0.0 - k[80]*y[IDX_HII] + k[674]*y[IDX_HeII];
     data[2543] = 0.0 - k[89]*y[IDX_HII];
     data[2544] = 0.0 - k[1216]*y[IDX_HII];
@@ -6872,7 +6872,7 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
     data[2596] = 0.0 + k[384]*y[IDX_H3OII] - k[386]*y[IDX_HCOII];
     data[2597] = 0.0 + k[82]*y[IDX_HCOI] + k[494]*y[IDX_CH3OHI] + k[496]*y[IDX_CO2I] +
         k[498]*y[IDX_H2COI];
-    data[2598] = 0.0 - k[149]*y[IDX_MgI] - k[330]*y[IDX_EM] - k[386]*y[IDX_CI] -
+    data[2598] = 0.0 - k[149]*y[IDX_MgI] - k[330]*y[IDX_eM] - k[386]*y[IDX_CI] -
         k[429]*y[IDX_CH2I] - k[466]*y[IDX_CHI] - k[566]*y[IDX_H2OI] -
         k[629]*y[IDX_HCNI] - k[635]*y[IDX_H2COI] - k[636]*y[IDX_HCOI] -
         k[637]*y[IDX_SiH2I] - k[638]*y[IDX_SiH4I] - k[639]*y[IDX_SiHI] -
@@ -6910,7 +6910,7 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
     data[2622] = 0.0 + k[609]*y[IDX_H3OII];
     data[2623] = 0.0 - k[568]*y[IDX_H2OI];
     data[2624] = 0.0 - k[125]*y[IDX_H2OI] - k[569]*y[IDX_H2OI];
-    data[2625] = 0.0 + k[318]*y[IDX_EM] - k[564]*y[IDX_H2OI];
+    data[2625] = 0.0 + k[318]*y[IDX_eM] - k[564]*y[IDX_H2OI];
     data[2626] = 0.0 + k[922]*y[IDX_OHI];
     data[2627] = 0.0 - k[123]*y[IDX_H2OI] - k[562]*y[IDX_H2OI];
     data[2628] = 0.0 - k[106]*y[IDX_H2OI] - k[518]*y[IDX_H2OI];
@@ -6930,7 +6930,7 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
         k[118]*y[IDX_HCOI] + k[119]*y[IDX_MgI] + k[120]*y[IDX_NOI] +
         k[121]*y[IDX_O2I] + k[122]*y[IDX_SiI] + k[185]*y[IDX_NH2I] +
         k[195]*y[IDX_NH3I] - k[555]*y[IDX_H2OI];
-    data[2639] = 0.0 + k[322]*y[IDX_EM] + k[425]*y[IDX_CH2I] + k[462]*y[IDX_CHI] +
+    data[2639] = 0.0 + k[322]*y[IDX_eM] + k[425]*y[IDX_CH2I] + k[462]*y[IDX_CHI] +
         k[607]*y[IDX_H2COI] + k[608]*y[IDX_HCNI] + k[609]*y[IDX_HNCI] +
         k[610]*y[IDX_SiI] + k[611]*y[IDX_SiH2I] + k[612]*y[IDX_SiHI] +
         k[613]*y[IDX_SiOI] + k[783]*y[IDX_NH2I];
@@ -6996,8 +6996,8 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
     data[2674] = 0.0 - k[1088]*y[IDX_OI];
     data[2675] = 0.0 + k[849]*y[IDX_OHII] - k[1089]*y[IDX_OI];
     data[2676] = 0.0 - k[1087]*y[IDX_OI];
-    data[2677] = 0.0 + k[362]*y[IDX_EM] - k[835]*y[IDX_OI] + k[1189];
-    data[2678] = 0.0 + k[332]*y[IDX_EM] - k[824]*y[IDX_OI];
+    data[2677] = 0.0 + k[362]*y[IDX_eM] - k[835]*y[IDX_OI] + k[1189];
+    data[2678] = 0.0 + k[332]*y[IDX_eM] - k[824]*y[IDX_OI];
     data[2679] = 0.0 + k[980]*y[IDX_HI] - k[1068]*y[IDX_OI] - k[1069]*y[IDX_OI] -
         k[1070]*y[IDX_OI];
     data[2680] = 0.0 - k[822]*y[IDX_OI];
@@ -7010,7 +7010,7 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
     data[2687] = 0.0 + k[844]*y[IDX_OHII];
     data[2688] = 0.0 - k[218]*y[IDX_OI] - k[825]*y[IDX_OI];
     data[2689] = 0.0 + k[207]*y[IDX_OII] - k[1056]*y[IDX_OI];
-    data[2690] = 0.0 - k[217]*y[IDX_OI] + k[304]*y[IDX_EM] + k[851]*y[IDX_OHI] + k[1131];
+    data[2690] = 0.0 - k[217]*y[IDX_OI] + k[304]*y[IDX_eM] + k[851]*y[IDX_OHI] + k[1131];
     data[2691] = 0.0 - k[526]*y[IDX_OI];
     data[2692] = 0.0 + k[213]*y[IDX_OII] - k[1074]*y[IDX_OI];
     data[2693] = 0.0 - k[915]*y[IDX_OI] - k[916]*y[IDX_OI] + k[917]*y[IDX_OHI];
@@ -7021,21 +7021,21 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
         k[202]*y[IDX_NHI] + k[207]*y[IDX_CH4I] + k[208]*y[IDX_COI] +
         k[209]*y[IDX_H2COI] + k[210]*y[IDX_H2OI] + k[211]*y[IDX_HCOI] +
         k[212]*y[IDX_NH2I] + k[213]*y[IDX_NH3I] + k[214]*y[IDX_O2I] +
-        k[215]*y[IDX_OHI] + k[1221]*y[IDX_EM];
+        k[215]*y[IDX_OHI] + k[1221]*y[IDX_eM];
     data[2697] = 0.0 + k[777]*y[IDX_O2I] - k[827]*y[IDX_OI];
     data[2698] = 0.0 + k[756]*y[IDX_H2OI] + k[764]*y[IDX_NOI] - k[767]*y[IDX_OI];
-    data[2699] = 0.0 + k[346]*y[IDX_EM] + k[346]*y[IDX_EM] + k[391]*y[IDX_CI] +
+    data[2699] = 0.0 + k[346]*y[IDX_eM] + k[346]*y[IDX_eM] + k[391]*y[IDX_CI] +
         k[435]*y[IDX_CH2I] + k[473]*y[IDX_CHI] + k[742]*y[IDX_NI] +
         k[804]*y[IDX_NHI] + k[1167];
     data[2700] = 0.0 + k[442]*y[IDX_O2I] - k[443]*y[IDX_OI] - k[444]*y[IDX_OI];
     data[2701] = 0.0 + k[212]*y[IDX_OII] + k[791]*y[IDX_OHII] + k[1032]*y[IDX_OHI] -
         k[1072]*y[IDX_OI] - k[1073]*y[IDX_OI];
     data[2702] = 0.0 - k[421]*y[IDX_OI];
-    data[2703] = 0.0 + k[312]*y[IDX_EM] + k[313]*y[IDX_EM] - k[823]*y[IDX_OI] +
+    data[2703] = 0.0 + k[312]*y[IDX_eM] + k[313]*y[IDX_eM] - k[823]*y[IDX_OI] +
         k[852]*y[IDX_OHI];
     data[2704] = 0.0 - k[828]*y[IDX_OI];
-    data[2705] = 0.0 + k[345]*y[IDX_EM];
-    data[2706] = 0.0 + k[323]*y[IDX_EM];
+    data[2705] = 0.0 + k[345]*y[IDX_eM];
+    data[2706] = 0.0 + k[323]*y[IDX_eM];
     data[2707] = 0.0 + k[845]*y[IDX_OHII] - k[1071]*y[IDX_OI];
     data[2708] = 0.0 + k[376]*y[IDX_O2I] - k[1193]*y[IDX_OI];
     data[2709] = 0.0 + k[841]*y[IDX_OHII] - k[1063]*y[IDX_OI] - k[1064]*y[IDX_OI] -
@@ -7044,11 +7044,11 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
     data[2711] = 0.0 + k[43]*y[IDX_OII] + k[435]*y[IDX_O2II] + k[437]*y[IDX_OHII] +
         k[892]*y[IDX_O2I] - k[894]*y[IDX_OI] - k[895]*y[IDX_OI] -
         k[896]*y[IDX_OI] - k[897]*y[IDX_OI] + k[900]*y[IDX_OHI];
-    data[2712] = 0.0 + k[306]*y[IDX_EM];
+    data[2712] = 0.0 + k[306]*y[IDX_eM];
     data[2713] = 0.0 + k[202]*y[IDX_OII] + k[804]*y[IDX_O2II] + k[806]*y[IDX_OHII] +
         k[1042]*y[IDX_NOI] + k[1044]*y[IDX_O2I] - k[1046]*y[IDX_OI] -
         k[1047]*y[IDX_OI] + k[1050]*y[IDX_OHI];
-    data[2714] = 0.0 + k[348]*y[IDX_EM] + k[393]*y[IDX_CI] + k[437]*y[IDX_CH2I] +
+    data[2714] = 0.0 + k[348]*y[IDX_eM] + k[393]*y[IDX_CI] + k[437]*y[IDX_CH2I] +
         k[475]*y[IDX_CHI] + k[791]*y[IDX_NH2I] + k[806]*y[IDX_NHI] -
         k[830]*y[IDX_OI] + k[836]*y[IDX_CNI] + k[837]*y[IDX_CO2I] +
         k[838]*y[IDX_COI] + k[839]*y[IDX_H2COI] + k[840]*y[IDX_H2OI] +
@@ -7135,77 +7135,77 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
         k[131]*y[IDX_OII] + k[978]*y[IDX_HCOI] + k[980]*y[IDX_HNOI] +
         k[987]*y[IDX_NOI] + k[989]*y[IDX_O2I] + k[990]*y[IDX_O2HI] +
         k[993]*y[IDX_OCNI] + k[996]*y[IDX_OHI] - k[1207]*y[IDX_OI];
-    data[2733] = 0.0 - k[351]*y[IDX_EM];
-    data[2734] = 0.0 - k[310]*y[IDX_EM] - k[311]*y[IDX_EM];
-    data[2735] = 0.0 - k[336]*y[IDX_EM];
-    data[2736] = 0.0 - k[335]*y[IDX_EM];
-    data[2737] = 0.0 - k[350]*y[IDX_EM];
-    data[2738] = 0.0 - k[360]*y[IDX_EM] - k[361]*y[IDX_EM];
-    data[2739] = 0.0 - k[358]*y[IDX_EM] - k[359]*y[IDX_EM];
-    data[2740] = 0.0 - k[349]*y[IDX_EM];
-    data[2741] = 0.0 - k[356]*y[IDX_EM] - k[357]*y[IDX_EM];
-    data[2742] = 0.0 - k[353]*y[IDX_EM] - k[354]*y[IDX_EM] - k[355]*y[IDX_EM];
+    data[2733] = 0.0 - k[351]*y[IDX_eM];
+    data[2734] = 0.0 - k[310]*y[IDX_eM] - k[311]*y[IDX_eM];
+    data[2735] = 0.0 - k[335]*y[IDX_eM];
+    data[2736] = 0.0 - k[336]*y[IDX_eM];
+    data[2737] = 0.0 - k[350]*y[IDX_eM];
+    data[2738] = 0.0 - k[360]*y[IDX_eM] - k[361]*y[IDX_eM];
+    data[2739] = 0.0 - k[358]*y[IDX_eM] - k[359]*y[IDX_eM];
+    data[2740] = 0.0 - k[349]*y[IDX_eM];
+    data[2741] = 0.0 - k[356]*y[IDX_eM] - k[357]*y[IDX_eM];
+    data[2742] = 0.0 - k[353]*y[IDX_eM] - k[354]*y[IDX_eM] - k[355]*y[IDX_eM];
     data[2743] = 0.0 + k[1180];
-    data[2744] = 0.0 - k[363]*y[IDX_EM] - k[364]*y[IDX_EM];
-    data[2745] = 0.0 - k[352]*y[IDX_EM];
+    data[2744] = 0.0 - k[363]*y[IDX_eM] - k[364]*y[IDX_eM];
+    data[2745] = 0.0 - k[352]*y[IDX_eM];
     data[2746] = 0.0 + k[1183];
-    data[2747] = 0.0 - k[362]*y[IDX_EM];
-    data[2748] = 0.0 - k[331]*y[IDX_EM] - k[332]*y[IDX_EM] - k[333]*y[IDX_EM];
+    data[2747] = 0.0 - k[362]*y[IDX_eM];
+    data[2748] = 0.0 - k[331]*y[IDX_eM] - k[332]*y[IDX_eM] - k[333]*y[IDX_eM];
     data[2749] = 0.0 + k[1120];
     data[2750] = 0.0 + k[266] + k[1154];
-    data[2751] = 0.0 - k[1219]*y[IDX_EM];
-    data[2752] = 0.0 - k[301]*y[IDX_EM] - k[302]*y[IDX_EM];
+    data[2751] = 0.0 - k[1219]*y[IDX_eM];
+    data[2752] = 0.0 - k[301]*y[IDX_eM] - k[302]*y[IDX_eM];
     data[2753] = 0.0 + k[1191];
-    data[2754] = 0.0 - k[303]*y[IDX_EM];
-    data[2755] = 0.0 - k[327]*y[IDX_EM] - k[328]*y[IDX_EM] - k[329]*y[IDX_EM];
-    data[2756] = 0.0 - k[338]*y[IDX_EM] - k[339]*y[IDX_EM];
-    data[2757] = 0.0 - k[347]*y[IDX_EM];
-    data[2758] = 0.0 - k[1222]*y[IDX_EM];
+    data[2754] = 0.0 - k[303]*y[IDX_eM];
+    data[2755] = 0.0 - k[327]*y[IDX_eM] - k[328]*y[IDX_eM] - k[329]*y[IDX_eM];
+    data[2756] = 0.0 - k[338]*y[IDX_eM] - k[339]*y[IDX_eM];
+    data[2757] = 0.0 - k[347]*y[IDX_eM];
+    data[2758] = 0.0 - k[1222]*y[IDX_eM];
     data[2759] = 0.0 + k[285] + k[1176];
-    data[2760] = 0.0 - k[334]*y[IDX_EM];
-    data[2761] = 0.0 - k[337]*y[IDX_EM];
-    data[2762] = 0.0 - k[317]*y[IDX_EM] - k[318]*y[IDX_EM] - k[319]*y[IDX_EM] -
-        k[320]*y[IDX_EM] - k[321]*y[IDX_EM];
+    data[2760] = 0.0 - k[334]*y[IDX_eM];
+    data[2761] = 0.0 - k[337]*y[IDX_eM];
+    data[2762] = 0.0 - k[317]*y[IDX_eM] - k[318]*y[IDX_eM] - k[319]*y[IDX_eM] -
+        k[320]*y[IDX_eM] - k[321]*y[IDX_eM];
     data[2763] = 0.0 + k[1126];
-    data[2764] = 0.0 - k[304]*y[IDX_EM];
-    data[2765] = 0.0 - k[305]*y[IDX_EM];
+    data[2764] = 0.0 - k[304]*y[IDX_eM];
+    data[2765] = 0.0 - k[305]*y[IDX_eM];
     data[2766] = 0.0 + k[272] + k[1160];
     data[2767] = 0.0 + k[245] + k[1117];
-    data[2768] = 0.0 - k[1220]*y[IDX_EM];
-    data[2769] = 0.0 - k[1221]*y[IDX_EM];
-    data[2770] = 0.0 - k[326]*y[IDX_EM];
-    data[2771] = 0.0 - k[341]*y[IDX_EM] - k[342]*y[IDX_EM];
-    data[2772] = 0.0 - k[340]*y[IDX_EM];
-    data[2773] = 0.0 - k[346]*y[IDX_EM];
-    data[2774] = 0.0 - k[298]*y[IDX_EM] - k[299]*y[IDX_EM] - k[300]*y[IDX_EM] -
-        k[1215]*y[IDX_EM];
+    data[2768] = 0.0 - k[1220]*y[IDX_eM];
+    data[2769] = 0.0 - k[1221]*y[IDX_eM];
+    data[2770] = 0.0 - k[326]*y[IDX_eM];
+    data[2771] = 0.0 - k[341]*y[IDX_eM] - k[342]*y[IDX_eM];
+    data[2772] = 0.0 - k[340]*y[IDX_eM];
+    data[2773] = 0.0 - k[346]*y[IDX_eM];
+    data[2774] = 0.0 - k[298]*y[IDX_eM] - k[299]*y[IDX_eM] - k[300]*y[IDX_eM] -
+        k[1215]*y[IDX_eM];
     data[2775] = 0.0 + k[269] + k[1157];
-    data[2776] = 0.0 - k[295]*y[IDX_EM] - k[296]*y[IDX_EM] - k[297]*y[IDX_EM];
-    data[2777] = 0.0 - k[312]*y[IDX_EM] - k[313]*y[IDX_EM] - k[314]*y[IDX_EM];
-    data[2778] = 0.0 - k[343]*y[IDX_EM] - k[344]*y[IDX_EM];
-    data[2779] = 0.0 - k[345]*y[IDX_EM];
-    data[2780] = 0.0 - k[322]*y[IDX_EM] - k[323]*y[IDX_EM] - k[324]*y[IDX_EM] -
-        k[325]*y[IDX_EM];
-    data[2781] = 0.0 - k[1214]*y[IDX_EM];
-    data[2782] = 0.0 - k[294]*y[IDX_EM];
+    data[2776] = 0.0 - k[295]*y[IDX_eM] - k[296]*y[IDX_eM] - k[297]*y[IDX_eM];
+    data[2777] = 0.0 - k[312]*y[IDX_eM] - k[313]*y[IDX_eM] - k[314]*y[IDX_eM];
+    data[2778] = 0.0 - k[343]*y[IDX_eM] - k[344]*y[IDX_eM];
+    data[2779] = 0.0 - k[345]*y[IDX_eM];
+    data[2780] = 0.0 - k[322]*y[IDX_eM] - k[323]*y[IDX_eM] - k[324]*y[IDX_eM] -
+        k[325]*y[IDX_eM];
+    data[2781] = 0.0 - k[1214]*y[IDX_eM];
+    data[2782] = 0.0 - k[294]*y[IDX_eM];
     data[2783] = 0.0 + k[242] + k[1112];
-    data[2784] = 0.0 - k[306]*y[IDX_EM] - k[307]*y[IDX_EM] - k[308]*y[IDX_EM] -
-        k[309]*y[IDX_EM] - k[1217]*y[IDX_EM];
+    data[2784] = 0.0 - k[306]*y[IDX_eM] - k[307]*y[IDX_eM] - k[308]*y[IDX_eM] -
+        k[309]*y[IDX_eM] - k[1217]*y[IDX_eM];
     data[2785] = 0.0 + k[275] + k[1163];
-    data[2786] = 0.0 - k[348]*y[IDX_EM];
+    data[2786] = 0.0 - k[348]*y[IDX_eM];
     data[2787] = 0.0 + k[1138] + k[1139];
     data[2788] = 0.0 + k[261] + k[1150];
-    data[2789] = 0.0 - k[1218]*y[IDX_EM];
+    data[2789] = 0.0 - k[1218]*y[IDX_eM];
     data[2790] = 0.0 + k[0]*y[IDX_OI] + k[1129];
-    data[2791] = 0.0 - k[315]*y[IDX_EM] - k[316]*y[IDX_EM];
+    data[2791] = 0.0 - k[315]*y[IDX_eM] - k[316]*y[IDX_eM];
     data[2792] = 0.0 + k[237] + k[265];
     data[2793] = 0.0 + k[277] + k[1165];
     data[2794] = 0.0 + k[238] + k[268];
     data[2795] = 0.0 + k[1175];
     data[2796] = 0.0 + k[279] + k[1168];
     data[2797] = 0.0 + k[231] + k[240] + k[1107];
-    data[2798] = 0.0 - k[1216]*y[IDX_EM];
-    data[2799] = 0.0 - k[330]*y[IDX_EM];
+    data[2798] = 0.0 - k[1216]*y[IDX_eM];
+    data[2799] = 0.0 - k[330]*y[IDX_eM];
     data[2800] = 0.0 + k[1141];
     data[2801] = 0.0 + k[0]*y[IDX_CHI] + k[239] + k[282];
     data[2802] = 0.0 - k[8]*y[IDX_H2I] + k[8]*y[IDX_H2I] - k[294]*y[IDX_CHII] -
@@ -7237,11 +7237,11 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
         k[1219]*y[IDX_MgII] - k[1220]*y[IDX_NII] - k[1221]*y[IDX_OII] -
         k[1222]*y[IDX_SiII] - k[1306];
     data[2803] = 0.0 + k[232];
-    data[2804] = 0.0 - k[8]*y[IDX_EM] + k[8]*y[IDX_EM] + k[233] + k[234];
+    data[2804] = 0.0 - k[8]*y[IDX_eM] + k[8]*y[IDX_eM] + k[233] + k[234];
     data[2805] = 0.0 + k[236] + k[258];
     data[2806] = 0.0 + k[1331] + k[1332] + k[1333] + k[1334];
     data[2807] = 0.0 + k[263] + k[502]*y[IDX_HII] + k[1004]*y[IDX_CI] + k[1152];
-    data[2808] = 0.0 + k[335]*y[IDX_EM];
+    data[2808] = 0.0 + k[335]*y[IDX_eM];
     data[2809] = 0.0 + k[1081]*y[IDX_OI];
     data[2810] = 0.0 + k[1082]*y[IDX_OI];
     data[2811] = 0.0 - k[489]*y[IDX_COI];
@@ -7254,7 +7254,7 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
     data[2817] = 0.0 + k[638]*y[IDX_HCOII];
     data[2818] = 0.0 + k[639]*y[IDX_HCOII];
     data[2819] = 0.0 + k[395]*y[IDX_CI] - k[490]*y[IDX_COI];
-    data[2820] = 0.0 + k[332]*y[IDX_EM] + k[333]*y[IDX_EM] - k[485]*y[IDX_COI];
+    data[2820] = 0.0 + k[332]*y[IDX_eM] + k[333]*y[IDX_eM] - k[485]*y[IDX_COI];
     data[2821] = 0.0 - k[951]*y[IDX_COI];
     data[2822] = 0.0 - k[448]*y[IDX_COI];
     data[2823] = 0.0 + k[382]*y[IDX_CII] + k[640]*y[IDX_HCOII];
@@ -7265,7 +7265,7 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
     data[2828] = 0.0 + k[648]*y[IDX_HCOII];
     data[2829] = 0.0 - k[486]*y[IDX_COI];
     data[2830] = 0.0 - k[74]*y[IDX_COI] + k[731]*y[IDX_HCOI];
-    data[2831] = 0.0 + k[319]*y[IDX_EM];
+    data[2831] = 0.0 + k[319]*y[IDX_eM];
     data[2832] = 0.0 + k[52]*y[IDX_COII];
     data[2833] = 0.0 + k[28]*y[IDX_CI] + k[38]*y[IDX_CH2I] + k[52]*y[IDX_CH4I] +
         k[54]*y[IDX_CHI] + k[70]*y[IDX_H2COI] + k[71]*y[IDX_HCOI] +
@@ -7296,7 +7296,7 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
     data[2849] = 0.0 + k[398]*y[IDX_CO2I] + k[399]*y[IDX_H2COI] + k[406]*y[IDX_HCOI];
     data[2850] = 0.0 + k[38]*y[IDX_COII] + k[429]*y[IDX_HCOII] + k[882]*y[IDX_HCOI] +
         k[891]*y[IDX_O2I] + k[894]*y[IDX_OI] + k[895]*y[IDX_OI];
-    data[2851] = 0.0 + k[307]*y[IDX_EM] + k[308]*y[IDX_EM] + k[641]*y[IDX_HCOI];
+    data[2851] = 0.0 + k[307]*y[IDX_eM] + k[308]*y[IDX_eM] + k[641]*y[IDX_HCOI];
     data[2852] = 0.0 + k[200]*y[IDX_COII] + k[799]*y[IDX_HCOII];
     data[2853] = 0.0 - k[838]*y[IDX_COI] + k[842]*y[IDX_HCOI];
     data[2854] = 0.0 + k[943]*y[IDX_HCOI] + k[946]*y[IDX_NOI] + k[948]*y[IDX_O2I] +
@@ -7334,7 +7334,7 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
         k[874]*y[IDX_OCNI] + k[875]*y[IDX_OHI] + k[1004]*y[IDX_HNCOI] +
         k[1196]*y[IDX_OI];
     data[2865] = 0.0 + k[501]*y[IDX_HCOI] + k[502]*y[IDX_HNCOI];
-    data[2866] = 0.0 + k[330]*y[IDX_EM] + k[386]*y[IDX_CI] + k[429]*y[IDX_CH2I] +
+    data[2866] = 0.0 + k[330]*y[IDX_eM] + k[386]*y[IDX_CI] + k[429]*y[IDX_CH2I] +
         k[466]*y[IDX_CHI] + k[566]*y[IDX_H2OI] + k[629]*y[IDX_HCNI] +
         k[635]*y[IDX_H2COI] + k[636]*y[IDX_HCOI] + k[637]*y[IDX_SiH2I] +
         k[638]*y[IDX_SiH4I] + k[639]*y[IDX_SiHI] + k[640]*y[IDX_SiOI] +
@@ -7363,16 +7363,16 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
     data[2871] = 0.0 + k[127]*y[IDX_COII] + k[971]*y[IDX_CO2I] - k[972]*y[IDX_COI] +
         k[977]*y[IDX_HCOI] + k[994]*y[IDX_OCNI];
     data[2872] = 0.0 + k[973]*y[IDX_HI] + k[1060]*y[IDX_OI];
-    data[2873] = 0.0 + k[311]*y[IDX_EM];
+    data[2873] = 0.0 + k[311]*y[IDX_eM];
     data[2874] = 0.0 + k[257] + k[499]*y[IDX_HII] + k[1143];
-    data[2875] = 0.0 - k[537]*y[IDX_H2I];
-    data[2876] = 0.0 - k[5]*y[IDX_H2I] + k[5]*y[IDX_H2I];
-    data[2877] = 0.0 + k[360]*y[IDX_EM];
-    data[2878] = 0.0 + k[358]*y[IDX_EM] - k[546]*y[IDX_H2I];
+    data[2875] = 0.0 - k[5]*y[IDX_H2I] + k[5]*y[IDX_H2I];
+    data[2876] = 0.0 - k[537]*y[IDX_H2I];
+    data[2877] = 0.0 + k[360]*y[IDX_eM];
+    data[2878] = 0.0 + k[358]*y[IDX_eM] - k[546]*y[IDX_H2I];
     data[2879] = 0.0 + k[991]*y[IDX_HI];
     data[2880] = 0.0 + k[595]*y[IDX_H3II];
-    data[2881] = 0.0 + k[357]*y[IDX_EM] + k[834]*y[IDX_OI] - k[1204]*y[IDX_H2I];
-    data[2882] = 0.0 + k[353]*y[IDX_EM];
+    data[2881] = 0.0 + k[357]*y[IDX_eM] + k[834]*y[IDX_OI] - k[1204]*y[IDX_H2I];
+    data[2882] = 0.0 + k[353]*y[IDX_eM];
     data[2883] = 0.0 + k[380]*y[IDX_CII] + k[505]*y[IDX_HII] + k[602]*y[IDX_H3II] +
         k[703]*y[IDX_HeII] + k[1085]*y[IDX_OI];
     data[2884] = 0.0 + k[619]*y[IDX_HI] - k[1203]*y[IDX_H2I];
@@ -7395,7 +7395,7 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
     data[2897] = 0.0 + k[601]*y[IDX_H3II];
     data[2898] = 0.0 + k[589]*y[IDX_H3II];
     data[2899] = 0.0 + k[455]*y[IDX_CH4I] - k[539]*y[IDX_H2I];
-    data[2900] = 0.0 + k[319]*y[IDX_EM];
+    data[2900] = 0.0 + k[319]*y[IDX_eM];
     data[2901] = 0.0 + k[101]*y[IDX_H2II] + k[249] + k[455]*y[IDX_N2II] +
         k[495]*y[IDX_HII] + k[511]*y[IDX_H2II] + k[658]*y[IDX_HeII] +
         k[659]*y[IDX_HeII] + k[717]*y[IDX_NII] + k[969]*y[IDX_HI] + k[1124] +
@@ -7419,15 +7419,15 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
     data[2909] = 0.0 - k[535]*y[IDX_H2I];
     data[2910] = 0.0 - k[542]*y[IDX_H2I];
     data[2911] = 0.0 - k[540]*y[IDX_H2I] - k[541]*y[IDX_H2I] + k[755]*y[IDX_H2OI];
-    data[2912] = 0.0 + k[299]*y[IDX_EM] + k[444]*y[IDX_OI] + k[445]*y[IDX_OHI] +
+    data[2912] = 0.0 + k[299]*y[IDX_eM] + k[444]*y[IDX_OI] + k[445]*y[IDX_OHI] +
         k[616]*y[IDX_HI] + k[794]*y[IDX_NHI] + k[1114];
     data[2913] = 0.0 + k[109]*y[IDX_H2II] + k[409]*y[IDX_CHII] + k[593]*y[IDX_H3II] +
         k[689]*y[IDX_HeII] - k[961]*y[IDX_H2I] + k[983]*y[IDX_HI];
-    data[2914] = 0.0 + k[295]*y[IDX_EM] - k[530]*y[IDX_H2I] + k[615]*y[IDX_HI] + k[1109];
-    data[2915] = 0.0 + k[312]*y[IDX_EM] - k[534]*y[IDX_H2I] + k[739]*y[IDX_NI] +
+    data[2914] = 0.0 + k[295]*y[IDX_eM] - k[530]*y[IDX_H2I] + k[615]*y[IDX_HI] + k[1109];
+    data[2915] = 0.0 + k[312]*y[IDX_eM] - k[534]*y[IDX_H2I] + k[739]*y[IDX_NI] +
         k[823]*y[IDX_OI];
     data[2916] = 0.0 + k[828]*y[IDX_OI];
-    data[2917] = 0.0 + k[323]*y[IDX_EM] + k[324]*y[IDX_EM] + k[384]*y[IDX_CI];
+    data[2917] = 0.0 + k[323]*y[IDX_eM] + k[324]*y[IDX_eM] + k[384]*y[IDX_CI];
     data[2918] = 0.0 + k[592]*y[IDX_H3II];
     data[2919] = 0.0 + k[374]*y[IDX_NH3I] + k[380]*y[IDX_SiH2I] - k[528]*y[IDX_H2I] -
         k[1199]*y[IDX_H2I];
@@ -7437,7 +7437,7 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
     data[2922] = 0.0 + k[100]*y[IDX_H2II] + k[491]*y[IDX_HII] + k[577]*y[IDX_H3II] +
         k[653]*y[IDX_HeII] + k[889]*y[IDX_O2I] + k[894]*y[IDX_OI] -
         k[956]*y[IDX_H2I] + k[967]*y[IDX_HI];
-    data[2923] = 0.0 + k[307]*y[IDX_EM];
+    data[2923] = 0.0 + k[307]*y[IDX_eM];
     data[2924] = 0.0 + k[111]*y[IDX_H2II] + k[410]*y[IDX_CHII] + k[594]*y[IDX_H3II] +
         k[794]*y[IDX_CH3II] - k[962]*y[IDX_H2I] + k[985]*y[IDX_HI] +
         k[1038]*y[IDX_NHI] + k[1038]*y[IDX_NHI];
@@ -7456,7 +7456,7 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
     data[2930] = 0.0 - k[2]*y[IDX_H2I] + k[2]*y[IDX_H2I] + k[102]*y[IDX_H2II] +
         k[580]*y[IDX_H3II] - k[958]*y[IDX_H2I] + k[970]*y[IDX_HI] -
         k[1201]*y[IDX_H2I];
-    data[2931] = 0.0 + k[315]*y[IDX_EM] + k[576]*y[IDX_CI] + k[577]*y[IDX_CH2I] +
+    data[2931] = 0.0 + k[315]*y[IDX_eM] + k[576]*y[IDX_CI] + k[577]*y[IDX_CH2I] +
         k[578]*y[IDX_CH3I] + k[579]*y[IDX_CH3OHI] + k[580]*y[IDX_CHI] +
         k[581]*y[IDX_CNI] + k[582]*y[IDX_CO2I] + k[583]*y[IDX_COI] +
         k[584]*y[IDX_COI] + k[585]*y[IDX_H2COI] + k[586]*y[IDX_H2OI] +
@@ -7499,7 +7499,7 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
         k[3]*y[IDX_H2I] - k[3]*y[IDX_H2I] - k[3]*y[IDX_H2I] + k[3]*y[IDX_H2I] +
         k[3]*y[IDX_H2I] - k[4]*y[IDX_H2OI] + k[4]*y[IDX_H2OI] -
         k[5]*y[IDX_HOCII] + k[5]*y[IDX_HOCII] - k[6]*y[IDX_O2I] +
-        k[6]*y[IDX_O2I] - k[7]*y[IDX_OHI] + k[7]*y[IDX_OHI] - k[8]*y[IDX_EM] -
+        k[6]*y[IDX_O2I] - k[7]*y[IDX_OHI] + k[7]*y[IDX_OHI] - k[8]*y[IDX_eM] -
         k[10]*y[IDX_HI] - k[115]*y[IDX_HeII] - k[233] - k[234] - k[235] -
         k[516]*y[IDX_H2II] - k[528]*y[IDX_CII] - k[529]*y[IDX_CHII] -
         k[530]*y[IDX_CH2II] - k[531]*y[IDX_CNII] - k[532]*y[IDX_COII] -
@@ -7524,26 +7524,26 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
         k[984]*y[IDX_NH3I] + k[985]*y[IDX_NHI] + k[991]*y[IDX_O2HI] +
         k[996]*y[IDX_OHI] + (H2formation);
     data[2944] = 0.0 + k[254] - k[973]*y[IDX_HI] + k[1135];
-    data[2945] = 0.0 + k[310]*y[IDX_EM] + k[1296];
+    data[2945] = 0.0 + k[310]*y[IDX_eM] + k[1296];
     data[2946] = 0.0 + k[675]*y[IDX_HeII] + k[1144] + k[1144];
-    data[2947] = 0.0 + k[336]*y[IDX_EM] - k[618]*y[IDX_HI];
-    data[2948] = 0.0 + k[335]*y[IDX_EM];
+    data[2947] = 0.0 + k[335]*y[IDX_eM];
+    data[2948] = 0.0 + k[336]*y[IDX_eM] - k[618]*y[IDX_HI];
     data[2949] = 0.0 + k[92]*y[IDX_HII];
     data[2950] = 0.0 + k[93]*y[IDX_HII];
-    data[2951] = 0.0 + k[361]*y[IDX_EM] + k[1248];
-    data[2952] = 0.0 + k[359]*y[IDX_EM] + k[546]*y[IDX_H2I];
+    data[2951] = 0.0 + k[361]*y[IDX_eM] + k[1248];
+    data[2952] = 0.0 + k[359]*y[IDX_eM] + k[546]*y[IDX_H2I];
     data[2953] = 0.0 + k[281] - k[990]*y[IDX_HI] - k[991]*y[IDX_HI] - k[992]*y[IDX_HI] +
         k[1170];
     data[2954] = 0.0 + k[94]*y[IDX_HII];
     data[2955] = 0.0 - k[986]*y[IDX_HI];
-    data[2956] = 0.0 + k[356]*y[IDX_EM];
-    data[2957] = 0.0 + k[354]*y[IDX_EM] + k[354]*y[IDX_EM] + k[355]*y[IDX_EM] +
+    data[2956] = 0.0 + k[356]*y[IDX_eM];
+    data[2957] = 0.0 + k[354]*y[IDX_eM] + k[354]*y[IDX_eM] + k[355]*y[IDX_eM] +
         k[833]*y[IDX_OI];
     data[2958] = 0.0 - k[993]*y[IDX_HI] - k[994]*y[IDX_HI] - k[995]*y[IDX_HI];
     data[2959] = 0.0 + k[95]*y[IDX_HII] + k[289] + k[704]*y[IDX_HeII] + k[1086]*y[IDX_OI]
         + k[1086]*y[IDX_OI] + k[1181];
-    data[2960] = 0.0 + k[364]*y[IDX_EM];
-    data[2961] = 0.0 + k[352]*y[IDX_EM] + k[394]*y[IDX_CI] - k[619]*y[IDX_HI] +
+    data[2960] = 0.0 + k[364]*y[IDX_eM];
+    data[2961] = 0.0 + k[352]*y[IDX_eM] + k[394]*y[IDX_CI] - k[619]*y[IDX_HI] +
         k[832]*y[IDX_OI] + k[1179];
     data[2962] = 0.0 + k[97]*y[IDX_HII] + k[708]*y[IDX_HeII] + k[1186] + k[1187];
     data[2963] = 0.0 + k[98]*y[IDX_HII] + k[292] + k[381]*y[IDX_CII] + k[709]*y[IDX_HeII]
@@ -7551,35 +7551,35 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
     data[2964] = 0.0 + k[96]*y[IDX_HII] + k[290] + k[706]*y[IDX_HeII] + k[1087]*y[IDX_OI]
         + k[1182];
     data[2965] = 0.0 + k[547]*y[IDX_H2I];
-    data[2966] = 0.0 + k[331]*y[IDX_EM] + k[332]*y[IDX_EM] + k[1287];
+    data[2966] = 0.0 + k[331]*y[IDX_eM] + k[332]*y[IDX_eM] + k[1287];
     data[2967] = 0.0 + k[264] + k[686]*y[IDX_HeII] - k[980]*y[IDX_HI] - k[981]*y[IDX_HI]
         - k[982]*y[IDX_HI] + k[1068]*y[IDX_OI] + k[1153];
     data[2968] = 0.0 + k[712]*y[IDX_NII] + k[714]*y[IDX_NII] + k[715]*y[IDX_NII] +
         k[820]*y[IDX_O2II] + k[1120];
     data[2969] = 0.0 + k[83]*y[IDX_HII] + k[591]*y[IDX_H3II];
-    data[2970] = 0.0 + k[301]*y[IDX_EM] + k[301]*y[IDX_EM] + k[302]*y[IDX_EM] -
+    data[2970] = 0.0 + k[301]*y[IDX_eM] + k[301]*y[IDX_eM] + k[302]*y[IDX_eM] -
         k[617]*y[IDX_HI] + k[1123];
     data[2971] = 0.0 + k[99]*y[IDX_HII];
     data[2972] = 0.0 - k[126]*y[IDX_HI] + k[531]*y[IDX_H2I];
-    data[2973] = 0.0 + k[327]*y[IDX_EM] + k[327]*y[IDX_EM] + k[328]*y[IDX_EM] +
-        k[329]*y[IDX_EM] + k[1301];
-    data[2974] = 0.0 + k[338]*y[IDX_EM] + k[1302];
-    data[2975] = 0.0 + k[347]*y[IDX_EM];
+    data[2973] = 0.0 + k[327]*y[IDX_eM] + k[327]*y[IDX_eM] + k[328]*y[IDX_eM] +
+        k[329]*y[IDX_eM] + k[1301];
+    data[2974] = 0.0 + k[338]*y[IDX_eM] + k[1302];
+    data[2975] = 0.0 + k[347]*y[IDX_eM];
     data[2976] = 0.0 + k[476]*y[IDX_CHI] + k[572]*y[IDX_H2OI] + k[859]*y[IDX_OHI] -
         k[1209]*y[IDX_HI];
     data[2977] = 0.0 + k[91]*y[IDX_HII] + k[1102]*y[IDX_OHI];
     data[2978] = 0.0 + k[262] + k[683]*y[IDX_HeII] + k[684]*y[IDX_HeII] -
         k[979]*y[IDX_HI] + k[979]*y[IDX_HI] + k[1151];
-    data[2979] = 0.0 + k[334]*y[IDX_EM];
+    data[2979] = 0.0 + k[334]*y[IDX_eM];
     data[2980] = 0.0 + k[456]*y[IDX_CH4I] + k[539]*y[IDX_H2I] + k[730]*y[IDX_H2COI];
-    data[2981] = 0.0 + k[319]*y[IDX_EM] + k[320]*y[IDX_EM] + k[321]*y[IDX_EM] +
-        k[321]*y[IDX_EM];
+    data[2981] = 0.0 + k[319]*y[IDX_eM] + k[320]*y[IDX_eM] + k[321]*y[IDX_eM] +
+        k[321]*y[IDX_eM];
     data[2982] = 0.0 + k[77]*y[IDX_HII] + k[456]*y[IDX_N2II] + k[511]*y[IDX_H2II] +
         k[658]*y[IDX_HeII] + k[660]*y[IDX_HeII] + k[716]*y[IDX_NII] +
         k[717]*y[IDX_NII] + k[718]*y[IDX_NII] + k[718]*y[IDX_NII] -
         k[969]*y[IDX_HI] + k[1125] + k[1127];
     data[2983] = 0.0 - k[127]*y[IDX_HI] + k[532]*y[IDX_H2I] + k[533]*y[IDX_H2I];
-    data[2984] = 0.0 - k[128]*y[IDX_HI] + k[305]*y[IDX_EM] + k[305]*y[IDX_EM] +
+    data[2984] = 0.0 - k[128]*y[IDX_HI] + k[305]*y[IDX_eM] + k[305]*y[IDX_eM] +
         k[509]*y[IDX_CI] + k[510]*y[IDX_CH2I] + k[511]*y[IDX_CH4I] +
         k[512]*y[IDX_CHI] + k[513]*y[IDX_CNI] + k[514]*y[IDX_CO2I] +
         k[515]*y[IDX_COI] + k[516]*y[IDX_H2I] + k[517]*y[IDX_H2COI] +
@@ -7598,45 +7598,45 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
         k[726]*y[IDX_NHI];
     data[2989] = 0.0 - k[131]*y[IDX_HI] + k[472]*y[IDX_CHI] + k[543]*y[IDX_H2I] +
         k[803]*y[IDX_NHI] + k[819]*y[IDX_OHI];
-    data[2990] = 0.0 - k[129]*y[IDX_HI] + k[326]*y[IDX_EM] + k[535]*y[IDX_H2I];
-    data[2991] = 0.0 + k[341]*y[IDX_EM] + k[341]*y[IDX_EM] + k[342]*y[IDX_EM] +
+    data[2990] = 0.0 - k[129]*y[IDX_HI] + k[326]*y[IDX_eM] + k[535]*y[IDX_H2I];
+    data[2991] = 0.0 + k[341]*y[IDX_eM] + k[341]*y[IDX_eM] + k[342]*y[IDX_eM] +
         k[542]*y[IDX_H2I] + k[741]*y[IDX_NI] + k[827]*y[IDX_OI];
-    data[2992] = 0.0 + k[340]*y[IDX_EM] + k[541]*y[IDX_H2I] + k[740]*y[IDX_NI];
+    data[2992] = 0.0 + k[340]*y[IDX_eM] + k[541]*y[IDX_H2I] + k[740]*y[IDX_NI];
     data[2993] = 0.0 + k[551]*y[IDX_H2COI] + k[820]*y[IDX_CH3OHI];
-    data[2994] = 0.0 + k[298]*y[IDX_EM] + k[300]*y[IDX_EM] + k[300]*y[IDX_EM] +
+    data[2994] = 0.0 + k[298]*y[IDX_eM] + k[300]*y[IDX_eM] + k[300]*y[IDX_eM] +
         k[443]*y[IDX_OI] - k[616]*y[IDX_HI] + k[1115];
     data[2995] = 0.0 + k[84]*y[IDX_HII] + k[270] + k[373]*y[IDX_CII] + k[690]*y[IDX_HeII]
         + k[866]*y[IDX_CI] + k[867]*y[IDX_CI] + k[961]*y[IDX_H2I] -
         k[983]*y[IDX_HI] + k[1030]*y[IDX_NOI] + k[1072]*y[IDX_OI] + k[1158];
-    data[2996] = 0.0 + k[296]*y[IDX_EM] + k[296]*y[IDX_EM] + k[297]*y[IDX_EM] +
+    data[2996] = 0.0 + k[296]*y[IDX_eM] + k[296]*y[IDX_eM] + k[297]*y[IDX_eM] +
         k[418]*y[IDX_H2OI] + k[421]*y[IDX_OI] + k[530]*y[IDX_H2I] -
         k[615]*y[IDX_HI] + k[736]*y[IDX_NI] + k[1110];
-    data[2997] = 0.0 + k[313]*y[IDX_EM] + k[313]*y[IDX_EM] + k[314]*y[IDX_EM] +
+    data[2997] = 0.0 + k[313]*y[IDX_eM] + k[313]*y[IDX_eM] + k[314]*y[IDX_eM] +
         k[534]*y[IDX_H2I] + k[738]*y[IDX_NI] + k[1140];
-    data[2998] = 0.0 + k[343]*y[IDX_EM] + k[344]*y[IDX_EM] + k[344]*y[IDX_EM];
-    data[2999] = 0.0 + k[322]*y[IDX_EM] + k[323]*y[IDX_EM] + k[325]*y[IDX_EM] +
-        k[325]*y[IDX_EM] + k[1286];
+    data[2998] = 0.0 + k[343]*y[IDX_eM] + k[344]*y[IDX_eM] + k[344]*y[IDX_eM];
+    data[2999] = 0.0 + k[322]*y[IDX_eM] + k[323]*y[IDX_eM] + k[325]*y[IDX_eM] +
+        k[325]*y[IDX_eM] + k[1286];
     data[3000] = 0.0 + k[521]*y[IDX_H2II];
     data[3001] = 0.0 + k[370]*y[IDX_H2OI] + k[371]*y[IDX_H2OI] + k[373]*y[IDX_NH2I] +
         k[375]*y[IDX_NHI] + k[379]*y[IDX_OHI] + k[381]*y[IDX_SiHI] +
         k[528]*y[IDX_H2I] - k[1205]*y[IDX_HI];
     data[3002] = 0.0 + k[81]*y[IDX_HII] + k[259] + k[676]*y[IDX_HeII] +
         k[678]*y[IDX_HeII] - k[976]*y[IDX_HI] + k[1065]*y[IDX_OI] + k[1147];
-    data[3003] = 0.0 + k[241] + k[294]*y[IDX_EM] + k[402]*y[IDX_H2OI] + k[408]*y[IDX_NI]
+    data[3003] = 0.0 + k[241] + k[294]*y[IDX_eM] + k[402]*y[IDX_H2OI] + k[408]*y[IDX_NI]
         + k[414]*y[IDX_OI] + k[529]*y[IDX_H2I] - k[614]*y[IDX_HI];
     data[3004] = 0.0 + k[75]*y[IDX_HII] + k[243] + k[510]*y[IDX_H2II] +
         k[654]*y[IDX_HeII] + k[888]*y[IDX_NOI] + k[890]*y[IDX_O2I] +
         k[890]*y[IDX_O2I] + k[895]*y[IDX_OI] + k[895]*y[IDX_OI] +
         k[896]*y[IDX_OI] + k[898]*y[IDX_OHI] + k[956]*y[IDX_H2I] -
         k[967]*y[IDX_HI] + k[1005]*y[IDX_NI] + k[1006]*y[IDX_NI] + k[1113];
-    data[3005] = 0.0 + k[308]*y[IDX_EM] + k[308]*y[IDX_EM] + k[309]*y[IDX_EM];
+    data[3005] = 0.0 + k[308]*y[IDX_eM] + k[308]*y[IDX_eM] + k[309]*y[IDX_eM];
     data[3006] = 0.0 + k[86]*y[IDX_HII] + k[274] + k[375]*y[IDX_CII] + k[523]*y[IDX_H2II]
         + k[693]*y[IDX_HeII] + k[726]*y[IDX_NII] + k[803]*y[IDX_OII] +
         k[869]*y[IDX_CI] + k[962]*y[IDX_H2I] - k[985]*y[IDX_HI] +
         k[1018]*y[IDX_NI] + k[1039]*y[IDX_NHI] + k[1039]*y[IDX_NHI] +
         k[1039]*y[IDX_NHI] + k[1039]*y[IDX_NHI] + k[1042]*y[IDX_NOI] +
         k[1046]*y[IDX_OI] + k[1049]*y[IDX_OHI] + k[1162];
-    data[3007] = 0.0 + k[348]*y[IDX_EM] + k[545]*y[IDX_H2I] + k[743]*y[IDX_NI] +
+    data[3007] = 0.0 + k[348]*y[IDX_eM] + k[545]*y[IDX_H2I] + k[743]*y[IDX_NI] +
         k[830]*y[IDX_OI] + k[1173];
     data[3008] = 0.0 + k[513]*y[IDX_H2II] + k[959]*y[IDX_H2I] + k[1091]*y[IDX_OHI];
     data[3009] = 0.0 + k[79]*y[IDX_HII] + k[497]*y[IDX_HII] + k[517]*y[IDX_H2II] +
@@ -7658,8 +7658,8 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
         k[928]*y[IDX_NI] + k[932]*y[IDX_NOI] + k[933]*y[IDX_O2I] +
         k[934]*y[IDX_O2I] + k[939]*y[IDX_OI] + k[941]*y[IDX_OHI] +
         k[958]*y[IDX_H2I] - k[970]*y[IDX_HI] + k[1128];
-    data[3013] = 0.0 + k[315]*y[IDX_EM] + k[316]*y[IDX_EM] + k[316]*y[IDX_EM] +
-        k[316]*y[IDX_EM] + k[591]*y[IDX_MgI] + k[598]*y[IDX_OI] + k[1145];
+    data[3013] = 0.0 + k[315]*y[IDX_eM] + k[316]*y[IDX_eM] + k[316]*y[IDX_eM] +
+        k[316]*y[IDX_eM] + k[591]*y[IDX_MgI] + k[598]*y[IDX_OI] + k[1145];
     data[3014] = 0.0 + k[520]*y[IDX_H2II];
     data[3015] = 0.0 + k[87]*y[IDX_HII] + k[524]*y[IDX_H2II] + k[888]*y[IDX_CH2I] +
         k[932]*y[IDX_CHI] - k[987]*y[IDX_HI] - k[988]*y[IDX_HI] +
@@ -7693,8 +7693,8 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
         + k[91]*y[IDX_SiI] + k[92]*y[IDX_SiC2I] + k[93]*y[IDX_SiC3I] +
         k[94]*y[IDX_SiCI] + k[95]*y[IDX_SiH2I] + k[96]*y[IDX_SiH3I] +
         k[97]*y[IDX_SiH4I] + k[98]*y[IDX_SiHI] + k[99]*y[IDX_SiOI] +
-        k[497]*y[IDX_H2COI] - k[1197]*y[IDX_HI] + k[1216]*y[IDX_EM];
-    data[3021] = 0.0 + k[330]*y[IDX_EM] + k[855]*y[IDX_OHI] + k[1148];
+        k[497]*y[IDX_H2COI] - k[1197]*y[IDX_HI] + k[1216]*y[IDX_eM];
+    data[3021] = 0.0 + k[330]*y[IDX_eM] + k[855]*y[IDX_OHI] + k[1148];
     data[3022] = 0.0 + k[4]*y[IDX_H2I] - k[11]*y[IDX_HI] + k[11]*y[IDX_HI] +
         k[11]*y[IDX_HI] + k[80]*y[IDX_HII] + k[256] + k[370]*y[IDX_CII] +
         k[371]*y[IDX_CII] + k[402]*y[IDX_CHII] + k[418]*y[IDX_CH2II] +
@@ -7734,7 +7734,7 @@ int Jac(realtype t, N_Vector u, N_Vector fu, SUNMatrix jmatrix, void *user_data,
     data[3025] = 0.0 + k[515]*y[IDX_H2II] - k[972]*y[IDX_HI] + k[1092]*y[IDX_OHI];
     data[3026] = 0.0 + k[2]*y[IDX_CHI] + k[3]*y[IDX_H2I] + k[3]*y[IDX_H2I] +
         k[3]*y[IDX_H2I] + k[3]*y[IDX_H2I] + k[4]*y[IDX_H2OI] + k[7]*y[IDX_OHI] +
-        k[8]*y[IDX_EM] + k[8]*y[IDX_EM] - k[10]*y[IDX_HI] + k[10]*y[IDX_HI] +
+        k[8]*y[IDX_eM] + k[8]*y[IDX_eM] - k[10]*y[IDX_HI] + k[10]*y[IDX_HI] +
         k[10]*y[IDX_HI] + k[10]*y[IDX_HI] + k[233] + k[235] + k[235] +
         k[516]*y[IDX_H2II] + k[528]*y[IDX_CII] + k[529]*y[IDX_CHII] +
         k[530]*y[IDX_CH2II] + k[531]*y[IDX_CNII] + k[532]*y[IDX_COII] +

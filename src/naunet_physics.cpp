@@ -12,10 +12,10 @@
 /*  */
 // clang-format off
 double GetElementAbund(double *y, int elemidx) {
-    if (elemidx == IDX_ELEM_MG) {
+    if (elemidx == IDX_ELEM_Mg) {
         return 1.0*y[IDX_GMgI] + 1.0*y[IDX_MgI] + 1.0*y[IDX_MgII] + 0.0;
     }
-    if (elemidx == IDX_ELEM_SI) {
+    if (elemidx == IDX_ELEM_Si) {
         return 1.0*y[IDX_GSiOI] + 1.0*y[IDX_GSiCI] + 1.0*y[IDX_GSiC2I] + 1.0*y[IDX_GSiC3I] + 
                1.0*y[IDX_GH2SiOI] + 1.0*y[IDX_SiC3II] + 1.0*y[IDX_H2SiOI] + 1.0*y[IDX_SiC2II] + 
                1.0*y[IDX_GSiH4I] + 1.0*y[IDX_SiC2I] + 1.0*y[IDX_SiC3I] + 1.0*y[IDX_SiH5II] + 
@@ -24,7 +24,7 @@ double GetElementAbund(double *y, int elemidx) {
                1.0*y[IDX_SiH4I] + 1.0*y[IDX_SiHI] + 1.0*y[IDX_SiH3I] + 1.0*y[IDX_SiOII] + 
                1.0*y[IDX_SiOI] + 1.0*y[IDX_SiII] + 1.0*y[IDX_SiI] + 0.0;
     }
-    if (elemidx == IDX_ELEM_HE) {
+    if (elemidx == IDX_ELEM_He) {
         return 1.0*y[IDX_HeHII] + 1.0*y[IDX_HeII] + 1.0*y[IDX_HeI] + 0.0;
     }
     if (elemidx == IDX_ELEM_N) {
@@ -70,8 +70,8 @@ double GetElementAbund(double *y, int elemidx) {
         return 2.0*y[IDX_GH2CNI] + 1.0*y[IDX_GHNCI] + 1.0*y[IDX_GHNCOI] + 1.0*y[IDX_GO2HI] + 
                4.0*y[IDX_GCH3OHI] + 2.0*y[IDX_GH2SiOI] + 1.0*y[IDX_GHNOI] + 2.0*y[IDX_GH2COI] + 
                1.0*y[IDX_GHCNI] + 2.0*y[IDX_GH2OI] + 3.0*y[IDX_GNH3I] + 2.0*y[IDX_H2CNI] + 
-               4.0*y[IDX_GCH4I] + 2.0*y[IDX_H2NOII] + 2.0*y[IDX_H2SiOI] + 1.0*y[IDX_HeHII] + 
-               1.0*y[IDX_HNCOI] + 1.0*y[IDX_HOCII] + 4.0*y[IDX_GSiH4I] + 5.0*y[IDX_SiH5II] + 
+               4.0*y[IDX_GCH4I] + 2.0*y[IDX_H2NOII] + 2.0*y[IDX_H2SiOI] + 1.0*y[IDX_HNCOI] + 
+               1.0*y[IDX_HOCII] + 1.0*y[IDX_HeHII] + 4.0*y[IDX_GSiH4I] + 5.0*y[IDX_SiH5II] + 
                4.0*y[IDX_SiH4II] + 1.0*y[IDX_O2HI] + 3.0*y[IDX_SiH3II] + 2.0*y[IDX_SiH2II] + 
                2.0*y[IDX_SiH2I] + 1.0*y[IDX_SiOHII] + 1.0*y[IDX_SiHII] + 4.0*y[IDX_SiH4I] + 
                1.0*y[IDX_SiHI] + 3.0*y[IDX_SiH3I] + 1.0*y[IDX_HCO2II] + 1.0*y[IDX_HNOI] + 
@@ -114,8 +114,8 @@ double GetMu(double *y) {
                   64.0*y[IDX_GSiC3I] + 32.0*y[IDX_GCH3OHI] + 44.0*y[IDX_GCO2I] + 46.0*y[IDX_GH2SiOI] + 
                   31.0*y[IDX_GHNOI] + 28.0*y[IDX_GN2I] + 30.0*y[IDX_GH2COI] + 27.0*y[IDX_GHCNI] + 
                   18.0*y[IDX_GH2OI] + 17.0*y[IDX_GNH3I] + 64.0*y[IDX_SiC3II] + 28.0*y[IDX_H2CNI] + 
-                  16.0*y[IDX_GCH4I] + 32.0*y[IDX_H2NOII] + 46.0*y[IDX_H2SiOI] + 5.0*y[IDX_HeHII] + 
-                  43.0*y[IDX_HNCOI] + 29.0*y[IDX_HOCII] + 52.0*y[IDX_SiC2II] + 32.0*y[IDX_GSiH4I] + 
+                  16.0*y[IDX_GCH4I] + 32.0*y[IDX_H2NOII] + 46.0*y[IDX_H2SiOI] + 43.0*y[IDX_HNCOI] + 
+                  29.0*y[IDX_HOCII] + 5.0*y[IDX_HeHII] + 52.0*y[IDX_SiC2II] + 32.0*y[IDX_GSiH4I] + 
                   52.0*y[IDX_SiC2I] + 64.0*y[IDX_SiC3I] + 33.0*y[IDX_SiH5II] + 32.0*y[IDX_SiH4II] + 
                   40.0*y[IDX_SiCII] + 33.0*y[IDX_O2HI] + 40.0*y[IDX_SiCI] + 46.0*y[IDX_NO2I] + 
                   31.0*y[IDX_SiH3II] + 30.0*y[IDX_SiH2II] + 42.0*y[IDX_OCNI] + 30.0*y[IDX_SiH2I] + 
@@ -135,7 +135,7 @@ double GetMu(double *y) {
                   29.0*y[IDX_HCOI] + 4.0*y[IDX_HeII] + 13.0*y[IDX_CHI] + 3.0*y[IDX_H3II] + 
                   4.0*y[IDX_HeI] + 30.0*y[IDX_NOI] + 14.0*y[IDX_NI] + 17.0*y[IDX_OHI] + 
                   32.0*y[IDX_O2I] + 12.0*y[IDX_CI] + 1.0*y[IDX_HII] + 29.0*y[IDX_HCOII] + 
-                  18.0*y[IDX_H2OI] + 16.0*y[IDX_OI] + 0.0*y[IDX_EM] + 28.0*y[IDX_COI] + 
+                  18.0*y[IDX_H2OI] + 16.0*y[IDX_OI] + 0.0*y[IDX_eM] + 28.0*y[IDX_COI] + 
                   2.0*y[IDX_H2I] + 1.0*y[IDX_HI] + 0.0;
     double num = y[IDX_GH2CNI] + y[IDX_GHNCI] + y[IDX_GNO2I] + y[IDX_GSiOI] +
                  y[IDX_GCOI] + y[IDX_GHNCOI] + y[IDX_GMgI] + y[IDX_GNOI] +
@@ -143,8 +143,8 @@ double GetMu(double *y) {
                  y[IDX_GSiC3I] + y[IDX_GCH3OHI] + y[IDX_GCO2I] + y[IDX_GH2SiOI]
                  + y[IDX_GHNOI] + y[IDX_GN2I] + y[IDX_GH2COI] + y[IDX_GHCNI] +
                  y[IDX_GH2OI] + y[IDX_GNH3I] + y[IDX_SiC3II] + y[IDX_H2CNI] +
-                 y[IDX_GCH4I] + y[IDX_H2NOII] + y[IDX_H2SiOI] + y[IDX_HeHII] +
-                 y[IDX_HNCOI] + y[IDX_HOCII] + y[IDX_SiC2II] + y[IDX_GSiH4I] +
+                 y[IDX_GCH4I] + y[IDX_H2NOII] + y[IDX_H2SiOI] + y[IDX_HNCOI] +
+                 y[IDX_HOCII] + y[IDX_HeHII] + y[IDX_SiC2II] + y[IDX_GSiH4I] +
                  y[IDX_SiC2I] + y[IDX_SiC3I] + y[IDX_SiH5II] + y[IDX_SiH4II] +
                  y[IDX_SiCII] + y[IDX_O2HI] + y[IDX_SiCI] + y[IDX_NO2I] +
                  y[IDX_SiH3II] + y[IDX_SiH2II] + y[IDX_OCNI] + y[IDX_SiH2I] +
@@ -164,7 +164,7 @@ double GetMu(double *y) {
                  y[IDX_HCOI] + y[IDX_HeII] + y[IDX_CHI] + y[IDX_H3II] +
                  y[IDX_HeI] + y[IDX_NOI] + y[IDX_NI] + y[IDX_OHI] + y[IDX_O2I] +
                  y[IDX_CI] + y[IDX_HII] + y[IDX_HCOII] + y[IDX_H2OI] + y[IDX_OI]
-                 + y[IDX_EM] + y[IDX_COI] + y[IDX_H2I] + y[IDX_HI] + 0.0;
+                 + y[IDX_eM] + y[IDX_COI] + y[IDX_H2I] + y[IDX_HI] + 0.0;
 
     return mass / num;
 }

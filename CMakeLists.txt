@@ -1,6 +1,6 @@
 # To use CUDA by enabling language
 cmake_minimum_required(VERSION 3.18)
-project(NAUNET VERSION 0.3.0 LANGUAGES CXX)
+project(NAUNET VERSION 0.4.2 LANGUAGES CXX)
 
 include(CMakePrintHelpers)
 

@@ -24,9 +24,9 @@
 // non-zero terms in jacobian matrix, used in sparse matrix
 #define NNZ 3028
 
-#define IDX_ELEM_MG 0
-#define IDX_ELEM_SI 1
-#define IDX_ELEM_HE 2
+#define IDX_ELEM_Mg 0
+#define IDX_ELEM_Si 1
+#define IDX_ELEM_He 2
 #define IDX_ELEM_N 3
 #define IDX_ELEM_C 4
 #define IDX_ELEM_O 5
@@ -59,9 +59,9 @@
 #define IDX_GCH4I 24
 #define IDX_H2NOII 25
 #define IDX_H2SiOI 26
-#define IDX_HeHII 27
-#define IDX_HNCOI 28
-#define IDX_HOCII 29
+#define IDX_HNCOI 27
+#define IDX_HOCII 28
+#define IDX_HeHII 29
 #define IDX_SiC2II 30
 #define IDX_GSiH4I 31
 #define IDX_SiC2I 32
@@ -142,7 +142,7 @@
 #define IDX_HCOII 107
 #define IDX_H2OI 108
 #define IDX_OI 109
-#define IDX_EM 110
+#define IDX_eM 110
 #define IDX_COI 111
 #define IDX_H2I 112
 #define IDX_HI 113
