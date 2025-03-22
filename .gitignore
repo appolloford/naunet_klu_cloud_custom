@@ -5,7 +5,6 @@ __pycache__/
 build*/
 lib/
 lib64/
-python/
 
 # deprecated
 enzo_*/

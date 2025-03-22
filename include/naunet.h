@@ -63,6 +63,7 @@ class Naunet {
     SUNMatrix cv_a_;
     void *cv_mem_;
     SUNLinearSolver cv_ls_;
+    SUNContext cv_sunctx_;
 
     realtype ab_init_[NEQUATIONS];
     realtype ab_tmp_[NEQUATIONS];  // Temporary state for error handling
