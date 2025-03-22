@@ -1,22 +1,14 @@
 import os
 import sys
-sys.path.append(os.getenv('PYNAUNET_PATH'))
+sys.path.append(os.getenv('PYNAUNET_MODEL_PATH'))
 
 import numpy as np
+from pathlib import Path
 from tomlkit.toml_file import TOMLFile
 
-from @PYMODNAME@ import Naunet, NaunetData
-
-config_path = os.getenv('NAUNET_CONFIG_PATH')
-config = TOMLFile(os.path.join(config_path, "naunet_config.toml"))
-content = config.read()
-chemistry = content["chemistry"]
-heating = chemistry["heating"]
-cooling = chemistry["cooling"]
-has_thermal = True if heating or cooling else False
-summary = content["summary"]
-species = summary["list_of_species"]
-nspec = len(species)
+from pynaunet_model import Naunet, NaunetData
+from pynaunet_model.constants import NSPEC, HAS_THERMAL
+from pynaunet_model.constant_indexes import *
 
 naunet_solver = Naunet()
 naunet_data = NaunetData()
@@ -72,17 +64,15 @@ if @USE_CUDA@:
     naunet_solver.Reset(1)
 
 
-y = np.ones(len(species)+has_thermal) * 1e-40
-y[species.index("H2")] = 0.5 * nH
-y[species.index("H")] = 5.0e-5 * nH
-y[species.index("HE")] = 9.75e-2 * nH
-y[species.index("N")] = 7.5e-5 * nH
-y[species.index("O")] = 1.8e-4 * nH
-y[species.index("CO")] = 1.4e-4 * nH
-y[species.index("S")] = 8.0e-8 * nH
-y[species.index("SI")] = 8.0e-9 * nH
-y[species.index("MG")] = 7.0e-9 * nH
-y[species.index("CL")] = 4.0e-9 * nH
+y = np.ones(NSPEC + HAS_THERMAL) * 1e-40
+y[IDX_H2I] = 0.5 * nH
+y[IDX_HI] = 5.0e-5 * nH
+y[IDX_HeI] = 9.75e-2 * nH
+y[IDX_NI] = 7.5e-5 * nH
+y[IDX_OI] = 1.8e-4 * nH
+y[IDX_COI] = 1.4e-4 * nH
+y[IDX_SiI] = 8.0e-9 * nH
+y[IDX_MgI] = 7.0e-9 * nH
 
 
 

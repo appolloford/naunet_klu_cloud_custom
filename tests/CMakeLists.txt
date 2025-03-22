@@ -6,8 +6,8 @@ endif()
 
 # check enabled languages
 get_property(
-    languages 
-        GLOBAL 
+    languages
+        GLOBAL
             PROPERTY ENABLED_LANGUAGES
 )
 
@@ -27,11 +27,10 @@ if("CUDA" IN_LIST languages)
     list(
         APPEND TESTTARGETS
             multiplegrid
-            
     )
 endif()
 
-message(STATUS "Test targets               = ${TESTTARGETS}")
+message(STATUS "Test targets                  = ${TESTTARGETS}")
 
 foreach(name ${TESTTARGETS})
 
@@ -44,17 +43,8 @@ foreach(name ${TESTTARGETS})
                 OUTPUT_NAME ${targetname}.x
     )
 
-    # for odeint test
-    if(USE_BOOST)
-        target_include_directories(
-            ${targetname}
-                PRIVATE 
-                    ${Boost_INCLUDE_DIRS}
-        )
-    endif()
-
     target_link_libraries(
-        ${targetname} 
+        ${targetname}
             PRIVATE
                 ${NAUNETLIB}
     )
@@ -70,18 +60,27 @@ foreach(name ${TESTTARGETS})
 endforeach(name ${TESTTARGETS})
 
 if(MAKE_PYTHON)
-    configure_file(singlegrid.py.in singlegrid.py)
+    set(
+        PYTESTTARGETS
+        singlegrid
+    )
 
-    if( ${NVIDIA_GPU_COUNT} OR NOT ("CUDA" IN_LIST languages) )
-        add_test(
-            NAME
-                test_pymodule
-            COMMAND
-                ${CMAKE_COMMAND} -E env 
-                    PYNAUNET_PATH=$<TARGET_FILE_DIR:${PYMODNAME}>
-                    NAUNET_CONFIG_PATH=${CMAKE_SOURCE_DIR}
-                ${Python3_EXECUTABLE} ${CMAKE_CURRENT_BINARY_DIR}/singlegrid.py
-        )
-    endif()
+    message(STATUS "Python interface test targets = ${PYTESTTARGETS}")
+    foreach(name ${PYTESTTARGETS})
+        configure_file(${name}.py.in ${name}.py)
+
+        if( ${NVIDIA_GPU_COUNT} OR NOT ("CUDA" IN_LIST languages) )
+            add_test(
+                NAME
+                    test_${name}_py
+                COMMAND
+                    ${CMAKE_COMMAND} -E env
+                        PYNAUNET_MODEL_PATH=${CMAKE_BINARY_DIR}/python
+                        NAUNET_CONFIG_PATH=${CMAKE_SOURCE_DIR}
+                    ${Python3_EXECUTABLE} ${CMAKE_CURRENT_BINARY_DIR}/${name}.py
+            )
+        endif()
+    endforeach(name ${PYTESTTARGETS})
+
 endif()
 
